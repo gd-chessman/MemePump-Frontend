@@ -4,7 +4,7 @@ import { getOrderHistories } from "@/services/api/OnChainService"
 import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { useState, Suspense } from "react"
 
 type Transaction = {
   time: string
@@ -19,6 +19,14 @@ type Transaction = {
 }
 
 export default function TransactionHistory() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <TransactionHistoryContent />
+    </Suspense>
+  )
+}
+
+function TransactionHistoryContent() {
   const [activeTab, setActiveTab] = useState<"all" | "my">("all")
   
   const searchParams = useSearchParams();
