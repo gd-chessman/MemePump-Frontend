@@ -29,7 +29,7 @@ const TradingPage = () => {
   const height = isMounted ? windowHeight : 800;
 
   return (
-    <div className={`h-[93.5vh] flex flex-col gap-4 container-trading py-4 relative z-10 ${height > 700 ? 'px-[40px]' : 'px-[10px]'}`}>
+    <div className={`h-[92vh] flex flex-col gap-4 container-trading py-4 relative z-10 ${height > 700 ? 'px-[40px]' : 'px-[10px]'}`}>
       <Interface />
       <div className='flex-1 flex gap-4 w-full relative z-10 overflow-hidden'>
         {/* Left Column */}
