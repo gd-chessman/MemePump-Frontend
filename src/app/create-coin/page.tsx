@@ -479,7 +479,6 @@ export default function CreateCoinForm() {
                         <img
                           src={formData.logoPreview || "/placeholder.svg"}
                           alt="Logo preview"
-                          fill
                           className="object-contain"
                         />
                         <button
