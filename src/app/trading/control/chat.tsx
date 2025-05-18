@@ -27,7 +27,7 @@ const ChatTrading = () => {
       id: "1",
       sender: {
         name: "POPCAT",
-        avatar: token,
+        avatar: "/token.png",
         isCurrentUser: false,
       },
       text: "Anyone is up for illustrations. I think there are less relatable images according to our brand.",
@@ -37,7 +37,7 @@ const ChatTrading = () => {
       id: "2",
       sender: {
         name: "POPCAT",
-        avatar: token,
+        avatar: "/token.png",
         isCurrentUser: false,
       },
       text: "Anyone is up for illustrations. I think there are less relatable images according to our brand.",
@@ -138,8 +138,8 @@ const ChatTrading = () => {
           <div key={message.id} className={`flex ${message.sender.isCurrentUser ? "justify-end" : "items-start"}`}>
             {!message.sender.isCurrentUser && (
               <div className="flex-shrink-0 mr-3">
-                <Image
-                  src={message.sender.avatar || token}
+                <img
+                  src={message.sender.avatar || "/token.png"}
                   alt={message.sender.name}
                   width={36}
                   height={36}

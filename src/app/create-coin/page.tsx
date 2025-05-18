@@ -231,7 +231,7 @@ export default function CreateCoinForm() {
     const classLabel = "block text-sm font-normal text-neutral-100 mb-1"
 
     const ethereumIcon = (width: number, height: number) => {
-        return <Image src={ethereum} alt="ethereum-icon" width={width} height={height} />
+        return <img src={"/ethereum.png"} alt="ethereum-icon" width={width} height={height} />
     }
     return (
         <div className="container-body px-[40px] flex gap-6 py-[30px] relative mx-auto z-10">
@@ -415,10 +415,11 @@ export default function CreateCoinForm() {
                                         <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleLogoUpload} />
 
                                         {formData.logoPreview ? (
-                                            <div className="relative w-full h-full">
-                                                <Image
+                                            <div className="relative w-full h-full flex items-center justify-center">
+                                                <img
                                                     src={formData.logoPreview || "/placeholder.svg"}
                                                     alt="Logo preview"
+                                                    width={200}
                                                     fill
                                                     className="object-contain"
                                                 />
@@ -446,10 +447,10 @@ export default function CreateCoinForm() {
                                 <div className="w-1/2">
                                     <label className={classLabel}>Preview</label>
                                     <div className="bg-black bg-opacity-60 border border-blue-500/50 rounded-lg p-6 relative h-full">
-                                        <div className="flex flex-col items-center">
+                                        <div className="flex flex-col items-center gap-3 h-full mt-4">
                                             <div className="w-16 h-16 bg-white rounded-full overflow-hidden mb-2 flex items-center justify-center">
                                                 {formData.logoPreview ? (
-                                                    <Image
+                                                    <img
                                                         src={formData.logoPreview || "/placeholder.svg"}
                                                         alt="Logo preview"
                                                         width={64}
@@ -457,7 +458,7 @@ export default function CreateCoinForm() {
                                                         className="object-cover"
                                                     />
                                                 ) : (
-                                                    <Image src={user} alt="user-icon" width={64} height={64} />
+                                                    <img src={"/user-icon.png"} alt="user-icon" width={64} height={64} />
                                                 )}
                                             </div>
                                             <h3 className="text-neutral-100 font-semibold text-sm">{formData.name || "YOUR COIN NAME"}</h3>
@@ -506,7 +507,7 @@ export default function CreateCoinForm() {
                         </div>
 
                         <div className="flex flex-col items-center justify-center py-8">
-                            <Image src={noCoin} alt="no-coin-icon" width={180} height={180} />
+                            <img src={"/no-list-token.png"} alt="no-coin-icon" width={180} height={180} />
                             <p className="text-neutral-100 mt-3 font-medium">No coins created recently</p>
                         </div>
                     </div>
@@ -514,7 +515,7 @@ export default function CreateCoinForm() {
                     <div className="mt-6 text-center">
                         <button className="text-neutral-100 flex gap-2 items-center justify-center mx-auto hover:text-blue-400 transition-colors">
                             <Link href="/my-coin" className="text-neutral-100 font-medium text-sm">SEE ALL MY COINS</Link>
-                            <Image src={arrow} alt="arrow-icon" width={15} height={14} />
+                            <img src={"/arrow.png"} alt="arrow-icon" width={15} height={14} />
                         </button>
                     </div>
                 </div>

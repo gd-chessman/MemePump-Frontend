@@ -39,7 +39,7 @@ const OverView = () => {
         <div className='flex flex-col gap-2'>
             <div className='relative clip-text uppercase text-sm font-semibold flex items-center gap-2'>
                 <span className='gradient-hover'>Favorite </span>
-                <Image src={star} alt="star" />
+                <img src={"/star.png"} alt="star" width={12}/>
             </div>
             <div className='flex gap-6 z-10'>
                 <div className='w-full rounded-lg border-1 border-theme-primary-300 dark:border-transparent dark:bg-[#0F0F0FD9] z-1'>
@@ -47,7 +47,7 @@ const OverView = () => {
                     {dataFavorite.map((item, index) => (
                         <div key={index} className={`w-full flex px-6 justify-between max-h-[45px] py-[6px]  ${index !== dataFavorite.length - 1 ? 'border-b-1 border-theme-primary-300 dark:border-theme-neutral-800' : ''}`}>
                             <div className='flex items-center gap-[14px]'>
-                                <Image src={token} alt="logo" />
+                                <img src={"/token.png"} alt="logo" />
                                 <span className='uppercase text-xs font-medium'>PopCat</span>
                             </div>
                             <div className='flex items-center gap-3'>
@@ -63,7 +63,7 @@ const OverView = () => {
                     ))}
                 </div>
 
-                <div className={`w-full rounded-lg  pl-[50px] pr-[40px] flex justify-between ${theme !== 'dark' ? 'linear-gradient-light' : 'box-gradient'}`}>
+                <div className={`w-full rounded-lg  pl-[50px] pr-[40px] flex justify-between items-center ${theme !== 'dark' ? 'linear-gradient-light' : 'box-gradient'}`}>
                     <div className='flex flex-col justify-center gap-[10px]'>
                         <h3 className='text-neutral-100 text-base font-semibold flex items-center gap-2'>{dataMarket.name} &ensp; <FontAwesomeIcon icon={faChevronRight} width={12} height={12} /></h3>
                         <div className='flex items-center gap-[41px]'>
@@ -75,17 +75,17 @@ const OverView = () => {
                             <span className='text-white text-sm font-medium'>Send &nbsp; ${dataMarket.priceChange}</span>
                         </div>
                     </div>
-                    <Image src={dolaLogo} alt='dola-logo' className='xl:mr-12'/>
+                    <img src={"/dolaLogo.png"} alt='dola-logo' className='xl:mr-12 w-[60px] h-[60px]'/>
 
                 </div>
                 <div className='w-full rounded-lg box-gradient flex justify-between items-center px-[60px] z-1'>
                     <div className='flex flex-col items-center gap-2'>
-                        <Image src={hourTradingVolume} alt='hour-trading-volume' />
+                        <img src={"/hourTradingVolume.png"} alt='hour-trading-volume' />
                         <span className='text-neutral-100 text-sm font-semibold capitalize'>Total 24h trading volume</span>
                         <span className='text-neutral-100 text-[22px] font-bold leading-[33px]'>$1.30M</span>
                     </div>
                     <div className='flex flex-col items-center gap-2'>
-                        <Image src={monthTradingVolume} alt='hour-trading-volume' />
+                        <img src={"/monthTradingVolume.png"} alt='hour-trading-volume' />
                         <span className='text-neutral-100 text-sm font-semibold capitalize'>Total 30d trading volume</span>
                         <span className='text-neutral-100 text-[22px] font-bold leading-[33px]'>$1.30M</span>
                     </div>

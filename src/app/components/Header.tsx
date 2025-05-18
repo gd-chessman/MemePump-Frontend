@@ -99,7 +99,7 @@ const Header = () => {
         <header className="sticky top-0 z-50 w-full bg-white dark:bg-black border-b dark:border-none border-gray-200 dark:border-gray-800">
             <div className='flex items-center justify-between px-10 py-[14px]'>
                 <div className='flex items-center gap-15'>
-                    <Link href="/"><Image src={logo} alt="logo" height={32} /></Link>
+                    <Link href="/"><img src={"/logo.png"} alt="logo" height={32} /></Link>
                     <nav className='flex items-center gap-15'>
                         {listSidebar.map((item, index) => (
                             <Link

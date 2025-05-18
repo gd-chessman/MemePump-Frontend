@@ -206,9 +206,9 @@ export default function MyCoinsTable() {
             <div className="pb-6 flex items-center justify-between">
                 <div className="flex w-full items-center justify-center gap-4">
                     <h2 className="text-xl font-bold text-black dark:text-neutral-100 flex items-center gap-2 flex-1">
-                        <Image src={ethereum} alt="logo" width={24} height={24} />
+                        <img src={"/ethereum.png"} alt="ethereum-icon" width={24} height={24} />
                         MY COINS
-                        <Image src={ethereum} alt="logo" width={24} height={24} />
+                        <img src={"/ethereum.png"} alt="ethereum-icon" width={24} height={24} />
                         <span className="ml-2 text-neutral-400 dark:text-neutral-400 text-sm">(40)</span>
                     </h2>
 

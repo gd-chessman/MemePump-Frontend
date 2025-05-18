@@ -26,7 +26,7 @@ export default function Display() {
                         size="icon" 
                         className="w-max text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 px-2 flex items-center gap-2 transition-colors"
                     >
-                        <Image src={lightMode} alt="light" height={24} />
+                        <img src={"/light.png"} alt="light" height={24} />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 

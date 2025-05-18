@@ -5,7 +5,6 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { ChevronDown, Edit, Check } from "lucide-react"
 import pencil from "@/assets/svgs/pencil.svg"
-import Image from "next/image"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
 import LanguageSelector from "@/app/components/select"
 import { useQuery } from "@tanstack/react-query"
@@ -339,8 +338,8 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
                                 }`}
                             >
                                 {percent}%
-                                <Image 
-                                    src={pencil} 
+                                <img 
+                                    src={"/pencil.png"} 
                                     alt="pencil" 
                                     className="cursor-pointer hover:opacity-80 dark:invert"
                                     onClick={(e) => {
@@ -385,8 +384,8 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
                                         className="px-1 w-full h-[30px] rounded-md flex items-center justify-between gap-1 border border-solid border-gray-200 dark:border-neutral-700 text-xs font-semibold text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
                                     >
                                         {value}
-                                        <Image
-                                            src={pencil}
+                                        <img
+                                            src={"/pencil.png"}
                                             alt="pencil"
                                             className="cursor-pointer hover:opacity-80 dark:invert"
                                             onClick={(e) => {
