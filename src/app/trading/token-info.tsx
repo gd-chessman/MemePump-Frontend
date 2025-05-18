@@ -67,7 +67,7 @@ export default function TokenInfo() {
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-              <Image src={dataToken.image} width={40} height={40} alt="Token logo" />
+              <Image src={tokenInfor?.logoUrl || ''} width={40} height={40} alt="Token logo" className="rounded-full" />
             </div>
             <div>
               <h2 className="font-semibold text-neutral-100 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="text-neutral-300 text-sm font-normal">{tokenInfor?.symbol}</span></h2>
