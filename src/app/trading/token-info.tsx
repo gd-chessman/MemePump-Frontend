@@ -92,9 +92,15 @@ export default function TokenInfo() {
               <Star className="w-4 h-4 text-neutral-500 hover:text-yellow-400" />
             </button> 
             <div className="flex items-center gap-2">
-              <Link href={tokenInfor?.telegram || ""} target="_blank"><Image src={telegram} alt="Website" className="h-4 w-4"/></Link>
-              <Link href={tokenInfor?.website || ""} target="_blank"><Image src={website} alt="Website" className="h-4 w-4"/></Link>
-              <Link href={tokenInfor?.twitter || ""} target="_blank"><Image src={x} alt="Website" className="h-4 w-4"/></Link>
+              {tokenInfor?.telegram && (
+                <Link href={tokenInfor.telegram} target="_blank"><Image src={telegram} alt="Telegram" className="h-4 w-4"/></Link>
+              )}
+              {tokenInfor?.website && (
+                <Link href={tokenInfor.website} target="_blank"><Image src={website} alt="Website" className="h-4 w-4"/></Link>
+              )}
+              {tokenInfor?.twitter && (
+                <Link href={tokenInfor.twitter} target="_blank"><Image src={x} alt="Twitter" className="h-4 w-4"/></Link>
+              )}
             </div>
           </div>
         </div>
