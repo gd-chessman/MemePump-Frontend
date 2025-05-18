@@ -1,5 +1,9 @@
 "use client"
 
+import { getOrderHistories } from "@/services/api/OnChainService"
+import { formatNumberWithSuffix, truncateString } from "@/utils/format"
+import { useQuery } from "@tanstack/react-query"
+import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 
 type Transaction = {
@@ -16,119 +20,31 @@ type Transaction = {
 
 export default function TransactionHistory() {
   const [activeTab, setActiveTab] = useState<"all" | "my">("all")
+  
+  const searchParams = useSearchParams();
+  const address = searchParams?.get("address");
+  const { data: orderHistories, isLoading: isLoadingOrderHistories , refetch: refetchOrderHistories} = useQuery(
+    {
+      queryKey: ["orderHistories", address],
+      queryFn: () =>
+        getOrderHistories({
+          address: address || "",
+          offset: 0,
+          limit: 100,
+          sort_by: "block_unix_time",
+          sort_type: "desc",
+          tx_type: "swap",
+        }),
+      enabled: !!address,
+    }
+  );
 
-  const transactions: Transaction[] = [
-    {
-      time: "21:55:26 07/08/2025",
-      type: "SELL",
-      price: "$150.02M",
-      amount: "768",
-      total: "$150.02M",
-      source: "solfl",
-      hash: "9BBNF...bgpump",
-      status: "COMPLETED",
-      address: "9BBNF...bgpump",
-    },
-    {
-      time: "21:55:26 07/08/2025",
-      type: "SELL",
-      price: "$150.02M",
-      amount: "768",
-      total: "$150.02M",
-      source: "solfl",
-      hash: "9BBNF...bgpump",
-      status: "COMPLETED",
-      address: "9BBNF...bgpump",
-    },
-    {
-      time: "21:55:26 07/08/2025",
-      type: "SELL",
-      price: "$150.02M",
-      amount: "768",
-      total: "$150.02M",
-      source: "solfl",
-      hash: "9BBNF...bgpump",
-      status: "COMPLETED",
-      address: "9BBNF...bgpump",
-    },
-    {
-      time: "21:55:26 07/08/2025",
-      type: "SELL",
-      price: "$150.02M",
-      amount: "768",
-      total: "$150.02M",
-      source: "solfl",
-      hash: "9BBNF...bgpump",
-      status: "COMPLETED",
-      address: "9BBNF...bgpump",
-    },
-    {
-      time: "21:55:26 07/08/2025",
-      type: "SELL",
-      price: "$150.02M",
-      amount: "768",
-      total: "$150.02M",
-      source: "solfl",
-      hash: "9BBNF...bgpump",
-      status: "COMPLETED",
-      address: "9BBNF...bgpump",
-    },
-    {
-      time: "21:55:26 07/08/2025",
-      type: "BUY",
-      price: "$150.02M",
-      amount: "768",
-      total: "$150.02M",
-      source: "solfl",
-      hash: "9BBNF...bgpump",
-      status: "COMPLETED",
-      address: "9BBNF...bgpump",
-    },
-    {
-        time: "21:55:26 07/08/2025",
-        type: "BUY",
-        price: "$150.02M",
-        amount: "768",
-        total: "$150.02M",
-        source: "solfl",
-        hash: "9BBNF...bgpump",
-        status: "COMPLETED",
-        address: "9BBNF...bgpump",
-      },
-      {
-        time: "21:55:26 07/08/2025",
-        type: "BUY",
-        price: "$150.02M",
-        amount: "768",
-        total: "$150.02M",
-        source: "solfl",
-        hash: "9BBNF...bgpump",
-        status: "COMPLETED",
-        address: "9BBNF...bgpump",
-      },
-      {
-        time: "21:55:26 07/08/2025",
-        type: "BUY",
-        price: "$150.02M",
-        amount: "768",
-        total: "$150.02M",
-        source: "solfl",
-        hash: "9BBNF...bgpump",
-        status: "COMPLETED",
-        address: "9BBNF...bgpump",
-      },
-      {
-        time: "21:55:26 07/08/2025",
-        type: "BUY",
-        price: "$150.02M",
-        amount: "768",
-        total: "$150.02M",
-        source: "solfl",
-        hash: "9BBNF...bgpump",
-        status: "COMPLETED",
-        address: "9BBNF...bgpump",
-      },
-  ]
+  console.log(orderHistories)
+
+  const formatPrice = (price: number | undefined) => {
+    if (price === undefined) return '0.0';
+    return price?.toFixed(6);
+};
 
   return (
     <div className="box-shadow-info rounded-xl p-3 overflow-hidden bg-white dark:bg-neutral-1000">
@@ -164,18 +80,34 @@ export default function TransactionHistory() {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((tx, index) => (
+              {orderHistories?.map((order: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50">
-                  <td className="px-4 py-2 truncate text-gray-600 dark:text-neutral-300">{tx.time}</td>
-                  <td className={`px-4 text-xs py-2 font-medium truncate ${tx.type === "BUY" ? "text-green-600 dark:text-green-500" : "text-red-600 dark:text-red-500"}`}>{tx.type}</td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">{tx.price}</td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">{tx.amount}</td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">{tx.total}</td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">{tx.source}</td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">{tx.hash}</td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">{tx.status}</td>
+                  <td className="px-4 py-2 truncate text-gray-600 dark:text-neutral-300">
+                    {new Date(order.time).toLocaleString()}
+                  </td>
+                  <td className={`px-4 text-xs py-2 font-medium truncate ${order.type === "buy" ? "text-green-600 dark:text-green-500 uppercase" : "text-red-600 dark:text-red-500 uppercase"}`}>
+                    {order.type}
+                  </td>
+                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                    ${formatPrice(order.token.from.price.usd)}
+                  </td>
+                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                    {formatNumberWithSuffix(order.amount)}
+                  </td>
+                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                    ${(order.token.from.price.usd * order.amount).toFixed(6)}
+                  </td>
+                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                    {order.program}
+                  </td>
+                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                    {order.tx}
+                  </td>
+                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                    COMPLETED
+                  </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium flex items-center truncate">
-                    {tx.address}
+                    {truncateString(order.wallet, 10)}
                     <button className="ml-1 text-gray-400 hover:text-gray-600 dark:text-neutral-500 dark:hover:text-neutral-300">
                       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
