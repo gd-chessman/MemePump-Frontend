@@ -5,17 +5,21 @@ type ResolutionString = '1s' | '5s' | '15s' | '1' | '5' | '1h' | '4h' | '1D' | '
 // Function to fetch data from Solana Tracker API
 const fetchChartData = async (tokenAddress: string, from: number, to: number, marketCap: boolean = false, resolution: ResolutionString) => {
   try {
-    const url = `https://data.solanatracker.io/chart/${tokenAddress}?type=${resolution}&time_from=${from}&time_to=${to}`
-  + (marketCap ? `&marketCap=${marketCap}` : '');
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/on-chain/chart/${tokenAddress}?market_cap=${marketCap ? 'marketcap' : 'price'}&type=${resolution}&time_from=${from}&time_to=${to}`;
+    
+    const authToken = localStorage.getItem('auth_token');
+    const headers: HeadersInit = {};
+    
+    if (authToken) {
+      headers['Authorization'] = `Bearer ${authToken}`;
+    }
 
     const response = await fetch(url, {
-      headers: {
-        'x-api-key': '53dc9d39-607d-40b4-a946-ab7bfa2cde15'
-      }
+      headers
     });
-
     const data = await response.json();
-    return data.oclhv.map((item: any) => ({
+    console.log(data)
+    return data.data.oclhv.map((item: any) => ({
       time: item.time * 1000,
       open: item.open,
       high: item.high,
