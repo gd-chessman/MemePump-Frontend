@@ -1,0 +1,39 @@
+{
+  "connect": "接続",
+  "overview": "概要",
+  "trade": "取引",
+  "createCoin": "コイン作成",
+  "masterTrade": "マスタートレード",
+  "wallet": "ウォレット",
+  "searchPlaceholder": "トークン名/アドレス",
+  "languages": {
+    "korea": "韓国語",
+    "english": "英語",
+    "vietnamese": "ベトナム語",
+    "japan": "日本語"
+  },
+  "trading": {
+    "token": "トークン",
+    "address": "アドレス",
+    "price": "価格",
+    "marketCap": "時価総額",
+    "liquidity": "流動性",
+    "holder": "保有者",
+    "volume1h": "1時間取引量",
+    "volume1hChange": "1時間変化率",
+    "volume24h": "24時間取引量",
+    "volume24hChange": "24時間変化率",
+    "noTokens": "トークンが見つかりません",
+    "trade": "取引"
+  },
+  "auth": {
+    "connect": "Telegramで接続",
+    "disconnect": "切断",
+    "connecting": "接続中...",
+    "connected": "接続済み",
+    "loginSuccess": "ログイン成功",
+    "loginFailed": "ログイン失敗",
+    "pleaseConnect": "Telegramアカウントを接続してください",
+    "userProfile": "ユーザープロフィール"
+  }
+}

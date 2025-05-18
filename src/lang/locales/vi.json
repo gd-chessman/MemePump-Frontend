@@ -1,0 +1,39 @@
+{
+  "connect": "Kết nối",
+  "overview": "Tổng quan",
+  "trade": "Giao dịch",
+  "createCoin": "Tạo Coin",
+  "masterTrade": "Giao dịch chuyên nghiệp",
+  "wallet": "Ví",
+  "searchPlaceholder": "Tên Token/ Địa chỉ",
+  "languages": {
+    "korea": "Hàn Quốc",
+    "english": "Tiếng Anh",
+    "vietnamese": "Tiếng Việt",
+    "japan": "Nhật Bản"
+  },
+  "trading": {
+    "token": "Token",
+    "address": "Địa chỉ",
+    "price": "Giá",
+    "marketCap": "Vốn hóa",
+    "liquidity": "Thanh khoản",
+    "holder": "Người nắm giữ",
+    "volume1h": "Khối lượng 1h",
+    "volume1hChange": "Thay đổi 1h",
+    "volume24h": "Khối lượng 24h",
+    "volume24hChange": "Thay đổi 24h",
+    "noTokens": "Không tìm thấy token nào",
+    "trade": "Giao dịch"
+  },
+  "auth": {
+    "connect": "Kết nối Telegram",
+    "disconnect": "Ngắt kết nối",
+    "connecting": "Đang kết nối...",
+    "connected": "Đã kết nối",
+    "loginSuccess": "Đăng nhập thành công",
+    "loginFailed": "Đăng nhập thất bại",
+    "pleaseConnect": "Vui lòng kết nối tài khoản Telegram của bạn",
+    "userProfile": "Thông tin người dùng"
+  }
+}

@@ -1,0 +1,175 @@
+import React from 'react';
+
+type ResolutionString = '1s' | '5s' | '15s' | '1' | '5' | '1h' | '4h' | '1D' | '1W' | '1MN';
+
+// Function to fetch data from Solana Tracker API
+const fetchChartData = async (tokenAddress: string, from: number, to: number, marketCap: boolean = false, resolution: ResolutionString) => {
+  try {
+    const url = `https://data.solanatracker.io/chart/${tokenAddress}?type=${resolution}&time_from=${from}&time_to=${to}`
+  + (marketCap ? `&marketCap=${marketCap}` : '');
+
+    const response = await fetch(url, {
+      headers: {
+        'x-api-key': '53dc9d39-607d-40b4-a946-ab7bfa2cde15'
+      }
+    });
+
+    const data = await response.json();
+    return data.oclhv.map((item: any) => ({
+      time: item.time * 1000,
+      open: item.open,
+      high: item.high,
+      low: item.low,
+      close: item.close,
+      volume: item.volume,
+    }));
+  } catch (error) {
+    console.error('Error fetching chart data:', error);
+    return [];
+  }
+};
+
+// Convert TradingView resolution to API resolution format
+const convertResolution = (resolution: string): any => {
+  switch (resolution) {
+    case '1':
+      return '1m';
+    case '5':
+      return '5m';
+    case '60':
+      return '1h';
+    case '240':
+      return '4h';
+    default:
+      return resolution as ResolutionString;
+  }
+};
+
+// Class MockDatafeed
+export class MockDatafeed {
+  private symbol: string;
+  private tokenAddress: string;
+  private resolution: ResolutionString;
+  private showMarketCap: boolean;
+  private isLoading: boolean = false;
+  private lastRequestTime: number = 0;
+  private requestTimeout: number = 1000; // Minimum time between requests in milliseconds
+
+  constructor(symbol: string, tokenAddress: string, resolution: ResolutionString, showMarketCap: boolean = false) {
+    this.symbol = symbol;
+    this.tokenAddress = tokenAddress;
+    this.resolution = resolution;
+    this.showMarketCap = showMarketCap;
+  }
+
+  onReady(callback: (config: any) => void) {
+    setTimeout(() => callback({
+      supported_resolutions: ['1s', '5s', '15s', '1', '5', '1h', '4h', '1D', '1W', '1MN'],
+      exchanges: [
+        {
+          value: 'MEMEPUMP',
+          name: 'MEMEPUMP',
+          desc: 'MEMEPUMP',
+        },
+      ],
+      symbols_types: [
+        {
+          name: 'crypto',
+          value: 'crypto',
+        },
+      ],
+    }));
+  }
+
+  searchSymbols(userInput: string, exchange: string, symbolType: string, onResultReadyCallback: (symbols: any[]) => void) {
+    // For now, we'll just return the current symbol
+    onResultReadyCallback([{
+      symbol: this.symbol,
+      full_name: this.symbol,
+      description: this.symbol,
+      exchange: 'MEMEPUMP',
+      type: 'crypto',
+    }]);
+  }
+
+  resolveSymbol(symbolName: string, onSymbolResolvedCallback: (symbolInfo: any) => void, onResolveErrorCallback: (error: any) => void) {
+    setTimeout(() => {
+      onSymbolResolvedCallback({
+        name: symbolName,
+        description: symbolName,
+        type: 'crypto',
+        session: '24x7',
+        timezone: 'UTC',
+        exchange: 'MEMEPUMP',
+        minmov: 1,
+        pricescale: 100000000, // Adjust based on your needs
+        has_intraday: true,
+        has_daily: true,
+        has_weekly_and_monthly: true,
+        supported_resolutions: ['1s', '5s', '15s', '1', '5', '1h', '4h', '1D', '1W', '1MN'],
+        volume_precision: 8,
+        data_status: 'streaming',
+        has_intraday_seconds: true,
+        has_seconds: true,
+      });
+    });
+  }
+
+  async getBars(symbolInfo: any, resolution: ResolutionString, periodParams: any, onHistoryCallback: (bars: any[], meta: any) => void, onErrorCallback: (error: any) => void) {
+    try {
+      const { from, to } = periodParams;
+      const currentTime = Date.now();
+
+      // Check if we're already loading or if the last request was too recent
+      if (this.isLoading || (currentTime - this.lastRequestTime < this.requestTimeout)) {
+        onHistoryCallback([], {
+          noData: true,
+        });
+        return;
+      }
+
+      this.isLoading = true;
+      this.lastRequestTime = currentTime;
+
+      const apiResolution = convertResolution(resolution);
+      const bars = await fetchChartData(this.tokenAddress, from, to, this.showMarketCap, apiResolution);
+      
+      this.isLoading = false;
+      onHistoryCallback(bars, {
+        noData: bars.length === 0,
+      });
+    } catch (error) {
+      this.isLoading = false;
+      console.error('Error in getBars:', error);
+      onErrorCallback(error);
+    }
+  }
+
+  subscribeBars(symbolInfo: any, resolution: ResolutionString, onRealtimeCallback: (bar: any) => void, subscriberUID: string, onResetCacheNeededCallback: () => void) {
+    // Implement real-time updates if needed
+  }
+
+  unsubscribeBars(subscriberUID: string) {
+    // Implement unsubscribe logic if needed
+  }
+}
+
+export const formatNumber = (value: number): string => {
+  if (value < 0.01) {
+    const str = value.toFixed(10);
+    const match = str.match(/^0\.(0*)([1-9].*)$/);
+    if (match) {
+      const [, zeros, rest] = match;
+      const subscriptMap: { [key: string]: string } = {
+        '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄',
+        '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉'
+      };
+      const subscriptNumber = zeros.length.toString().split('').map(d => subscriptMap[d]).join('');
+      return `0.0${subscriptNumber}${rest}`;
+    }
+  }
+  if (value >= 1e9) return (value / 1e9).toFixed(2) + 'B';
+  if (value >= 1e6) return (value / 1e6).toFixed(2) + 'M';
+  if (value >= 1e3) return (value / 1e3).toFixed(2) + 'K';
+  return value.toFixed(2);
+}; 

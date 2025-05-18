@@ -1,0 +1,39 @@
+{
+  "connect": "연결",
+  "overview": "개요",
+  "trade": "거래",
+  "createCoin": "코인 생성",
+  "masterTrade": "마스터 거래",
+  "wallet": "지갑",
+  "searchPlaceholder": "토큰 이름/주소",
+  "languages": {
+    "korea": "한국어",
+    "english": "영어",
+    "vietnamese": "베트남어",
+    "japan": "일본어"
+  },
+  "trading": {
+    "token": "토큰",
+    "address": "주소",
+    "price": "가격",
+    "marketCap": "시가총액",
+    "liquidity": "유동성",
+    "holder": "보유자",
+    "volume1h": "1시간 거래량",
+    "volume1hChange": "1시간 변화율",
+    "volume24h": "24시간 거래량",
+    "volume24hChange": "24시간 변화율",
+    "noTokens": "토큰을 찾을 수 없습니다",
+    "trade": "거래"
+  },
+  "auth": {
+    "connect": "Telegram 연결",
+    "disconnect": "연결 해제",
+    "connecting": "연결 중...",
+    "connected": "연결됨",
+    "loginSuccess": "로그인 성공",
+    "loginFailed": "로그인 실패",
+    "pleaseConnect": "Telegram 계정을 연결해주세요",
+    "userProfile": "사용자 프로필"
+  }
+}

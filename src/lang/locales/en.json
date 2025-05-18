@@ -1,0 +1,39 @@
+{
+  "connect": "Connect",
+  "overview": "Overview",
+  "trade": "Trade",
+  "createCoin": "Create Coin",
+  "masterTrade": "Master Trade",
+  "wallet": "Wallet",
+  "searchPlaceholder": "Token Name/ Address",
+  "languages": {
+    "korea": "Korea",
+    "english": "English",
+    "vietnamese": "Vietnamese",
+    "japan": "Japan"
+  },
+  "trading": {
+    "token": "Token",
+    "address": "Address",
+    "price": "Price",
+    "marketCap": "Market Cap",
+    "liquidity": "Liquidity",
+    "holder": "Holder",
+    "volume1h": "Volume 1h",
+    "volume1hChange": "Volume 1h Change",
+    "volume24h": "Volume 24h",
+    "volume24hChange": "Volume 24h Change",
+    "noTokens": "No tokens found",
+    "trade": "Trade"
+  },
+  "auth": {
+    "connect": "Connect Telegram",
+    "disconnect": "Disconnect",
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Login failed",
+    "pleaseConnect": "Please connect your Telegram account",
+    "userProfile": "User Profile"
+  }
+}
