@@ -36,7 +36,7 @@ export default function MasterTradeChat() {
     setCopiedAddress(address)
     setTimeout(() => setCopiedAddress(null), 2000)
   }
-
+  console.log("myConnects", myConnects)
   const handleSelectItem = (id: string) => {
     setSelectedItem(id === selectedItem ? null : id)
   }

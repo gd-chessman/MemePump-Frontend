@@ -24,7 +24,15 @@
     "volume24h": "24時間取引量",
     "volume24hChange": "24時間変化率",
     "noTokens": "トークンが見つかりません",
-    "trade": "取引"
+    "trade": "取引",
+    "panel": {
+      "buy": "購入",
+      "sell": "売却",
+      "percentage": "パーセンテージ",
+      "balance": "残高",
+      "selectGroups": "グループを選択...",
+      "amount": "数量"
+    }
   },
   "auth": {
     "connect": "Telegramで接続",

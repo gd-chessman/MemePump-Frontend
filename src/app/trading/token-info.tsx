@@ -6,61 +6,73 @@ import { Star } from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
 import token from '@/assets/svgs/token.svg'
-import { truncateString } from "@/utils/format"
+import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import website from '@/assets/svgs/website.svg'
 import telegram from '@/assets/svgs/tele-icon.svg'
 import x from '@/assets/svgs/x-icon.svg'
-import { getTokenInforByAddress } from "@/services/api/SolonaTokenService"
+import { getMyWishlist, getTokenInforByAddress } from "@/services/api/SolonaTokenService"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { SolonaTokenService } from "@/services/api"
+import { useLang } from "@/lang";
+import { UpdateFavorite } from "../components/UpdateFavorite"
 type TimeFrame = '5m' | '1h' | '4h' | '24h'
 
 export default function TokenInfo() {
   const searchParams = useSearchParams();
   const address = searchParams?.get("address");
+  const { t } = useLang();  
   const { data: tokenInfor, refetch } = useQuery({
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
   });
-  const [activeTab, setActiveTab] = useState("all")
+  const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
+    queryKey: ["myWishlist"],
+    queryFn: getMyWishlist,
+    refetchOnMount: true,
+  });
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("24h")
   const dataToken = {
-    name: 'axeinfinity',
-    image: token,
-    symbol: 'AXE',
-    address: '0x1234567890123456789012345678901234567890',
-    cap: '$994.56M',
-    aDayVolume: '$994.56M',
-    liquidity: '$994.56M',
-    holders: '$994.56M',
+    name: tokenInfor?.name,
+    image: tokenInfor?.logoUrl,
+    symbol: tokenInfor?.symbol,
+    address: tokenInfor?.address,
+    cap: tokenInfor?.marketCap,
+    aDayVolume: tokenInfor?.volume24h,
+    liquidity: tokenInfor?.liquidity,
+    holders: tokenInfor?.holders,
     '5m': {
-      vol: '$7.7M',
-      buy: '$994.56M',
-      sell: '$994.56M',
-      netBuy: '$994.56M',
+      difference: "12%",
+      vol: tokenInfor?.volume5m || "updating",
+      buy: tokenInfor?.buyVolume5m || "updating",
+      sell: tokenInfor?.sellVolume5m || "updating",
+      netBuy: tokenInfor?.netBuyVolume5m || "updating",
     },
     '1h': {
-      vol: '$994.56M',
-      buy: '$7.7M',
-      sell: '$994.56M',
-      netBuy: '$994.56M',
+      difference: "12%",
+      vol: tokenInfor?.volume1h || "updating",
+      buy: tokenInfor?.buyVolume1h || "updating",
+      sell: tokenInfor?.sellVolume1h || "updating",
+      netBuy: tokenInfor?.netBuyVolume1h || "updating",
     },
     '4h': {
-      vol: '$994.56M',
-      buy: '$7.7M',
-      sell: '$994.56M',
-      netBuy: '$994.56M',
+      difference: "12%",
+      vol: tokenInfor?.volume4h || "updating",
+      buy: tokenInfor?.buyVolume4h || "updating",
+      sell: tokenInfor?.sellVolume4h || "updating",
+      netBuy: tokenInfor?.netBuyVolume4h || "updating",
     },
     '24h': {
-      vol: '$994.56M',
-      buy: '$7.7M',
-      sell: '$994.56M',
-      netBuy: '$994.56M',
+      difference: "12%",
+      vol: tokenInfor?.volume24h || "updating",
+      buy: tokenInfor?.buyVolume24h || "updating",
+      sell: tokenInfor?.sellVolume24h || "updating",
+      netBuy: tokenInfor?.netBuyVolume24h || "updating",
     }
-
   }
-  console.log(tokenInfor?.logoUrl, "tokenInfor")
+  
+  console.log("tokenInfor", tokenInfor)
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-neutral-1000 box-shadow-info rounded-xl p-3 h-full flex flex-col ">
@@ -88,9 +100,18 @@ export default function TokenInfo() {
             </div>
           </div>
           <div className="flex flex-col items-end justify-between h-[40px]">
-            <button className="ml-auto">
-              <Star className="w-4 h-4 text-neutral-500 hover:text-yellow-400" />
-            </button> 
+            <button className="ml-auto" onClick={(e) => {
+              e.stopPropagation();
+              const data = {
+                token_address: tokenInfor?.address,
+                status: myWishlist?.tokens?.some((t: { address: string }) => t.address === tokenInfor?.address) ? "off" : "on",
+              };
+              SolonaTokenService.toggleWishlist(data).then(() => {
+                refetchMyWishlist();
+              });
+            }}>
+              <Star className={`w-4 h-4 ${myWishlist?.tokens?.some((t: { address: string }) => t.address === tokenInfor?.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
+            </button>
             <div className="flex items-center gap-2">
               {tokenInfor?.telegram && (
                 <Link href={tokenInfor.telegram} target="_blank"><Image src={telegram} alt="Telegram" className="h-4 w-4"/></Link>
@@ -108,28 +129,28 @@ export default function TokenInfo() {
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
             <div className="text-xs text-neutral-100 font-semibold mb-1">Market Cap</div>
             <div className="font-medium text-sm text-neutral-100 flex items-center">
-              {dataToken.cap}
-              <span className="text-green-400 text-xs ml-1">↑</span>
+              ${formatNumberWithSuffix(dataToken.cap || 0)}
+              {/* <span className="text-green-400 text-xs ml-1">↑</span> */}
             </div>
           </div>
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
             <div className="text-xs text-neutral-100 font-semibold mb-1">24h Volume</div>
             <div className="font-medium text-sm text-neutral-100 flex items-center">
-              {dataToken.aDayVolume}
-              <span className="text-red-400 text-xs ml-1">↓</span>
+              ${formatNumberWithSuffix(dataToken.aDayVolume || 0)}
+              {/* <span className="text-red-400 text-xs ml-1">↓</span> */}
             </div>
           </div>
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
             <div className="text-xs text-neutral-100 font-semibold mb-1">Liquidity</div>
             <div className="font-medium text-sm text-neutral-100 flex items-center">
-              {dataToken.liquidity}
-              <span className="text-green-400 text-xs ml-1">↑</span>
+              ${formatNumberWithSuffix(dataToken.liquidity || 0)} 
+              {/* <span className="text-green-400 text-xs ml-1">↑</span> */}
             </div>
           </div>
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
             <div className="text-xs text-neutral-100 font-semibold mb-1">Holders</div>
             <div className="font-medium text-sm text-neutral-100">
-              {dataToken.holders}
+              ${formatNumberWithSuffix(dataToken.holders || 0)}
             </div>
           </div>
         </div>
@@ -139,22 +160,22 @@ export default function TokenInfo() {
         <div className="grid grid-cols-4 gap-2 ">
           <button onClick={() => setTimeFrame("5m")} className={`flex flex-col gap-1 cursor-pointer rounded-lg p-2 text-center border-1 border-solid  ${timeFrame === "5m" ? "border-green-400" : "box-shadow-info"}`}>
             <div className="text-xs">5m</div>
-            <div className="text-red-400 font-normal text-xs">-12.67%</div>
+            <div className="text-red-400 font-normal text-xs">{dataToken[timeFrame].difference}</div>
           </button>
           <button onClick={() => setTimeFrame("1h")} className={`flex flex-col gap-1 cursor-pointer rounded-lg p-2 text-center border-1 border-solid  ${timeFrame === "1h" ? "border-green-400" : "box-shadow-info"}`}>
             <div className="text-xs">1h</div>
-            <div className="text-green-400 font-normal text-xs">12.67%</div>
+            <div className="text-green-400 font-normal text-xs">{dataToken[timeFrame].difference}</div>
           </button>
           <button onClick={() => setTimeFrame("4h")} className={`flex flex-col gap-1 cursor-pointer rounded-lg p-2 text-center border-1 border-solid  ${timeFrame === "4h" ? "border-green-400" : "box-shadow-info"}`}>
             <div className="text-xs">4h</div>
-            <div className="text-green-400 font-normal text-xs">12.67%</div>
+            <div className="text-green-400 font-normal text-xs">{dataToken[timeFrame].difference}</div>
           </button>
           <button onClick={() => setTimeFrame("24h")} className={`flex flex-col gap-1 cursor-pointer rounded-lg p-2 text-center border-1 border-solid  ${timeFrame === "24h" ? "border-green-400" : "box-shadow-info"}`}>
             <div className="text-xs">24h</div>
-            <div className="text-green-400 font-normal text-xs">1200.67%</div>
+            <div className="text-green-400 font-normal text-xs">{dataToken[timeFrame].difference}</div>
           </button>
         </div>
-        <div className="flex justify-between mx-1">
+        <div className="flex justify-between mx-4">
           <div className="flex flex-col items-center gap-1">
             <div className="text-xs text-neutral-100">Vol</div>
             <div className="font-medium text-xs">{dataToken[timeFrame].vol}</div>

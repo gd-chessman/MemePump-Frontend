@@ -24,7 +24,15 @@
     "volume24h": "Khối lượng 24h",
     "volume24hChange": "Thay đổi 24h",
     "noTokens": "Không tìm thấy token nào",
-    "trade": "Giao dịch"
+    "trade": "Giao dịch",
+    "panel": {
+      "buy": "Mua",
+      "sell": "Bán",
+      "percentage": "Phần trăm",
+      "balance": "Số dư",
+      "selectGroups": "Chọn nhóm...",
+      "amount": "Số lượng"
+    }
   },
   "auth": {
     "connect": "Kết nối Telegram",

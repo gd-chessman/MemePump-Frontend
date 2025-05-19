@@ -24,7 +24,15 @@
     "volume24h": "Volume 24h",
     "volume24hChange": "Volume 24h Change",
     "noTokens": "No tokens found",
-    "trade": "Trade"
+    "trade": "Trade",
+    "panel": {
+      "buy": "Buy",
+      "sell": "Sell",
+      "percentage": "Percentage",
+      "balance": "Balance",
+      "selectGroups": "Select groups...",
+      "amount": "Amount"
+    }
   },
   "auth": {
     "connect": "Connect Telegram",

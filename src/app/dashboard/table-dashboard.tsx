@@ -17,6 +17,7 @@ import LogWarring from "@/ui/log-warring";
 import { getMyWishlist } from "@/services/api/SolonaTokenService";
 import { useQuery } from "@tanstack/react-query";
 import { getTopCoins } from "@/services/api/OnChainService";
+import { UpdateFavorite } from "@/app/components/UpdateFavorite";
 
 export default function Trading() {
   const router = useRouter();
@@ -134,32 +135,6 @@ export default function Trading() {
     setCurrentPage(page);
   };
 
-  const handleStarClick = async (token: any) => {
-    try {
-      const data = {
-        token_address: token.address,
-        status: token.status ? "off" : "on",
-      };
-      const response = await SolonaTokenService.toggleWishlist(data);
-      if (response) {
-        setToastMessage(t("trading.wishlistUpdated"));
-        setShowToast(true);
-        setTimeout(() => {
-          setShowToast(false);
-        }, 3000);
-        // Refresh wishlist using refetch
-        refetchMyWishlist();
-      }
-    } catch (error) {
-      console.error("Error toggling wishlist:", error);
-      setToastMessage(t("trading.wishlistError"));
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
-    }
-  };
-
   const handleSort = (field: string) => {
     if (sortBy === field) {
       setSortType(sortType === "asc" ? "desc" : "asc");
@@ -210,7 +185,26 @@ export default function Trading() {
                 <TableTokenList
                   tokens={displayTokens}
                   onCopyAddress={handleCopyAddress}
-                  onStarClick={handleStarClick}
+                  onStarClick={(token) => {
+                    const data = {
+                      token_address: token.address,
+                      status: myWishlist?.tokens?.some((t: { address: string }) => t.address === token.address) ? "off" : "on",
+                    };
+                    SolonaTokenService.toggleWishlist(data).then(() => {
+                      refetchMyWishlist();
+                      setToastMessage("Thêm vào danh sách token yêu thích thành công");
+                      setShowToast(true);
+                      setTimeout(() => {
+                        setShowToast(false);
+                      }, 3000);
+                    }).catch(() => {
+                      setToastMessage("Thêm vào danh sách token yêu thích thất bại");
+                      setShowToast(true);
+                      setTimeout(() => {
+                        setShowToast(false);
+                      }, 3000);
+                    });
+                  }}
                   isFavoritesTab={false}
                   isLoading={isLoadingTopCoins}
                   sortBy={sortBy}

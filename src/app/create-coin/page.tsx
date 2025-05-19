@@ -16,12 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/ui/select";
-import ethereum from "@/assets/svgs/ethereum-icon.svg";
-import user from "@/assets/svgs/user-icon.svg";
-import arrow from "@/assets/svgs/arrow-icon.svg";
-import noCoin from "@/assets/svgs/no-token.svg";
-import token from "@/assets/svgs/token.svg";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getTokenCategorys } from "@/services/api/TelegramWalletService";
 
 type CoinFormData = {
   name: string;
@@ -133,7 +130,12 @@ export default function CreateCoinForm() {
   const [showOtherOption, setShowOtherOption] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState("today");
+  const { data: categories = [] } = useQuery({
+    queryKey: ["token-categories"],
+    queryFn: getTokenCategorys,
+  });
 
+  console.log("categories", categories)
   useEffect(() => {
     const style = document.createElement("style");
     style.textContent = globalStyles;
@@ -475,7 +477,7 @@ export default function CreateCoinForm() {
                     />
 
                     {formData.logoPreview ? (
-                      <div className="relative w-full h-full">
+                      <div className="relative w-full h-full flex items-center justify-center">
                         <img
                           src={formData.logoPreview || "/placeholder.svg"}
                           alt="Logo preview"
@@ -513,7 +515,7 @@ export default function CreateCoinForm() {
                       <div className="w-16 h-16 bg-white rounded-full overflow-hidden mb-2 flex items-center justify-center">
                         {formData.logoPreview ? (
                           <img
-                            src={formData.logoPreview || "/placeholder.svg"}
+                            src={formData.logoPreview}
                             alt="Logo preview"
                             width={64}
                             height={64}
@@ -521,10 +523,10 @@ export default function CreateCoinForm() {
                           />
                         ) : (
                           <img
-                            src={user}
+                            src={"/user-icon.png"}
                             alt="user-icon"
-                            width={64}
-                            height={64}
+                            width={40}
+                            height={40}
                           />
                         )}
                       </div>
@@ -674,7 +676,7 @@ export default function CreateCoinForm() {
             </div>
             {activeTab === "today" ? (
                <div className="flex flex-col items-center justify-center py-8">
-               <Image src={noCoin} alt="no-coin-icon" width={180} height={180} />
+               <img src={"/no-list-token.png"} alt="no-coin-icon" width={180} height={180} />
                <p className="text-neutral-100 mt-3 font-medium">
                  No coins created recently
                </p>
@@ -732,7 +734,7 @@ export default function CreateCoinForm() {
               >
                 SEE ALL MY COINS
               </Link>
-              <Image src={arrow} alt="arrow-icon" width={15} height={14} />
+              <img src={"/arrow.png"} alt="arrow-icon" width={15} height={14} />
             </button>
           </div>
         </div>

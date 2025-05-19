@@ -115,7 +115,7 @@ const Header = () => {
                 <div className='flex items-center gap-6'>
                     {isAuthenticated && walletInfor && (
                         <button className='linear-gradient-light dark:linear-gradient-connect text-sm text-black dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-colors'>
-                            {walletInfor.solana_balance} SOL &ensp; {'$' + formatNumberWithSuffix3(walletInfor.solana_balance)}
+                            {walletInfor.solana_balance} SOL &ensp; {'$' + formatNumberWithSuffix3(walletInfor.solana_balance_usd)}
                         </button>
                     )}
                     <div className="relative">
