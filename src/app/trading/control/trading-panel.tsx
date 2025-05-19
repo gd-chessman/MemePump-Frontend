@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getMyGroups } from "@/services/api/MasterTradingService"
 import { getTradeAmount } from "@/services/api/TradingService"
 import { useSearchParams } from "next/navigation"
+import { useLang } from "@/lang/useLang"
 const styleTextBase = "text-gray-600 dark:text-neutral-200 text-sm font-normal"
 type TradingMode = "buy" | "sell"
 
@@ -29,7 +30,7 @@ interface TradingPanelProps {
 }
 
 export default function TradingPanel({ defaultMode = "buy", currency, isConnected, onConnect }: TradingPanelProps) {
-
+    const { t } = useLang();
     const searchParams = useSearchParams();
     const address = searchParams?.get("address");
 
@@ -251,13 +252,13 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
                     className={`flex-1 rounded-3xl text-sm cursor-pointer uppercase text-center ${mode === "buy" ? "border-green-500 text-green-600 dark:text-theme-green-200 border-1 bg-green-50 dark:bg-theme-green-100 font-semibold" : "text-gray-500 dark:text-neutral-400"}`}
                     onClick={() => setMode("buy")}
                 >
-                    Buy
+                    {t('trading.panel.buy')}
                 </button>
                 <button
                     className={`flex-1 rounded-3xl cursor-pointer text-sm uppercase text-center ${mode === "sell" ? "border-red-500 text-red-600 dark:text-theme-red-100 border-1 bg-red-50 dark:bg-theme-red-300 font-semibold" : "text-gray-500 dark:text-neutral-400"}`}
                     onClick={() => setMode("sell")}
                 >
-                    Sell
+                    {t('trading.panel.sell')}
                 </button>
             </div>
 
@@ -280,7 +281,7 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
             <div className="flex justify-between text-sm mb-3">
                 <div className={styleTextBase}>~ ${amountUSD}</div>
                 <div className={styleTextBase}>
-                    Balance: {tradeAmount?.sol_balance.toFixed(6)} {currency.symbol}
+                    {t('trading.panel.balance')}: {tradeAmount?.sol_balance.toFixed(6)} {currency.symbol}
                 </div>
             </div>
 
@@ -290,7 +291,7 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
                     {/* Percentage Slider */}
                     <div>
                         <div className="flex justify-between mb-1">
-                            <span className={styleTextBase}>Percentage</span>
+                            <span className={styleTextBase}>{t('trading.panel.percentage')}</span>
                             <span className={`${styleTextBase} text-blue-600 dark:text-theme-primary-300`}>{percentage.toFixed(2)}%</span>
                         </div>
                         <input
@@ -355,7 +356,7 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
             {/* Quick Amount Buttons */}
             {mode == "buy" && (
                 <>
-                    <span className={styleTextBase}>{currency.symbol}</span>
+                    <span className={styleTextBase}>SOL</span>
                     <div className="flex items-center justify-between gap-3">
                         {amountValues.map((value, index) => (
                             <div key={index} className="relative w-full">
@@ -404,7 +405,7 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
             <div className="relative mt-3">
                 <Select>
                     <SelectTrigger className="bg-gray-50 dark:bg-neutral-900 w-full py-2 px-4 rounded-full flex items-center justify-between text-gray-500 dark:text-neutral-400 border border-gray-200 dark:border-theme-neutral-900">
-                        <SelectValue placeholder="Select groups..." />
+                        <SelectValue placeholder={t('trading.panel.selectGroups')} />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-neutral-900 box-shadow-info rounded-xl z-10">
                         {groups?.filter((group: any) => group.mg_status === "on").map((group: any) => (
@@ -429,7 +430,7 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
                             : "bg-red-500 hover:bg-red-600 dark:bg-theme-red-100 dark:hover:bg-theme-red-100/90"
                     }`}
                 >
-                    {mode === "buy" ? "BUY" : "SELL"}
+                    {mode === "buy" ? t('trading.panel.buy') : t('trading.panel.sell')}
                 </button>
             </div>
         </div>
