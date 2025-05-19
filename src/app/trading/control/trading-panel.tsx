@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import LanguageSelector from "@/app/components/select"
 import { useQuery } from "@tanstack/react-query"
 import { getMyGroups } from "@/services/api/MasterTradingService"
-import { getTradeAmount } from "@/services/api/TradingService"
+import { createTrading, getTradeAmount } from "@/services/api/TradingService"
 import { useSearchParams } from "next/navigation"
 import { useLang } from "@/lang/useLang"
 import { getPriceSolona } from "@/services/api/SolonaTokenService"
@@ -47,7 +47,7 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
         queryKey: ["sol-price"],
         queryFn: () => getPriceSolona(),
     });
-    console.log("solPrice", solPrice)
+    console.log("groups", groups)
 
 
     const [mode, setMode] = useState<TradingMode>(defaultMode)
@@ -64,7 +64,8 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
     const [isDirectAmountInput, setIsDirectAmountInput] = useState(false)
     const [isMounted, setIsMounted] = useState(false);
     const [windowHeight, setWindowHeight] = useState(800); // Default height
-    const [selectedGroup, setSelectedGroup] = useState<string>("")
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
 
     // Giả lập tỷ giá đổi từ crypto sang USD
     const exchangeRate = solPrice?.priceUSD || 0   
@@ -270,6 +271,14 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
         }
     }, [tradeAmount, mode, percentage, isDirectAmountInput])
 
+    const toggleGroup = (groupId: string) => {
+        setSelectedGroups(prev => 
+            prev.includes(groupId) 
+                ? prev.filter(id => id !== groupId)
+                : [...prev, groupId]
+        );
+    };
+
     // member_list: []
     // order_price: 161.2150935
     // order_qlty: 1
@@ -277,14 +286,23 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
     // order_token_name: "No name"
     // order_trade_type: "buy"
     // order_type: "market"
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        // const response = await createTrading({
+        //     order_trade_type: mode,
+        //     order_type: "market",
+        //     order_token_name: tradeAmount?.token_address || "No name",
+        //     order_token_address: tradeAmount?.token_address || "",
+        //     order_price: mode === "buy" ? Number(amount) * (solPrice?.priceUSD || 0) : Number(amount) * (tradeAmount?.token_price || 0),
+        //     order_qlty: Number(amount),
+        //     member_list: [],
+        //   });
         const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
         const submitData = {
             mode,
             amount: Number(amount),
             amountUSD: Number(amountUSD),
             percentage,
-            groupId: selectedGroup,
+            groupId: selectedGroups.join(","),
             currency: mode === "buy" ? currency.symbol : tradeAmount?.token_address,
             balance: balance,
             isDirectAmountInput
@@ -293,7 +311,8 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
         console.log('Trading Submit Data:', submitData)
         // TODO: Add API call here
     }
-    console.log("tradeAmount", tradeAmount)
+   
+    console.log("tradeAmount", tradeAmount?.token_address)
     return (
         <div className="rounded-lg flex flex-col 2xl:justify-between gap-3 h-full overflow-y-auto">
             {/* BUY/SELL Toggle */}
@@ -455,22 +474,42 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
             )}
             {/* Select Groups Dropdown */}
             <div className="relative mt-3">
-                <Select onValueChange={(value) => setSelectedGroup(value)}>
-                    <SelectTrigger className="bg-gray-50 dark:bg-neutral-900 w-full py-2 px-4 rounded-full flex items-center justify-between text-gray-500 dark:text-neutral-400 border border-gray-200 dark:border-theme-neutral-900">
-                        <SelectValue placeholder={t('trading.panel.selectGroups')} />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white dark:bg-neutral-900 box-shadow-info rounded-xl z-10">
-                        {groups?.filter((group: any) => group.mg_status === "on").map((group: any) => (
-                            <SelectItem
-                                key={group.mg_id}
-                                value={group.mg_id.toString()}
-                                className="text-gray-700 dark:text-neutral-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-800"
-                            >
-                                {group.mg_name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="bg-gray-50 dark:bg-neutral-900 w-full py-2 px-4 rounded-full flex items-center justify-between text-gray-500 dark:text-neutral-400 border border-gray-200 dark:border-theme-neutral-900"
+                >
+                    <span>{selectedGroups.length > 0 ? `${selectedGroups.length} groups selected` : t('trading.panel.selectGroups')}</span>
+                    <svg
+                        className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                
+                {isOpen && (
+                    <div className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-900 box-shadow-info rounded-xl border border-gray-200 dark:border-theme-neutral-900">
+                        <div className="max-h-60 overflow-auto">
+                            {groups?.filter((group: any) => group.mg_status === "on").map((group: any) => (
+                                <div
+                                    key={group.mg_id}
+                                    className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer"
+                                    onClick={() => toggleGroup(group.mg_id.toString())}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedGroups.includes(group.mg_id.toString())}
+                                        onChange={() => {}}
+                                        className="mr-2"
+                                    />
+                                    <span className="text-gray-700 dark:text-neutral-400">{group.mg_name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Action Button */}
