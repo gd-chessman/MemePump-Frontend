@@ -2,6 +2,7 @@
 import { Search, Star } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import token from '@/assets/svgs/token.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useQuery } from '@tanstack/react-query'
@@ -9,6 +10,7 @@ import { getTopCoins } from '@/services/api/OnChainService'
 import { formatNumberWithSuffix } from '@/utils/format'
 
 const ListToken = () => {
+    const router = useRouter()
     const [sortBy, setSortBy] = useState("volume_1h_usd");
     const [sortType, setSortType] = useState("desc");
     const [activeTab, setActiveTab] = useState("all")
@@ -17,6 +19,7 @@ const ListToken = () => {
         queryFn: () => getTopCoins({ sort_by: sortBy, sort_type: sortType, offset: 3, limit: 50 }),
         refetchInterval: 10000,
       });
+      console.log("topCoins", topCoins)
     return (
         <div className='bg-neutral-1000 box-shadow-info rounded-xl p-3 pr-0 pb-0 h-[69%] overflow-hidden'>
             <div className="relative mb-4 pr-3">
@@ -56,7 +59,8 @@ const ListToken = () => {
                 {topCoins?.map((item: any, i: number) => (
                         <div
                             key={i}
-                            className="flex items-center justify-between py-2 border-b border-neutral-800 group hover:bg-neutral-800/50 px-2 rounded"
+                            onClick={() => router.push(`/trading?address=${item.address}`)}
+                            className="flex items-center justify-between py-2 border-b border-neutral-800 group hover:bg-neutral-800/50 px-2 rounded cursor-pointer"
                         >
                             <div className="flex items-center gap-2">
                                 <button className="text-neutral-500">

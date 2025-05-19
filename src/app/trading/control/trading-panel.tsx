@@ -12,6 +12,7 @@ import { getMyGroups } from "@/services/api/MasterTradingService"
 import { getTradeAmount } from "@/services/api/TradingService"
 import { useSearchParams } from "next/navigation"
 import { useLang } from "@/lang/useLang"
+import { getPriceSolona } from "@/services/api/SolonaTokenService"
 const styleTextBase = "text-gray-600 dark:text-neutral-200 text-sm font-normal"
 type TradingMode = "buy" | "sell"
 
@@ -29,7 +30,7 @@ interface TradingPanelProps {
     onConnect: () => void
 }
 
-export default function TradingPanel({ defaultMode = "buy", currency, isConnected, onConnect }: TradingPanelProps) {
+export default function TradingPanel({ defaultMode = "buy", currency, isConnected }: TradingPanelProps) {
     const { t } = useLang();
     const searchParams = useSearchParams();
     const address = searchParams?.get("address");
@@ -37,11 +38,17 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
     const { data: groups } = useQuery({
         queryKey: ["groups"],
         queryFn: getMyGroups,
-      });
+    });
     const { data: tradeAmount } = useQuery({
         queryKey: ["tradeAmount", address],
         queryFn: () => getTradeAmount(address),
-      });
+    });
+    const { data: solPrice } = useQuery({
+        queryKey: ["sol-price"],
+        queryFn: () => getPriceSolona(),
+    });
+    console.log("solPrice", solPrice)
+
 
     const [mode, setMode] = useState<TradingMode>(defaultMode)
     const [amount, setAmount] = useState("0.00")
@@ -57,9 +64,10 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
     const [isDirectAmountInput, setIsDirectAmountInput] = useState(false)
     const [isMounted, setIsMounted] = useState(false);
     const [windowHeight, setWindowHeight] = useState(800); // Default height
+    const [selectedGroup, setSelectedGroup] = useState<string>("")
 
     // Giả lập tỷ giá đổi từ crypto sang USD
-    const exchangeRate = 20 // Giả sử 1 crypto = 20 USD
+    const exchangeRate = solPrice?.priceUSD || 0   
 
     // Load values from Local Storage on component mount
     useEffect(() => {
@@ -67,9 +75,9 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
             if (typeof window !== 'undefined') {
                 const savedPercentages = localStorage.getItem('tradingPercentageValues')
                 const savedAmounts = localStorage.getItem('tradingAmountValues')
-                
+
                 console.log('Loading from localStorage:', { savedPercentages, savedAmounts })
-                
+
                 if (savedPercentages) {
                     const parsedPercentages = JSON.parse(savedPercentages)
                     if (Array.isArray(parsedPercentages) && parsedPercentages.every(n => typeof n === 'number')) {
@@ -137,11 +145,11 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
     useEffect(() => {
         setIsMounted(true);
         setWindowHeight(window.innerHeight);
-        
+
         const handleResize = () => {
             setWindowHeight(window.innerHeight);
         };
-        
+
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -176,7 +184,8 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
 
         // Update amount based on percentage of balance
         if (isConnected) {
-            const newAmount = ((currency.balance * newPercentage) / 100).toFixed(2)
+            const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
+            const newAmount = ((balance * newPercentage) / 100).toFixed(6)
             setAmount(newAmount)
         }
     }
@@ -187,7 +196,8 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
 
         // Update amount based on percentage of balance
         if (isConnected) {
-            const newAmount = ((currency.balance * percent) / 100).toFixed(2)
+            const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
+            const newAmount = ((balance * percent) / 100).toFixed(6)
             setAmount(newAmount)
         }
     }
@@ -244,18 +254,58 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
         }
     }
 
+    // Reset amount and percentage when mode changes
+    useEffect(() => {
+        setAmount("0.00")
+        setPercentage(0)
+        setIsDirectAmountInput(false)
+    }, [mode])
+
+    // Update amount when balance changes
+    useEffect(() => {
+        if (!isDirectAmountInput && percentage > 0) {
+            const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
+            const newAmount = ((balance * percentage) / 100).toFixed(6)
+            setAmount(newAmount)
+        }
+    }, [tradeAmount, mode, percentage, isDirectAmountInput])
+
+    // member_list: []
+    // order_price: 161.2150935
+    // order_qlty: 1
+    // order_token_address: "DMSA4AVeBwApQDy79hzKG3fx4Qm1e4qc5TAvLU2kpump"
+    // order_token_name: "No name"
+    // order_trade_type: "buy"
+    // order_type: "market"
+    const handleSubmit = () => {
+        const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
+        const submitData = {
+            mode,
+            amount: Number(amount),
+            amountUSD: Number(amountUSD),
+            percentage,
+            groupId: selectedGroup,
+            currency: mode === "buy" ? currency.symbol : tradeAmount?.token_address,
+            balance: balance,
+            isDirectAmountInput
+        }
+
+        console.log('Trading Submit Data:', submitData)
+        // TODO: Add API call here
+    }
+    console.log("tradeAmount", tradeAmount)
     return (
         <div className="rounded-lg flex flex-col 2xl:justify-between gap-3 h-full overflow-y-auto">
             {/* BUY/SELL Toggle */}
             <div className="flex  bg-gray-100 dark:bg-theme-neutral-1000 rounded-xl">
                 <button
-                    className={`flex-1 rounded-3xl text-sm cursor-pointer uppercase text-center ${mode === "buy" ? "border-green-500 text-green-600 dark:text-theme-green-200 border-1 bg-green-50 dark:bg-theme-green-100 font-semibold" : "text-gray-500 dark:text-neutral-400"}`}
+                    className={`flex-1 rounded-3xl py-1 text-sm cursor-pointer uppercase text-center ${mode === "buy" ? "border-green-500 text-green-600 dark:text-theme-green-200 border-1 bg-green-50 dark:bg-theme-green-100 font-semibold" : "text-gray-500 dark:text-neutral-400"}`}
                     onClick={() => setMode("buy")}
                 >
                     {t('trading.panel.buy')}
                 </button>
                 <button
-                    className={`flex-1 rounded-3xl cursor-pointer text-sm uppercase text-center ${mode === "sell" ? "border-red-500 text-red-600 dark:text-theme-red-100 border-1 bg-red-50 dark:bg-theme-red-300 font-semibold" : "text-gray-500 dark:text-neutral-400"}`}
+                    className={`flex-1 rounded-3xl py-1 cursor-pointer text-sm uppercase text-center ${mode === "sell" ? "border-red-500 text-red-600 dark:text-theme-red-100 border-1 bg-red-50 dark:bg-theme-red-300 font-semibold" : "text-gray-500 dark:text-neutral-400"}`}
                     onClick={() => setMode("sell")}
                 >
                     {t('trading.panel.sell')}
@@ -275,37 +325,40 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
                         <span className={`${styleTextBase} text-blue-600 dark:text-theme-primary-300`}>{percentage.toFixed(2)}%</span>
                     )}
                 </div>
-            </div>
 
-            {/* USD Value and Balance */}
-            <div className="flex justify-between text-sm mb-3">
-                <div className={styleTextBase}>~ ${amountUSD}</div>
-                <div className={styleTextBase}>
-                    {t('trading.panel.balance')}: {tradeAmount?.sol_balance.toFixed(6)} {currency.symbol}
-                </div>
-            </div>
-
-            {/* Percentage Controls - Only show when not in direct amount input mode */}
-            {(!isDirectAmountInput || mode != "buy") && (
-                <>
-                    {/* Percentage Slider */}
-                    <div>
-                        <div className="flex justify-between mb-1">
-                            <span className={styleTextBase}>{t('trading.panel.percentage')}</span>
-                            <span className={`${styleTextBase} text-blue-600 dark:text-theme-primary-300`}>{percentage.toFixed(2)}%</span>
-                        </div>
-                        <input
-                            type="range"
-                            min="1"
-                            max="100"
-                            value={percentage}
-                            className="slider w-full accent-blue-500 dark:accent-theme-primary-400"
-                            onChange={handlePercentageChange}
-                            id="myRange"
-                        />
+                {/* USD Value and Balance */}
+                <div className="flex justify-between text-sm mb-3 mt-2">
+                    {mode == "buy" ? (
+                        <div className={styleTextBase}>~ ${amountUSD}</div>
+                    ) : (
+                        <div className={styleTextBase}>&ensp;</div>
+                    )}
+                    <div className={styleTextBase}>
+                        {t('trading.panel.balance')}: {mode == "buy" ? tradeAmount?.sol_balance.toFixed(6) + " " + currency.symbol : tradeAmount?.token_balance.toFixed(6) + " " + tradeAmount?.token_address?.substring(0, 3)}
                     </div>
-                </>
-            )}
+                </div>
+
+                {/* Percentage Controls - Only show when not in direct amount input mode */}
+                {(!isDirectAmountInput || mode != "buy") && (
+                    <>
+                        {/* Percentage Slider */}
+                        <div>
+                            <div className="flex justify-between mb-1">
+                                <span className={styleTextBase}>{t('trading.panel.percentage')}</span>
+                                <span className={`${styleTextBase} text-blue-600 dark:text-theme-primary-300`}>{percentage.toFixed(2)}%</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={percentage}
+                                onChange={(e) => handlePercentageChange(e)}
+                                className="w-full"
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
             {/* Percentage Buttons */}
             <div className="flex items-center justify-between gap-3">
                 {percentageValues.map((percent, index) => (
@@ -332,16 +385,15 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
                         ) : (
                             <button
                                 onClick={() => handleSetPercentage(percent)}
-                                className={`w-full px-2 py-1 h-[30px] font-semibold rounded-md flex items-center justify-between gap-1 border border-solid text-xs transition-colors ${
-                                    percentage === percent
+                                className={`w-full px-2 py-1 h-[30px] font-semibold rounded-md flex items-center justify-between gap-1 border border-solid text-xs transition-colors ${percentage === percent
                                         ? "border-blue-500 text-blue-600 dark:border-linear-start bg-blue-50 dark:bg-theme-primary-400/10"
                                         : "border-gray-200 dark:border-neutral-700 text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-800"
-                                }`}
+                                    }`}
                             >
                                 {percent}%
-                                <img 
-                                    src={"/pencil.png"} 
-                                    alt="pencil" 
+                                <img
+                                    src={"/pencil.png"}
+                                    alt="pencil"
                                     className="cursor-pointer hover:opacity-80 dark:invert"
                                     onClick={(e) => {
                                         e.stopPropagation()
@@ -403,13 +455,13 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
             )}
             {/* Select Groups Dropdown */}
             <div className="relative mt-3">
-                <Select>
+                <Select onValueChange={(value) => setSelectedGroup(value)}>
                     <SelectTrigger className="bg-gray-50 dark:bg-neutral-900 w-full py-2 px-4 rounded-full flex items-center justify-between text-gray-500 dark:text-neutral-400 border border-gray-200 dark:border-theme-neutral-900">
                         <SelectValue placeholder={t('trading.panel.selectGroups')} />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-neutral-900 box-shadow-info rounded-xl z-10">
                         {groups?.filter((group: any) => group.mg_status === "on").map((group: any) => (
-                            <SelectItem 
+                            <SelectItem
                                 key={group.mg_id}
                                 value={group.mg_id.toString()}
                                 className="text-gray-700 dark:text-neutral-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-800"
@@ -424,15 +476,16 @@ export default function TradingPanel({ defaultMode = "buy", currency, isConnecte
             {/* Action Button */}
             <div className="mt-3">
                 <button
-                    className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${
-                        mode === "buy" 
-                            ? "bg-green-500 hover:bg-green-600 dark:bg-theme-green-200 dark:hover:bg-theme-green-200/90" 
+                    onClick={handleSubmit}
+                    className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${mode === "buy"
+                            ? "bg-green-500 hover:bg-green-600 dark:bg-theme-green-200 dark:hover:bg-theme-green-200/90"
                             : "bg-red-500 hover:bg-red-600 dark:bg-theme-red-100 dark:hover:bg-theme-red-100/90"
-                    }`}
+                        }`}
                 >
                     {mode === "buy" ? t('trading.panel.buy') : t('trading.panel.sell')}
                 </button>
             </div>
+
         </div>
     )
 }
