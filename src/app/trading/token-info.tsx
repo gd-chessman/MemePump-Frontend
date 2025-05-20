@@ -62,7 +62,6 @@ export default function TokenInfo() {
     });
 
     socketInstance.on('tokenInfo', (data: any) => {
-      console.log('Received token info:', data);
       setWsTokenInfo(data);
       
       // Emit custom event when marketCap updates

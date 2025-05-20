@@ -64,7 +64,6 @@ function TransactionHistoryContent() {
     });
 
     socketInstance.on('transaction', (transaction: any) => {
-      console.log('Received real-time transaction:', transaction);
       setRealTimeTransactions((prev) => [transaction, ...prev].slice(0, 50));
     });
 
