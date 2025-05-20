@@ -98,6 +98,24 @@ function TransactionHistoryContent() {
     }
   );
 
+  // Get the first transaction price
+  const lastTransactionPrice = orderHistories && orderHistories.length > 0 
+    ? orderHistories[0]?.token?.from?.price?.usd 
+    : undefined;
+
+  // Dispatch event when lastTransactionPrice changes
+  useEffect(() => {
+    if (lastTransactionPrice !== undefined) {
+      const event = new CustomEvent('lastTransactionPriceUpdate', {
+        detail: { 
+          price: lastTransactionPrice,
+          tokenAddress: address 
+        }
+      });
+      window.dispatchEvent(event);
+    }
+  }, [lastTransactionPrice, address]);
+
   // Combine historical and real-time transactions
   const allTransactions = [
     ...(realTimeTransactions || []),

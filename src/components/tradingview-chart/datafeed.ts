@@ -19,7 +19,6 @@ const fetchChartData = async (tokenAddress: string, from: number, to: number, ma
       headers
     });
     const data = await response.json();
-    console.log(data)
     return data.data.oclhv.map((item: any) => ({
       time: item.time * 1000,
       open: item.open,
@@ -67,6 +66,8 @@ export class MockDatafeed {
   private socket: Socket | null = null;
   private subscribers: Map<string, (bar: any) => void> = new Map();
   private isConnected: boolean = false;
+  private lastTransactionPrice: number | undefined;
+  private lastBarClose: number | undefined;
 
   constructor(symbol: string, tokenAddress: string, resolution: ResolutionString, showMarketCap: boolean = false) {
     this.symbol = symbol;
@@ -74,11 +75,11 @@ export class MockDatafeed {
     this.resolution = resolution;
     this.showMarketCap = showMarketCap;
     this.initializeWebSocket();
+    this.initializeLastTransactionPriceListener();
   }
 
   private initializeWebSocket() {
     if (!this.tokenAddress) {
-      console.log('No token address provided for WebSocket');
       return;
     }
 
@@ -88,7 +89,6 @@ export class MockDatafeed {
     });
 
     this.socket.on('connect', () => {
-      console.log('WebSocket connected');
       this.isConnected = true;
       // Subscribe to chart updates when connected with formatted timeframe
       this.socket?.emit('subscribeToChart', {
@@ -98,21 +98,51 @@ export class MockDatafeed {
     });
 
     this.socket.on('disconnect', () => {
-      console.log('WebSocket disconnected');
       this.isConnected = false;
     });
 
     this.socket.on('chartUpdate', (data) => {
-      console.log('Chart update received:', data);
-      // Notify all subscribers with the new data
-      this.subscribers.forEach((callback) => {
-        callback(data.data);
-      });
+      // If market cap is enabled and we have total supply, multiply OHLC values
+      if (this.showMarketCap && this.lastBarClose && this.lastTransactionPrice) {
+        const totalSupply = this.lastBarClose / this.lastTransactionPrice;
+        const updatedData = {
+          ...data.data,
+          open: data.data.open * totalSupply,
+          high: data.data.high * totalSupply,
+          low: data.data.low * totalSupply,
+          close: data.data.close * totalSupply
+        };
+        // Notify all subscribers with the updated data
+        this.subscribers.forEach((callback) => {
+          callback(updatedData);
+        });
+      } else {
+        // Notify all subscribers with the original data
+        this.subscribers.forEach((callback) => {
+          callback(data.data);
+        });
+      }
     });
 
     this.socket.on('subscriptionError', (error) => {
       console.error('WebSocket subscription error:', error);
     });
+  }
+
+  private initializeLastTransactionPriceListener() {
+    const handleLastTransactionPrice = (event: CustomEvent) => {
+      const { price, tokenAddress } = event.detail;
+      if (tokenAddress === this.tokenAddress) {
+        this.lastTransactionPrice = price;
+        
+        // Calculate total supply if market cap is enabled and we have both prices
+        if (this.showMarketCap && this.lastBarClose && price) {
+          const totalSupply = this.lastBarClose / price;
+        }
+      }
+    };
+
+    window.addEventListener('lastTransactionPriceUpdate', handleLastTransactionPrice as EventListener);
   }
 
   onReady(callback: (config: any) => void) {
@@ -187,6 +217,11 @@ export class MockDatafeed {
       const apiResolution = convertResolution(resolution);
       const bars = await fetchChartData(this.tokenAddress, from, to, this.showMarketCap, apiResolution);
       
+      // Store the last bar's close price if we have bars and market cap is enabled
+      if (this.showMarketCap && bars.length > 0) {
+        this.lastBarClose = bars[bars.length - 1].close;
+      }
+      
       this.isLoading = false;
       onHistoryCallback(bars, {
         noData: bars.length === 0,
@@ -217,6 +252,11 @@ export class MockDatafeed {
       this.socket = null;
       this.isConnected = false;
     }
+  }
+
+  // Thêm getter để lấy lastTransactionPrice
+  getLastTransactionPrice(): number | undefined {
+    return this.lastTransactionPrice;
   }
 }
 
