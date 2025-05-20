@@ -31,7 +31,13 @@
       "percentage": "パーセンテージ",
       "balance": "残高",
       "selectGroups": "グループを選択...",
-      "amount": "数量"
+      "amount": "数量",
+      "masterTrade": "マスタートレード",
+      "searchMasterTrade": "マスタートレードを検索",
+      "copyAddress": "アドレスをコピー",
+      "addressCopied": "コピーしました",
+      "noConnections": "接続がありません",
+      "selectConnection": "接続を選択"
     }
   },
   "auth": {

@@ -31,7 +31,13 @@
       "percentage": "Phần trăm",
       "balance": "Số dư",
       "selectGroups": "Chọn nhóm...",
-      "amount": "Số lượng"
+      "amount": "Số lượng",
+      "masterTrade": "Giao dịch chuyên nghiệp",
+      "searchMasterTrade": "Tìm kiếm giao dịch chuyên nghiệp",
+      "copyAddress": "Sao chép địa chỉ",
+      "addressCopied": "Đã sao chép",
+      "noConnections": "Không có kết nối nào",
+      "selectConnection": "Chọn kết nối"
     }
   },
   "auth": {

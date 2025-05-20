@@ -31,7 +31,13 @@
       "percentage": "비율",
       "balance": "잔액",
       "selectGroups": "그룹 선택...",
-      "amount": "수량"
+      "amount": "수량",
+      "masterTrade": "마스터 거래",
+      "searchMasterTrade": "마스터 거래 검색",
+      "copyAddress": "주소 복사",
+      "addressCopied": "복사됨",
+      "noConnections": "연결 없음",
+      "selectConnection": "연결 선택"
     }
   },
   "auth": {

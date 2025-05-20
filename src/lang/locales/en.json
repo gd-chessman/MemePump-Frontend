@@ -31,7 +31,13 @@
       "percentage": "Percentage",
       "balance": "Balance",
       "selectGroups": "Select groups...",
-      "amount": "Amount"
+      "amount": "Amount",
+      "masterTrade": "Master Trade",
+      "searchMasterTrade": "Search master trade",
+      "copyAddress": "Copy address",
+      "addressCopied": "Copied",
+      "noConnections": "No connections",
+      "selectConnection": "Select connection"
     }
   },
   "auth": {

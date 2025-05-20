@@ -12,6 +12,7 @@ const notify = ({ message = 'Operation successful!', type = 'success' }: NotifyP
       duration: 3000,
       position: 'top-right',
       style: {
+        fontSize: '14px',
         background: '#4CAF50',
         color: '#fff',
         padding: '6px 10px',
@@ -23,6 +24,7 @@ const notify = ({ message = 'Operation successful!', type = 'success' }: NotifyP
       duration: 3000,
       position: 'top-right',
       style: {
+        fontSize: '14px',
         background: '#f44336',
         color: '#fff',
         padding: '6px 10px',
