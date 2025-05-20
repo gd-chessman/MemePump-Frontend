@@ -1,11 +1,12 @@
 import React from 'react';
 import { useLang } from './useLang';
+import { LangCodes } from './index';
 
 export const LangChange: React.FC = () => {
   const { lang, setLang, langConfig } = useLang();
 
   const handleLangChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setLang(event.target.value);
+    setLang(event.target.value as LangCodes);
   };
 
   const convertToPascalCase = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
