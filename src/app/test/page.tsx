@@ -1,39 +1,33 @@
 "use client"
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-interface Transaction {
-  signature: string;
-  timestamp: number;
-  // ... other transaction fields
-}
 
-export default function TokenTransactions() {
-  const [socket, setSocket] = useState<Socket | null>(null);
+export default function TokenInfoTest() {
+  const [socket, setSocket] = useState<any>(null);
+  const [tokenInfo, setTokenInfo] = useState<any | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
-  const address = searchParams?.get("address");
-  const [tokenAddress, setTokenAddress] = useState(address || '');
+  const tokenAddress = searchParams?.get("address");
 
   useEffect(() => {
     // Initialize socket connection
-    const socketInstance = io(`${process.env.NEXT_PUBLIC_API_URL}/token-txs`, {
+    const socketInstance = io('http://localhost:8000/token-info', {
       path: '/socket.io',
       transports: ['websocket'],
     });
 
-    // Connection event handlers
     socketInstance.on('connect', () => {
       console.log('Connected to WebSocket server');
       setIsConnected(true);
       setError(null);
       
-      // Tự động subscribe nếu có address từ URL
-      if (address) {
-        socketInstance.emit('subscribe', { tokenAddress: address });
+      // Auto subscribe if tokenAddress exists
+      if (tokenAddress) {
+        console.log('Auto subscribing to token:', tokenAddress);
+        socketInstance.emit('subscribe', { tokenAddress });
       }
     });
 
@@ -42,23 +36,21 @@ export default function TokenTransactions() {
       setIsConnected(false);
     });
 
-    socketInstance.on('error', (error) => {
+    socketInstance.on('error', (error: any) => {
       console.error('WebSocket error:', error);
       setError(error.message);
     });
 
-    // Transaction event handler
-    socketInstance.on('transaction', (transaction: Transaction) => {
-      console.log('Received transaction:', transaction); // Thêm log để debug
-      setTransactions((prev) => [transaction, ...prev].slice(0, 50));
+    socketInstance.on('tokenInfo', (data: any) => {
+      console.log('Received token info:', data);
+      setTokenInfo(data);
     });
 
-    // Subscription confirmation handlers
-    socketInstance.on('subscribed', (data) => {
+    socketInstance.on('subscribed', (data: { tokenAddress: string }) => {
       console.log('Subscribed to token:', data.tokenAddress);
     });
 
-    socketInstance.on('unsubscribed', (data) => {
+    socketInstance.on('unsubscribed', (data: { tokenAddress: string }) => {
       console.log('Unsubscribed from token:', data.tokenAddress);
     });
 
@@ -66,103 +58,100 @@ export default function TokenTransactions() {
 
     // Cleanup on component unmount
     return () => {
-      if (socketInstance) {
-        // Unsubscribe trước khi disconnect
-        if (tokenAddress) {
-          socketInstance.emit('unsubscribe', { tokenAddress });
-        }
-        socketInstance.disconnect();
-      }
+      socketInstance.disconnect();
     };
-  }, [address]); // Thêm address vào dependency array
-
-  // Effect để tự động subscribe khi tokenAddress thay đổi
-  useEffect(() => {
-    if (socket && isConnected && tokenAddress) {
-      socket.emit('subscribe', { tokenAddress });
-    }
-  }, [socket, isConnected, tokenAddress]);
+  }, []);
 
   const handleSubscribe = () => {
-    if (!tokenAddress || !socket) return;
-    console.log('Subscribing to:', tokenAddress); // Thêm log để debug
-    socket.emit('subscribe', { tokenAddress });
+    if (!tokenAddress) {
+      setError('Please enter a token address');
+      return;
+    }
+    socket?.emit('subscribe', { tokenAddress });
   };
 
   const handleUnsubscribe = () => {
-    if (!tokenAddress || !socket) return;
-    console.log('Unsubscribing from:', tokenAddress); // Thêm log để debug
-    socket.emit('unsubscribe', { tokenAddress });
+    if (!tokenAddress) {
+      setError('Please enter a token address');
+      return;
+    }
+    socket?.emit('unsubscribe', { tokenAddress });
   };
 
-  console.log(transactions)
-
   return (
-    <div className="p-4 max-w-4xl mx-auto">
+    <div className="p-8 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">Token Info WebSocket Test</h1>
+      
       {/* Connection Status */}
-      <div className="mb-4 p-4 rounded-lg">
-        <div className="flex items-center gap-2">
-          <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
-          <span className="font-medium">
-            {isConnected ? 'Connected' : 'Disconnected'}
-          </span>
-        </div>
-        {error && (
-          <div className="mt-2 text-red-500 text-sm">
-            Error: {error}
-          </div>
-        )}
+      <div className="mb-4">
+        <span className={`inline-block px-3 py-1 rounded-full text-sm ${
+          isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`}>
+          {isConnected ? 'Connected' : 'Disconnected'}
+        </span>
       </div>
 
-      {/* Token Address Input and Controls */}
+      {/* Error Display */}
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
+          {error}
+        </div>
+      )}
+
+      {/* Token Address Display */}
       <div className="mb-6">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={tokenAddress}
-            onChange={(e) => setTokenAddress(e.target.value)}
-            placeholder="Enter token address"
-            className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={handleSubscribe}
-            disabled={!isConnected || !tokenAddress}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Subscribe
-          </button>
+        <div className="w-full p-2 border rounded-lg mb-2">
+          {tokenAddress || 'No token address provided'}
+        </div>
+        <div className="space-x-4">
           <button
             onClick={handleUnsubscribe}
-            disabled={!isConnected || !tokenAddress}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 rounded-lg hover:bg-gray-600"
           >
             Unsubscribe
           </button>
         </div>
       </div>
 
-      {/* Transactions List */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Recent Transactions</h2>
-        {transactions.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No transactions yet. Subscribe to a token to see transactions.
+      {/* Token Info Display */}
+      {tokenInfo && (
+        <div className="rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">Token Information</h2>
+          
+          {/* Quick Stats */}
+          <div className="mb-6 grid grid-cols-2 gap-4">
+            {tokenInfo && (
+              <>
+                <div className="p-4 rounded-lg">
+                  <h3 className="font-medium mb-2">Current Price</h3>
+                  <p className="text-lg">${tokenInfo.price.usd}</p>
+                </div>
+                <div className="p-4 rounded-lg">
+                  <h3 className="font-medium mb-2">Market Cap</h3>
+                  <p className="text-lg">${tokenInfo.marketCap.usd}</p>
+                </div>
+
+                <div className="p-4 rounded-lg">
+                  <h3 className="font-medium mb-2">Liquidity</h3>
+                  <p className="text-lg">${tokenInfo.liquidity.usd}</p>
+                </div>
+              </>
+            )}
           </div>
-        ) : (
-          <div className="space-y-2">
-            {transactions.map((tx, index) => (
-              <div
-                key={index}
-                className="p-4 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200"
-              >
-                <pre className="text-xs overflow-x-auto whitespace-pre-wrap">
-                  {JSON.stringify(tx, null, 2)}
-                </pre>
-              </div>
-            ))}
+
+          {/* JSON Display */}
+          <div className="mt-6">
+            <h3 className="font-medium mb-2">Raw Data (JSON)</h3>
+            <pre className="p-4 rounded-lg overflow-auto max-h-[100vh]">
+              {JSON.stringify(tokenInfo, null, 2)}
+            </pre>
           </div>
-        )}
-      </div>
+
+          <div className="mt-4 text-sm text-gray-500">
+            Last Updated: {new Date(tokenInfo.timestamp).toLocaleString()}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
