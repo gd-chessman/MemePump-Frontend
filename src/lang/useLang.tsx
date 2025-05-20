@@ -48,5 +48,6 @@ export const useLang = () => {
     tArray,
     lang: context.lang,
     setLang: context.setLang,
+    langConfig: context.langConfig,
   };
 };
