@@ -157,7 +157,7 @@ export default function MyCoinsTable() {
                         <img src={"/ethereum.png"} alt="ethereum-icon" width={24} height={24} />
                         MY COINS
                         <img src={"/ethereum.png"} alt="ethereum-icon" width={24} height={24} />
-                        <span className="ml-2 text-neutral-400 dark:text-neutral-400 text-sm">(40)</span>
+                        <span className="ml-2 text-neutral-400 dark:text-neutral-400 text-sm">({sortedAndFilteredCoins.length})</span>
                     </h2>
 
                     <div className="relative">
