@@ -1,18 +1,30 @@
 "use client";
 import React, { createContext, useState, useEffect } from 'react';
-import { langConfig as importedLangConfig } from "./index";
+import { langConfig as importedLangConfig, LangCodes } from "./index";
+import enTranslations from "./locales/en.json";
+import krTranslations from "./locales/kr.json";
+import viTranslations from "./locales/vi.json";
+import jpTranslations from "./locales/jp.json";
+
+const translations = {
+  en: enTranslations,
+  kr: krTranslations,
+  vi: viTranslations,
+  jp: jpTranslations,
+};
 
 export interface LangContextProps {
-  lang: string;
-  setLang: (lang: string) => void;
+  lang: LangCodes;
+  setLang: (lang: LangCodes) => void;
   langConfig: typeof importedLangConfig;
+  translations: typeof enTranslations;
 }
 
-export const LangContext = createContext<LangContextProps | undefined>(undefined);
+export const LangContext = createContext<LangContextProps | null>(null);
 
 interface LangProviderProps {
   children: React.ReactNode;
-  initialLang?: string; // Nhận giá trị ngôn ngữ từ SSR
+  initialLang?: LangCodes; // Nhận giá trị ngôn ngữ từ SSR
   langConfig?: typeof importedLangConfig;
 }
 
@@ -22,27 +34,39 @@ export const LangProvider: React.FC<LangProviderProps> = ({
   langConfig 
 }) => {
   const [mounted, setMounted] = useState(false);
-  const [lang, setLang] = useState<string>(initialLang);
+  const [lang, setLang] = useState<LangCodes>(initialLang);
 
   useEffect(() => {
     setMounted(true);
-    const storedLang = localStorage.getItem('appLang');
-    if (storedLang) {
-      setLang(storedLang);
+    const savedLang = localStorage.getItem("lang") as LangCodes;
+    if (savedLang) {
+      setLang(savedLang);
     }
   }, []);
 
   useEffect(() => {
     if (mounted) {
-      localStorage.setItem('appLang', lang);
+      localStorage.setItem("lang", lang);
       document.documentElement.lang = lang;
     }
   }, [lang, mounted]);
 
   const config = langConfig || importedLangConfig;
 
+  const handleSetLang = (newLang: LangCodes) => {
+    setLang(newLang);
+    localStorage.setItem("lang", newLang);
+  };
+
   return (
-    <LangContext.Provider value={{ lang, setLang, langConfig: config }}>
+    <LangContext.Provider
+      value={{
+        lang,
+        setLang: handleSetLang,
+        langConfig: config,
+        translations: translations[lang],
+      }}
+    >
       {children}
     </LangContext.Provider>
   );

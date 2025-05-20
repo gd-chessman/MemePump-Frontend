@@ -13,14 +13,17 @@ interface CryptoCurrency {
 
 const Control = () => {
   const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy");
+  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [selectedConnections, setSelectedConnections] = useState<string[]>([]); // (prev: string[]) => string[] | string[]
+
   const { data: walletInfor, refetch } = useQuery({
     queryKey: ["wallet-infor"],
     queryFn: getInforWallet,
     refetchInterval: 30000,
     staleTime: 30000,
-});
+  });
+
   const [isConnected, setIsConnected] = useState(false)
-  
   
   // Convert walletInfor to CryptoCurrency format
   const currencies: CryptoCurrency =  { 
@@ -29,17 +32,30 @@ const Control = () => {
     name: "Solana" 
   }
   
-  console.log("currencies", currencies)
-  const classLayout = "bg-neutral-1000 box-shadow-info rounded-3xl flex flex-col"
+  const classLayout = "bg-neutral-1000 box-shadow-info rounded-2xl flex flex-col"
   return (
-    <div className='flex flex-col gap-4 h-full'>
-      <div className={classLayout + " p-3"}>
+    <div className='flex flex-col h-full gap-4'>
+      <div className={classLayout + " p-3 flex-none"}>
         <Suspense fallback={<div></div>}>
-          <TradingPanel defaultMode={activeTab} currency={currencies} isConnected={isConnected} onConnect={() => setIsConnected(!isConnected)} />
+          <TradingPanel 
+            defaultMode={activeTab} 
+            currency={currencies} 
+            isConnected={isConnected} 
+            onConnect={() => setIsConnected(!isConnected)}
+            selectedGroups={selectedGroups}
+            setSelectedGroups={setSelectedGroups}
+            selectedConnections={selectedConnections}
+            setSelectedConnections={setSelectedConnections}
+          />
         </Suspense>
       </div>
-      <div className={classLayout}>
-        <MasterTradeChat />
+      <div className={classLayout + " flex-1 min-h-0"}>
+        <MasterTradeChat 
+          selectedGroups={selectedGroups}
+          setSelectedGroups={setSelectedGroups}
+          selectedConnections={selectedConnections}
+          setSelectedConnections={setSelectedConnections}
+        />
       </div>
     </div>
   )

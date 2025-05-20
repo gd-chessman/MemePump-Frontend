@@ -2,7 +2,92 @@
   "connect": "接続",
   "overview": "概要",
   "trade": "取引",
-  "createCoin": "コイン作成",
+  "createCoin": {
+    "title": "新規コイン作成",
+    "form": {
+      "name": {
+        "label": "名前",
+        "placeholder": "コイン名を入力",
+        "required": "コイン名は必須です"
+      },
+      "symbol": {
+        "label": "シンボル",
+        "placeholder": "コインシンボルを入力",
+        "required": "コインシンボルは必須です",
+        "maxLength": "シンボルは10文字以下である必要があります"
+      },
+      "amount": {
+        "label": "数量",
+        "placeholder": "SOLでの初期流動性数量を入力",
+        "required": "初期流動性数量は必須です",
+        "invalid": "有効な数量を入力してください"
+      },
+      "categories": {
+        "label": "カテゴリー",
+        "placeholder": "カテゴリーを選択...",
+        "search": "カテゴリーを検索...",
+        "noResults": "カテゴリーが見つかりません"
+      },
+      "description": {
+        "label": "説明",
+        "placeholder": "コインの説明を入力"
+      },
+      "logo": {
+        "label": "ロゴ",
+        "required": "コインロゴは必須です",
+        "upload": "クリックしてアップロード",
+        "invalidType": "画像ファイルをアップロードしてください",
+        "maxSize": "画像サイズは2MB未満である必要があります"
+      },
+      "preview": {
+        "label": "プレビュー",
+        "name": "コイン名",
+        "symbol": "シンボル",
+        "description": "コインの説明がここに表示されます",
+        "undo": "元に戻す"
+      },
+      "otherOptions": {
+        "title": "その他のオプション",
+        "telegram": {
+          "label": "Telegram",
+          "placeholder": "Telegramグループリンクを入力"
+        },
+        "twitter": {
+          "label": "Twitter",
+          "placeholder": "Twitterユーザー名を入力"
+        },
+        "website": {
+          "label": "ウェブサイト",
+          "placeholder": "コインのウェブサイトを入力",
+          "invalid": "http://またはhttps://で始まる有効なURLを入力してください"
+        }
+      },
+      "submit": {
+        "create": "コイン作成",
+        "creating": "作成中..."
+      }
+    },
+    "myCoins": {
+      "title": "マイコイン",
+      "tabs": {
+        "today": "今日",
+        "last8days": "過去8日間",
+        "lastMonth": "先月"
+      },
+      "noCoins": "最近作成されたコインはありません",
+      "seeAll": "すべてのマイコインを表示",
+      "trade": "取引"
+    },
+    "guide": {
+      "title": "ガイド",
+      "rules": [
+        "作成後は削除または編集できません",
+        "Solanaにデプロイされます",
+        "条件を満たす場合は取引可能です",
+        "各コインは固有のウォレットとトークンを持ちます - 安全に保管してください"
+      ]
+    }
+  },
   "masterTrade": "マスタートレード",
   "wallet": "ウォレット",
   "searchPlaceholder": "トークン名/アドレス",
@@ -31,7 +116,13 @@
       "percentage": "パーセンテージ",
       "balance": "残高",
       "selectGroups": "グループを選択...",
-      "amount": "数量"
+      "amount": "数量",
+      "masterTrade": "マスタートレード",
+      "searchMasterTrade": "マスタートレードを検索",
+      "copyAddress": "アドレスをコピー",
+      "addressCopied": "コピーしました",
+      "noConnections": "接続がありません",
+      "selectConnection": "接続を選択"
     }
   },
   "auth": {
