@@ -25,8 +25,6 @@ const ListToken = () => {
         refetchInterval: 10000,
     });
     const [tokenList, setTokenList] = useState(topCoins);
-    console.log("topCoins", topCoins);
-    console.log("current tokenList", tokenList);
 
     useEffect(() => {
         const searchTokens = async () => {
