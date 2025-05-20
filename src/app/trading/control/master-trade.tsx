@@ -110,9 +110,7 @@ export default function MasterTradeChat() {
                 />
 
               </div>
-            ))}Báo cáo ngày 19/05/2025:
-            - Cập nhật tính năng yêu thích token,  Ghép API info Token, search token trong view Trading (Done)
-            - Ghép API phần Buy Sell (80%)
+            ))}
           </div>
         </>
       ) : (
