@@ -1,4 +1,5 @@
 import React from 'react';
+import { io, Socket } from 'socket.io-client';
 
 type ResolutionString = '1s' | '5s' | '15s' | '1' | '5' | '1h' | '4h' | '1D' | '1W' | '1MN';
 
@@ -49,6 +50,11 @@ const convertResolution = (resolution: string): any => {
   }
 };
 
+// Convert timeframe to lowercase format for WebSocket
+const formatTimeframe = (timeframe: ResolutionString): string => {
+  return timeframe.replace(/([A-Z])/g, (match) => match.toLowerCase());
+};
+
 // Class MockDatafeed
 export class MockDatafeed {
   private symbol: string;
@@ -58,12 +64,55 @@ export class MockDatafeed {
   private isLoading: boolean = false;
   private lastRequestTime: number = 0;
   private requestTimeout: number = 1000; // Minimum time between requests in milliseconds
+  private socket: Socket | null = null;
+  private subscribers: Map<string, (bar: any) => void> = new Map();
+  private isConnected: boolean = false;
 
   constructor(symbol: string, tokenAddress: string, resolution: ResolutionString, showMarketCap: boolean = false) {
     this.symbol = symbol;
     this.tokenAddress = tokenAddress;
     this.resolution = resolution;
     this.showMarketCap = showMarketCap;
+    this.initializeWebSocket();
+  }
+
+  private initializeWebSocket() {
+    if (!this.tokenAddress) {
+      console.log('No token address provided for WebSocket');
+      return;
+    }
+
+    this.socket = io(`${process.env.NEXT_PUBLIC_API_URL}/chart`, {
+      path: '/socket.io',
+      transports: ['websocket'],
+    });
+
+    this.socket.on('connect', () => {
+      console.log('WebSocket connected');
+      this.isConnected = true;
+      // Subscribe to chart updates when connected with formatted timeframe
+      this.socket?.emit('subscribeToChart', {
+        tokenAddress: this.tokenAddress,
+        timeframe: formatTimeframe(convertResolution(this.resolution))
+      });
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log('WebSocket disconnected');
+      this.isConnected = false;
+    });
+
+    this.socket.on('chartUpdate', (data) => {
+      console.log('Chart update received:', data);
+      // Notify all subscribers with the new data
+      this.subscribers.forEach((callback) => {
+        callback(data.data);
+      });
+    });
+
+    this.socket.on('subscriptionError', (error) => {
+      console.error('WebSocket subscription error:', error);
+    });
   }
 
   onReady(callback: (config: any) => void) {
@@ -150,11 +199,24 @@ export class MockDatafeed {
   }
 
   subscribeBars(symbolInfo: any, resolution: ResolutionString, onRealtimeCallback: (bar: any) => void, subscriberUID: string, onResetCacheNeededCallback: () => void) {
-    // Implement real-time updates if needed
+    this.subscribers.set(subscriberUID, onRealtimeCallback);
+    
+    // If socket is not connected, try to reconnect
+    if (!this.isConnected && !this.socket) {
+      this.initializeWebSocket();
+    }
   }
 
   unsubscribeBars(subscriberUID: string) {
-    // Implement unsubscribe logic if needed
+    this.subscribers.delete(subscriberUID);
+    
+    // If no more subscribers, disconnect the socket
+    if (this.subscribers.size === 0 && this.socket) {
+      this.socket.emit('unsubscribeFromChart', { tokenAddress: this.tokenAddress });
+      this.socket.disconnect();
+      this.socket = null;
+      this.isConnected = false;
+    }
   }
 }
 
@@ -175,5 +237,5 @@ export const formatNumber = (value: number): string => {
   if (value >= 1e9) return (value / 1e9).toFixed(2) + 'B';
   if (value >= 1e6) return (value / 1e6).toFixed(2) + 'M';
   if (value >= 1e3) return (value / 1e3).toFixed(2) + 'K';
-  return value.toFixed(2);
+  return value.toFixed(3);
 }; 
