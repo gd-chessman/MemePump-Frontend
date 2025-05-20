@@ -1,11 +1,11 @@
 "use client"
 
 import { getOrderHistories } from "@/services/api/OnChainService"
-import { getInforWallet, getListBuyToken } from "@/services/api/TelegramWalletService"
 import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
-import { useState, Suspense } from "react"
+import { useState, Suspense, useEffect } from "react"
+import { io, Socket } from 'socket.io-client';
 
 type Transaction = {
   time: string
@@ -29,10 +29,60 @@ export default function TransactionHistory() {
 
 function TransactionHistoryContent() {
   const [activeTab, setActiveTab] = useState<"all" | "my">("all")
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [realTimeTransactions, setRealTimeTransactions] = useState<any[]>([]);
   
   const searchParams = useSearchParams();
   const address = searchParams?.get("address");
-  const { data: orderHistories, isLoading: isLoadingOrderHistories , refetch: refetchOrderHistories} = useQuery(
+
+  // WebSocket connection setup
+  useEffect(() => {
+    if (!address) return;
+
+    const socketInstance = io(`${process.env.NEXT_PUBLIC_API_URL}/token-txs`, {
+      path: '/socket.io',
+      transports: ['websocket'],
+    });
+
+    socketInstance.on('connect', () => {
+      console.log('Connected to WebSocket server');
+      setIsConnected(true);
+      setError(null);
+      socketInstance.emit('subscribe', { tokenAddress: address });
+    });
+
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from WebSocket server');
+      setIsConnected(false);
+    });
+
+    socketInstance.on('error', (error) => {
+      console.error('WebSocket error:', error);
+      setError(error.message);
+    });
+
+    socketInstance.on('transaction', (transaction: any) => {
+      console.log('Received real-time transaction:', transaction);
+      setRealTimeTransactions((prev) => [transaction, ...prev].slice(0, 50));
+    });
+
+    socketInstance.on('subscribed', (data) => {
+      console.log('Subscribed to token:', data.tokenAddress);
+    });
+
+    setSocket(socketInstance);
+
+    return () => {
+      if (socketInstance) {
+        socketInstance.emit('unsubscribe', { tokenAddress: address });
+        socketInstance.disconnect();
+      }
+    };
+  }, [address]);
+
+  const { data: orderHistories, isLoading: isLoadingOrderHistories, refetch: refetchOrderHistories } = useQuery(
     {
       queryKey: ["orderHistories", address],
       queryFn: () =>
@@ -47,6 +97,30 @@ function TransactionHistoryContent() {
       enabled: !!address,
     }
   );
+
+  // Get the first transaction price
+  const lastTransactionPrice = orderHistories && orderHistories.length > 0 
+    ? orderHistories[0]?.token?.from?.price?.usd 
+    : undefined;
+
+  // Dispatch event when lastTransactionPrice changes
+  useEffect(() => {
+    if (lastTransactionPrice !== undefined) {
+      const event = new CustomEvent('lastTransactionPriceUpdate', {
+        detail: { 
+          price: lastTransactionPrice,
+          tokenAddress: address 
+        }
+      });
+      window.dispatchEvent(event);
+    }
+  }, [lastTransactionPrice, address]);
+
+  // Combine historical and real-time transactions
+  const allTransactions = [
+    ...(realTimeTransactions || []),
+    ...(orderHistories || [])
+  ];
 
   const formatPrice = (price: number | undefined) => {
     if (price === undefined) return '0.0';
@@ -87,7 +161,7 @@ function TransactionHistoryContent() {
               </tr>
             </thead>
             <tbody>
-              {orderHistories?.map((order: any, index: number) => (
+              {allTransactions?.map((order: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50">
                   <td className="px-4 py-2 truncate text-gray-600 dark:text-neutral-300">
                     {new Date(order.time).toLocaleString()}

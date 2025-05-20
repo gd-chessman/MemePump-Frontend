@@ -1,4 +1,5 @@
 import React from 'react';
+import { io, Socket } from 'socket.io-client';
 
 type ResolutionString = '1s' | '5s' | '15s' | '1' | '5' | '1h' | '4h' | '1D' | '1W' | '1MN';
 
@@ -18,7 +19,6 @@ const fetchChartData = async (tokenAddress: string, from: number, to: number, ma
       headers
     });
     const data = await response.json();
-    console.log(data)
     return data.data.oclhv.map((item: any) => ({
       time: item.time * 1000,
       open: item.open,
@@ -49,6 +49,11 @@ const convertResolution = (resolution: string): any => {
   }
 };
 
+// Convert timeframe to lowercase format for WebSocket
+const formatTimeframe = (timeframe: ResolutionString): string => {
+  return timeframe.replace(/([A-Z])/g, (match) => match.toLowerCase());
+};
+
 // Class MockDatafeed
 export class MockDatafeed {
   private symbol: string;
@@ -57,13 +62,82 @@ export class MockDatafeed {
   private showMarketCap: boolean;
   private isLoading: boolean = false;
   private lastRequestTime: number = 0;
-  private requestTimeout: number = 1000; // Minimum time between requests in milliseconds
+  private requestTimeout: number = 1000;
+  private socket: Socket | null = null;
+  private subscribers: Map<string, (bar: any) => void> = new Map();
+  private isConnected: boolean = false;
+  private currentMarketCap: number | undefined;
+  private handleMarketCapUpdate: (event: Event) => void;
 
   constructor(symbol: string, tokenAddress: string, resolution: ResolutionString, showMarketCap: boolean = false) {
     this.symbol = symbol;
     this.tokenAddress = tokenAddress;
     this.resolution = resolution;
     this.showMarketCap = showMarketCap;
+    this.handleMarketCapUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { marketCap, tokenAddress } = customEvent.detail;
+      
+      if (tokenAddress === this.tokenAddress) {
+        this.currentMarketCap = marketCap;
+      }
+    };
+    this.initializeWebSocket();
+    this.initializeMarketCapListener();
+  }
+
+  private initializeMarketCapListener() {
+    window.addEventListener('marketCapUpdate', this.handleMarketCapUpdate as EventListener);
+  }
+
+  private initializeWebSocket() {
+    if (!this.tokenAddress) {
+      return;
+    }
+
+    this.socket = io(`${process.env.NEXT_PUBLIC_API_URL}/chart`, {
+      path: '/socket.io',
+      transports: ['websocket'],
+    });
+
+    this.socket.on('connect', () => {
+      this.isConnected = true;
+      // Subscribe to chart updates when connected with formatted timeframe
+      this.socket?.emit('subscribeToChart', {
+        tokenAddress: this.tokenAddress,
+        timeframe: formatTimeframe(convertResolution(this.resolution))
+      });
+    });
+
+    this.socket.on('disconnect', () => {
+      this.isConnected = false;
+    });
+
+    this.socket.on('chartUpdate', (data) => { 
+      if (this.showMarketCap && this.currentMarketCap) {
+        // When showing market cap, use the current market cap value as the close price
+        const totalSupply = this.currentMarketCap / data.data.close;
+        const updatedData = {
+          ...data.data,
+          close: this.currentMarketCap,
+          high: data.data.high * totalSupply,
+          low: data.data.low * totalSupply,
+          open: data.data.open * totalSupply,
+        };
+        this.subscribers.forEach((callback) => {
+          callback(updatedData);
+        });
+      } else {
+        // Use original data when not showing market cap
+        this.subscribers.forEach((callback) => {
+          callback(data.data);
+        });
+      }
+    });
+
+    this.socket.on('subscriptionError', (error) => {
+      console.error('WebSocket subscription error:', error);
+    });
   }
 
   onReady(callback: (config: any) => void) {
@@ -124,7 +198,6 @@ export class MockDatafeed {
       const { from, to } = periodParams;
       const currentTime = Date.now();
 
-      // Check if we're already loading or if the last request was too recent
       if (this.isLoading || (currentTime - this.lastRequestTime < this.requestTimeout)) {
         onHistoryCallback([], {
           noData: true,
@@ -150,11 +223,25 @@ export class MockDatafeed {
   }
 
   subscribeBars(symbolInfo: any, resolution: ResolutionString, onRealtimeCallback: (bar: any) => void, subscriberUID: string, onResetCacheNeededCallback: () => void) {
-    // Implement real-time updates if needed
+    this.subscribers.set(subscriberUID, onRealtimeCallback);
+    
+    // If socket is not connected, try to reconnect
+    if (!this.isConnected && !this.socket) {
+      this.initializeWebSocket();
+    }
   }
 
   unsubscribeBars(subscriberUID: string) {
-    // Implement unsubscribe logic if needed
+    this.subscribers.delete(subscriberUID);
+    
+    // If no more subscribers, disconnect the socket and remove event listener
+    if (this.subscribers.size === 0 && this.socket) {
+      this.socket.emit('unsubscribeFromChart', { tokenAddress: this.tokenAddress });
+      this.socket.disconnect();
+      this.socket = null;
+      this.isConnected = false;
+      window.removeEventListener('marketCapUpdate', this.handleMarketCapUpdate as EventListener);
+    }
   }
 }
 
@@ -175,5 +262,5 @@ export const formatNumber = (value: number): string => {
   if (value >= 1e9) return (value / 1e9).toFixed(2) + 'B';
   if (value >= 1e6) return (value / 1e6).toFixed(2) + 'M';
   if (value >= 1e3) return (value / 1e3).toFixed(2) + 'K';
-  return value.toFixed(2);
+  return value.toFixed(3);
 }; 

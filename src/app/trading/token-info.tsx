@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { Star } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import token from '@/assets/svgs/token.svg'
 import { formatNumberWithSuffix, truncateString } from "@/utils/format"
@@ -17,6 +17,7 @@ import Link from "next/link"
 import { SolonaTokenService } from "@/services/api"
 import { useLang } from "@/lang";
 import { UpdateFavorite } from "../components/UpdateFavorite"
+import { io } from 'socket.io-client';
 type TimeFrame = '5m' | '1h' | '4h' | '24h'
 
 export default function TokenInfo() {
@@ -33,14 +34,64 @@ export default function TokenInfo() {
     refetchOnMount: true,
   });
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("24h")
+  const [socket, setSocket] = useState<any>(null);
+  const [wsTokenInfo, setWsTokenInfo] = useState<any>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  
+  useEffect(() => {
+    // Initialize socket connection
+    const socketInstance = io(`${process.env.NEXT_PUBLIC_API_URL}/token-info`, {
+      path: '/socket.io',
+      transports: ['websocket'],
+    });
+
+    socketInstance.on('connect', () => {
+      console.log('Connected to WebSocket server');
+      setIsConnected(true);
+      
+      // Auto subscribe if address exists
+      if (address) {
+        console.log('Auto subscribing to token:', address);
+        socketInstance.emit('subscribe', { tokenAddress: address });
+      }
+    });
+
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from WebSocket server');
+      setIsConnected(false);
+    });
+
+    socketInstance.on('tokenInfo', (data: any) => {
+      console.log('Received token info:', data);
+      setWsTokenInfo(data);
+      
+      // Emit custom event when marketCap updates
+      const marketCapEvent = new CustomEvent('marketCapUpdate', {
+        detail: {
+          marketCap: data?.marketCap?.usd || tokenInfor?.marketCap,
+          tokenAddress: address,
+          timestamp: new Date().toISOString()
+        }
+      });
+      window.dispatchEvent(marketCapEvent);
+    });
+
+    setSocket(socketInstance);
+
+    // Cleanup on component unmount
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, [address, tokenInfor?.marketCap]);
+
   const dataToken = {
     name: tokenInfor?.name,
     image: tokenInfor?.logoUrl,
     symbol: tokenInfor?.symbol,
     address: tokenInfor?.address,
-    cap: tokenInfor?.marketCap,
+    cap: wsTokenInfo?.marketCap?.usd || tokenInfor?.marketCap,
     aDayVolume: tokenInfor?.volume24h,
-    liquidity: tokenInfor?.liquidity,
+    liquidity: wsTokenInfo?.liquidity?.usd || tokenInfor?.liquidity,
     holders: tokenInfor?.holders,
     '5m': {
       difference: "12%",
@@ -71,8 +122,6 @@ export default function TokenInfo() {
       netBuy: tokenInfor?.netBuyVolume24h || "updating",
     }
   }
-  
-  console.log("tokenInfor", tokenInfor)
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-neutral-1000 box-shadow-info rounded-xl p-3 h-full flex flex-col ">
@@ -130,7 +179,9 @@ export default function TokenInfo() {
             <div className="text-xs text-neutral-100 font-semibold mb-1">Market Cap</div>
             <div className="font-medium text-sm text-neutral-100 flex items-center">
               ${formatNumberWithSuffix(dataToken.cap || 0)}
-              {/* <span className="text-green-400 text-xs ml-1">↑</span> */}
+              {wsTokenInfo?.marketCap?.usd && (
+                <span className="text-green-400 text-xs ml-1">●</span>
+              )}
             </div>
           </div>
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
@@ -143,8 +194,10 @@ export default function TokenInfo() {
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
             <div className="text-xs text-neutral-100 font-semibold mb-1">Liquidity</div>
             <div className="font-medium text-sm text-neutral-100 flex items-center">
-              ${formatNumberWithSuffix(dataToken.liquidity || 0)} 
-              {/* <span className="text-green-400 text-xs ml-1">↑</span> */}
+              ${formatNumberWithSuffix(dataToken.liquidity || 0)}
+              {wsTokenInfo?.liquidity?.usd && (
+                <span className="text-green-400 text-xs ml-1">●</span>
+              )}
             </div>
           </div>
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
