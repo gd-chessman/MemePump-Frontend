@@ -225,7 +225,7 @@ export default function CreateCoinForm() {
         case "last8days":
           return coinDate >= eightDaysAgo && coinDate < today;
         case "lastmonth":
-          return coinDate >= lastMonth && coinDate < eightDaysAgo;
+          return coinDate ;
         default:
           return true;
       }
@@ -786,7 +786,7 @@ export default function CreateCoinForm() {
         {/* Sidebar */}
         <div className="w-1/3 space-y-6 flex flex-col gap-2">
           {/* My Coins */}
-          <div className="rounded-xl border p-6 shadow-lg border-my-coin flex-1 flex flex-col justify-between">
+          <div className="rounded-xl border p-6 shadow-lg border-my-coin flex-1 flex flex-col justify-between z-10">
             <div>
               <h2 className="text-center text-lg font-bold text-neutral-100 mb-4 flex items-center justify-center gap-2">
                 {ethereumIcon(20, 20)}
@@ -872,7 +872,10 @@ export default function CreateCoinForm() {
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <button className="linear-gradient-light dark:linear-gradient-connect hover:border py-2 px-5 border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 rounded-full text-xs">
+                          <button 
+                            onClick={() => router.push(`/trading?address=${coin.address}`)}
+                            className="linear-gradient-light dark:linear-gradient-connect hover:border py-2 px-5 border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 rounded-full text-xs"
+                          >
                             {t('createCoin.myCoins.trade')}
                           </button>
                         </div>
