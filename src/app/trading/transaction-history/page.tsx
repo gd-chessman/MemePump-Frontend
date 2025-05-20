@@ -1,6 +1,7 @@
 "use client"
 
 import { getOrderHistories } from "@/services/api/OnChainService"
+import { getInforWallet, getListBuyToken } from "@/services/api/TelegramWalletService"
 import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
@@ -46,8 +47,6 @@ function TransactionHistoryContent() {
       enabled: !!address,
     }
   );
-
-  console.log(orderHistories)
 
   const formatPrice = (price: number | undefined) => {
     if (price === undefined) return '0.0';

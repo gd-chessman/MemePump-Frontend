@@ -2,7 +2,92 @@
   "connect": "연결",
   "overview": "개요",
   "trade": "거래",
-  "createCoin": "코인 생성",
+  "createCoin": {
+    "title": "새 코인 생성",
+    "form": {
+      "name": {
+        "label": "이름",
+        "placeholder": "코인 이름 입력",
+        "required": "코인 이름은 필수입니다"
+      },
+      "symbol": {
+        "label": "심볼",
+        "placeholder": "코인 심볼 입력",
+        "required": "코인 심볼은 필수입니다",
+        "maxLength": "심볼은 10자 이하여야 합니다"
+      },
+      "amount": {
+        "label": "수량",
+        "placeholder": "SOL로 초기 유동성 수량 입력",
+        "required": "초기 유동성 수량은 필수입니다",
+        "invalid": "유효한 수량을 입력해주세요"
+      },
+      "categories": {
+        "label": "카테고리",
+        "placeholder": "카테고리 선택...",
+        "search": "카테고리 검색...",
+        "noResults": "카테고리를 찾을 수 없습니다"
+      },
+      "description": {
+        "label": "설명",
+        "placeholder": "코인 설명 입력"
+      },
+      "logo": {
+        "label": "로고",
+        "required": "코인 로고는 필수입니다",
+        "upload": "클릭하여 업로드",
+        "invalidType": "이미지 파일을 업로드해주세요",
+        "maxSize": "이미지 크기는 2MB 미만이어야 합니다"
+      },
+      "preview": {
+        "label": "미리보기",
+        "name": "코인 이름",
+        "symbol": "심볼",
+        "description": "코인 설명이 여기에 표시됩니다",
+        "undo": "실행 취소"
+      },
+      "otherOptions": {
+        "title": "기타 옵션",
+        "telegram": {
+          "label": "텔레그램",
+          "placeholder": "텔레그램 그룹 링크 입력"
+        },
+        "twitter": {
+          "label": "트위터",
+          "placeholder": "트위터 사용자 이름 입력"
+        },
+        "website": {
+          "label": "웹사이트",
+          "placeholder": "코인 웹사이트 입력",
+          "invalid": "http:// 또는 https://로 시작하는 유효한 URL을 입력해주세요"
+        }
+      },
+      "submit": {
+        "create": "코인 생성",
+        "creating": "생성 중..."
+      }
+    },
+    "myCoins": {
+      "title": "내 코인",
+      "tabs": {
+        "today": "오늘",
+        "last8days": "최근 8일",
+        "lastMonth": "지난달"
+      },
+      "noCoins": "최근에 생성된 코인이 없습니다",
+      "seeAll": "모든 내 코인 보기",
+      "trade": "거래"
+    },
+    "guide": {
+      "title": "가이드",
+      "rules": [
+        "생성 후에는 삭제하거나 수정할 수 없습니다",
+        "Solana에 배포됩니다",
+        "자격이 있는 경우 거래 가능합니다",
+        "각 코인은 고유한 지갑과 토큰을 가집니다 - 안전하게 보관하세요"
+      ]
+    }
+  },
   "masterTrade": "마스터 거래",
   "wallet": "지갑",
   "searchPlaceholder": "토큰 이름/주소",
@@ -31,7 +116,13 @@
       "percentage": "비율",
       "balance": "잔액",
       "selectGroups": "그룹 선택...",
-      "amount": "수량"
+      "amount": "수량",
+      "masterTrade": "마스터 거래",
+      "searchMasterTrade": "마스터 거래 검색",
+      "copyAddress": "주소 복사",
+      "addressCopied": "복사됨",
+      "noConnections": "연결 없음",
+      "selectConnection": "연결 선택"
     }
   },
   "auth": {
