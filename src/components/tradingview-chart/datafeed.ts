@@ -62,20 +62,36 @@ export class MockDatafeed {
   private showMarketCap: boolean;
   private isLoading: boolean = false;
   private lastRequestTime: number = 0;
-  private requestTimeout: number = 1000; // Minimum time between requests in milliseconds
+  private requestTimeout: number = 1000;
   private socket: Socket | null = null;
   private subscribers: Map<string, (bar: any) => void> = new Map();
   private isConnected: boolean = false;
   private lastTransactionPrice: number | undefined;
   private lastBarClose: number | undefined;
+  private totalSupply: number | undefined;
+  private dataLoadedPromise: Promise<void> | null = null;
+  private dataLoadedResolve: (() => void) | null = null;
 
   constructor(symbol: string, tokenAddress: string, resolution: ResolutionString, showMarketCap: boolean = false) {
     this.symbol = symbol;
     this.tokenAddress = tokenAddress;
     this.resolution = resolution;
     this.showMarketCap = showMarketCap;
+    this.initializeDataLoadedPromise();
     this.initializeWebSocket();
     this.initializeLastTransactionPriceListener();
+  }
+
+  private initializeDataLoadedPromise() {
+    this.dataLoadedPromise = new Promise((resolve) => {
+      this.dataLoadedResolve = resolve;
+    });
+  }
+
+  private async waitForDataLoaded() {
+    if (this.dataLoadedPromise) {
+      await this.dataLoadedPromise;
+    }
   }
 
   private initializeWebSocket() {
@@ -103,14 +119,16 @@ export class MockDatafeed {
 
     this.socket.on('chartUpdate', (data) => {
       // If market cap is enabled and we have total supply, multiply OHLC values
-      if (this.showMarketCap && this.lastBarClose && this.lastTransactionPrice) {
-        const totalSupply = this.lastBarClose / this.lastTransactionPrice;
+      console.log('Using totalSupply from class F:', this.totalSupply);
+      if (this.showMarketCap && this.totalSupply) {
+        console.log('Last transaction WS:', data.data);
+        console.log('Using totalSupply from class:', this.totalSupply);
         const updatedData = {
           ...data.data,
-          open: data.data.open * totalSupply,
-          high: data.data.high * totalSupply,
-          low: data.data.low * totalSupply,
-          close: data.data.close * totalSupply
+          open: data.data.open * this.totalSupply,
+          high: data.data.high * this.totalSupply,
+          low: data.data.low * this.totalSupply,
+          close: data.data.close * this.totalSupply
         };
         // Notify all subscribers with the updated data
         this.subscribers.forEach((callback) => {
@@ -127,22 +145,6 @@ export class MockDatafeed {
     this.socket.on('subscriptionError', (error) => {
       console.error('WebSocket subscription error:', error);
     });
-  }
-
-  private initializeLastTransactionPriceListener() {
-    const handleLastTransactionPrice = (event: CustomEvent) => {
-      const { price, tokenAddress } = event.detail;
-      if (tokenAddress === this.tokenAddress) {
-        this.lastTransactionPrice = price;
-        
-        // Calculate total supply if market cap is enabled and we have both prices
-        if (this.showMarketCap && this.lastBarClose && price) {
-          const totalSupply = this.lastBarClose / price;
-        }
-      }
-    };
-
-    window.addEventListener('lastTransactionPriceUpdate', handleLastTransactionPrice as EventListener);
   }
 
   onReady(callback: (config: any) => void) {
@@ -203,7 +205,6 @@ export class MockDatafeed {
       const { from, to } = periodParams;
       const currentTime = Date.now();
 
-      // Check if we're already loading or if the last request was too recent
       if (this.isLoading || (currentTime - this.lastRequestTime < this.requestTimeout)) {
         onHistoryCallback([], {
           noData: true,
@@ -217,9 +218,15 @@ export class MockDatafeed {
       const apiResolution = convertResolution(resolution);
       const bars = await fetchChartData(this.tokenAddress, from, to, this.showMarketCap, apiResolution);
       
-      // Store the last bar's close price if we have bars and market cap is enabled
       if (this.showMarketCap && bars.length > 0) {
         this.lastBarClose = bars[bars.length - 1].close;
+        console.log('Total supply Bars loaded, lastBarClose:', this.lastBarClose);
+        // Resolve the promise when we have the data
+        if (this.dataLoadedResolve) {
+          this.dataLoadedResolve();
+          this.dataLoadedResolve = null;
+          this.dataLoadedPromise = null;
+        }
       }
       
       this.isLoading = false;
@@ -231,6 +238,32 @@ export class MockDatafeed {
       console.error('Error in getBars:', error);
       onErrorCallback(error);
     }
+  }
+
+  private async initializeLastTransactionPriceListener() {
+    const handleLastTransactionPrice = async (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { price, tokenAddress } = customEvent.detail;
+      
+      if (tokenAddress === this.tokenAddress) {
+        this.lastTransactionPrice = price;
+        console.log('Last transaction price received:', price);
+        
+        if (this.showMarketCap) {
+          // Wait for data to be loaded before calculating total supply
+          await this.waitForDataLoaded();
+          
+          if (this.lastBarClose && price) {
+            this.totalSupply = this.lastBarClose / price;
+            console.log('Total supply calculated after data loaded:', this.totalSupply);
+          } else {
+            console.log('Waiting for lastBarClose to be available...');
+          }
+        }
+      }
+    };
+
+    window.addEventListener('lastTransactionPriceUpdate', handleLastTransactionPrice as EventListener);
   }
 
   subscribeBars(symbolInfo: any, resolution: ResolutionString, onRealtimeCallback: (bar: any) => void, subscriberUID: string, onResetCacheNeededCallback: () => void) {
