@@ -105,12 +105,14 @@ export default function MasterTradeChat() {
                   </div>
                 </div>
                 <button
-                  className={`w-6 h-6 rounded-full border ${selectedItem === item.id ? "border-transparent linear-gradient-blue" : "border-gray-600 hover:border-gray-400"
+                  className={`w-6 h-6 rounded-full border ${item.connection_id === 47 ? "border-transparent linear-gradient-blue" : "border-gray-600 hover:border-gray-400"
                     }`}
                 />
 
               </div>
-            ))}
+            ))}Báo cáo ngày 19/05/2025:
+            - Cập nhật tính năng yêu thích token,  Ghép API info Token, search token trong view Trading (Done)
+            - Ghép API phần Buy Sell (80%)
           </div>
         </>
       ) : (
