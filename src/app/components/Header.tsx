@@ -136,7 +136,7 @@ const Header = () => {
                                 <Link
                                     href={item.href}
                                     key={index}
-                                    className={`hover:gradient-hover text-theme-neutral-800 dark:text-theme-neutral-300 transition-colors  ${pathname === item.href ? 'gradient-hover font-semibold' : ''}`}
+                                    className={`hover:gradient-hover text-theme-neutral-800 dark:text-theme-neutral-300 capitalize transition-colors  ${pathname === item.href ? 'gradient-hover font-semibold' : ''}`}
                                 >
                                     {item.name}
                                 </Link>

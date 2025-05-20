@@ -8,7 +8,7 @@ import { LangProvider } from '@/lang/LangProvider';
 export type LangCodes = 'en' | 'vi' | 'kr' | 'jp';
 
 // Định nghĩa kiểu dữ liệu có thể chứa object lồng nhau
-type Translations = { [key: string]: string | Translations };
+type Translations = { [key: string]: string | string[] | Translations };
 
 export const langConfig: { 
   listLangs: { id: number; name: string; code: LangCodes; translationKey: string; flag: string }[];
@@ -29,19 +29,29 @@ export const langConfig: {
 };
 
 // Hàm hỗ trợ lấy dữ liệu từ object lồng nhau
-const getNestedTranslation = (translations: Translations, key: string): string => {
-  return key.split('.').reduce((obj: any, k) => {
+const getNestedTranslation = (translations: Translations, key: string): string | string[] => {
+  const result = key.split('.').reduce((obj: any, k) => {
     if (typeof obj === 'object' && obj !== null && k in obj) {
       return obj[k] as Translations;
     }
     return undefined;
-  }, translations as Translations) as string || key;
+  }, translations as Translations);
+  
+  return result || key;
 };
 
 // Export the translation function that takes language as a parameter
-export const getTranslation = (lang: LangCodes) => (key: string) => {
+export const getTranslation = (lang: LangCodes) => {
   const translations = langConfig.langsApp[lang] || {};
-  return getNestedTranslation(translations, key);
+  
+  return (key: string): string => {
+    const result = getNestedTranslation(translations, key);
+    if (Array.isArray(result)) {
+      // For arrays, join them with newlines to make it a string
+      return result.join('\n');
+    }
+    return result as string;
+  };
 };
 
 // Re-export useLang and LangProvider

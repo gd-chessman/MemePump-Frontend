@@ -49,5 +49,91 @@
     "loginFailed": "Đăng nhập thất bại",
     "pleaseConnect": "Vui lòng kết nối tài khoản Telegram của bạn",
     "userProfile": "Thông tin người dùng"
+  },
+  "createCoin": {
+    "title": "TẠO COIN MỚI",
+    "form": {
+      "name": {
+        "label": "Tên",
+        "placeholder": "Nhập tên coin",
+        "required": "Tên coin là bắt buộc"
+      },
+      "symbol": {
+        "label": "Ký hiệu",
+        "placeholder": "Nhập ký hiệu coin",
+        "required": "Ký hiệu coin là bắt buộc",
+        "maxLength": "Ký hiệu không được vượt quá 10 ký tự"
+      },
+      "amount": {
+        "label": "Số lượng",
+        "placeholder": "Nhập số lượng thanh khoản ban đầu bằng SOL",
+        "required": "Số lượng thanh khoản ban đầu là bắt buộc",
+        "invalid": "Vui lòng nhập số lượng hợp lệ"
+      },
+      "categories": {
+        "label": "Danh mục",
+        "placeholder": "Chọn danh mục...",
+        "search": "Tìm kiếm danh mục...",
+        "noResults": "Không tìm thấy danh mục nào"
+      },
+      "description": {
+        "label": "Mô tả",
+        "placeholder": "Nhập mô tả coin"
+      },
+      "logo": {
+        "label": "Logo",
+        "required": "Logo coin là bắt buộc",
+        "upload": "Nhấp để tải lên",
+        "invalidType": "Vui lòng tải lên file hình ảnh",
+        "maxSize": "Kích thước hình ảnh phải nhỏ hơn 2MB"
+      },
+      "preview": {
+        "label": "Xem trước",
+        "name": "TÊN COIN CỦA BẠN",
+        "symbol": "KÝ HIỆU",
+        "description": "Mô tả coin của bạn sẽ xuất hiện ở đây",
+        "undo": "Hoàn tác"
+      },
+      "otherOptions": {
+        "title": "Tùy chọn khác",
+        "telegram": {
+          "label": "Telegram",
+          "placeholder": "Nhập liên kết nhóm telegram"
+        },
+        "twitter": {
+          "label": "Twitter",
+          "placeholder": "Nhập tên người dùng twitter"
+        },
+        "website": {
+          "label": "Website",
+          "placeholder": "Nhập website của coin",
+          "invalid": "Vui lòng nhập URL hợp lệ bắt đầu bằng http:// hoặc https://"
+        }
+      },
+      "submit": {
+        "create": "TẠO COIN",
+        "creating": "ĐANG TẠO..."
+      }
+    },
+    "myCoins": {
+      "title": "COIN CỦA TÔI",
+      "tabs": {
+        "today": "Hôm nay",
+        "last8days": "8 ngày qua",
+        "lastMonth": "Tháng trước"
+      },
+      "noCoins": "Chưa tạo coin nào gần đây",
+      "seeAll": "XEM TẤT CẢ COIN CỦA TÔI",
+      "trade": "Giao dịch"
+    },
+    "guide": {
+      "title": "HƯỚNG DẪN",
+      "rules": [
+        "Không thể xóa hoặc chỉnh sửa sau khi tạo",
+        "Được triển khai trên Solana",
+        "Có thể giao dịch nếu đủ điều kiện",
+        "Mỗi coin có ví và token riêng - lưu trữ an toàn"
+      ]
+    }
   }
 }

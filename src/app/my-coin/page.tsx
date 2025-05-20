@@ -18,6 +18,8 @@ import { Card } from "@/ui/card";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import convertIcon from "@/assets/svgs/convert-icon.svg"
 import { useRouter } from "next/navigation";
+import { getMyTokens } from "@/services/api/TelegramWalletService"
+import { useQuery } from "@tanstack/react-query"
 
 type CoinData = {
     id: string
@@ -30,6 +32,17 @@ type CoinData = {
     decimals: number
 }
 
+type MemeCoinData = {
+    token_id: number;
+    created_at: string;
+    name: string;
+    logo_url: string;
+    symbol: string;
+    address: string;
+    decimals: number;
+}
+
+
 type SortField = "time" | "name" | "symbol" | "address" | "decimals"
 type SortDirection = "asc" | "desc"
 
@@ -39,92 +52,27 @@ export default function MyCoinsTable() {
     const [sortField, setSortField] = useState<SortField>("time")
     const [sortDirection, setSortDirection] = useState<SortDirection>("desc")
 
-    // Sample data
-    const coins: CoinData[] = useMemo(
-        () => [
-            {
-                id: "coin-1",
-                time: "22:00",
-                date: "12/05/2025",
-                name: "The Sandbox",
-                logo: "/sandbox-logo.png",
-                symbol: "SAND",
-                address: "T034JK....mnoqpr",
-                decimals: 9,
-            },
-            {
-                id: "coin-2",
-                time: "15:30",
-                date: "11/05/2025",
-                name: "Axie Infinity",
-                logo: "/axie-logo.png",
-                symbol: "AXS",
-                address: "T045LM....rstuvw",
-                decimals: 18,
-            },
-            {
-                id: "coin-3",
-                time: "09:15",
-                date: "12/05/2025",
-                name: "Decentraland",
-                logo: "/mana-logo.png",
-                symbol: "MANA",
-                address: "T056NP....xyzabc",
-                decimals: 6,
-            },
-            {
-                id: "coin-4",
-                time: "18:45",
-                date: "10/05/2025",
-                name: "CryptoKitties",
-                logo: "/kitty-logo.png",
-                symbol: "KITTY",
-                address: "T067QR....defghi",
-                decimals: 8,
-            },
-            {
-                id: "coin-5",
-                time: "11:20",
-                date: "12/05/2025",
-                name: "Gods Unchained",
-                logo: "/gods-logo.png",
-                symbol: "GODS",
-                address: "T078ST....jklmno",
-                decimals: 12,
-            },
-            {
-                id: "coin-6",
-                time: "14:10",
-                date: "11/05/2025",
-                name: "Illuvium",
-                logo: "/ilv-logo.png",
-                symbol: "ILV",
-                address: "T089UV....pqrstu",
-                decimals: 10,
-            },
-            {
-                id: "coin-7",
-                time: "16:55",
-                date: "12/05/2025",
-                name: "Yield Guild Games",
-                logo: "/ygg-logo.png",
-                symbol: "YGG",
-                address: "T090WX....vwxyz",
-                decimals: 7,
-            },
-            {
-                id: "coin-8",
-                time: "10:05",
-                date: "10/05/2025",
-                name: "Gala Games",
-                logo: "/gala-logo.png",
-                symbol: "GALA",
-                address: "T101YZ....abcdef",
-                decimals: 15,
-            }
-        ],
-        [],
-    )
+    const { data: memeCoins = [] } = useQuery({
+        queryKey: ["my-tokens"],
+        queryFn: getMyTokens,
+    });
+
+    // Transform API data into table format
+    const coins: CoinData[] = useMemo(() => {
+        return memeCoins.map((coin: MemeCoinData) => {
+            const createdDate = new Date(coin.created_at);
+            return {
+                id: coin.token_id.toString(),
+                time: createdDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+                date: createdDate.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+                name: coin.name,
+                logo: coin.logo_url || token,
+                symbol: coin.symbol,
+                address: coin.address,
+                decimals: coin.decimals,
+            };
+        });
+    }, [memeCoins]);
 
     const handleSort = (field: SortField) => {
         if (sortField === field) {
@@ -292,8 +240,8 @@ export default function MyCoinsTable() {
                                         <TableCell className="h-[48px]">
                                             <div className="flex items-center justify-start gap-3">
                                                 <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-700 flex-shrink-0">
-                                                    <Image
-                                                        src={token}
+                                                    <img
+                                                        src={coin.logo}
                                                         alt={coin.name}
                                                         width={32}
                                                         height={32}
@@ -303,7 +251,7 @@ export default function MyCoinsTable() {
                                                 <span className="text-neutral-700 dark:text-neutral-200 text-xs font-normal">{coin.name}</span>
                                             </div>
                                         </TableCell>
-                                        <TableCell className="text-neutral-700 dark:text-neutral-200 text-xs font-normal text-center">{coin.symbol}</TableCell>
+                                        <TableCell className="text-neutral-700 dark:text-neutral-200 text-xs font-normal text-left uppercase">{coin.symbol}</TableCell>
                                         <TableCell className="h-[48px]">
                                             <div className="flex items-center justify-center gap-2">
                                                 <span className="text-neutral-700 dark:text-neutral-200 text-xs font-normal">{coin.address}</span>
@@ -315,7 +263,7 @@ export default function MyCoinsTable() {
                                                 </button>
                                             </div>
                                         </TableCell>
-                                        <TableCell className="text-neutral-700 dark:text-neutral-200 text-xs font-normal text-center">{coin.decimals}</TableCell>
+                                        <TableCell className="text-neutral-700 dark:text-neutral-200 text-xs font-normal text-left">{coin.decimals}</TableCell>
                                         <TableCell className="text-center">
                                             <button className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors">
                                                 <Image src={convertIcon} alt="convert" width={21} height={20} />

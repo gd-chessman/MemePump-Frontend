@@ -2,7 +2,92 @@
   "connect": "Connect",
   "overview": "Overview",
   "trade": "Trade",
-  "createCoin": "Create Coin",
+  "createCoin": {
+    "title": "CREATE NEW COIN",
+    "form": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Enter coin name",
+        "required": "Coin name is required"
+      },
+      "symbol": {
+        "label": "Symbol",
+        "placeholder": "Enter coin symbol",
+        "required": "Coin symbol is required",
+        "maxLength": "Symbol should be 10 characters or less"
+      },
+      "amount": {
+        "label": "Amount",
+        "placeholder": "Enter initial liquidity amount in SOL",
+        "required": "Initial liquidity amount is required",
+        "invalid": "Please enter a valid amount"
+      },
+      "categories": {
+        "label": "Categories",
+        "placeholder": "Select categories...",
+        "search": "Search categories...",
+        "noResults": "No categories found"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Enter coin description"
+      },
+      "logo": {
+        "label": "Logo",
+        "required": "Coin logo is required",
+        "upload": "Click to upload",
+        "invalidType": "Please upload an image file",
+        "maxSize": "Image size should be less than 2MB"
+      },
+      "preview": {
+        "label": "Preview",
+        "name": "YOUR COIN NAME",
+        "symbol": "SYMBOL",
+        "description": "Your coin description will appear here",
+        "undo": "Undo"
+      },
+      "otherOptions": {
+        "title": "Other Options",
+        "telegram": {
+          "label": "Telegram",
+          "placeholder": "Enter telegram group link"
+        },
+        "twitter": {
+          "label": "Twitter",
+          "placeholder": "Enter twitter username"
+        },
+        "website": {
+          "label": "Website",
+          "placeholder": "Enter coin website",
+          "invalid": "Please enter a valid URL starting with http:// or https://"
+        }
+      },
+      "submit": {
+        "create": "CREATE COIN",
+        "creating": "CREATING..."
+      }
+    },
+    "myCoins": {
+      "title": "MY COINS",
+      "tabs": {
+        "today": "Today",
+        "last8days": "Last 8 days",
+        "lastMonth": "Last month"
+      },
+      "noCoins": "No coins created recently",
+      "seeAll": "SEE ALL MY COINS",
+      "trade": "Trade"
+    },
+    "guide": {
+      "title": "GUIDE",
+      "rules": [
+        "Cannot be deleted or edited after creation",
+        "Deployed on Solana",
+        "Tradable if eligible",
+        "Each coin has a unique wallet and token - store securely"
+      ]
+    }
+  },
   "masterTrade": "Master Trade",
   "wallet": "Wallet",
   "searchPlaceholder": "Token Name/ Address",
