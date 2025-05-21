@@ -34,7 +34,6 @@ export default function TokenInfo() {
     refetchOnMount: true,
   });
  
-  console.log("tokenInfor", tokenInfor)
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("24h")
   const [socket, setSocket] = useState<any>(null);
   const [wsTokenInfo, setWsTokenInfo] = useState<any>(null);
@@ -93,30 +92,30 @@ export default function TokenInfo() {
     cap: wsTokenInfo?.marketCap?.usd || tokenInfor?.marketCap,
     aDayVolume: tokenInfor?.volume24h,
     liquidity: wsTokenInfo?.liquidity?.usd || tokenInfor?.liquidity,
-    holders: tokenInfor?.holders,
+    holders: wsTokenInfo?.holders || tokenInfor?.holders,
     '5m': {
-      difference: "12%",
+      difference: tokenInfor?.events?.['5m']?.priceChangePercentage?.toFixed(2) + '%' || "0%",
       vol: tokenInfor?.volume5m || "updating",
       buy: tokenInfor?.buyVolume5m || "updating",
       sell: tokenInfor?.sellVolume5m || "updating",
       netBuy: tokenInfor?.netBuyVolume5m || "updating",
     },
     '1h': {
-      difference: "12%",
+      difference: tokenInfor?.events?.['1h']?.priceChangePercentage?.toFixed(2) + '%' || "0%",
       vol: tokenInfor?.volume1h || "updating",
       buy: tokenInfor?.buyVolume1h || "updating",
       sell: tokenInfor?.sellVolume1h || "updating",
       netBuy: tokenInfor?.netBuyVolume1h || "updating",
     },
     '4h': {
-      difference: "12%",
+      difference: tokenInfor?.events?.['4h']?.priceChangePercentage?.toFixed(2) + '%' || "0%",
       vol: tokenInfor?.volume4h || "updating",
       buy: tokenInfor?.buyVolume4h || "updating",
       sell: tokenInfor?.sellVolume4h || "updating",
       netBuy: tokenInfor?.netBuyVolume4h || "updating",
     },
     '24h': {
-      difference: "12%",
+      difference: tokenInfor?.events?.['24h']?.priceChangePercentage?.toFixed(2) + '%' || "0%",
       vol: tokenInfor?.volume24h || "updating",
       buy: tokenInfor?.buyVolume24h || "updating",
       sell: tokenInfor?.sellVolume24h || "updating",
@@ -203,8 +202,11 @@ export default function TokenInfo() {
           </div>
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
             <div className="text-xs text-neutral-100 font-semibold mb-1">Holders</div>
-            <div className="font-medium text-sm text-neutral-100">
+            <div className="font-medium text-sm text-neutral-100 flex items-center">
               ${formatNumberWithSuffix(dataToken.holders || 0)}
+              {wsTokenInfo?.holders && (
+                <span className="text-green-400 text-xs ml-1">●</span>
+              )}
             </div>
           </div>
         </div>
@@ -214,25 +216,33 @@ export default function TokenInfo() {
         <div className="grid grid-cols-4 gap-2 ">
           <button onClick={() => setTimeFrame("5m")} className={`flex flex-col gap-1 cursor-pointer rounded-lg p-2 text-center border-1 border-solid  ${timeFrame === "5m" ? "border-green-400" : "box-shadow-info"}`}>
             <div className="text-xs">5m</div>
-            <div className="text-red-400 font-normal text-xs">{dataToken[timeFrame].difference}</div>
+            <div className={`font-normal text-xs ${Number(tokenInfor?.events?.['5m']?.priceChangePercentage) >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {tokenInfor?.events?.['5m']?.priceChangePercentage?.toFixed(2)}%
+            </div>
           </button>
           <button onClick={() => setTimeFrame("1h")} className={`flex flex-col gap-1 cursor-pointer rounded-lg p-2 text-center border-1 border-solid  ${timeFrame === "1h" ? "border-green-400" : "box-shadow-info"}`}>
             <div className="text-xs">1h</div>
-            <div className="text-green-400 font-normal text-xs">{dataToken[timeFrame].difference}</div>
+            <div className={`font-normal text-xs ${Number(tokenInfor?.events?.['1h']?.priceChangePercentage) >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {tokenInfor?.events?.['1h']?.priceChangePercentage?.toFixed(2)}%
+            </div>
           </button>
           <button onClick={() => setTimeFrame("4h")} className={`flex flex-col gap-1 cursor-pointer rounded-lg p-2 text-center border-1 border-solid  ${timeFrame === "4h" ? "border-green-400" : "box-shadow-info"}`}>
             <div className="text-xs">4h</div>
-            <div className="text-green-400 font-normal text-xs">{dataToken[timeFrame].difference}</div>
+            <div className={`font-normal text-xs ${Number(tokenInfor?.events?.['4h']?.priceChangePercentage) >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {tokenInfor?.events?.['4h']?.priceChangePercentage?.toFixed(2)}%
+            </div>
           </button>
           <button onClick={() => setTimeFrame("24h")} className={`flex flex-col gap-1 cursor-pointer rounded-lg p-2 text-center border-1 border-solid  ${timeFrame === "24h" ? "border-green-400" : "box-shadow-info"}`}>
             <div className="text-xs">24h</div>
-            <div className="text-green-400 font-normal text-xs">{dataToken[timeFrame].difference}</div>
+            <div className={`font-normal text-xs ${Number(tokenInfor?.events?.['24h']?.priceChangePercentage) >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {tokenInfor?.events?.['24h']?.priceChangePercentage?.toFixed(2)}%
+            </div>
           </button>
         </div>
         <div className="flex justify-between mx-4">
           <div className="flex flex-col items-center gap-1">
             <div className="text-xs text-neutral-100">Vol</div>
-            <div className="font-medium text-xs">{dataToken[timeFrame].vol}</div>
+            <div className="font-medium text-xs text-red-400">{"updating"}</div>
           </div>
           <div className="flex flex-col items-center gap-1">
             <div className="text-xs text-neutral-100">Buy</div>
