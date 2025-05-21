@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, Suspense } from "react"
 import { Smile, Send, Image as ImageIcon, X } from "lucide-react"
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react'
 import { langConfig } from "@/lang";
@@ -43,7 +43,8 @@ type ChatHistoryItem = {
   createdAt: string;
 }
 
-const ChatTrading = () => {
+// Create a client component for the main content
+const ChatTradingContent = () => {
   const { t, lang } = useLang();
   const [isMounted, setIsMounted] = useState(false);
   const [windowHeight, setWindowHeight] = useState(800); // Defaul
@@ -223,6 +224,15 @@ const ChatTrading = () => {
       </div>
     </div>
   )
+}
+
+// Main component with Suspense
+const ChatTrading = () => {
+  return (
+    <Suspense fallback={<div></div>}>
+      <ChatTradingContent />
+    </Suspense>
+  );
 }
 
 export default ChatTrading
