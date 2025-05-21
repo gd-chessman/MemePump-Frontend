@@ -14,12 +14,12 @@
         "label": "シンボル",
         "placeholder": "コインシンボルを入力",
         "required": "コインシンボルは必須です",
-        "maxLength": "シンボルは10文字以下である必要があります"
+        "maxLength": "シンボルは10文字以内で入力してください"
       },
       "amount": {
         "label": "数量",
-        "placeholder": "SOLでの初期流動性数量を入力",
-        "required": "初期流動性数量は必須です",
+        "placeholder": "初期流動性のSOL数量を入力",
+        "required": "初期流動性は必須です",
         "invalid": "有効な数量を入力してください"
       },
       "categories": {
@@ -37,11 +37,11 @@
         "required": "コインロゴは必須です",
         "upload": "クリックしてアップロード",
         "invalidType": "画像ファイルをアップロードしてください",
-        "maxSize": "画像サイズは2MB未満である必要があります"
+        "maxSize": "画像サイズは2MB未満にしてください"
       },
       "preview": {
         "label": "プレビュー",
-        "name": "コイン名",
+        "name": "あなたのコイン名",
         "symbol": "シンボル",
         "description": "コインの説明がここに表示されます",
         "undo": "元に戻す"
@@ -74,7 +74,7 @@
         "last8days": "過去8日間",
         "lastMonth": "先月"
       },
-      "noCoins": "最近作成されたコインはありません",
+      "noCoins": "最近作成したコインはありません",
       "seeAll": "すべてのマイコインを表示",
       "trade": "取引"
     },
@@ -82,9 +82,9 @@
       "title": "ガイド",
       "rules": [
         "作成後は削除または編集できません",
-        "Solanaにデプロイされます",
-        "条件を満たす場合は取引可能です",
-        "各コインは固有のウォレットとトークンを持ちます - 安全に保管してください"
+        "Solana上にデプロイされます",
+        "条件を満たせば取引可能です",
+        "各コインには固有のウォレットとトークンがあります - 安全に保管してください"
       ]
     }
   },
@@ -105,9 +105,9 @@
     "liquidity": "流動性",
     "holder": "保有者",
     "volume1h": "1時間取引量",
-    "volume1hChange": "1時間変化率",
+    "volume1hChange": "1時間取引量変化",
     "volume24h": "24時間取引量",
-    "volume24hChange": "24時間変化率",
+    "volume24hChange": "24時間取引量変化",
     "noTokens": "トークンが見つかりません",
     "trade": "取引",
     "panel": {
@@ -122,17 +122,18 @@
       "copyAddress": "アドレスをコピー",
       "addressCopied": "コピーしました",
       "noConnections": "接続がありません",
-      "selectConnection": "接続を選択"
+      "selectConnection": "接続を選択",
+      "noGroupsAvailable": "利用可能なグループがありません"
     },
     "interface": {
       "loading": "トークン情報を読み込み中...",
-      "noTokens": "最近表示したトークンはありません",
+      "noTokens": "最近閲覧したトークンはありません",
       "recentTokens": "最近のトークン",
       "openInNewTab": "新しいタブで開く"
     }
   },
   "auth": {
-    "connect": "Telegramで接続",
+    "connect": "Telegramに接続",
     "disconnect": "切断",
     "connecting": "接続中...",
     "connected": "接続済み",

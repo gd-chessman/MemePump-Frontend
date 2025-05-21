@@ -14,12 +14,12 @@
         "label": "심볼",
         "placeholder": "코인 심볼 입력",
         "required": "코인 심볼은 필수입니다",
-        "maxLength": "심볼은 10자 이하여야 합니다"
+        "maxLength": "심볼은 10자 이내로 입력해주세요"
       },
       "amount": {
         "label": "수량",
-        "placeholder": "SOL로 초기 유동성 수량 입력",
-        "required": "초기 유동성 수량은 필수입니다",
+        "placeholder": "초기 유동성 SOL 수량 입력",
+        "required": "초기 유동성은 필수입니다",
         "invalid": "유효한 수량을 입력해주세요"
       },
       "categories": {
@@ -41,7 +41,7 @@
       },
       "preview": {
         "label": "미리보기",
-        "name": "코인 이름",
+        "name": "당신의 코인 이름",
         "symbol": "심볼",
         "description": "코인 설명이 여기에 표시됩니다",
         "undo": "실행 취소"
@@ -74,7 +74,7 @@
         "last8days": "최근 8일",
         "lastMonth": "지난달"
       },
-      "noCoins": "최근에 생성된 코인이 없습니다",
+      "noCoins": "최근 생성한 코인이 없습니다",
       "seeAll": "모든 내 코인 보기",
       "trade": "거래"
     },
@@ -83,7 +83,7 @@
       "rules": [
         "생성 후에는 삭제하거나 수정할 수 없습니다",
         "Solana에 배포됩니다",
-        "자격이 있는 경우 거래 가능합니다",
+        "조건을 충족하면 거래 가능합니다",
         "각 코인은 고유한 지갑과 토큰을 가집니다 - 안전하게 보관하세요"
       ]
     }
@@ -105,14 +105,14 @@
     "liquidity": "유동성",
     "holder": "보유자",
     "volume1h": "1시간 거래량",
-    "volume1hChange": "1시간 변화율",
+    "volume1hChange": "1시간 거래량 변화",
     "volume24h": "24시간 거래량",
-    "volume24hChange": "24시간 변화율",
+    "volume24hChange": "24시간 거래량 변화",
     "noTokens": "토큰을 찾을 수 없습니다",
     "trade": "거래",
     "panel": {
-      "buy": "매수",
-      "sell": "매도",
+      "buy": "구매",
+      "sell": "판매",
       "percentage": "비율",
       "balance": "잔액",
       "selectGroups": "그룹 선택...",
@@ -121,24 +121,25 @@
       "searchMasterTrade": "마스터 거래 검색",
       "copyAddress": "주소 복사",
       "addressCopied": "복사됨",
-      "noConnections": "연결 없음",
-      "selectConnection": "연결 선택"
+      "noConnections": "연결이 없습니다",
+      "selectConnection": "연결 선택",
+      "noGroupsAvailable": "사용 가능한 그룹이 없습니다"
     },
     "interface": {
-      "loading": "토큰 정보 로딩 중...",
-      "noTokens": "최근에 본 토큰이 없습니다",
+      "loading": "토큰 정보를 불러오는 중...",
+      "noTokens": "최근 본 토큰이 없습니다",
       "recentTokens": "최근 토큰",
       "openInNewTab": "새 탭에서 열기"
     }
   },
   "auth": {
-    "connect": "Telegram 연결",
+    "connect": "텔레그램 연결",
     "disconnect": "연결 해제",
     "connecting": "연결 중...",
     "connected": "연결됨",
     "loginSuccess": "로그인 성공",
     "loginFailed": "로그인 실패",
-    "pleaseConnect": "Telegram 계정을 연결해주세요",
+    "pleaseConnect": "텔레그램 계정을 연결해주세요",
     "userProfile": "사용자 프로필"
   }
 }

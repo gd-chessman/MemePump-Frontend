@@ -7,12 +7,13 @@ import ChatTrading from "./chat"
 import { MasterTradeChatProps } from "./types"
 import { SearchBar } from "./components/SearchBar"
 import { ConnectionList } from "./components/ConnectionList"
+import { getInforWallet } from "@/services/api/TelegramWalletService"
 
-export default function MasterTradeChat({ 
-    selectedGroups, 
-    setSelectedGroups, 
-    selectedConnections, 
-    setSelectedConnections 
+export default function MasterTradeChat({
+    selectedGroups,
+    setSelectedGroups,
+    selectedConnections,
+    setSelectedConnections
 }: MasterTradeChatProps) {
     const [activeTab, setActiveTab] = useState<"trade" | "chat">("trade")
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
@@ -23,11 +24,15 @@ export default function MasterTradeChat({
         queryFn: getMyConnects,
         refetchOnWindowFocus: false
     })
+    const { data: walletInfor } = useQuery({
+        queryKey: ["wallet-infor"],
+        queryFn: getInforWallet,
+    });
 
     // Filter connections based on search query
     const filteredConnections = useMemo(() => {
         if (!searchQuery.trim()) return myConnects
-        
+
         const query = searchQuery.toLowerCase().trim()
         return myConnects.filter((connect: any) => {
             const memberName = connect.member_name?.toLowerCase() || ""
@@ -39,12 +44,12 @@ export default function MasterTradeChat({
     useEffect(() => {
         // Update selected connections based on selected groups
         const newSelectedConnections = myConnects
-            .filter((connect: any) => 
-                connect.joined_groups.some((group: any) => 
+            .filter((connect: any) =>
+                connect.joined_groups.some((group: any) =>
                     selectedGroups.includes(group.group_id.toString())
                 )
             ).map((connect: any) => connect.member_id.toString())
-        setSelectedConnections(newSelectedConnections)
+        setSelectedConnections([...selectedConnections, ...newSelectedConnections])
     }, [selectedGroups, myConnects, setSelectedConnections])
 
     const handleCopyAddress = useCallback((address: string) => {
@@ -67,28 +72,35 @@ export default function MasterTradeChat({
         }
     }, [selectedConnections, myConnects, setSelectedConnections, setSelectedGroups, selectedGroups])
 
+    useEffect(() => {
+        if (walletInfor?.role != "master") {
+            setActiveTab("chat")
+        }
+    }, [walletInfor])
+
     return (
         <div className="h-full flex flex-col">
             {/* Tabs */}
             <div className="flex-none flex h-[30px] bg-neutral-1000 my-3 mx-3 rounded-xl relative">
+
+                {walletInfor?.role == "master" && (
+                    <button
+                        className={`flex-1 rounded-xl text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "trade" ? "linear-gradient-connect" : "text-neutral-400"
+                            }`}
+                        onClick={() => setActiveTab("trade")}
+                    >
+                        TRADE
+                    </button>
+                )}
                 <button
-                    className={`flex-1 rounded-xl text-sm cursor-pointer font-medium uppercase text-center ${
-                        activeTab === "trade" ? "linear-gradient-connect" : "text-neutral-400"
-                    }`}
-                    onClick={() => setActiveTab("trade")}
-                >
-                    TRADE
-                </button>
-                <button
-                    className={`flex-1 rounded-xl cursor-pointer text-sm font-medium uppercase text-center ${
-                        activeTab === "chat" ? "linear-gradient-connect" : "text-neutral-400"
-                    }`}
+                    className={`flex-1 rounded-xl cursor-pointer text-sm font-medium uppercase text-center ${activeTab === "chat" ? "linear-gradient-connect" : "text-neutral-400"
+                        }`}
                     onClick={() => setActiveTab("chat")}
                 >
                     CHAT
                 </button>
                 <div className="absolute right-1 top-0">
-                    <div className="bg-blue-500 text-white text-xs rounded-full px-1 py-1">+10</div>
+                    <div className="bg-theme-primary-400 text-neutral-100 text-[10px] rounded-full p-[2px]">+10</div>
                 </div>
             </div>
 

@@ -43,7 +43,6 @@ const Header = () => {
         queryFn: getMyWallets,
         staleTime: 30000,
     });
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { isAuthenticated, logout, updateToken } = useAuth();
     const [mounted, setMounted] = useState(false);
     const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
