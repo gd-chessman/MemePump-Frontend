@@ -33,6 +33,8 @@ export default function TokenInfo() {
     queryFn: getMyWishlist,
     refetchOnMount: true,
   });
+ 
+  console.log("tokenInfor", tokenInfor)
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("24h")
   const [socket, setSocket] = useState<any>(null);
   const [wsTokenInfo, setWsTokenInfo] = useState<any>(null);

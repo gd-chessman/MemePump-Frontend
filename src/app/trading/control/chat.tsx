@@ -189,7 +189,6 @@ const ChatTrading = () => {
                 placeholder="Type a message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
                 className="w-full bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-white rounded-full px-4 py-2 pr-10 
                                          focus:outline-none focus:ring-2 focus:ring-theme-primary-400/50 
                                          placeholder-gray-400 dark:placeholder-gray-500

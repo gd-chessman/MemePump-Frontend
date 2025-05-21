@@ -10,6 +10,7 @@ export const getTradeAmount = async (code: any)=>{
     }
 }
 
+
 export const getOrders = async (address: any)=>{
     try {
         const temp = await axiosClient.get(`/trade/orders?token=${address}`,)
