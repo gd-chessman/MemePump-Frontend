@@ -123,6 +123,12 @@
       "addressCopied": "Copied",
       "noConnections": "No connections",
       "selectConnection": "Select connection"
+    },
+    "interface": {
+      "loading": "Loading token information...",
+      "noTokens": "No recently viewed tokens",
+      "recentTokens": "Recent Tokens",
+      "openInNewTab": "Open in new tab"
     }
   },
   "auth": {

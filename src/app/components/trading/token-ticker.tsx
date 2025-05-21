@@ -21,7 +21,7 @@ export default function TokenTicker({
         <span className="font-medium text-gray-900 dark:text-white">{symbol}</span>
         <span className="text-blue-600 dark:text-theme-primary-400">{price}</span>
         <span className={isPositive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}>{change}</span>
-        {isShow && <FontAwesomeIcon icon={faXmark} width={12} className="text-gray-500 dark:text-gray-400"/>}
+        {/* {isShow && <FontAwesomeIcon icon={faXmark} width={12} className="text-gray-500 dark:text-gray-400"/>} */}
       </div>
     )
   }

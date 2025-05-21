@@ -123,6 +123,12 @@
       "addressCopied": "복사됨",
       "noConnections": "연결 없음",
       "selectConnection": "연결 선택"
+    },
+    "interface": {
+      "loading": "토큰 정보 로딩 중...",
+      "noTokens": "최근에 본 토큰이 없습니다",
+      "recentTokens": "최근 토큰",
+      "openInNewTab": "새 탭에서 열기"
     }
   },
   "auth": {

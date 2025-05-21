@@ -38,6 +38,12 @@
       "addressCopied": "Đã sao chép",
       "noConnections": "Không có kết nối nào",
       "selectConnection": "Chọn kết nối"
+    },
+    "interface": {
+      "loading": "Đang tải thông tin token...",
+      "noTokens": "Chưa có token nào được xem gần đây",
+      "recentTokens": "Token gần đây",
+      "openInNewTab": "Mở trong tab mới"
     }
   },
   "auth": {

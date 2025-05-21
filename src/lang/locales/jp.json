@@ -123,6 +123,12 @@
       "addressCopied": "コピーしました",
       "noConnections": "接続がありません",
       "selectConnection": "接続を選択"
+    },
+    "interface": {
+      "loading": "トークン情報を読み込み中...",
+      "noTokens": "最近表示したトークンはありません",
+      "recentTokens": "最近のトークン",
+      "openInNewTab": "新しいタブで開く"
     }
   },
   "auth": {
