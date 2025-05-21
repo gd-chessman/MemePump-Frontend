@@ -7,6 +7,7 @@ import { LangProvider } from "@/lang/LangProvider";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import VideoBackground from "./components/VideoBackground";
+import Chat from "./chat";
 
 export default function RootLayout({
   children,
@@ -48,6 +49,7 @@ export default function RootLayout({
               <main className="flex-1 w-full bg-white/80 dark:bg-[#000000a8]">
                 {children}
               </main>
+              {/* <Chat />  */}
             </ThemeProvider>
           </LangProvider>
         </QueryClientProvider>

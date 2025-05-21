@@ -127,7 +127,7 @@ function TransactionHistoryContent() {
 };
 
   return (
-    <div className="box-shadow-info rounded-xl p-3 overflow-hidden bg-white dark:bg-neutral-1000">
+    <div className="box-shadow-info rounded-xl p-3 overflow-hidden bg-white dark:bg-neutral-1000 flex flex-col h-full">
       <div className="flex border-gray-200 dark:border-neutral-800 h-[30px] bg-gray-100 dark:bg-theme-neutral-1000 rounded-xl">
         <button 
           className={`flex-1 rounded-xl text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "all" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
@@ -143,8 +143,8 @@ function TransactionHistoryContent() {
         </button>
       </div>
 
-      <div className="mt-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-xl relative">
-        <div className="overflow-x-auto max-h-[330px] w-full">
+      <div className="mt-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-xl relative flex-1 flex flex-col min-h-0">
+        <div className="flex-1 overflow-auto">
           <table className="w-full text-sm table-fixed">
             <thead className="sticky top-0 z-10 bg-white dark:bg-[#0F0F0F]">
               <tr className="border-b border-gray-200 dark:border-neutral-800">

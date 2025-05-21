@@ -14,15 +14,16 @@ import { useLocalStorage } from "./hooks/useLocalStorage"
 import { PercentageButtons } from "./components/PercentageButtons"
 import { AmountButtons } from "./components/AmountButtons"
 import { GroupSelect } from "./components/GroupSelect"
+import { getInforWallet } from "@/services/api/TelegramWalletService"
 
-export default function TradingPanel({ 
-    defaultMode = "buy", 
-    currency, 
-    isConnected, 
-    selectedGroups, 
-    setSelectedGroups, 
-    selectedConnections, 
-    setSelectedConnections 
+export default function TradingPanel({
+    defaultMode = "buy",
+    currency,
+    isConnected,
+    selectedGroups,
+    setSelectedGroups,
+    selectedConnections,
+    setSelectedConnections
 }: TradingPanelProps) {
     const { t } = useLang()
     const searchParams = useSearchParams()
@@ -39,11 +40,16 @@ export default function TradingPanel({
         queryFn: () => getTradeAmount(address),
     })
 
+    const { data: walletInfor } = useQuery({
+        queryKey: ["wallet-infor"],
+        queryFn: getInforWallet,
+    });
+
     const { data: solPrice } = useQuery({
         queryKey: ["sol-price"],
         queryFn: () => getPriceSolona(),
     })
-     const { data: tokenInfor, refetch } = useQuery({
+    const { data: tokenInfor, refetch } = useQuery({
         queryKey: ["token-infor", address],
         queryFn: () => getTokenInforByAddress(address),
     });
@@ -252,21 +258,19 @@ export default function TradingPanel({
                 {/* BUY/SELL Toggle */}
                 <div className="flex bg-gray-100 dark:bg-theme-neutral-1000 rounded-xl">
                     <button
-                        className={`flex-1 rounded-3xl py-1 text-sm cursor-pointer uppercase text-center ${
-                            mode === "buy" 
-                                ? "border-green-500 text-green-600 dark:text-theme-green-200 border-1 bg-green-50 dark:bg-theme-green-100 font-semibold" 
+                        className={`flex-1 rounded-3xl py-1 text-sm cursor-pointer uppercase text-center ${mode === "buy"
+                                ? "border-green-500 text-green-600 dark:text-theme-green-200 border-1 bg-green-50 dark:bg-theme-green-100 font-semibold"
                                 : "text-gray-500 dark:text-neutral-400"
-                        }`}
+                            }`}
                         onClick={() => setMode("buy")}
                     >
                         {t('trading.panel.buy')}
                     </button>
                     <button
-                        className={`flex-1 rounded-3xl py-1 cursor-pointer text-sm uppercase text-center ${
-                            mode === "sell" 
-                                ? "border-red-500 text-red-600 dark:text-theme-red-100 border-1 bg-red-50 dark:bg-theme-red-300 font-semibold" 
+                        className={`flex-1 rounded-3xl py-1 cursor-pointer text-sm uppercase text-center ${mode === "sell"
+                                ? "border-red-500 text-red-600 dark:text-theme-red-100 border-1 bg-red-50 dark:bg-theme-red-300 font-semibold"
                                 : "text-gray-500 dark:text-neutral-400"
-                        }`}
+                            }`}
                         onClick={() => setMode("sell")}
                     >
                         {t('trading.panel.sell')}
@@ -297,8 +301,8 @@ export default function TradingPanel({
                             <div className={STYLE_TEXT_BASE}>&ensp;</div>
                         )}
                         <div className={STYLE_TEXT_BASE}>
-                            {t('trading.panel.balance')}: {mode === "buy" 
-                                ? tradeAmount?.sol_balance.toFixed(6) + " " + currency.symbol 
+                            {t('trading.panel.balance')}: {mode === "buy"
+                                ? tradeAmount?.sol_balance.toFixed(6) + " " + currency.symbol
                                 : tradeAmount?.token_balance.toFixed(6) + " " + tradeAmount?.token_address?.substring(0, 3)}
                         </div>
                     </div>
@@ -352,21 +356,21 @@ export default function TradingPanel({
                 )}
 
                 {/* Group Select */}
-                <GroupSelect
+                {walletInfor?.role == "master" && <GroupSelect
                     groups={groups || []}
                     selectedGroups={selectedGroups}
                     setSelectedGroups={setSelectedGroups}
-                />
+                />}
+
 
                 {/* Action Button */}
                 <div className="mt-3">
                     <button
                         onClick={handleSubmit}
-                        className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${
-                            mode === "buy"
+                        className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${mode === "buy"
                                 ? "bg-green-500 hover:bg-green-600 dark:bg-theme-green-200 dark:hover:bg-theme-green-200/90"
                                 : "bg-red-500 hover:bg-red-600 dark:bg-theme-red-100 dark:hover:bg-theme-red-100/90"
-                        }`}
+                            }`}
                     >
                         {mode === "buy" ? t('trading.panel.buy') : t('trading.panel.sell')}
                     </button>

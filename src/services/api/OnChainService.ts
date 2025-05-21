@@ -48,6 +48,16 @@ export const getChartData = async (address: string, timeframe: string, timeFrom:
     return temp.data.data;
   } catch (error) {
     console.log(error);
+    return [];  
+  }
+}
+
+export const getOrderMyHistories = async (address: string, walletAddress: string) => {
+  try {
+    const temp = await axiosClient.get(`/on-chain/my-histories/${address}?walletAddress=${walletAddress}`);
+    return temp.data.data.items;
+  } catch (error) {
+    console.log(error);
     return [];
   }
 }

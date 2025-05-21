@@ -38,12 +38,6 @@ const Header = () => {
         refetchInterval: 30000,
         staleTime: 30000,
     });
-    const { data: myWallets } = useQuery({
-        queryKey: ["my-wallets"],
-        queryFn: getMyWallets,
-        staleTime: 30000,
-    });
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { isAuthenticated, logout, updateToken } = useAuth();
     const [mounted, setMounted] = useState(false);
     const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);

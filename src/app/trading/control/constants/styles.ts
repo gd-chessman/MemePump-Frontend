@@ -3,55 +3,76 @@ export const STYLE_TEXT_BASE = "text-gray-600 dark:text-neutral-200 text-sm font
 export const SELECT_STYLES = {
     control: (base: any) => ({
         ...base,
-        backgroundColor: "hsl(var(--background))",
-        borderColor: "hsl(var(--input))",
-        color: "hsl(var(--foreground))",
-        "&:hover": {
-            borderColor: "hsl(var(--input))",
-        },
+        backgroundColor: document.documentElement.classList.contains("dark") 
+            ? "#1E1E1E" 
+            : "#fff",
+        borderColor: document.documentElement.classList.contains("dark")
+            ? "#8833EE"
+            : "rgba(0, 0, 0, 0.1)",
+        color: document.documentElement.classList.contains("dark")
+            ? "#fff"
+            : "#000",
+        
+        borderRadius: "1rem",
+       
+            
     }),
     menu: (base: any) => ({
         ...base,
-        backgroundColor: "#333",
-        color: "hsl(var(--foreground))",
-        border: "1px solid hsl(var(--input))",
+        backgroundColor: document.documentElement.classList.contains("dark")
+            ? "#1E1E1E"
+            : "#fff",
+        color: document.documentElement.classList.contains("dark")
+            ? "#fff"
+            : "#000",
+        border: document.documentElement.classList.contains("dark")
+            ? "1px solid rgba(255, 255, 255, 0.1)"
+            : "1px solid rgba(0, 0, 0, 0.1)",
         borderRadius: "0.5rem",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+        boxShadow: document.documentElement.classList.contains("dark")
+            ? "0 4px 12px rgba(0, 0, 0, 0.3)"
+            : "0 4px 12px rgba(0, 0, 0, 0.1)",
         marginTop: "0.5rem",
         overflow: "hidden",
         animation: "fadeIn 0.2s ease-in-out",
         zIndex: 9999,
-        "&:before": {
-            content: '""',
-            position: "absolute",
-            top: "-1px",
-            left: "-1px",
-            right: "-1px",
-            height: "1px",
-            background: "linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)))",
-            opacity: 0.5,
-        },
     }),
     option: (base: any, state: any) => ({
         ...base,
         backgroundColor: state.isSelected
-            ? "hsl(var(--primary))"
+            ? (document.documentElement.classList.contains("dark")
+                ? "#2a2a2a"
+                : "#f0f0f0")
             : state.isFocused
-                ? "hsl(var(--accent))"
+                ? (document.documentElement.classList.contains("dark")
+                    ? "#2a2a2a"
+                    : "#f5f5f5")
                 : "transparent",
-        color: state.isSelected
-            ? document.documentElement.classList.contains("dark")
-                ? "#fff"
-                : "#000"
-            : "hsl(var(--foreground))",
+        color: document.documentElement.classList.contains("dark")
+            ? "#fff"
+            : "#000",
+        cursor: "pointer",
+        padding: "8px 12px",
+        fontSize: "0.875rem",
+        ":active": {
+            backgroundColor: document.documentElement.classList.contains("dark")
+                ? "#2a2a2a"
+                : "#f0f0f0",
+        },
         "&:hover": {
-            backgroundColor: "hsl(var(--accent))",
-            color: "hsl(var(--foreground))",
+            backgroundColor: document.documentElement.classList.contains("dark")
+                ? "#2a2a2a !important"
+                : "#f5f5f5 !important",
+            color: document.documentElement.classList.contains("dark")
+                ? "#fff !important"
+                : "#000 !important",
         },
     }),
     multiValue: (base: any) => ({
         ...base,
-        backgroundColor: "hsl(var(--primary))",
+        backgroundColor: document.documentElement.classList.contains("dark")
+            ? "#2a2a2a"
+            : "#f0f0f0",
         color: document.documentElement.classList.contains("dark")
             ? "#fff"
             : "#000",
@@ -74,48 +95,68 @@ export const SELECT_STYLES = {
             : "#000",
         padding: "0.125rem 0.25rem",
         ":hover": {
-            backgroundColor: "hsl(var(--destructive))",
-            color: "white",
+            backgroundColor: document.documentElement.classList.contains("dark")
+                ? "#3a3a3a"
+                : "#e0e0e0",
+            color: document.documentElement.classList.contains("dark")
+                ? "#fff"
+                : "#000",
         },
     }),
     singleValue: (base: any) => ({
         ...base,
-        color: "hsl(var(--foreground))",
+        color: document.documentElement.classList.contains("dark")
+            ? "#fff"
+            : "#000",
         fontSize: "0.875rem",
     }),
     input: (base: any) => ({
         ...base,
-        color: "hsl(var(--foreground))",
+        color: document.documentElement.classList.contains("dark")
+            ? "#fff"
+            : "#000",
         fontSize: "0.875rem",
     }),
     placeholder: (base: any) => ({
         ...base,
-        color: "hsl(var(--muted-foreground))",
+        color: document.documentElement.classList.contains("dark")
+            ? "rgba(255, 255, 255, 0.5)"
+            : "rgba(0, 0, 0, 0.5)",
         fontSize: "0.875rem",
     }),
     menuList: (base: any) => ({
         ...base,
-        color: "hsl(var(--foreground))",
+        color: document.documentElement.classList.contains("dark")
+            ? "#fff"
+            : "#000",
         padding: "0.5rem",
         maxHeight: "300px",
         "&::-webkit-scrollbar": {
             width: "8px",
         },
         "&::-webkit-scrollbar-track": {
-            background: "hsl(var(--background))",
+            background: document.documentElement.classList.contains("dark")
+                ? "#1E1E1E"
+                : "#f5f5f5",
             borderRadius: "4px",
         },
         "&::-webkit-scrollbar-thumb": {
-            background: "hsl(var(--muted-foreground))",
+            background: document.documentElement.classList.contains("dark")
+                ? "#3a3a3a"
+                : "#d0d0d0",
             borderRadius: "4px",
             "&:hover": {
-                background: "hsl(var(--foreground))",
+                background: document.documentElement.classList.contains("dark")
+                    ? "#4a4a4a"
+                    : "#c0c0c0",
             },
         },
     }),
     noOptionsMessage: (base: any) => ({
         ...base,
-        color: "hsl(var(--muted-foreground))",
+        color: document.documentElement.classList.contains("dark")
+            ? "rgba(255, 255, 255, 0.5)"
+            : "rgba(0, 0, 0, 0.5)",
     }),
 }
 

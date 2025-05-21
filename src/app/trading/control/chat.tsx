@@ -5,8 +5,16 @@ import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Smile, Send, Image as ImageIcon, X } from "lucide-react"
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react'
-import Image from "next/image"
-import token from "@/assets/svgs/token.svg"
+import { langConfig } from "@/lang";
+import { useQuery } from "@tanstack/react-query"
+import { useSearchParams } from "next/navigation"
+import {
+  getTokenHistories,
+  readTokenMessage,
+} from "@/services/api/ChatService";
+import { useLang } from "@/lang";
+import { ChatService } from "@/services/api"
+import ChatMessage from "@/app/components/chat/ChatMessage"
 
 type Message = {
   id: string
@@ -17,58 +25,79 @@ type Message = {
   }
   text: string
   timestamp: Date
+  country: string
+}
+
+type ChatHistoryItem = {
+  _id: string;
+  ch_id: string;
+  chat_id: string;
+  ch_wallet_address: string;
+  ch_content: string;
+  chat_type: string;
+  ch_status: string;
+  ch_is_master: boolean;
+  ch_lang: string;
+  country: string;
+  nick_name: string;
+  createdAt: string;
 }
 
 const ChatTrading = () => {
+  const { t, lang } = useLang();
   const [isMounted, setIsMounted] = useState(false);
-  const [windowHeight, setWindowHeight] = useState(800); // Default height
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      sender: {
-        name: "POPCAT",
-        avatar: "/token.png",
-        isCurrentUser: false,
-      },
-      text: "Anyone is up for illustrations. I think there are less relatable images according to our brand.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 5),
-    },
-    {
-      id: "2",
-      sender: {
-        name: "POPCAT",
-        avatar: "/token.png",
-        isCurrentUser: false,
-      },
-      text: "Anyone is up for illustrations. I think there are less relatable images according to our brand.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 4),
-    },
-    {
-      id: "3",
-      sender: {
-        name: "You",
-        avatar: "/user-avatar.png",
-        isCurrentUser: true,
-      },
-      text: "Yes, It will decrease the loading",
-      timestamp: new Date(Date.now() - 1000 * 60 * 3),
-    },
-  ])
+  const [windowHeight, setWindowHeight] = useState(800); // Defaul
+  // t height
+  const searchParams = useSearchParams();
+  const tokenAddress = searchParams?.get("address");
+  const { data: chatTokenHistories, refetch: refetchChatTokenHistories } =
+    useQuery({
+      queryKey: ["chatTokenHistories", tokenAddress, lang],
+      queryFn: () => getTokenHistories(tokenAddress || "", lang),
+      refetchOnMount: true,
+      enabled: !!tokenAddress,
+    });
+  const { data: tokenMessageData, refetch: refetchTokenMessage } = useQuery({
+    queryKey: ["readTokenMessage", tokenAddress],
+    queryFn: () => readTokenMessage(tokenAddress || ""),
+    enabled: !!tokenAddress,
+    refetchOnMount: true,
+  });
+
+  // Convert chatTokenHistories data to Message format
+  useEffect(() => {
+    if (chatTokenHistories?.data) {
+      const convertedMessages: Message[] = chatTokenHistories.data.map((chat: ChatHistoryItem) => ({
+        id: chat._id,
+        sender: {
+          name: chat.nick_name || "Anonymous",
+          avatar: "/token.png",
+          isCurrentUser: chat.ch_wallet_address === "YOUR_WALLET_ADDRESS", // TODO: Replace with actual wallet address
+        },
+        text: chat.ch_content,
+        timestamp: new Date(chat.createdAt),
+        country: chat.ch_lang
+      }));
+      setMessages(convertedMessages);
+    }
+  }, [chatTokenHistories]);
+  console.log("chatTokenHistories", chatTokenHistories)
+
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showIconPicker, setShowIconPicker] = useState(false)
   const emojiPickerRef = useRef<HTMLDivElement>(null)
   const iconPickerRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     setIsMounted(true);
     setWindowHeight(window.innerHeight);
-    
+
     const handleResize = () => {
       setWindowHeight(window.innerHeight);
     };
-    
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -96,31 +125,6 @@ const ChatTrading = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() === "") return
-
-    const message: Message = {
-      id: Date.now().toString(),
-      sender: {
-        name: "You",
-        avatar: "/user-avatar.png",
-        isCurrentUser: true,
-      },
-      text: newMessage,
-      timestamp: new Date(),
-    }
-
-    setMessages([...messages, message])
-    setNewMessage("")
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
-    }
-  }
-
   const onEmojiClick = (emojiData: EmojiClickData) => {
     setNewMessage(prev => prev + emojiData.emoji)
     setShowEmojiPicker(false)
@@ -130,40 +134,33 @@ const ChatTrading = () => {
     setNewMessage(prev => prev + icon)
     setShowIconPicker(false)
   }
-  
+  const handleSendMessage = async () => {
+    if (!newMessage.trim()) return;
+
+    try {
+      await ChatService.sendTokenMessage(
+        newMessage,
+        tokenAddress || "",
+        lang
+      );
+      refetchChatTokenHistories(); // Refetch chat history after sending
+      setNewMessage("");
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-gray-50 dark:bg-theme-neutral-1000">
-      <div className={`${height > 700 ? 'flex-1' : 'h-[300px]'} overflow-y-auto p-2 space-y-4`}>
+      <div className={`${height > 700 ? 'flex-1' : 'h-[300px]'} overflow-y-auto p-4 space-y-4`}>
         {messages.map((message) => (
-          <div key={message.id} className={`flex ${message.sender.isCurrentUser ? "justify-end" : "items-start"}`}>
-            {!message.sender.isCurrentUser && (
-              <div className="flex-shrink-0 mr-3">
-                <img
-                  src={message.sender.avatar || "/token.png"}
-                  alt={message.sender.name}
-                  width={36}
-                  height={36}
-                  className="rounded-full ring-2 ring-theme-primary-400/20 dark:ring-theme-primary-400/30"
-                />
-              </div>
-            )}
-            <div>
-              {!message.sender.isCurrentUser && (
-                <div className="font-medium text-xs mb-1 text-theme-primary-500 dark:text-theme-primary-300">
-                  {message.sender.name}
-                </div>
-              )}
-              <div
-                className={`max-w-[90%] rounded-lg p-2 ${message.sender.isCurrentUser
-                    ? "bg-theme-primary-400 text-white shadow-sm dark:bg-theme-primary-400/90"
-                    : "bg-white dark:bg-neutral-800 text-gray-800 dark:text-white border border-gray-200 dark:border-theme-primary-400/30 shadow-sm"
-                  }`}
-              >
-                <p className="text-xs text-gray-800 dark:text-white">{message.text}</p>
-              </div>
-            </div>
-
-          </div>
+          <ChatMessage key={message.id} message={message} />
         ))}
         <div ref={messagesEndRef} />
       </div>
@@ -192,7 +189,6 @@ const ChatTrading = () => {
                 placeholder="Type a message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
                 className="w-full bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-white rounded-full px-4 py-2 pr-10 
                                          focus:outline-none focus:ring-2 focus:ring-theme-primary-400/50 
                                          placeholder-gray-400 dark:placeholder-gray-500
