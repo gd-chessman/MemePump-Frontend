@@ -30,10 +30,10 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
             height={20}
             className="rounded-full ring-2 ring-theme-primary-400/20 dark:ring-theme-primary-400/30"
           /> */}
-          <div className="font-medium text-xs mb-1 text-theme-primary-500 dark:text-theme-primary-300 uppercase">
-            {message.sender.name}
-          </div>
           <img src={currentLang?.flag} alt={currentLang?.name} className="w-6 h-4 rounded" />
+          <div className="font-medium text-xs mb-1 text-theme-primary-500 dark:text-theme-primary-300">
+            {message.sender.name} :
+          </div>
           <span className="text-xs text-gray-800 dark:text-white">{message.text}</span>
         </div>
       )}
