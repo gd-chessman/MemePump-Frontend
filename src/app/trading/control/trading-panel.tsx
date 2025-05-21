@@ -6,7 +6,7 @@ import { getMyGroups } from "@/services/api/MasterTradingService"
 import { createTrading, getTokenAmount, getTradeAmount } from "@/services/api/TradingService"
 import { useSearchParams } from "next/navigation"
 import { useLang } from "@/lang/useLang"
-import { getPriceSolona } from "@/services/api/SolonaTokenService"
+import { getPriceSolona, getTokenInforByAddress } from "@/services/api/SolonaTokenService"
 import notify from "@/app/components/notify"
 import { TradingPanelProps, TradingMode } from "./types"
 import { STYLE_TEXT_BASE } from "./constants/styles"
@@ -43,6 +43,10 @@ export default function TradingPanel({
         queryKey: ["sol-price"],
         queryFn: () => getPriceSolona(),
     })
+     const { data: tokenInfor, refetch } = useQuery({
+        queryKey: ["token-infor", address],
+        queryFn: () => getTokenInforByAddress(address),
+    });
 
     const { data: tokenAmount, refetch: refetchTokenAmount } = useQuery({
         queryKey: ["tokenAmount", address],
@@ -184,8 +188,8 @@ export default function TradingPanel({
             const response = await createTrading({
                 order_trade_type: mode,
                 order_type: "market",
-                order_token_name: tokenAmount?.token_address || "No name",
-                order_token_address: tokenAmount?.token_address || "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+                order_token_name: tokenAmount?.token_address || tokenInfor.symbol,
+                order_token_address: tokenAmount?.token_address || tokenInfor.address,
                 order_price:
                     mode === "sell"
                         ? Number(amount) * (tokenAmount?.token_price || 0)

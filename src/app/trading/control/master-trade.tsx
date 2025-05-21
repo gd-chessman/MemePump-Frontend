@@ -15,8 +15,8 @@ export default function MasterTradeChat({
     setSelectedConnections 
 }: MasterTradeChatProps) {
     const [activeTab, setActiveTab] = useState<"trade" | "chat">("trade")
-    const [searchQuery, setSearchQuery] = useState("")
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
+    const [searchQuery, setSearchQuery] = useState("")
 
     const { data: myConnects = [] } = useQuery({
         queryKey: ["myConnects"],
@@ -24,15 +24,16 @@ export default function MasterTradeChat({
         refetchOnWindowFocus: false
     })
 
-    // Memoize filtered connections based on search query
+    // Filter connections based on search query
     const filteredConnections = useMemo(() => {
-        if (!searchQuery) return myConnects
-        const query = searchQuery.toLowerCase()
-        return myConnects.filter((connect: any) => 
-            connect.name.toLowerCase().includes(query) ||
-            connect.ticker.toLowerCase().includes(query) ||
-            connect.member_address.toLowerCase().includes(query)
-        )
+        if (!searchQuery.trim()) return myConnects
+        
+        const query = searchQuery.toLowerCase().trim()
+        return myConnects.filter((connect: any) => {
+            const memberName = connect.member_name?.toLowerCase() || ""
+            const memberAddress = connect.member_address?.toLowerCase() || ""
+            return memberName.includes(query) || memberAddress.includes(query)
+        })
     }, [myConnects, searchQuery])
 
     useEffect(() => {
