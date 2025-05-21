@@ -162,13 +162,13 @@ export default function TokenInfo() {
             </button>
             <div className="flex items-center gap-2">
               {tokenInfor?.telegram && (
-                <Link href={tokenInfor.telegram} target="_blank"><Image src={telegram} alt="Telegram" className="h-4 w-4"/></Link>
+                <Link href={tokenInfor.telegram} target="_blank"><img src={"/telegram.png"} alt="Telegram" className="h-4 w-4"/></Link>
               )}
               {tokenInfor?.website && (
-                <Link href={tokenInfor.website} target="_blank"><Image src={website} alt="Website" className="h-4 w-4"/></Link>
+                <Link href={tokenInfor.website} target="_blank"><img src={"/website.png"} alt="Website" className="h-4 w-4"/></Link>
               )}
               {tokenInfor?.twitter && (
-                <Link href={tokenInfor.twitter} target="_blank"><Image src={x} alt="Twitter" className="h-4 w-4"/></Link>
+                <Link href={tokenInfor.twitter} target="_blank"><img src={"/x.png"} alt="Twitter" className="h-4 w-4"/></Link>
               )}
             </div>
           </div>
