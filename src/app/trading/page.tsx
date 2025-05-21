@@ -11,7 +11,7 @@ import TradingViewChart from '@/app/components/tradingview-chart/TradingViewChar
 const TradingPage = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [windowHeight, setWindowHeight] = useState(800); // Default height
-  const [chartHeight, setChartHeight] = useState(50); // Changed default to 50%
+  const [chartHeight, setChartHeight] = useState(51); // Changed default to 50%
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -91,10 +91,10 @@ const TradingPage = () => {
           />
           
           <div 
-            style={{ height: `${98 - chartHeight}%` }} 
-            className='transition-all duration-100 overflow-hidden '
+            style={{ height: `${100 - chartHeight}%` }} 
+            className='transition-all duration-100 overflow-hidden flex'
           >
-            <div className='h-full'>
+            <div className='flex flex-1'>
               <TransactionHistory />
             </div>
           </div>

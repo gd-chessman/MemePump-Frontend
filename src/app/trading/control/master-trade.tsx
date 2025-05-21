@@ -15,19 +15,21 @@ export default function MasterTradeChat({
     selectedConnections,
     setSelectedConnections
 }: MasterTradeChatProps) {
-    const [activeTab, setActiveTab] = useState<"trade" | "chat">("trade")
+    const [activeTab, setActiveTab] = useState<"trade" | "chat">("chat")
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
 
-    const { data: myConnects = [] } = useQuery({
+    const { data: myConnects = [], isLoading: isLoadingConnects } = useQuery({
         queryKey: ["myConnects"],
         queryFn: getMyConnects,
         refetchOnWindowFocus: false
     })
-    const { data: walletInfor } = useQuery({
+    const { data: walletInfor, isLoading: isLoadingWallet } = useQuery({
         queryKey: ["wallet-infor"],
         queryFn: getInforWallet,
     });
+
+    const isLoading = isLoadingConnects || isLoadingWallet;
 
     // Filter connections based on search query
     const filteredConnections = useMemo(() => {
@@ -52,6 +54,12 @@ export default function MasterTradeChat({
         setSelectedConnections([...selectedConnections, ...newSelectedConnections])
     }, [selectedGroups, myConnects, setSelectedConnections])
 
+    useEffect(() => {
+        if (walletInfor?.role !== "master") {
+            setActiveTab("chat")
+        }
+    }, [walletInfor])
+
     const handleCopyAddress = useCallback((address: string) => {
         navigator.clipboard.writeText(address)
         setCopiedAddress(address)
@@ -71,19 +79,17 @@ export default function MasterTradeChat({
             setSelectedConnections([...selectedConnections, id])
         }
     }, [selectedConnections, myConnects, setSelectedConnections, setSelectedGroups, selectedGroups])
-
-    useEffect(() => {
-        if (walletInfor?.role != "master") {
-            setActiveTab("chat")
-        }
-    }, [walletInfor])
-
+    
     return (
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col relative">
+            {/* {isLoading && (
+                <div className="absolute inset-0 bg-neutral-1000/50 backdrop-blur-xl z-10 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-theme-primary-400"></div>
+                </div>
+            )} */}
             {/* Tabs */}
             <div className="flex-none flex h-[30px] bg-neutral-1000 my-3 mx-3 rounded-xl relative">
-
-                {walletInfor?.role == "master" && (
+                {walletInfor?.role === "master" && (
                     <button
                         className={`flex-1 rounded-xl text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "trade" ? "linear-gradient-connect" : "text-neutral-400"
                             }`}

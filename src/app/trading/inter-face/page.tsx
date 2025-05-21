@@ -50,7 +50,6 @@ const Interface = () => {
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
   });
-  console.log("tokenInfor", tokenInfor)
 
   // Update recent tokens when tokenInfor changes
   useEffect(() => {
