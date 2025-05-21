@@ -169,13 +169,13 @@ function TransactionHistoryContent() {
                     {order.type}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
-                    ${formatPrice(order.token.from.price.usd)}
+                    ${formatPrice(order.priceUsd)}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
                     {formatNumberWithSuffix(order.amount)}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
-                    ${(order.token.from.price.usd * order.amount).toFixed(6)}
+                    ${(order.priceUsd * order.amount).toFixed(6)}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
                     {order.program}

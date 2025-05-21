@@ -67,21 +67,36 @@ export class MockDatafeed {
   private subscribers: Map<string, (bar: any) => void> = new Map();
   private isConnected: boolean = false;
   private currentMarketCap: number | undefined;
-  private handleMarketCapUpdate: (event: Event) => void;
+  private handleMarketCapUpdate = (event: Event) => {
+    const customEvent = event as CustomEvent;
+    const { marketCap, tokenAddress } = customEvent.detail;
+    
+    if (tokenAddress === this.tokenAddress) {
+      this.currentMarketCap = marketCap;
+      // Emit update to all subscribers when market cap changes
+      if (this.showMarketCap && this.currentMarketCap) {
+        // We need the last price data to calculate totalSupply
+        // So we'll just update the close price for now
+        this.subscribers.forEach((callback) => {
+          callback({
+            time: Date.now(),
+            close: this.currentMarketCap,
+            // Keep other values unchanged until we get new chart data
+            open: undefined,
+            high: undefined,
+            low: undefined,
+            volume: undefined
+          });
+        });
+      }
+    }
+  };
 
   constructor(symbol: string, tokenAddress: string, resolution: ResolutionString, showMarketCap: boolean = false) {
     this.symbol = symbol;
     this.tokenAddress = tokenAddress;
     this.resolution = resolution;
     this.showMarketCap = showMarketCap;
-    this.handleMarketCapUpdate = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const { marketCap, tokenAddress } = customEvent.detail;
-      
-      if (tokenAddress === this.tokenAddress) {
-        this.currentMarketCap = marketCap;
-      }
-    };
     this.initializeWebSocket();
     this.initializeMarketCapListener();
   }
@@ -115,7 +130,7 @@ export class MockDatafeed {
 
     this.socket.on('chartUpdate', (data) => { 
       if (this.showMarketCap && this.currentMarketCap) {
-        // When showing market cap, use the current market cap value as the close price
+        // Calculate totalSupply to properly scale other values
         const totalSupply = this.currentMarketCap / data.data.close;
         const updatedData = {
           ...data.data,
