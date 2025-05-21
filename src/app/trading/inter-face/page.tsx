@@ -3,7 +3,7 @@ import TokenTicker from '@/app/components/trading/token-ticker'
 import { getTokenInforByAddress } from '@/services/api/SolonaTokenService';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import { useLang } from '@/lang/useLang';
 
 interface TokenInfo {
@@ -40,7 +40,8 @@ const formatPrice = (price: string): string => {
   }
 };
 
-const Interface = () => {
+// Create a client component for the main content
+const InterfaceContent = () => {
   const { t } = useLang();
   const searchParams = useSearchParams();
   const address = searchParams?.get("address");
@@ -126,6 +127,15 @@ const Interface = () => {
       )}
     </div>
   )
+}
+
+// Main component with Suspense
+const Interface = () => {
+  return (
+    <Suspense fallback={<div></div>}>
+      <InterfaceContent />
+    </Suspense>
+  );
 }
 
 export default Interface
