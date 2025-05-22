@@ -49,7 +49,7 @@ export default function RootLayout({
               <main className="flex-1 w-full bg-white/80 dark:bg-[#000000a8]">
                 {children}
               </main>
-              {/* <Chat />  */}
+              <Chat />
             </ThemeProvider>
           </LangProvider>
         </QueryClientProvider>
