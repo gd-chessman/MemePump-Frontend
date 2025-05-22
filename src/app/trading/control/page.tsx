@@ -11,10 +11,10 @@ interface CryptoCurrency {
   name: string
 }
 
-const Control = () => {
+const ControlContent = () => {
   const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy");
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
-  const [selectedConnections, setSelectedConnections] = useState<string[]>([]); // (prev: string[]) => string[] | string[]
+  const [selectedConnections, setSelectedConnections] = useState<string[]>([]);
 
   const { data: walletInfor, refetch } = useQuery({
     queryKey: ["wallet-infor"],
@@ -25,7 +25,6 @@ const Control = () => {
 
   const [isConnected, setIsConnected] = useState(false)
   
-  // Convert walletInfor to CryptoCurrency format
   const currencies: CryptoCurrency =  { 
     symbol: "SOL", 
     balance: walletInfor?.sol_balance || 0.0, 
@@ -36,18 +35,16 @@ const Control = () => {
   return (
     <div className='flex flex-col h-full gap-4'>
       <div className={classLayout + " p-3 flex-none"}>
-        <Suspense fallback={<div></div>}>
-          <TradingPanel 
-            defaultMode={activeTab} 
-            currency={currencies} 
-            isConnected={isConnected} 
-            onConnect={() => setIsConnected(!isConnected)}
-            selectedGroups={selectedGroups}
-            setSelectedGroups={setSelectedGroups}
-            selectedConnections={selectedConnections}
-            setSelectedConnections={setSelectedConnections}
-          />
-        </Suspense>
+        <TradingPanel 
+          defaultMode={activeTab} 
+          currency={currencies} 
+          isConnected={isConnected} 
+          onConnect={() => setIsConnected(!isConnected)}
+          selectedGroups={selectedGroups}
+          setSelectedGroups={setSelectedGroups}
+          selectedConnections={selectedConnections}
+          setSelectedConnections={setSelectedConnections}
+        />
       </div>
       <div className={classLayout + " flex-1 min-h-0"}>
         <MasterTradeChat 
@@ -58,6 +55,14 @@ const Control = () => {
         />
       </div>
     </div>
+  )
+}
+
+const Control = () => {
+  return (
+    <Suspense fallback={<div className="h-full w-full bg-neutral-1000 rounded-2xl"></div>}>
+      <ControlContent />
+    </Suspense>
   )
 }
 

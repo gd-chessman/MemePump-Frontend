@@ -6,10 +6,7 @@ import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import { useState, Suspense, useEffect } from "react"
-import dynamic from 'next/dynamic'
-
-// Dynamically import socket.io-client with no SSR
-const io = dynamic(() => import('socket.io-client').then(mod => mod.io), { ssr: false })
+import { io as socketIO } from "socket.io-client"
 
 type Transaction = {
   time: string
@@ -33,7 +30,7 @@ export default function TransactionHistory() {
 
 function TransactionHistoryContent() {
   const [activeTab, setActiveTab] = useState<"all" | "my">("all")
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<any>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [realTimeTransactions, setRealTimeTransactions] = useState<any[]>([]);
@@ -45,7 +42,7 @@ function TransactionHistoryContent() {
   useEffect(() => {
     if (typeof window === 'undefined' || !address) return;
 
-    const socketInstance = io(`${process.env.NEXT_PUBLIC_API_URL}/token-txs`, {
+    const socketInstance = socketIO(`${process.env.NEXT_PUBLIC_API_URL}/token-txs`, {
       path: '/socket.io',
       transports: ['websocket'],
     });

@@ -1,30 +1,13 @@
-"use client";
-import { useState } from "react";
 import "@/styles/globals.css";
-import Header from "@/app/components/Header";
-import "@/libs/fontawesome";
 import { LangProvider } from "@/lang/LangProvider";
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import VideoBackground from "./components/VideoBackground";
-import Chat from "./chat";
+import ClientLayout from "@/app/components/ClientLayout";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            refetchOnMount: false,
-          },
-        },
-      })
-  );
-
   return (
     <html suppressHydrationWarning>
       <head>
@@ -38,21 +21,10 @@ export default function RootLayout({
           referrerPolicy="no-referrer"
         />
       </head>
-      <body
-        className={`antialiased min-h-screen flex flex-col bg-white dark:bg-black`}
-      >
-        <QueryClientProvider client={queryClient}>
-          <LangProvider>
-            <ThemeProvider>
-              <Header />
-              <VideoBackground />
-              <main className="flex-1 w-full bg-white/80 dark:bg-[#000000a8]">
-                {children}
-              </main>
-              <Chat />
-            </ThemeProvider>
-          </LangProvider>
-        </QueryClientProvider>
+      <body className={`antialiased min-h-screen flex flex-col bg-white dark:bg-black`}>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );
