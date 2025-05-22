@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/ui/card"
 import { Button } from "@/ui/button"
 import { CheckCircle2, ExternalLink, Copy, X } from "lucide-react"
-import { cn } from "@/libs/utils"
+import { cn } from "@/lib/utils"
 import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import { ToastNotification } from "@/ui/toast"
 import { useState, useEffect, useRef } from "react"

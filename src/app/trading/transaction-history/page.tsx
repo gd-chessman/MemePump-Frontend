@@ -6,7 +6,10 @@ import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import { useState, Suspense, useEffect } from "react"
-import { io, Socket } from 'socket.io-client';
+import dynamic from 'next/dynamic'
+
+// Dynamically import socket.io-client with no SSR
+const io = dynamic(() => import('socket.io-client').then(mod => mod.io), { ssr: false })
 
 type Transaction = {
   time: string
@@ -40,7 +43,7 @@ function TransactionHistoryContent() {
 
   // WebSocket connection setup
   useEffect(() => {
-    if (!address) return;
+    if (typeof window === 'undefined' || !address) return;
 
     const socketInstance = io(`${process.env.NEXT_PUBLIC_API_URL}/token-txs`, {
       path: '/socket.io',
@@ -162,7 +165,7 @@ function TransactionHistoryContent() {
 
   // Dispatch event when lastTransactionPrice changes
   useEffect(() => {
-    if (lastTransactionPrice !== undefined) {
+    if (typeof window !== 'undefined' && lastTransactionPrice !== undefined) {
       const event = new CustomEvent('lastTransactionPriceUpdate', {
         detail: { 
           price: lastTransactionPrice,

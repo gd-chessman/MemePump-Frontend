@@ -7,7 +7,7 @@ import { X } from "lucide-react"
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { cn } from "@/libs/utils"
+import { cn } from "@/lib/utils"
 
 const ToastProvider = ToastPrimitives.Provider
 
