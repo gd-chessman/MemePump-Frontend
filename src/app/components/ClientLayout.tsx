@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/theme/ThemeProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import dynamic from 'next/dynamic';
 import VideoBackground from "./VideoBackground";
+import { useAuth } from "@/hooks/useAuth";
 
 const Chat = dynamic(() => import('../chat'), {
   ssr: false
@@ -18,6 +19,7 @@ export default function ClientLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isAuthenticated } = useAuth();
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -38,7 +40,7 @@ export default function ClientLayout({
           <main className="flex-1 w-full bg-white/80 dark:bg-[#000000a8]">
             {children}
           </main>
-          <Chat />
+          {isAuthenticated && <Chat />}
         </ThemeProvider>
       </LangProvider>
     </QueryClientProvider>

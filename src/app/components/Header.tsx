@@ -78,13 +78,13 @@ const Header = () => {
             });
             router.push("/complete-profile");
         }
-        if (walletInfor?.status === 401) {
-            notify({ 
-                message: 'Phiên đăng nhập đã hết hạn!', 
-                type: 'error' 
-            });
-            logout();
-        }
+        // if (walletInfor?.status === 401) {
+        //     notify({ 
+        //         message: 'Phiên đăng nhập đã hết hạn!', 
+        //         type: 'error' 
+        //     });
+        //     logout();
+        // }
         if (walletInfor && walletInfor.status === 200 && !isWalletDialogOpen) {
             notify({ 
                 message: 'Đăng nhập thành công!', 
@@ -125,7 +125,7 @@ const Header = () => {
                 <div className='flex items-center justify-between px-10 py-[14px]'>
                     <div className='flex items-center gap-15'>
                         <Link href="/"><img src={"/logo.png"} alt="logo" height={32} /></Link>
-                        <nav className='flex items-center gap-15'>
+                        <nav className='flex items-center gap-10 xl:gap-15'>
                             {listSidebar.map((item, index) => (
                                 <Link
                                     href={item.href}
@@ -147,7 +147,7 @@ const Header = () => {
                             <input
                                 type="text"
                                 placeholder={t('searchPlaceholder')}
-                                className="rounded-full py-2 pl-10 pr-4 w-64 text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400"
+                                className="rounded-full py-2 pl-10 pr-4 w-60 text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-xs"
                             />
                             <Search className="absolute left-3 top-2 h-4 w-4 text-gray-500 dark:text-muted-foreground" />
                         </div>

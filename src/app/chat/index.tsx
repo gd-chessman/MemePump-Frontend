@@ -290,26 +290,26 @@ const ChatWidget = () => {
         {/* Chat Box */}
         {open && (
           <div 
-            className={`${getBoxPositionClasses()}  shadow-lg rounded-lg w-96 h-[40vh] flex flex-col border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400`}
+            className={`${getBoxPositionClasses()} shadow-lg rounded-lg  w-96 h-[40vh] flex flex-col border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400`}
             onMouseDown={(e) => {
               e.stopPropagation();
             }}
           >
             <div
-              className="flex items-center justify-center gap-2 p-2 cursor-move bg-gray-50 dark:bg-gray-900 rounded-t-lg select-none"
+              className="flex items-center justify-center gap-2 p-2 cursor-move bg-gray-50 dark:bg-neutral-900 rounded-t-lg select-none"
               onMouseDown={handleMouseDown}
             >
               <img src={"/ethereum.png"} alt="ethereum-icon" width={15} height={15} />
               <span className="text-white font-bold">Community Chatroom</span>
               <img src={"/ethereum.png"} alt="ethereum-icon" width={15} height={15} />
             </div>
-            <div className="flex-1 overflow-y-auto p-3 bg-gray-50 dark:bg-gray-900">
+            <div className="flex-1 overflow-y-auto p-3 bg-gray-50 dark:bg-neutral-900">
               {messages.map((msg) => (
                 <ChatMessage key={msg.id} message={msg} />
               ))}
               <div ref={messagesEndRef} />
             </div>
-            <div className="p-2 rounded-xl bg-gray-50 dark:bg-gray-900 ">
+            <div className="p-2 rounded-xl bg-gray-50 dark:bg-neutral-900 ">
               <div className="flex gap-2 rounded-xl">
                 <input
                   type="text"
@@ -322,12 +322,12 @@ const ChatWidget = () => {
                     }
                   }}
                   placeholder={t("Type a message...")}
-                  className="flex-1 px-3 py-1 text-sm bg-gray-50 dark:bg-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-theme-primary-400/50"
+                  className="flex-1 px-3 py-1 h-[30px] text-xs bg-gray-50 dark:bg-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-theme-primary-400/50"
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim()}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                  className={`px-4 py-1 rounded-lg text-xs font-medium transition-colors
                     ${inputMessage.trim()
                       ? 'bg-theme-primary-400 hover:bg-theme-primary-500 text-white'
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}`}
