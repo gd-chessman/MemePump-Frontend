@@ -8,6 +8,12 @@ import { MasterTradeChatProps } from "./types"
 import { SearchBar } from "./components/SearchBar"
 import { ConnectionList } from "./components/ConnectionList"
 import { getInforWallet } from "@/services/api/TelegramWalletService"
+import { useTradingChatStore } from "@/store/tradingChatStore"
+import { useSearchParams } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
+import { useLang } from "@/lang"
+
+type TabType = "chat" | "trade";
 
 export default function MasterTradeChat({
     selectedGroups,
@@ -15,9 +21,32 @@ export default function MasterTradeChat({
     selectedConnections,
     setSelectedConnections
 }: MasterTradeChatProps) {
-    const [activeTab, setActiveTab] = useState<"trade" | "chat">("chat")
+    const searchParams = useSearchParams();
+    const tokenAddress = searchParams?.get("address");
+    const { token } = useAuth();
+    const { lang } = useLang();
+    const { 
+        activeTab, 
+        setActiveTab, 
+        unreadCount, 
+        messages,
+        setTokenAddress,
+        initializeWebSocket,
+        disconnectWebSocket
+    } = useTradingChatStore();
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
+
+    // Initialize websocket when token address changes
+    useEffect(() => {
+        if (tokenAddress && token) {
+            setTokenAddress(tokenAddress);
+            initializeWebSocket(token, lang);
+        }
+        return () => {
+            disconnectWebSocket();
+        };
+    }, [tokenAddress, token, lang, setTokenAddress, initializeWebSocket, disconnectWebSocket]);
 
     const { data: myConnects = [], isLoading: isLoadingConnects } = useQuery({
         queryKey: ["myConnects"],
@@ -58,7 +87,7 @@ export default function MasterTradeChat({
         if (walletInfor?.role !== "master") {
             setActiveTab("chat")
         }
-    }, [walletInfor])
+    }, [walletInfor, setActiveTab])
 
     const handleCopyAddress = useCallback((address: string) => {
         navigator.clipboard.writeText(address)
@@ -79,7 +108,12 @@ export default function MasterTradeChat({
             setSelectedConnections([...selectedConnections, id])
         }
     }, [selectedConnections, myConnects, setSelectedConnections, setSelectedGroups, selectedGroups])
-    
+
+    const handleTabChange = (tab: TabType) => {
+        setActiveTab(tab);
+    };
+    console.log("unreadCount", unreadCount)
+    console.log("messages", messages)
     return (
         <div className="h-full flex flex-col relative">
             {/* {isLoading && (
@@ -93,7 +127,8 @@ export default function MasterTradeChat({
                     <button
                         className={`flex-1 rounded-xl text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "trade" ? "linear-gradient-connect" : "text-neutral-400"
                             }`}
-                        onClick={() => setActiveTab("trade")}
+                        onClick={() => handleTabChange("trade")}
+                        data-active-tab={activeTab}
                     >
                         TRADE
                     </button>
@@ -101,13 +136,16 @@ export default function MasterTradeChat({
                 <button
                     className={`flex-1 rounded-xl cursor-pointer text-sm font-medium uppercase text-center ${activeTab === "chat" ? "linear-gradient-connect" : "text-neutral-400"
                         }`}
-                    onClick={() => setActiveTab("chat")}
+                    onClick={() => handleTabChange("chat")}
+                    data-active-tab={activeTab}
                 >
                     CHAT
+                    {unreadCount > 0 && activeTab !== "chat" && (
+                        <div className="absolute right-1 top-0">
+                            <div className="bg-theme-primary-400 text-neutral-100 text-[10px] rounded-full p-[2px]">{unreadCount}</div>
+                        </div>
+                    )}
                 </button>
-                <div className="absolute right-1 top-0">
-                    <div className="bg-theme-primary-400 text-neutral-100 text-[10px] rounded-full p-[2px]">+10</div>
-                </div>
             </div>
 
             {activeTab === "trade" ? (

@@ -54,6 +54,8 @@ const InterfaceContent = () => {
 
   // Update recent tokens when tokenInfor changes
   useEffect(() => {
+    if (typeof window === 'undefined') return; // Skip during SSR
+    
     if (tokenInfor) {
       const newToken: TokenInfo = {
         address: tokenInfor.address,
@@ -65,36 +67,48 @@ const InterfaceContent = () => {
         volume24h: tokenInfor.volume24h || 0 // Ensure volume24h is never undefined
       };
       
-      // Get existing tokens from localStorage
-      const storedTokens = localStorage.getItem('recentTokens');
-      let tokens: TokenInfo[] = storedTokens ? JSON.parse(storedTokens) : [];
-      
-      // Remove if token already exists
-      tokens = tokens.filter(t => t.address !== newToken.address);
-      
-      // Add new token to the beginning
-      tokens.unshift(newToken);
-      
-      // Keep only last 3 tokens
-      tokens = tokens.slice(0, 3);
-      
-      // Save to localStorage and state
-      localStorage.setItem('recentTokens', JSON.stringify(tokens));
-      setRecentTokens(tokens);
+      try {
+        // Get existing tokens from localStorage
+        const storedTokens = localStorage.getItem('recentTokens');
+        let tokens: TokenInfo[] = storedTokens ? JSON.parse(storedTokens) : [];
+        
+        // Remove if token already exists
+        tokens = tokens.filter(t => t.address !== newToken.address);
+        
+        // Add new token to the beginning
+        tokens.unshift(newToken);
+        
+        // Keep only last 3 tokens
+        tokens = tokens.slice(0, 3);
+        
+        // Save to localStorage and state
+        localStorage.setItem('recentTokens', JSON.stringify(tokens));
+        setRecentTokens(tokens);
+      } catch (error) {
+        console.error('Error handling localStorage:', error);
+      }
     }
   }, [tokenInfor]);
 
   // Load recent tokens on component mount
   useEffect(() => {
-    const storedTokens = localStorage.getItem('recentTokens');
-    if (storedTokens) {
-      setRecentTokens(JSON.parse(storedTokens));
+    if (typeof window === 'undefined') return; // Skip during SSR
+    
+    try {
+      const storedTokens = localStorage.getItem('recentTokens');
+      if (storedTokens) {
+        setRecentTokens(JSON.parse(storedTokens));
+      }
+    } catch (error) {
+      console.error('Error loading from localStorage:', error);
     }
   }, []);
 
   const handleTokenClick = (token: TokenInfo) => {
-    // Open token details in new tab
-    window.open(`/trading?address=${token.address}`, '_blank');
+    // Only open in new tab if window is available (client-side)
+    if (typeof window !== 'undefined') {
+      window.open(`/trading?address=${token.address}`, '_blank');
+    }
   };
 
   if (isLoading) {

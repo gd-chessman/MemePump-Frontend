@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/libs/utils"
+import { cn } from "@/lib/utils"
 
 interface AvatarProps extends React.HTMLProps<HTMLDivElement> {
   src?: string

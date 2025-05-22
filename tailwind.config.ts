@@ -53,6 +53,13 @@ const config: Config = {
               '200': '#D00416',
               '300': '#fb37481a',
             },
+          'yellow': {
+              '100': '#fdfce5',
+              '200': '#DFB400',
+            },
+            'black': {
+              '1/2': 'rgba(0, 0, 0, 0.50)',
+            },
           'gradient': {
             'start': '#15DFFD',
             'end': '#761BB3',
@@ -219,7 +226,7 @@ const config: Config = {
           WebkitTextFillColor: 'transparent',
         },
         '.gradient-hover': {
-          background: `linear-gradient(90deg, ${theme('colors.theme.primary.300')} 3.63%, ${theme('colors.theme.secondary.300')} 100.06%)`,
+          background: `linear-gradient(90deg, ${theme('colors.theme.primary.300')} 3.63%, ${theme('colors.theme.secondary.200')} 100.06%)`,
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
