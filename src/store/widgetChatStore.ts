@@ -1,10 +1,9 @@
 import { create } from 'zustand'
 
-type Message = {
+export type Message = {
   id: string
   sender: {
     name: string
-    avatar: string
     isCurrentUser: boolean
   }
   text: string

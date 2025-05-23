@@ -2,6 +2,7 @@
   "connect": "接続",
   "overview": "概要",
   "trade": "取引",
+  "create coin": "コイン作成",
   "createCoin": {
     "title": "新規コイン作成",
     "form": {

@@ -2,6 +2,7 @@
   "connect": "Connect",
   "overview": "Overview",
   "trade": "Trade",
+  "create coin": "Create Coin",
   "createCoin": {
     "title": "CREATE NEW COIN",
     "form": {

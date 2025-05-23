@@ -11,7 +11,6 @@ type Message = {
   id: string;
   sender: {
     name: string;
-    avatar: string;
     isCurrentUser: boolean;
   };
   text: string;
@@ -43,32 +42,8 @@ type WsMessage = {
   ch_wallet_address: string;
   nick_name?: string;
   ch_lang?: string;
+  country?: string;
 };
-
-const fakeMessages = [
-  {
-    id: "1",
-    sender: {
-      name: "Alice",
-      avatar: "",
-      isCurrentUser: false,
-    },
-    text: "Hello! How can I help you?",
-    timestamp: new Date(),
-    country: "en",
-  },
-  {
-    id: "2",
-    sender: {
-      name: "You",
-      avatar: "",
-      isCurrentUser: true,
-    },
-    text: "Hi! I have a question.",
-    timestamp: new Date(),
-    country: "en",
-  },
-];
 
 const chatLogo = "/chat-logo.png"; // Đặt đúng đường dẫn ảnh logo
 
@@ -205,12 +180,11 @@ const ChatWidget = () => {
         id: chat._id,
         sender: {
           name: chat.nick_name || "Anonymous",
-          avatar: "/token.png",
           isCurrentUser: chat.ch_wallet_address === "YOUR_WALLET_ADDRESS", // TODO: Replace with actual wallet address
         },
         text: chat.ch_content,
         timestamp: new Date(chat.createdAt),
-        country: chat.ch_lang
+        country: chat.country || "en"
       }));
       setMessages(convertedMessages);
     }
@@ -220,16 +194,16 @@ const ChatWidget = () => {
   useEffect(() => {
     if (wsMessage) {
       const wsMsg = wsMessage as WsMessage;
+      console.log("wsMsg", wsMsg)
       const newMessage: Message = {
         id: wsMsg._id,
         sender: {
           name: wsMsg.nick_name || "Anonymous",
-          avatar: "/token.png",
           isCurrentUser: wsMsg.ch_wallet_address === "YOUR_WALLET_ADDRESS", // TODO: Replace with actual wallet address
         },
         text: wsMsg.ch_content,
         timestamp: new Date(wsMsg.createdAt),
-        country: wsMsg.ch_lang || lang
+        country: wsMsg.country || "en"
       };
       addMessage(newMessage);
     }
@@ -303,13 +277,13 @@ const ChatWidget = () => {
               <span className="text-white font-bold">Community Chatroom</span>
               <img src={"/ethereum.png"} alt="ethereum-icon" width={15} height={15} />
             </div>
-            <div className="flex-1 overflow-y-auto p-3 bg-gray-50 dark:bg-neutral-900">
+            <div className="flex-1 overflow-y-auto p-3 pb-1 bg-gray-50 dark:bg-neutral-900">
               {messages.map((msg) => (
                 <ChatMessage key={msg.id} message={msg} />
               ))}
               <div ref={messagesEndRef} />
             </div>
-            <div className="p-2 rounded-xl bg-gray-50 dark:bg-neutral-900 ">
+            <div className="p-2 rounded-b-md bg-gray-50 dark:bg-neutral-900 ">
               <div className="flex gap-2 rounded-xl">
                 <input
                   type="text"
@@ -344,3 +318,4 @@ const ChatWidget = () => {
 };
 
 export default ChatWidget; 
+

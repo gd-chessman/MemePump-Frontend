@@ -2,6 +2,7 @@
   "connect": "연결",
   "overview": "개요",
   "trade": "거래",
+  "create coin": "코인 생성",
   "createCoin": {
     "title": "새 코인 생성",
     "form": {

@@ -1,46 +1,100 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Search, Copy, Check, Send } from "lucide-react"
+import { Search, Copy, Check, Send, ChevronDown } from "lucide-react"
 import Image from "next/image"
 import { useWsChatMessage } from "@/hooks/useWsChatMessage"
 import { getInforWallet } from "@/services/api/TelegramWalletService"
 import { useQuery } from "@tanstack/react-query"
 import { getGroupHistories } from "@/services/api/ChatService"
 import { useLang } from "@/lang/useLang"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faUsersGear } from "@fortawesome/free-solid-svg-icons"
+import { useRouter } from "next/navigation"
+import ChatMessage from "@/app/components/chat/ChatMessage"
+import { getMyConnects, getMyGroups } from "@/services/api/MasterTradingService"
+import { ChatService, MasterTradingService } from "@/services/api"
+import { GroupSelect } from "@/app/trading/control/components/GroupSelect"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/ui/dialog"
+import { Button } from "@/ui/button"
+import MasterMessage from "@/app/components/chat/MasterMessage"
+import { useMasterChatStore } from "@/store/masterChatStore"
+import type { MasterMessage as StoreMasterMessage } from "@/store/masterChatStore"
 
 // Định nghĩa các kiểu dữ liệu
 type TabType = "Connected" | "Paused" | "Pending" | "Block"
-type GroupStatus = "ON" | "OFF"
-type TradeStatus = "Pending" | "Connected" | "Paused" | "Blocked"
-
+const data = [{
+  ch_content: "alo ae",
+  ch_id: "1745422427753-44",
+  ch_is_master: true,
+  ch_lang: "vi",
+  ch_status: "send",
+  ch_wallet_address: "s4uJWXe7C3QeKsUBoMTvNDRGtrk5LJYJK1Az7jyfvdy",
+  chat_id: "23",
+  chat_type: "public",
+  country: "vi",
+  createdAt: "2025-04-23T15:33:47.755Z",
+  nick_name: "khanh382",
+  _id: "6809085b48386b72708da4ea"
+}]
 interface TradeItem {
-  id: string
-  address: string
-  group: number
-  status: TradeStatus
+  connection_id: number;
+  member_id: number;
+  member_address: string;
+  status: "connect" | "pending" | "pause" | "block";
+  option_limit: string;
+  price_limit: string;
+  ratio_limit: number;
+  joined_groups: {
+    group_id: number;
+    group_name: string;
+  }[];
 }
 
 interface Group {
-  id: string
-  name: string
-  status: GroupStatus
+  mg_id: number
+  mg_name: string
+  mg_status: string
+  mg_fixed_price: string
+  mg_fixed_ratio: number
+  mg_master_wallet: number
+  mg_option: string
+  created_at: string
 }
 
-interface ChatMessage {
-  id: string
-  username: string
-  avatar: string
-  message: string
-  timestamp: Date
-  isCurrentUser: boolean
-}
+type Connection = {
+  connection_id: number;
+  member_id: number;
+  member_address: string;
+  status: "connect" | "pending" | "pause" | "block";
+  option_limit: string;
+  price_limit: string;
+  ratio_limit: number;
+  joined_groups: {
+    group_id: number;
+    group_name: string;
+  }[];
+};
+
+// Add type definition for wsMessage
+type WsMessage = {
+  _id?: string;
+  ch_chat_id: number;
+  ch_content: string;
+  ch_status: string;
+  createdAt: string;
+  ch_wallet_address: string;
+  nick_name?: string;
+  country?: string;
+  ch_lang?: string;
+};
 
 const textHeaderTable = "text-xs font-normal text-neutral-200"
 const textBodyTable = "text-xs font-normal text-neutral-100"
-const styleTextRow = "px-4 py-2 rounded-md text-xs"
 
 export default function MasterTradeInterface() {
+  const router = useRouter()
   // State cho các tab và bộ lọc
   const [activeTab, setActiveTab] = useState<TabType>("Connected")
   const [activeGroupTab, setActiveGroupTab] = useState<"On" | "Off" | "Delete">("On")
@@ -50,26 +104,48 @@ export default function MasterTradeInterface() {
   const [showGroupDropdown, setShowGroupDropdown] = useState(false)
   const [newGroupName, setNewGroupName] = useState("")
   const [newMessage, setNewMessage] = useState("")
-
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   // State cho dữ liệu
   const [tradeItems, setTradeItems] = useState<TradeItem[]>([])
   const [groups, setGroups] = useState<Group[]>([])
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
+  const [chatMessages, setChatMessages] = useState<StoreMasterMessage[]>([])
   const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
   const { t, lang } = useLang();
+  const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
+  const [selectedGroupName, setSelectedGroupName] = useState<string>("");
+  const [selectedChatGroup, setSelectedChatGroup] = useState<string>("");
+
+  const { data: myConnects = [], refetch: refetchMyConnects } = useQuery<Connection[]>({
+    queryKey: ["my-connects-manage"],
+    queryFn: getMyConnects,
+  });
+
+  const { data: myGroups = [] , refetch: refetchMyGroups} = useQuery<Group[]>({
+    queryKey: ["my-groups-manage"],
+    queryFn: async () => {
+      const response = await getMyGroups();
+      console.log("API Response:", response);
+      if (Array.isArray(response)) {
+        return response;
+      }
+      return response.data || [];
+    },
+  });
+  console.log("selectedChatGroup", selectedChatGroup)
 
   const { data: chatGroupHistories, refetch: refetchChatGroupHistories } =
     useQuery({
-      queryKey: ["chatGroupHistories", selectedGroup, lang],
-      queryFn: () => getGroupHistories(selectedGroup || "" , lang),
-      enabled: !!selectedGroup,
+      queryKey: ["chatGroupHistories", selectedChatGroup, lang],
+      queryFn: () => getGroupHistories(selectedChatGroup, lang),
+      enabled: !!selectedChatGroup,
     });
-
+  
   const { message: wsMessage } = useWsChatMessage({
     chatType: "group",
     groupId: selectedGroup,
-  });
+  }) as { message: WsMessage | null };
 
   // Thêm ref để scroll to bottom
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -82,187 +158,256 @@ export default function MasterTradeInterface() {
     scrollToBottom();
   }, [chatMessages]);
 
-  // Tạo dữ liệu mẫu khi component được mount
+  const { messages, setMessages, addMessage, clearMessages } = useMasterChatStore();
+  console.log("messages", messages)
+  
+  // Clear messages when changing chat group
   useEffect(() => {
-    // Tạo dữ liệu mẫu cho các nhóm
-    const sampleGroups: Group[] = [
-      { id: "group-1", name: "Test 1", status: "ON" },
-      { id: "group-2", name: "Test 2", status: "ON" },
-      { id: "group-3", name: "Test 3", status: "ON" },
-      { id: "group-4", name: "Test 4", status: "OFF" },
-      { id: "group-5", name: "Test 5", status: "OFF" },
-    ]
+    if (selectedChatGroup) {
+      clearMessages();
+    }
+  }, [selectedChatGroup, clearMessages]);
 
-    // Tạo dữ liệu mẫu cho các giao dịch
-    const sampleTradeItems: TradeItem[] = Array(15)
-      .fill(null)
-      .map((_, index) => {
-        let status: TradeStatus
-        if (index < 3) {
-          status = "Connected"
-        } else if (index < 5) {
-          status = "Paused"
-        } else if (index < 12) {
-          status = "Pending"
-        } else {
-          status = "Blocked"
-        }
+  // Convert chatGroupHistories data to Message format
+  useEffect(() => {
+    if (chatGroupHistories?.data && selectedChatGroup) {
+      const convertedMessages: StoreMasterMessage[] = chatGroupHistories.data
+        .filter((msg: any) => msg && msg.ch_content) // Filter out invalid messages
+        .map((chat: any) => ({
+          id: chat._id || String(chat.ch_chat_id),
+          sender: {
+            name: chat.nick_name || chat.ch_wallet_address || "Anonymous",
+            isCurrentUser: false,
+          },
+          text: chat.ch_content,
+          timestamp: new Date(chat.createdAt || Date.now()),
+          country: chat.country || lang
+        }));
+      console.log("Setting messages from history:", convertedMessages);
+      setMessages(convertedMessages);
+    }
+  }, [chatGroupHistories, setMessages, lang, selectedChatGroup]);
 
-        return {
-          id: `trade-${index}`,
-          address: `T034...mnop`,
-          group: 2,
-          status,
-        }
-      })
+  // Handle new websocket messages
+  useEffect(() => {
+    if (wsMessage && selectedChatGroup) {
+      console.log("New websocket message:", wsMessage);
+      const newMessage: StoreMasterMessage = {
+        id: wsMessage._id || String(wsMessage.ch_chat_id),
+        sender: {
+          name: wsMessage.nick_name || wsMessage.ch_wallet_address || "Anonymous",
+          isCurrentUser: false,
+        },
+        text: wsMessage.ch_content,
+        timestamp: new Date(wsMessage.createdAt || Date.now()),
+        country: wsMessage.country || lang
+      };
+      console.log("Adding new message to store:", newMessage);
+      addMessage(newMessage);
+    }
+  }, [wsMessage, addMessage, lang, selectedChatGroup]);
 
-    // Tạo dữ liệu mẫu cho tin nhắn chat
-    const sampleChatMessages: ChatMessage[] = [
-      {
-        id: "msg-1",
-        username: "POPCAT",
-        avatar: "/tabby-cat-sunbeam.png",
-        message: "Hi. This is a dog",
-        timestamp: new Date(Date.now() - 1000 * 60 * 30),
-        isCurrentUser: false,
-      },
-      {
-        id: "msg-2",
-        username: "POPCAT",
-        avatar: "/tabby-cat-sunbeam.png",
-        message: "Hi. This is a dog",
-        timestamp: new Date(Date.now() - 1000 * 60 * 25),
-        isCurrentUser: false,
-      },
-      {
-        id: "msg-3",
-        username: "POPCAT",
-        avatar: "/tabby-cat-sunbeam.png",
-        message: "Hi. This is a dog",
-        timestamp: new Date(Date.now() - 1000 * 60 * 20),
-        isCurrentUser: false,
-      },
-      {
-        id: "msg-4",
-        username: "CATFACE",
-        avatar: "/cat-face.png",
-        message: "Hello. This is a cat.",
-        timestamp: new Date(Date.now() - 1000 * 60 * 15),
-        isCurrentUser: false,
-      },
-      {
-        id: "msg-5",
-        username: "POPCAT",
-        avatar: "/tabby-cat-sunbeam.png",
-        message: "Anyone is up for illustrations. I think This is Hi. This is a dog!!!",
-        timestamp: new Date(Date.now() - 1000 * 60 * 10),
-        isCurrentUser: false,
-      },
-      {
-        id: "msg-6",
-        username: "POPCAT",
-        avatar: "/tabby-cat-sunbeam.png",
-        message: "😊",
-        timestamp: new Date(Date.now() - 1000 * 60 * 5),
-        isCurrentUser: false,
-      },
-      {
-        id: "msg-7",
-        username: "ME",
-        avatar: "/abstract-geometric-shapes.png",
-        message: "Hi.",
-        timestamp: new Date(Date.now() - 1000 * 60 * 4),
-        isCurrentUser: true,
-      },
-      {
-        id: "msg-8",
-        username: "YOU",
-        avatar: "/diverse-group.png",
-        message: "Hello there!",
-        timestamp: new Date(Date.now() - 1000 * 60 * 3),
-        isCurrentUser: false,
-      },
-      {
-        id: "msg-9",
-        username: "ME",
-        avatar: "/abstract-geometric-shapes.png",
-        message: "How's it going?",
-        timestamp: new Date(Date.now() - 1000 * 60 * 2),
-        isCurrentUser: true,
-      },
-      {
-        id: "msg-10",
-        username: "YOU",
-        avatar: "/diverse-group.png",
-        message: "Pretty good, thanks for asking.",
-        timestamp: new Date(Date.now() - 1000 * 60 * 1),
-        isCurrentUser: false,
-      },
-    ]
+  const handleSendMessage = async () => {
+    if (!newMessage.trim() || !selectedChatGroup) return;
+    
+    try {
+      // Add message to store immediately for optimistic update
+      const optimisticMessage: StoreMasterMessage = {
+        id: Date.now().toString(), // Temporary ID
+        sender: {
+          name: "You", // This will be replaced by actual data from server
+          isCurrentUser: true,
+        },
+        text: newMessage,
+        timestamp: new Date(),
+        country: lang
+      };
+      addMessage(optimisticMessage);
+      
+      // Send message to server
+      await ChatService.sendGroupMessage(newMessage, selectedChatGroup, lang);
+      setNewMessage("");
+      
+      // The actual message will be received via websocket and replace the optimistic one
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      // TODO: Remove optimistic message on error
+    }
+  };
 
-    setGroups(sampleGroups)
-    setTradeItems(sampleTradeItems)
-    setChatMessages(sampleChatMessages)
+  // Xử lý bật/tắt nhóm
+  const handleToggleGroup = async (id: number, currentStatus: string) => {
+    try {
+      const newStatus = currentStatus === "ON" ? "on" : "off";
+      await MasterTradingService.changeStatusGroup(id, newStatus);
+      await refetchMyGroups();
+    } catch (error) {
+    }
+  };
+
+  // Xử lý xóa nhóm
+  const handleDeleteGroup = async (id: number) => {
+    try {
+      console.log(`Deleting group ${id}`);
+      await MasterTradingService.changeStatusGroup(id, "delete");
+      await refetchMyGroups();
+    } catch (error) {
+    }
+  };
+
+  // Xử lý khôi phục nhóm
+  const handleRestoreGroup = async (id: number) => {
+    try {
+      console.log(`Restoring group ${id}`);
+      await MasterTradingService.changeStatusGroup(id, "OFF");
+      await refetchMyGroups();
+    } catch (error) {
+    }
+  };
+
+  const handleCreateGroup = async () => {
+    if (newGroupName.trim()) {
+      try {
+        await MasterTradingService.masterCreateGroup({ mg_name: newGroupName });
+        setNewGroupName("");
+        setToastMessage(t("masterTrade.manage.createNewGroup.success"));
+        setShowToast(true);
+        refetchMyGroups();
+        setTimeout(() => setShowToast(false), 3000);
+      } catch (error) {
+        setToastMessage(t("masterTrade.manage.createNewGroup.error"));
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+      }
+    }
+  };
+
+  const handleGroupSelect = (group: Group) => {
+    setSelectedGroup(group.mg_id.toString());
+    setSelectedGroupName(group.mg_name);
+    setShowGroupDropdown(false);
+    setIsJoinDialogOpen(true);
+  };
+
+  const handleJoin = async () => {
+    if (!selectedGroup || selectedItems.length === 0) return;
+
+    try {
+      // Lấy tất cả member_ids từ các kết nối đã chọn
+      const memberIds = selectedItems.map(connId => {
+        const selectedConnection = myConnects.find(
+          conn => conn.connection_id.toString() === connId
+        );
+        return selectedConnection?.member_id;
+      }).filter((id): id is number => id !== undefined);
+
+      if (memberIds.length > 0) {
+        await MasterTradingService.masterSetGroup({
+          mg_id: parseInt(selectedGroup),
+          member_ids: memberIds
+        });
+
+        // Hiển thị thông báo thành công
+        setToastMessage(t("masterTrade.manage.connectionManagement.joinSuccess"));
+        setShowToast(true);
+
+        // Reset states và refresh dữ liệu
+        setSelectedItems([]);
+        setSelectedGroup(null);
+        setSelectedGroupName("");
+        setIsJoinDialogOpen(false);
+        
+        // Refresh dữ liệu
+        await Promise.all([refetchMyGroups(), refetchMyConnects()]);
+        
+        setTimeout(() => setShowToast(false), 3000);
+      }
+    } catch (error) {
+      console.error("Error joining group:", error);
+      setToastMessage(t("masterTrade.manage.connectionManagement.joinError"));
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    }
+  };
+
+  const handleToggleConnection = async (id: number, action: string) => {
+    try {
+      let status = "";
+      let successMessage = "";
+
+      switch (action) {
+        case "connect":
+          status = "connect";
+          successMessage = t("masterTrade.manage.connectionManagement.connectSuccess");
+          break;
+        case "block":
+          status = "block";
+          successMessage = t("masterTrade.manage.connectionManagement.blockSuccess");
+          break;
+        case "pause":
+          status = "pause";
+          successMessage = t("masterTrade.manage.connectionManagement.pauseSuccess");
+          break;
+        case "unblock":
+          status = "connect";
+          successMessage = t("masterTrade.manage.connectionManagement.unblockSuccess");
+          break;
+        default:
+          throw new Error("Invalid action");
+      }
+
+      await MasterTradingService.masterSetConnect({ 
+        mc_id: id, 
+        status: status 
+      });
+
+      // Hiển thị thông báo thành công
+      setToastMessage(successMessage);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+
+      // Refresh dữ liệu
+      await refetchMyConnects();
+    } catch (error) {
+      console.error("Error toggling connection:", error);
+      // Hiển thị thông báo lỗi
+      setToastMessage(t("masterTrade.manage.connectionManagement.error"));
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    }
+  };
+
+  // Xóa phần tạo dữ liệu mẫu cho trade items
+  useEffect(() => {
+    setTradeItems([]) // Không cần dữ liệu mẫu nữa
   }, [])
 
-  // Thêm useEffect để xử lý chatGroupHistories và wsMessage
-  useEffect(() => {
-    if (chatGroupHistories?.data) {
-      const messages = chatGroupHistories.data.map((msg: any) => ({
-        id: msg.ch_chat_id.toString(),
-        username: msg.ch_wallet_address,
-        avatar: "/placeholder.svg",
-        message: msg.ch_content,
-        timestamp: new Date(msg.createdAt),
-        isCurrentUser: false, // TODO: Compare with current user's wallet
-      }));
-      setChatMessages(messages);
-    }
-  }, [chatGroupHistories]);
-
-  useEffect(() => {
-    if (wsMessage) {
-      const newMessage = {
-        id: wsMessage.ch_chat_id.toString(),
-        username: wsMessage.ch_wallet_address,
-        avatar: "/placeholder.svg",
-        message: wsMessage.ch_content,
-        timestamp: new Date(wsMessage.createdAt),
-        isCurrentUser: false, // TODO: Compare with current user's wallet
-      };
-      setChatMessages(prev => [...prev, newMessage]);
-    }
-  }, [wsMessage]);
-
-  // Lọc các mục giao dịch dựa trên tab đang hoạt động và truy vấn tìm kiếm
-  const filteredTradeItems = tradeItems.filter((item) => {
+  // Cập nhật logic lọc dựa trên trạng thái thực tế
+  const filteredTradeItems = myConnects.filter((item) => {
     // Lọc theo tab
-    if (item.status !== activeTab) return false
+    if (activeTab === "Connected" && item.status !== "connect") return false;
+    if (activeTab === "Paused" && item.status !== "pause") return false;
+    if (activeTab === "Pending" && item.status !== "pending") return false;
+    if (activeTab === "Block" && item.status !== "block") return false;
 
     // Lọc theo tìm kiếm
-    if (searchQuery && !item.address.toLowerCase().includes(searchQuery.toLowerCase())) return false
+    if (searchQuery && !item.member_address.toLowerCase().includes(searchQuery.toLowerCase())) return false;
 
-    return true
-  })
-
-  // Lọc các nhóm dựa trên tab đang hoạt động và truy vấn tìm kiếm
-  const filteredGroups = groups.filter((group) => {
-    // Lọc theo tab
-    if (activeGroupTab === "On" && group.status !== "ON") return false
-    if (activeGroupTab === "Off" && group.status !== "OFF") return false
-    // Giả sử "Delete" hiển thị tất cả các nhóm
-
-    // Lọc theo tìm kiếm
-    if (groupSearchQuery && !group.name.toLowerCase().includes(groupSearchQuery.toLowerCase())) return false
-
-    return true
-  })
+    return true;
+  });
 
   // Lọc các nhóm cho dropdown
-  const filteredGroupsForDropdown = groups.filter((group) => {
-    if (!groupSearchQuery) return true
-    return group.name.toLowerCase().includes(groupSearchQuery.toLowerCase())
-  })
+  const filteredGroupsForDropdown = myGroups.filter((group) => {
+    // Chỉ lấy các nhóm có status là "ON"
+    if (group.mg_status?.toUpperCase() !== "ON") return false;
+    
+    // Lọc theo tìm kiếm nếu có
+    if (groupSearchQuery) {
+      return group.mg_name.toLowerCase().includes(groupSearchQuery.toLowerCase());
+    }
+    
+    return true;
+  });
 
   // Xử lý sao chép địa chỉ
   const handleCopyAddress = (address: string) => {
@@ -282,84 +427,35 @@ export default function MasterTradeInterface() {
     })
   }
 
-  // Xử lý tạo nhóm mới
-  const handleCreateGroup = () => {
-    if (!newGroupName.trim()) return
-
-    const newGroup: Group = {
-      id: `group-${groups.length + 1}`,
-      name: newGroupName,
-      status: "ON",
-    }
-
-    setGroups([...groups, newGroup])
-    setNewGroupName("")
-  }
-
-  // Xử lý thay đổi trạng thái nhóm
-  const handleToggleGroupStatus = (id: string) => {
-    setGroups(
-      groups.map((group) => {
-        if (group.id === id) {
-          return {
-            ...group,
-            status: group.status === "ON" ? "OFF" : "ON",
-          }
-        }
-        return group
-      }),
-    )
-  }
-
-  // Xử lý xóa nhóm
-  const handleDeleteGroup = (id: string) => {
-    setGroups(groups.filter((group) => group.id !== id))
-  }
-
-  // Xử lý gửi tin nhắn
-  const handleSendMessage = () => {
-    if (!newMessage.trim() || !selectedGroup) return;
-
-    // TODO: Implement websocket send message
-    // const messageToSend = {
-    //   ch_content: newMessage,
-    //   ch_wallet_address: currentUserWallet, // Get from user context
-    //   ch_status: "active",
-    // };
-
-    setNewMessage("");
-  }
-
-  // Xử lý chặn giao dịch
-  const handleBlockTrade = (id: string) => {
-    setTradeItems(
-      tradeItems.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            status: "Blocked",
-          }
-        }
-        return item
-      }),
-    )
-  }
-
-  // Đếm số lượng mục theo trạng thái
-  const connectedCount = tradeItems.filter((item) => item.status === "Connected").length
-  const pausedCount = tradeItems.filter((item) => item.status === "Paused").length
-  const pendingCount = tradeItems.filter((item) => item.status === "Pending").length
-  const blockedCount = tradeItems.filter((item) => item.status === "Blocked").length
+  // Cập nhật số lượng theo trạng thái thực tế
+  const connectedCount = myConnects.filter((item) => item.status === "connect").length;
+  const pausedCount = myConnects.filter((item) => item.status === "pause").length;
+  const pendingCount = myConnects.filter((item) => item.status === "pending").length;
+  const blockedCount = myConnects.filter((item) => item.status === "block").length;
 
   // Đếm số lượng nhóm theo trạng thái
-  const onGroupsCount = groups.filter((group) => group.status === "ON").length
-  const offGroupsCount = groups.filter((group) => group.status === "OFF").length
+  const onGroupsCount = myGroups.filter(g => g.mg_status?.toUpperCase() === "ON").length;
+  const offGroupsCount = myGroups.filter(g => g.mg_status?.toUpperCase() === "OFF").length;
+  const deleteGroupsCount = myGroups.filter(g => g.mg_status?.toUpperCase() === "DELETE").length;
 
   const ethereumIcon = (width: number, height: number) => {
     return (
       <img src={"/ethereum.png"} alt="ethereum-icon" width={width} height={height} />
     );
   };
+
+  // Add useEffect to set default selected group when groups are loaded
+  useEffect(() => {
+    if (filteredGroupsForDropdown.length > 0 && !selectedChatGroup) {
+      setSelectedChatGroup(filteredGroupsForDropdown[0].mg_id.toString());
+    }
+  }, [filteredGroupsForDropdown, selectedChatGroup]);
+
+  // Transform groups data for select
+  const groupOptions = filteredGroupsForDropdown.map(group => ({
+    value: group.mg_id.toString(),
+    label: group.mg_name
+  }));
 
   return (
     <div className="container-body px-[40px] flex gap-6 pt-[30px] relative mx-auto z-10">
@@ -417,71 +513,151 @@ export default function MasterTradeInterface() {
               className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeGroupTab === "Delete"
                 ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
             >
-              <span className={`${activeGroupTab === 'Delete' ? 'gradient-hover ' : ''}`}>Delete (1)</span>
+              <span className={`${activeGroupTab === 'Delete' ? 'gradient-hover ' : ''}`}>Delete ({deleteGroupsCount})</span>
             </button>
           </div>
-          <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
-            <table className="w-full bg-black  text-neutral-100">
-              <thead>
-                <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                  <th className={`text-center ${textHeaderTable}`}>Group</th>
-                  <th className={`px-4 py-2`}>
-                    <div className={`px ${textHeaderTable}`}>
-                      Status
-                    </div>
-                  </th>
-                  <th className={`px-4 py-2`}>
-                    <div className={`px ${textHeaderTable}`}>
-                      Action</div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredGroups.map((group) => (
-                  <tr key={group.id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center">
 
-                        <span className={`${textBodyTable}`}>{group.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <span className={`${textBodyTable}`}>{group.status}</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex justify-center gap-2">
-                        <button
-                          onClick={() => handleToggleGroupStatus(group.id)}
-                          className={`px-4 py-1 rounded-full text-xs ${group.status === "ON"
-                            ? "text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200"
-                            : "text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200"
-                            }`}
-                        >
-                          {group.status === "ON" ? "Off" : "On"}
-                        </button>
-                        <button
-                          onClick={() => handleDeleteGroup(group.id)}
-                          className={`px-3 py-1 rounded-full text-xs ${group.status === "ON"
-                            ? "text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200"
-                            : "text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200"
-                            }`}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
+          {/* Bảng cho tab On */}
+          {activeGroupTab === "On" && (
+            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
+              <table className="w-full bg-black text-neutral-100">
+                <thead>
+                  <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
+                    <th className={`text-center ${textHeaderTable}`}>Group</th>
+                    <th className={`px-4 py-2`}>
+                      <div className={`px ${textHeaderTable}`}>Status</div>
+                    </th>
+                    <th className={`px-4 py-2`}>
+                      <div className={`px ${textHeaderTable}`}>Action</div>
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {myGroups.filter(group => group.mg_status?.toUpperCase() === "ON").map((group) => (
+                    <tr key={group.mg_id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center">
+                          <span className={`${textBodyTable}`}>{group.mg_name}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`${textBodyTable}`}>{group.mg_status}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex justify-center gap-2">
+                          <button
+                            onClick={() => handleToggleGroup(group.mg_id, group.mg_status)}
+                            className="px-4 py-1 rounded-full text-xs text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200"
+                          >
+                            Off
+                          </button>
+                          <button
+                            onClick={() => handleDeleteGroup(group.mg_id)}
+                            className="px-3 py-1 rounded-full text-xs text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Bảng cho tab Off */}
+          {activeGroupTab === "Off" && (
+            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
+              <table className="w-full bg-black text-neutral-100">
+                <thead>
+                  <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
+                    <th className={`text-center ${textHeaderTable}`}>Group</th>
+                    <th className={`px-4 py-2`}>
+                      <div className={`px ${textHeaderTable}`}>Status</div>
+                    </th>
+                    <th className={`px-4 py-2`}>
+                      <div className={`px ${textHeaderTable}`}>Action</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {myGroups.filter(group => group.mg_status?.toUpperCase() === "OFF").map((group) => (
+                    <tr key={group.mg_id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center">
+                          <span className={`${textBodyTable}`}>{group.mg_name}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`${textBodyTable}`}>{group.mg_status}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex justify-center gap-2">
+                          <button
+                            onClick={() => handleToggleGroup(group.mg_id, group.mg_status)}
+                            className="px-4 py-1 rounded-full text-xs text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200"
+                          >
+                            On
+                          </button>
+                          <button
+                            onClick={() => handleDeleteGroup(group.mg_id)}
+                            className="px-3 py-1 rounded-full text-xs text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Bảng cho tab Delete */}
+          {activeGroupTab === "Delete" && (
+            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
+              <table className="w-full bg-black text-neutral-100">
+                <thead>
+                  <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
+                    <th className={`text-center ${textHeaderTable}`}>Group</th>
+                    <th className={`px-4 py-2`}>
+                      <div className={`px ${textHeaderTable}`}>Status</div>
+                    </th>
+                    <th className={`px-4 py-2`}>
+                      <div className={`px ${textHeaderTable}`}>Action</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {myGroups.filter(group => group.mg_status?.toUpperCase() === "DELETE").map((group) => (
+                    <tr key={group.mg_id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center">
+                          <span className={`${textBodyTable}`}>{group.mg_name}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`${textBodyTable}`}>{group.mg_status}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex justify-center gap-2">
+                          
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Phần bảng giao dịch */}
-      <div className="flex-1">
-        <div>
-          <div className="flex gap-6 mb-4 ">
+      <div className="flex-1 z-10 flex flex-col gap-6">
+          <div className="flex gap-6  ">
             <button
               onClick={() => setActiveTab("Connected")}
               className={`h-min rounded-sm text-sm font-medium text-neutral-400  px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeTab === "Connected" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
@@ -507,19 +683,21 @@ export default function MasterTradeInterface() {
               <span className={`${activeTab === 'Block' ? 'gradient-hover ' : ''}`}>Block ({blockedCount})</span>
             </button>
             <div className="flex-1 flex items-center justify-end">
-              <button
-                onClick={() => setShowGroupDropdown(!showGroupDropdown)}
-                className="flex items-center gap-2 px-4 py-1 bg-black bg-opacity-60 rounded-full text-neutral-100 border border-blue-500/30"
-              >
-                <span className="text-xs">Choose group</span>
-                <svg className="w-2 h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
+              {selectedItems.length > 0 && (
+                <button
+                  onClick={() => setShowGroupDropdown(!showGroupDropdown)}
+                  className="flex items-center gap-2 px-4 py-1 bg-black bg-opacity-60 rounded-full text-neutral-100 border border-blue-500/30"
+                >
+                  <span className="text-xs">Choose group</span>
+                  <svg className="w-2 h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              )}
             </div>
             <div className="relative">
               {showGroupDropdown && (
-                <div className="absolute top-8 right-0 mt-2 w-64 bg-theme-neutral-1000 bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-10">
+                <div className="absolute top-10 right-0 mt-2 w-64 bg-theme-neutral-1000 bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-10">
                   <div className="p-2">
                     <div className="relative mb-2">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -535,14 +713,11 @@ export default function MasterTradeInterface() {
                     <div className="max-h-48 overflow-y-auto">
                       {filteredGroupsForDropdown.map((group) => (
                         <button
-                          key={group.id}
-                          onClick={() => {
-                            setSelectedGroup(group.id)
-                            setShowGroupDropdown(false)
-                          }}
+                          key={group.mg_id}
+                          onClick={() => handleGroupSelect(group)}
                           className="w-full text-left px-4 py-2 text-neutral-100 hover:bg-blue-900/30 rounded-md text-xs"
                         >
-                          Group {group.name}
+                          {group.mg_name}
                         </button>
                       ))}
                     </div>
@@ -556,7 +731,22 @@ export default function MasterTradeInterface() {
             <table className="w-full text-neutral-100">
               <thead>
                 <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-
+                  <th className={`px-4 py-3 text-center ${textHeaderTable}`}>
+                    {activeTab === "Connected" && (
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.length === filteredTradeItems.filter(item => item.status === "connect").length}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedItems(filteredTradeItems.filter(item => item.status === "connect").map(item => item.connection_id.toString()));
+                          } else {
+                            setSelectedItems([]);
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                    )}
+                  </th>
                   <th className={`px-4 py-3 text-left ${textHeaderTable}`}>Address</th>
                   <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Group</th>
                   <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Status</th>
@@ -565,16 +755,31 @@ export default function MasterTradeInterface() {
               </thead>
               <tbody>
                 {filteredTradeItems.map((item) => (
-                  <tr key={item.id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
-
+                  <tr key={item.connection_id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
+                    <td className="px-4 py-3 text-center">
+                      {item.status === "connect" && (
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(item.connection_id.toString())}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedItems([...selectedItems, item.connection_id.toString()]);
+                            } else {
+                              setSelectedItems(selectedItems.filter(id => id !== item.connection_id.toString()));
+                            }
+                          }}
+                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                      )}
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center">
-                        <span className={`${textBodyTable}`}>{item.address}</span>
+                        <span className={`${textBodyTable}`}>{item.member_address}</span>
                         <button
-                          onClick={() => handleCopyAddress(item.address)}
+                          onClick={() => handleCopyAddress(item.member_address)}
                           className="ml-2 text-gray-400 hover:text-neutral-100 transition-colors"
                         >
-                          {copiedAddress === item.address ? (
+                          {copiedAddress === item.member_address ? (
                             <Check className="h-4 w-4 text-green-500" />
                           ) : (
                             <Copy className="h-4 w-4" />
@@ -583,129 +788,199 @@ export default function MasterTradeInterface() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`${textBodyTable}`}>{item.group}</span>
+                      <span className={`${textBodyTable}`}>
+                        {item.joined_groups.length > 0 
+                          ? item.joined_groups.map(g => g.group_name).join(", ")
+                          : "Không có nhóm"
+                        }
+                      </span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`${textBodyTable}`}>{item.status}</span>
+                      <span className={`${textBodyTable} capitalize`}>{item.status}</span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <button
-                        onClick={() => handleBlockTrade(item.id)}
-                        className="px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full text-xs"
-                      >
-                        Block
-                      </button>
+                      <div className="flex justify-center gap-2">
+                        {item.status === "pending" && (
+                          <>
+                            <button
+                              onClick={() => handleToggleConnection(item.connection_id, "connect")}
+                              className="px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full text-xs"
+                            >
+                              Connect
+                            </button>
+                            <button
+                              onClick={() => handleToggleConnection(item.connection_id, "block")}
+                              className="px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full text-xs"
+                            >
+                              Block
+                            </button>
+                          </>
+                        )}
+                        {item.status === "connect" && (
+                          <>
+                           
+                            <button
+                              onClick={() => handleToggleConnection(item.connection_id, "block")}
+                              className="px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full text-xs"
+                            >
+                              Block
+                            </button>
+                          </>
+                        )}
+                        {item.status === "block" && (
+                          <button
+                            onClick={() => handleToggleConnection(item.connection_id, "pause")}
+                            className="px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full text-xs"
+                          >
+                            Unblock
+                          </button>
+                        )}
+                        {item.status === "pause" && (
+                         
+                          <>
+                             <button
+                            onClick={() => handleToggleConnection(item.connection_id, "block")}
+                            className="px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full text-xs"
+                          >
+                            Block
+                          </button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
       </div>
 
       {/* Phần chat */}
-      <div className="">
-        <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-xl border border-blue-500/30 overflow-hidden shadow-lg flex flex-col h-[600px]">
-          <div className="p-4 border-b border-blue-500/30">
-            <h2 className="text-center text-lg font-bold text-neutral-100 flex items-center justify-center gap-2">
-              <img src="/ethereum.png" alt="ethereum-icon" width={16} height={16} />
+      <div className="z-10 w-1/4 flex flex-col gap-6 justify-end items-end ">
+        <button className="w-fit create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-xs items-center justify-center " onClick={() => router.push("/master-trade")}>
+          <FontAwesomeIcon icon={faUsersGear} className="w-4 h-4" />
+          Connect with other Master
+        </button>
+        <div className="bg-black bg-opacity-30 backdrop-blur-sm w-full rounded-xl border border-y-[#15DFFD] border-x-[#720881] overflow-hidden shadow-lg flex flex-col h-[600px]">
+          {/* Chat Header */}
+          <div className="p-4 border-b border-cyan-500/30">
+            <h2 className="text-center text-[16px] font-semibold text-neutral-100 mb-4 flex items-center justify-center">
+              <span className="text-cyan-400 mr-2">✦</span>
               MASTER CHATROOM
-              <img src="/ethereum.png" alt="ethereum-icon" width={16} height={16} />
+              <span className="text-cyan-400 ml-2">✦</span>
             </h2>
 
-            <div className="mt-4">
-              <div className="relative">
-                <select 
-                  className="w-full bg-black bg-opacity-60 border border-blue-500/30 rounded-lg p-3 text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
-                  value={selectedGroup || ""}
-                  onChange={(e) => setSelectedGroup(e.target.value)}
-                >
-                  <option value="">Select groups...</option>
-                  {groups.map((group) => (
-                    <option key={group.id} value={group.id}>
-                      {group.name}
-                    </option>
+            <div className="relative flex items-center justify-center">
+              <Select
+                
+                value={selectedChatGroup}
+                onValueChange={(value) => setSelectedChatGroup(value)}
+              >
+                <SelectTrigger className="w-[200px] pl-4 h-[30px] bg-black/60 border-theme-primary-300/30 hover:border-theme-primary-300/50 text-neutral-100 text-sm rounded-full">
+                  <SelectValue placeholder="Select a group..." />
+                </SelectTrigger>
+                <SelectContent className="bg-black/90 border-theme-primary-300/30">
+                  {groupOptions.map((option) => (
+                    <SelectItem 
+                      key={option.value} 
+                      value={option.value}
+                      className="text-neutral-100 hover:bg-theme-primary-300/20 focus:bg-theme-primary-300/10 cursor-pointer"
+                    >
+                      {option.label}
+                    </SelectItem>
                   ))}
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <svg
-                    className="w-5 h-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </div>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900">
-            {chatMessages.map((message) => (
-              <div key={message.id} className={`flex ${message.isCurrentUser ? "justify-end" : "items-start"} gap-2`}>
-                {!message.isCurrentUser && (
-                  <div className="flex-shrink-0">
-                    <div className="relative w-8 h-8">
-                      <Image
-                        src={message.avatar || "/placeholder.svg"}
-                        alt={message.username}
-                        fill
-                        className="rounded-full object-cover"
-                      />
-                    </div>
-                  </div>
-                )}
-                <div
-                  className={`max-w-[80%] rounded-lg p-3 ${
-                    message.isCurrentUser
-                      ? "bg-theme-primary-400 text-white"
-                      : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
-                  }`}
-                >
-                  {!message.isCurrentUser && (
-                    <div className="font-medium text-xs text-gray-500 dark:text-gray-400 mb-1">{message.username}</div>
-                  )}
-                  <p className="text-sm">{message.message}</p>
-                </div>
-              </div>
+          {/* Chat Messages */}
+          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            {messages.map((msg) => (
+              <MasterMessage 
+                key={msg.id} 
+                message={{
+                  ch_id: msg.id,
+                  ch_content: msg.text,
+                  ch_wallet_address: msg.sender.name,
+                  ch_is_master: msg.sender.isCurrentUser,
+                  ch_lang: msg.country,
+                  createdAt: msg.timestamp instanceof Date ? msg.timestamp.toISOString() : new Date(msg.timestamp).toISOString(),
+                  chat_id: msg.id,
+                  chat_type: "group",
+                  ch_status: "send",
+                  country: msg.country,
+                  nick_name: msg.sender.name,
+                  _id: msg.id
+                }} 
+              />
             ))}
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-3 bg-gray-50 dark:bg-gray-900">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Type a message..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage();
-                  }
-                }}
-                className="flex-1 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-theme-primary-400/50"
-                disabled={!selectedGroup}
-              />
-              <button
-                onClick={handleSendMessage}
-                disabled={!newMessage.trim() || !selectedGroup}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  !newMessage.trim() || !selectedGroup
-                    ? "bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
-                    : "bg-theme-primary-400 hover:bg-theme-primary-500 text-white"
-                }`}
-              >
-                Send
-              </button>
+          {/* Chat Input */}
+          <div className="p-3 ">
+            <div className="flex items-center">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  placeholder="Type a message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault()
+                      handleSendMessage()
+                    }
+                  }}
+                  className="w-full py-1 px-3 bg-[#111111] rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-xs placeholder:text-neutral-100 text-sm"
+                />
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!newMessage.trim()}
+                    className={`p-1.5 rounded-full ${
+                      !newMessage.trim()
+                        ? "bg-gray-700 text-gray-500"
+                        : "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                    }`}
+                  >
+                    <Send className="h-3 w-3" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Dialog xác nhận join group */}
+      <Dialog open={isJoinDialogOpen} onOpenChange={setIsJoinDialogOpen}>
+        <DialogContent className="bg-theme-neutral-1000 border border-blue-500/30 w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="text-neutral-100 text-center text-sm">
+              Xác nhận kết nối {selectedItems.length} ví đã chọn vào nhóm "{selectedGroupName}"
+            </DialogTitle>
+          </DialogHeader>
+          <DialogFooter className="">
+            <div className="flex w-full gap-6 justify-center">
+            <Button
+              variant="outline"
+              onClick={() => setIsJoinDialogOpen(false)}
+              className="px-3 py-1 text-neutral-100 border border-blue-500/30 hover:bg-blue-500/10 h-[30px]"
+            >
+              Hủy
+            </Button>
+            <Button
+              onClick={handleJoin}
+              className="px-3 py-1 bg-blue-500 text-neutral-100 hover:bg-blue-600 h-[30px]"
+            >
+              Xác nhận
+            </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
