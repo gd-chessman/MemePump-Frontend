@@ -36,9 +36,19 @@ export default function MasterTradeChat({
     } = useTradingChatStore();
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
+    const [mounted, setMounted] = useState(false);
+    const [initialized, setInitialized] = useState(false);
+
+    // Handle initial mount
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
 
     // Initialize websocket when token address changes
     useEffect(() => {
+        if (!mounted) return;
+        
         if (tokenAddress && token) {
             setTokenAddress(tokenAddress);
             initializeWebSocket(token, lang);
@@ -46,7 +56,7 @@ export default function MasterTradeChat({
         return () => {
             disconnectWebSocket();
         };
-    }, [tokenAddress, token, lang, setTokenAddress, initializeWebSocket, disconnectWebSocket]);
+    }, [tokenAddress, token, lang, setTokenAddress, initializeWebSocket, disconnectWebSocket, mounted]);
 
     const { data: myConnects = [], isLoading: isLoadingConnects } = useQuery({
         queryKey: ["myConnects"],
@@ -72,16 +82,38 @@ export default function MasterTradeChat({
         })
     }, [myConnects, searchQuery])
 
+    // Update selected connections based on selected groups
     useEffect(() => {
-        // Update selected connections based on selected groups
+        if (!mounted || !initialized) return;
+
         const newSelectedConnections = myConnects
             .filter((connect: any) =>
                 connect.joined_groups.some((group: any) =>
                     selectedGroups.includes(group.group_id.toString())
                 )
-            ).map((connect: any) => connect.member_id.toString())
-        setSelectedConnections([...selectedConnections, ...newSelectedConnections])
-    }, [selectedGroups, myConnects, setSelectedConnections])
+            ).map((connect: any) => connect.member_id.toString());
+        
+        // Only update if there are actual changes
+        const uniqueConnections = Array.from(new Set([...selectedConnections, ...newSelectedConnections]));
+        if (JSON.stringify(uniqueConnections) !== JSON.stringify(selectedConnections)) {
+            setSelectedConnections(uniqueConnections);
+        }
+    }, [selectedGroups, myConnects, setSelectedConnections, selectedConnections, mounted, initialized]);
+
+// Initialize connections after mount
+    useEffect(() => {
+        if (!mounted || initialized) return;
+        
+        const initialConnections = myConnects
+            .filter((connect: any) =>
+                connect.joined_groups.some((group: any) =>
+                    selectedGroups.includes(group.group_id.toString())
+                )
+            ).map((connect: any) => connect.member_id.toString());
+        
+        setSelectedConnections(initialConnections);
+        setInitialized(true);
+    }, [mounted, myConnects, selectedGroups, setSelectedConnections, initialized]);
 
     useEffect(() => {
         if (walletInfor?.role !== "master") {
@@ -112,8 +144,6 @@ export default function MasterTradeChat({
     const handleTabChange = (tab: TabType) => {
         setActiveTab(tab);
     };
-    console.log("unreadCount", unreadCount)
-    console.log("messages", messages)
     return (
         <div className="h-full flex flex-col relative">
             {/* {isLoading && (
@@ -148,7 +178,7 @@ export default function MasterTradeChat({
                 </button>
             </div>
 
-            {activeTab === "trade" ? (
+{activeTab === "trade" ? (
                 <div className="flex-1 min-h-0 flex flex-col">
                     <div className="flex-none">
                         <SearchBar

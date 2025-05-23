@@ -106,7 +106,7 @@ const Header = () => {
         //     href: '/trading'
         // },
         {
-            name: t('createCoin'),
+            name: t('create coin'),
             href: '/create-coin'
         },
         {

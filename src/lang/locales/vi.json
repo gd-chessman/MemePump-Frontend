@@ -2,6 +2,7 @@
   "connect": "Kết nối",
   "overview": "Tổng quan",
   "trade": "Giao dịch",
+  "create coin": "Tạo Coin",
   "createCoin": {
     "title": "TẠO COIN MỚI",
     "form": {

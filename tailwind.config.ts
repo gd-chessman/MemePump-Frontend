@@ -59,6 +59,7 @@ const config: Config = {
             },
             'black': {
               '1/2': 'rgba(0, 0, 0, 0.50)',
+              '9/10': 'rgba(0, 0, 0, 0.90)',
             },
           'gradient': {
             'start': '#15DFFD',
