@@ -857,7 +857,7 @@ export default function MasterTradeInterface() {
 
       {/* Phần chat */}
       <div className="z-10 w-1/4 flex flex-col gap-6 justify-end items-end ">
-        <button className="w-fit create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-xs items-center justify-center " onClick={() => router.push("/master-trade/manage")}>
+        <button className="w-fit create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-xs items-center justify-center " onClick={() => router.push("/master-trade")}>
           <FontAwesomeIcon icon={faUsersGear} className="w-4 h-4" />
           Connect with other Master
         </button>
