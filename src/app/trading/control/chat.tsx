@@ -144,7 +144,7 @@ const ChatTradingContent = () => {
 
   return (
     <div className="flex flex-col h-full bg-gray-50 dark:bg-theme-neutral-1000">
-      <div className={`${height > 700 ? 'flex-1' : 'h-[300px]'} overflow-y-auto p-4 space-y-4`}>
+      <div className={`${height > 700 ? 'flex-1' : 'h-[300px]'} overflow-y-auto p-4`}>
         {messages.map((message) => (
           <ChatMessage key={message.id} message={message} />
         ))}

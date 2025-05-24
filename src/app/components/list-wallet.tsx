@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Search, X, Copy, Check } from "lucide-react"
-import { useQuery } from '@tanstack/react-query'
-import { getMyWallets } from '@/services/api/TelegramWalletService'
+import { useWallets } from '@/hooks/useWallets'
 
 export interface Wallet {
   wallet_id: string
@@ -30,11 +29,7 @@ export default function WalletSelectorModal({
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
   const modalRef = useRef<HTMLDivElement>(null)
 
-  const { data: myWallets } = useQuery({
-    queryKey: ["my-wallets"],
-    queryFn: getMyWallets,
-    staleTime: 30000,
-  })
+  const { wallets: myWallets } = useWallets()
 
   const filteredWallets = myWallets?.filter((wallet: Wallet) => {
     if (!searchQuery) return true

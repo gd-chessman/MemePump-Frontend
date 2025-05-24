@@ -146,7 +146,7 @@ body {
 }
 
 .container-body {
-  @apply max-w-[1920px] w-full;
+  @apply max-w-[1920px] w-full ;
 }
 
 .container-trading:before,

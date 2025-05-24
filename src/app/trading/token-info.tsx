@@ -28,6 +28,21 @@ export default function TokenInfo() {
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
   });
+
+  // // Add effect to emit marketCapUpdate event when tokenInfor is loaded/updated
+  // useEffect(() => {
+  //   if (tokenInfor?.marketCap && address) {
+  //     const marketCapEvent = new CustomEvent('marketCapUpdate', {
+  //       detail: {
+  //         marketCap: tokenInfor.marketCap,
+  //         tokenAddress: address,
+  //         timestamp: new Date().toISOString()
+  //       }
+  //     });
+  //     window.dispatchEvent(marketCapEvent);
+  //   }
+  // }, [tokenInfor?.marketCap, address]);
+
   const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
     queryKey: ["myWishlist"],
     queryFn: getMyWishlist,
@@ -40,6 +55,9 @@ export default function TokenInfo() {
   const [isConnected, setIsConnected] = useState(false);
   
   useEffect(() => {
+    // Reset state when address changes
+    setWsTokenInfo(null);
+
     // Initialize socket connection
     const socketInstance = io(`${process.env.NEXT_PUBLIC_API_URL}/token-info`, {
       path: '/socket.io',
@@ -52,7 +70,7 @@ export default function TokenInfo() {
       
       // Auto subscribe if address exists
       if (address) {
-        console.log('Auto subscribing to token:', address);
+        console.log('Subscribing to token:', address);
         socketInstance.emit('subscribe', { tokenAddress: address });
       }
     });
@@ -63,26 +81,33 @@ export default function TokenInfo() {
     });
 
     socketInstance.on('tokenInfo', (data: any) => {
-      setWsTokenInfo(data);
-      
-      // Emit custom event when marketCap updates
-      const marketCapEvent = new CustomEvent('marketCapUpdate', {
-        detail: {
-          marketCap: data?.marketCap?.usd || tokenInfor?.marketCap,
-          tokenAddress: address,
-          timestamp: new Date().toISOString()
-        }
-      });
-      window.dispatchEvent(marketCapEvent);
+      // Only update state if the data is for current address
+      if (data?.tokenAddress === address) {
+        setWsTokenInfo(data);
+        
+        // Emit custom event when marketCap updates
+        const marketCapEvent = new CustomEvent('marketCapUpdate', {
+          detail: {
+            marketCap: data?.marketCap?.usd || tokenInfor?.marketCap,
+            tokenAddress: address,
+            timestamp: new Date().toISOString()
+          }
+        });
+        window.dispatchEvent(marketCapEvent);
+      }
     });
 
     setSocket(socketInstance);
 
-    // Cleanup on component unmount
+    // Cleanup on component unmount or address change
     return () => {
+      if (socketInstance && address) {
+        // Unsubscribe from current token before disconnecting
+        socketInstance.emit('unsubscribe', { tokenAddress: address });
+      }
       socketInstance.disconnect();
     };
-  }, [address, tokenInfor?.marketCap]);
+  }, [address]); // Only depend on address changes
 
   const dataToken = {
     name: tokenInfor?.name,
@@ -187,8 +212,7 @@ export default function TokenInfo() {
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
             <div className="text-xs text-neutral-100 font-semibold mb-1">24h Volume</div>
             <div className="font-medium text-sm text-neutral-100 flex items-center">
-              ${formatNumberWithSuffix(dataToken.aDayVolume || 0)}
-              {/* <span className="text-red-400 text-xs ml-1">↓</span> */}
+              ${formatNumberWithSuffix(Math.abs(dataToken.aDayVolume || 0))}
             </div>
           </div>
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
