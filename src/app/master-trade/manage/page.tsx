@@ -458,7 +458,7 @@ export default function MasterTradeInterface() {
   }));
 
   return (
-    <div className="container-body px-[40px] flex gap-6 pt-[30px] relative mx-auto z-10">
+    <div className="container-body h-[92vh] px-[40px] flex gap-6 pt-[30px] relative mx-auto z-10">
       {/* Phần tạo nhóm */}
       <div className="">
         <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-xl border border-blue-500/30 p-[30px] shadow-lg">

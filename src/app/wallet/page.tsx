@@ -64,7 +64,7 @@ export default function WalletPage() {
     };
 
     return (
-        <div className="container-body px-[40px] flex flex-col gap-6 pt-[30px] relative mx-auto z-10">
+        <div className="container-body h-[92vh] px-[40px] flex flex-col gap-6 pt-[30px] relative mx-auto z-10">
             <div className="grid grid-cols-4 gap-4 w-full">
                 <div className="px-6 py-4 bg-gradient-to-br from-blue-950/50 to-purple-600/50 rounded-xl outline outline-1 outline-offset-[-1px] outline-Colors-Secondary-300 backdrop-blur-[5px] flex flex-col justify-start items-center gap-4 min-w-0">
                     <div className="inline-flex justify-start items-center gap-2 w-full">

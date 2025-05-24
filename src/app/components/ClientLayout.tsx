@@ -37,7 +37,7 @@ export default function ClientLayout({
         <ThemeProvider>
           <Header />
           <VideoBackground />
-          <main className="bg-white/80 dark:bg-[#000000a8]">
+          <main className="bg-white/80 dark:bg-[#000000a8] overflow-x-hidden">
             {children}
           </main>
           {isAuthenticated && <Chat />}

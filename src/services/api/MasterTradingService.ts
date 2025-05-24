@@ -14,7 +14,7 @@ export const getMasters = async ()=>{
 export const getMasterById = async (id: any)=>{
     try {
         const temp = await axiosClient.get(`/on-chain/pnl/${id}`)
-        return temp.data;
+        return temp.data.data;
     } catch (error) {
         console.log(error)
         return [];
