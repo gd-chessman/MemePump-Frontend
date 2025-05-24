@@ -1,13 +1,18 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { Search, Copy, ChevronDown, Crown } from "lucide-react"
-import { getMasters } from "@/services/api/MasterTradingService"
+import { Search, Copy, ChevronDown, Crown, Loader2 } from "lucide-react"
+import { getMasterById, getMasters } from "@/services/api/MasterTradingService"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
+import { getInforWallet } from "@/services/api/TelegramWalletService"
+import { MasterTradingService } from "@/services/api"
+import ConnectToMasterModal from "../components/connect-master-trade-modal"
+import { truncateString } from "@/utils/format"
+import DetailMasterModal from "./modal-detail-wallet"
 
 // Định nghĩa các kiểu dữ liệu
-type TradeStatus = "Not Connected" | "Connected" | "Disconnected" | "Paused" | "Pending"
+type TradeStatus = "Not Connected" | "connect" | "disconnect" | "Paused" | "pending" | "block"
 type TradeType = "VIP" | "NORMAL"
 
 interface TradeData {
@@ -36,12 +41,29 @@ const textHeaderTable = "text-xs font-normal text-neutral-200"
 export default function MasterTradeTable() {
     const [activeFilter, setActiveFilter] = useState<FilterType>("All")
     const [searchQuery, setSearchQuery] = useState("")
+    const [showConnectModal, setShowConnectModal] = useState<string>("")
+    const [inforWallet, setInforWallet] = useState<any>(null)
+    const [showDetailModal, setShowDetailModal] = useState<boolean>(false)
+    const [selectedAddress, setSelectedAddress] = useState<string>("")
     const [copyNotification, setCopyNotification] = useState<{ show: boolean; address: string }>({ show: false, address: "" })
     const router = useRouter()
 
-    const { data: masterTraders = [], refetch: refetchMasterTraders } = useQuery({
+    const { data: masterTraders = [], refetch: refetchMasterTraders, isLoading: isLoadingMasters } = useQuery({
         queryKey: ["master-trading/masters"],
         queryFn: getMasters,
+    });
+
+    const { data: masterInfor, refetch: refetchMasterInfor, isLoading: isLoadingMasterInfor } = useQuery({
+        queryKey: ["master-trading/master-infor", selectedAddress],
+        queryFn: () => getMasterById(selectedAddress),
+    });
+    console.log("masterInfor", masterInfor)
+
+    const { data: walletInfor, refetch, isLoading: isLoadingWallet } = useQuery({
+        queryKey: ["wallet-infor"],
+        queryFn: getInforWallet,
+        refetchInterval: 30000,
+        staleTime: 30000,
     });
 
     // Transform masterTraders data to match the required format
@@ -62,10 +84,10 @@ export default function MasterTradeTable() {
     }, [masterTraders]);
 
     // Đếm số lượng mục theo trạng thái
-    const connectedCount = tradeData.filter((item) => item.status === "Connected").length
+    const connectedCount = tradeData.filter((item) => item.status === "connect").length
     const notConnectedCount = tradeData.filter((item) => item.status === "Not Connected").length
-    const disconnectedCount = tradeData.filter((item) => item.status === "Disconnected").length
-    const pendingCount = tradeData.filter((item) => item.status === "Pending").length
+    const disconnectedCount = tradeData.filter((item) => item.status === "disconnect").length
+    const pendingCount = tradeData.filter((item) => item.status === "pending").length
 
     // Lọc dữ liệu dựa trên bộ lọc đang hoạt động và truy vấn tìm kiếm
     const filteredData = useMemo(() => {
@@ -84,6 +106,7 @@ export default function MasterTradeTable() {
         return filtered
     }, [tradeData, activeFilter, searchQuery])
 
+    console.log("filteredData", filteredData)
     // Xử lý sao chép địa chỉ
     const copyAddress = (address: string) => {
         navigator.clipboard.writeText(address)
@@ -95,9 +118,21 @@ export default function MasterTradeTable() {
     }
 
     // Xử lý các hành động
-    const handleConnect = (id: string) => {
-        console.log(`Connecting to ${id}`)
+    const handleConnect = (address: string, type?: string, inforWallet?: any) => {
+        
+        if(type === "NORMAL"){
+            setShowConnectModal(address)
+        }else{
+            handleMemberConnect(inforWallet)
+        }
         // Thực hiện logic kết nối ở đây
+    }
+    const handleMemberConnect = async (inforWallet?: any) => {
+        await MasterTradingService.memberSetConnect({
+            master_id: inforWallet.id,
+            status: "connect",
+            master_address: inforWallet.address,
+        });
     }
 
     const handleDisconnect = (id: string) => {
@@ -121,6 +156,40 @@ export default function MasterTradeTable() {
     }
 
     console.log(tradeData)
+
+    // Loading skeleton component
+    const TableSkeleton = () => (
+        <tr className="border-b border-blue-500/10 animate-pulse">
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-32"></div>
+            </td>
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-20"></div>
+            </td>
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-20"></div>
+            </td>
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-16"></div>
+            </td>
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-12"></div>
+            </td>
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-24"></div>
+            </td>
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-16"></div>
+            </td>
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-24"></div>
+            </td>
+            <td className={`${styleTextRow}`}>
+                <div className="h-4 bg-gray-700 rounded w-24"></div>
+            </td>
+        </tr>
+    );
+
     return (
         <div className="container-body px-[40px] flex flex-col gap-6 pt-[30px] relative mx-auto z-10">
             {/* Thông báo copy */}
@@ -135,8 +204,8 @@ export default function MasterTradeTable() {
                 <div className="flex flex-wrap gap-6">
                     <button
                         onClick={() => setActiveFilter("All")}
-                      
-                            className={` rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeFilter === "All" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
+
+                        className={` rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeFilter === "All" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
                     >
                         <span className={`${activeFilter === 'All' ? 'gradient-hover ' : ''}`}>All master trade ({tradeData.length})</span>
                     </button>
@@ -178,25 +247,27 @@ export default function MasterTradeTable() {
                         />
                     </div>
 
-                    <button className="w-full max-w-[400px] create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed mx-auto flex gap-2 text-xs" onClick={() => router.push("/master-trade/manage")}>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
-                        Manage Master
-                    </button>
+                    {walletInfor?.role === "master" && (
+                        <button className="w-full max-w-[400px] create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed mx-auto flex gap-2 text-xs" onClick={() => router.push("/master-trade/manage")}>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                            Manage Master
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -205,144 +276,200 @@ export default function MasterTradeTable() {
                 <table className="w-full text-neutral-100">
                     <thead>
                         <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                            <th className={`${styleTextRow} text-left ${textHeaderTable}`}>Address</th>
-                            <th className={`${styleTextRow} text-left ${textHeaderTable}`}>
+                            <th className={`${styleTextRow} text-left ${textHeaderTable} w-[22%]`}>Address</th>
+                            <th className={`${styleTextRow} text-left ${textHeaderTable} w-[12%]`}>
                                 <div className={`flex items-center ${textHeaderTable}`}>
                                     7D PnL
                                     <ChevronDown className="ml-1 h-4 w-4" />
                                 </div>
                             </th>
-                            <th className={`${styleTextRow} text-left`}>
+                            <th className={`${styleTextRow} text-left w-[12%]`}>
                                 <div className={`flex items-center ${textHeaderTable}`}>
                                     30D PnL
                                     <ChevronDown className="ml-1 h-4 w-4" />
                                 </div>
                             </th>
-                            <th className={`${styleTextRow} text-left`}>
+                            <th className={`${styleTextRow} text-left w-[10%]`}>
                                 <div className={`flex items-center ${textHeaderTable}`}>
                                     7D Win Rate
                                     <ChevronDown className="ml-1 h-4 w-4" />
                                 </div>
                             </th>
-                            <th className={`${styleTextRow} text-left`}>
+                            <th className={`${styleTextRow} text-left w-[8%]`}>
                                 <div className={`flex items-center ${textHeaderTable}`}>
                                     7D TXs
                                     <ChevronDown className="ml-1 h-4 w-4" />
                                 </div>
                             </th>
-                            <th className={`${styleTextRow} text-left`}>
+                            <th className={`${styleTextRow} text-left w-[10%]`}>
                                 <div className={`flex items-center ${textHeaderTable}`}>
                                     Last Time
                                     <ChevronDown className="ml-1 h-4 w-4" />
                                 </div>
                             </th>
-                            <th className={`${styleTextRow} text-left`}>
+                            <th className={`${styleTextRow} text-left w-[8%]`}>
                                 <div className={`flex items-center ${textHeaderTable}`}>
                                     Type
                                     <ChevronDown className="ml-1 h-4 w-4" />
                                 </div>
                             </th>
-                            <th className={`${styleTextRow} text-center ${textHeaderTable}`}>Status</th>
-                            <th className={`${styleTextRow} text-center ${textHeaderTable}`}>Action</th>
+                            <th className={`${styleTextRow} text-start ${textHeaderTable} w-[8%]`}>Status</th>
+                            <th className={`${styleTextRow} text-start ${textHeaderTable} whitespace-nowrap`}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredData.map((item) => (
-                            <tr key={item.id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
-                                <td className={`${styleTextRow}`}>
-                                    <div className="flex items-center text-xs font-normal text-neutral-200">
-                                        <span className="text-neutral-100 text-xs font-medium">{item.address}</span>
-                                        <button
-                                            onClick={() => copyAddress(item.address)}
-                                            className="ml-2 text-neutral-100 transition-colors group relative"
-                                        >
-                                            <Copy className="h-4 w-4" />
-                                            <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-neutral-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                                                Copy address
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td className={`${styleTextRow}`}>
-                                    <div className="text-theme-green-200 text-xs">{item.pnl7d}</div>
-                                    <div className="text-theme-red-200 text-xs">{item.pnlPercent7d}</div>
-                                </td>
-                                <td className={`${styleTextRow}`}>
-                                    <div className="text-theme-green-200 text-xs">{item.pnl30d}</div>
-                                    <div className="text-theme-red-200 text-xs">{item.pnlPercent30d}</div>
-                                </td>
-                                <td className={`${styleTextRow} text-xs`}>{item.winRate7d}</td>
-                                <td className={`${styleTextRow} text-xs`}>
-                                    <div>{item.transactions7d}</div>
-                                    {/* <div className="text-theme-primary-400">3/4</div> */}
-                                </td>
-                                <td className={`${styleTextRow} text-xs`}>{item.lastTime}</td>
-                                <td className={`${styleTextRow}`}>
-                                    {item.type === "VIP" ? (
-                                        <div className="flex items-center text-theme-yellow-200 text-xs">
-                                            <Crown className="h-4 w-4 mr-1" />
-                                            VIP
-                                        </div>
-                                    ) : (
-                                        <div className="text-theme-primary-400 text-xs">NORMAL</div>
-                                    )}
-                                </td>
-                                <td className={`${styleTextRow} text-start`}>
-                                    <span
-                                        className={`px-3 py-1 rounded-full text-xs`}
-                                    >
-                                        {item.status}
-                                    </span>
-                                </td>
-                                <td className={`${styleTextRow} text-center`}>
-                                    <div className="flex justify-center gap-2">
-                                        {item.status === "Not Connected" && (
-                                            <button
-                                                onClick={() => handleConnect(item.id)}
-                                                className={`px-3 py-1 ${greenBg} rounded-full transition-colors text-xs`}
-                                            >
-                                                Connect
-                                            </button>
-                                        )}
-                                        {item.status === "Connected" && (
-                                            <>
-                                                <button
-                                                    onClick={() => handlePause(item.id)}
-                                                    className={`px-3 py-1 ${yellowBg} rounded-full transition-colors text-xs`}
-                                                >
-                                                    Pause
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDisconnect(item.id)}
-                                                    className={`px-3 py-1 ${redBg} rounded-full transition-colors text-xs`}
-                                                >
-                                                    Disconnect
-                                                </button>
-                                            </>
-                                        )}
-                                        {(item.status === "Disconnected" || item.status === "Paused") && (
-                                            <button
-                                                onClick={() => handleReconnect(item.id)}
-                                                className={`px-3 py-1 ${greenBg} rounded-full transition-colors text-xs`}
-                                            >
-                                                Reconnect
-                                            </button>
-                                        )}
-                                        {item.status === "Pending" && (
-                                            <button
-                                                onClick={() => handleCancel(item.id)}
-                                                className={`px-3 py-1 ${yellowBg} rounded-full text-sm transition-colors`}
-                                            >
-                                                Cancel
-                                            </button>
-                                        )}
-                                    </div>
+                        {isLoadingMasters ? (
+                            // Show 5 skeleton rows while loading
+                            Array(5).fill(0).map((_, index) => (
+                                <TableSkeleton key={index} />
+                            ))
+                        ) : filteredData.length === 0 ? (
+                            <tr>
+                                <td colSpan={9} className="text-center py-8 text-neutral-400">
+                                    No data available
                                 </td>
                             </tr>
-                        ))}
+                        ) : (
+                            filteredData.map((item) => (
+                                <tr key={item.id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
+                                    <td className={`${styleTextRow}`}>
+                                        <div className="flex items-center text-xs font-normal text-neutral-200">
+                                            <span className="text-neutral-100 text-xs font-medium">{truncateString(item.address, 12)}</span>
+                                            <button
+                                                onClick={() => copyAddress(item.address)}
+                                                className="ml-2 text-neutral-100 transition-colors group relative"
+                                            >
+                                                <Copy className="h-4 w-4" />
+                                                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-neutral-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                                    Copy address
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td className={`${styleTextRow}`}>
+                                        <div className="text-theme-green-200 text-xs">{item.pnl7d}</div>
+                                        <div className="text-theme-red-200 text-xs">{item.pnlPercent7d}</div>
+                                    </td>
+                                    <td className={`${styleTextRow}`}>
+                                        <div className="text-theme-green-200 text-xs">{item.pnl30d}</div>
+                                        <div className="text-theme-red-200 text-xs">{item.pnlPercent30d}</div>
+                                    </td>
+                                    <td className={`${styleTextRow} text-xs`}>{item.winRate7d}</td>
+                                    <td className={`${styleTextRow} text-xs`}>
+                                        <div>{item.transactions7d}</div>
+                                        {/* <div className="text-theme-primary-400">3/4</div> */}
+                                    </td>
+                                    <td className={`${styleTextRow} text-xs`}>{item.lastTime}</td>
+                                    <td className={`${styleTextRow}`}>
+                                        {item.type === "VIP" ? (
+                                            <div className="flex items-center text-theme-yellow-200 text-xs">
+                                                <Crown className="h-4 w-4 mr-1" />
+                                                VIP
+                                            </div>
+                                        ) : (
+                                            <div className="text-theme-primary-400 text-xs">NORMAL</div>
+                                        )}
+                                    </td>
+                                    <td className={`${styleTextRow} text-start`}>
+                                        <span
+                                            className={` py-1 rounded-full text-xs`}
+                                        >
+                                            {item.status}
+                                        </span>
+                                    </td>
+                                    <td className={`${styleTextRow} text-center`}>
+                                        <div className="flex  gap-1 justify-start">
+                                            {item.status === "Not Connected" && (
+                                                <button
+                                                    onClick={() => {
+                                                        handleConnect(item.address, item.type, item)
+                                                        setInforWallet(walletInfor)
+                                                    }}
+                                                    className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
+                                                >
+                                                    Connect
+                                                </button>
+                                            )}
+                                            {item.status === "connect" && (
+                                                <>
+                                                <button
+                                                        onClick={() => {
+                                                            handlePause(item.address)
+                                                            setInforWallet(walletInfor)
+                                                        }}
+                                                        className={`px-3 py-1 ${blueBg} rounded-full transition-colors text-xs`}
+                                                    >
+                                                        Chat
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            setShowDetailModal(true)
+                                                            setSelectedAddress(item.address)
+                                                        }}
+                                                        className={`px-3 py-1 ${blueBg} rounded-full transition-colors text-xs`}
+                                                    >
+                                                        Details
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            handlePause(item.address)
+                                                            setInforWallet(walletInfor)
+                                                        }}
+                                                        className={`px-3 py-1 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs`}
+                                                    >
+                                                        Pause
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            handleDisconnect(item.address)
+                                                            setInforWallet(walletInfor)
+                                                        }}
+                                                        className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
+                                                    >
+                                                        Disconnect
+                                                    </button>
+                                                </>
+                                            )}
+                                            {(item.status === "disconnect" || item.status === "Paused") && (
+                                                <button
+                                                    onClick={() => {
+                                                        handleMemberConnect(item)
+                                                    }}
+                                                    className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
+                                                >
+                                                    Reconnect
+                                                </button>
+                                            )}
+                                            
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
+                {isLoadingMasters && (
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                        <div className="flex flex-col items-center gap-2">
+                            <Loader2 className="h-8 w-8 animate-spin text-theme-primary-300" />
+                            <span className="text-sm text-neutral-200">Loading...</span>
+                        </div>
+                    </div>
+                )}
             </div>
+            <ConnectToMasterModal
+                refetchMasterTraders={refetchMasterTraders}
+                inforWallet={inforWallet}
+                onClose={() => setShowConnectModal("")}
+                masterAddress={showConnectModal}
+                isMember={true}
+                onConnect={handleConnect}
+            />
+            <DetailMasterModal
+                isOpen={showDetailModal}
+                onClose={() => setShowDetailModal(false)}
+                address={selectedAddress}
+            />
         </div>
     )
 }

@@ -27,11 +27,13 @@ import ListWallet from './list-wallet';
 import type { Wallet } from './list-wallet';
 import notify from './notify'
 import { NotifyProvider } from './notify'
+import { useWallets } from '@/hooks/useWallets'
 
 const Header = () => {
     const { t } = useLang();
     const router = useRouter();
     const pathname = usePathname();
+    const { wallets } = useWallets();
     const { data: walletInfor, refetch } = useQuery({
         queryKey: ["wallet-infor"],
         queryFn: getInforWallet,
@@ -62,6 +64,7 @@ const Header = () => {
             });
         }
     };
+    console.log("isAuthenticated", isAuthenticated)
 
     useEffect(() => {
         setMounted(true);
@@ -78,13 +81,9 @@ const Header = () => {
             });
             router.push("/complete-profile");
         }
-        // if (walletInfor?.status === 401) {
-        //     notify({ 
-        //         message: 'Phiên đăng nhập đã hết hạn!', 
-        //         type: 'error' 
-        //     });
-        //     logout();
-        // }
+        if (walletInfor?.status === 401) {
+            logout();
+        }
         if (walletInfor && walletInfor.status === 200 && !isWalletDialogOpen) {
             notify({ 
                 message: 'Đăng nhập thành công!', 
@@ -95,7 +94,7 @@ const Header = () => {
             }, 1000);
         }
     }, [walletInfor, router, logout, isWalletDialogOpen]);
-
+    console.log("walletInfor", walletInfor)
     const listSidebar = [
         {
             name: t('overview'),

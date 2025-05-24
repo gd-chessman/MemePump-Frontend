@@ -13,6 +13,8 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{process.env.NEXT_PUBLIC_APP_NAME}</title>
+        <link rel="icon" href="/logo.png" type="image/png" />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -21,7 +23,7 @@ export default function RootLayout({
           referrerPolicy="no-referrer"
         />
       </head>
-      <body className={`antialiased min-h-screen flex flex-col bg-white dark:bg-black`}>
+      <body className={`antialiased min-h-screen flex flex-col bg-white dark:bg-black overflow-x-hidden`}>
         <ClientLayout>
           {children}
         </ClientLayout>

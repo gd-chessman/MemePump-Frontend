@@ -11,6 +11,15 @@ export const getMasters = async ()=>{
     }
 }
 
+export const getMasterById = async (id: any)=>{
+    try {
+        const temp = await axiosClient.get(`/on-chain/pnl/${id}`)
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        return [];
+    }
+}
 export const getMyGroups = async ()=>{
     try {
         const temp = await axiosClient.get("/master-trading/get-my-groups")

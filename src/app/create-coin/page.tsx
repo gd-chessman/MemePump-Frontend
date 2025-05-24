@@ -417,7 +417,7 @@ export default function CreateCoinForm() {
   return (
     <>
       <NotifyProvider />
-      <div className="container-body  px-[40px] flex gap-6 py-[30px] relative mx-auto z-10">
+      <div className="container-body px-[40px] flex gap-6 py-[30px] relative mx-auto z-10">
         {/* Main Form */}
         <div className="border-create-coin w-2/3 bg-transparent flex-1 bg-opacity-30 rounded-xl p-[30px] shadow-lg flex flex-col ">
           <div className="w-full h-full flex flex-col">
