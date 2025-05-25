@@ -1,6 +1,11 @@
 "use client"
-import { KeyIcon, PlusIcon } from "lucide-react";
+import { TelegramWalletService } from "@/services/api";
+import { getInforWallet, getMyWallets } from "@/services/api/TelegramWalletService";
+import { truncateString } from "@/utils/format";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowDownToLine, ArrowUpFromLine, KeyIcon, PlusIcon } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
+import { Wallet } from "../components/list-wallet";
 
 export default function WalletPage() {
     const [showPrivateKeys, setShowPrivateKeys] = useState(false);
@@ -10,10 +15,40 @@ export default function WalletPage() {
     const [walletNickname, setWalletNickname] = useState("");
     const [selectedNetwork, setSelectedNetwork] = useState("EN");
     const [privateKey, setPrivateKey] = useState("");
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [wallets, setWallets] = useState<any[]>([]);
 
     const privateKeysRef = useRef<HTMLDivElement>(null);
     const addWalletRef = useRef<HTMLDivElement>(null);
     const importWalletRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        fetchWallets();
+    }, []);
+
+    const { data: walletInfor, refetch } = useQuery({
+        queryKey: ["wallet-infor"],
+        queryFn: getInforWallet,
+        refetchInterval: 30000,
+        staleTime: 30000,
+    });
+    const { data: listWallets, error } = useQuery({
+        queryKey: ['my-wallets'],
+        queryFn: getMyWallets,
+    });
+    console.log("listWallets", listWallets)
+    const fetchWallets = async () => {
+        try {
+            const walletList = await TelegramWalletService.getMyWallets();
+            setWallets(walletList);
+        } catch (error) {
+            console.error("Error fetching wallets:", error);
+            setToastMessage("Failed to fetch wallets");
+            setShowToast(true);
+        }
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -42,10 +77,6 @@ export default function WalletPage() {
         setShowPrivateKeys(false);
     };
 
-    const handleAddWallet = () => {
-        setShowAddWallet(true);
-    };
-
     const handleCloseAddWallet = () => {
         setShowAddWallet(false);
         setWalletName("");
@@ -63,16 +94,46 @@ export default function WalletPage() {
         setPrivateKey("");
     };
 
+    const handleAddWallet = async () => {
+        try {
+            setIsLoading(true);
+            const walletData = {
+                name: walletName,
+                nick_name: walletNickname,
+                country: selectedNetwork,
+                type: "other",
+            };
+
+            await TelegramWalletService.addWallet(walletData);
+
+            // Reset form and close modal
+            setWalletName("");
+            setWalletNickname("");
+            setSelectedNetwork("EN");
+            setShowAddWallet(false);
+
+            // Show success message
+            setToastMessage("Wallet added successfully");
+            setShowToast(true);
+
+            // Refresh wallet list
+            await fetchWallets();
+        } catch (error) {
+            console.error("Error adding wallet:", error);
+            setToastMessage("Failed to add wallet. Please try again.");
+            setShowToast(true);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="container-body h-[92vh] px-[40px] flex flex-col gap-6 pt-[30px] relative mx-auto z-10">
-            <div className="grid grid-cols-4 gap-4 w-full">
-                <div className="px-6 py-4 bg-gradient-to-br from-blue-950/50 to-purple-600/50 rounded-xl outline outline-1 outline-offset-[-1px] outline-Colors-Secondary-300 backdrop-blur-[5px] flex flex-col justify-start items-center gap-4 min-w-0">
+            <div className="grid grid-cols-4 gap-6 w-full">
+                <div className="px-6 py-4 border border-solid border-theme-secondary-500 rounded-xl flex flex-col justify-start items-center gap-4 min-w-0 bg-gradient-overlay">
                     <div className="inline-flex justify-start items-center gap-2 w-full">
                         <div className="w-8 h-8 relative overflow-hidden flex-shrink-0">
-                            <div className="w-8 h-8 left-0 top-0 absolute bg-gradient-to-l from-violet-900 to-violet-800" />
-                            <div className="w-3.5 h-[2.86px] left-[8.68px] top-[18.88px] absolute bg-gradient-to-b from-teal-400 to-fuchsia-500" />
-                            <div className="w-3.5 h-[2.87px] left-[8.70px] top-[10.26px] absolute bg-gradient-to-b from-teal-400 to-fuchsia-500" />
-                            <div className="w-3.5 h-[2.86px] left-[8.70px] top-[14.54px] absolute bg-gradient-to-b from-teal-400 to-fuchsia-500" />
+                            <img src="/solana.png" alt="Solana" className="w-full h-full object-cover" />
                         </div>
                         <div className="justify-start truncate">
                             <span className="text-Colors-Neutral-100 text-base font-semibold uppercase leading-tight">
@@ -89,18 +150,18 @@ export default function WalletPage() {
                     <div className="flex flex-col justify-start items-center gap-2 w-full">
                         <div className="w-full h-10 pl-4 pr-6 relative rounded-xl outline outline-1 outline-offset-[-1px] outline-purple-300 flex justify-between items-center">
                             <div className="justify-center text-Colors-Neutral-200 text-sm font-normal leading-tight truncate">
-                                TG34....mnop
+                                {truncateString(walletInfor?.solana_address, 12)}
                             </div>
                             <div className="w-3.5 h-3.5 flex-shrink-0">
                                 <div className="w-3 h-3 bg-Colors-Neutral-100" />
                             </div>
                         </div>
                         <div className="justify-center text-Colors-Neutral-200 text-xs font-normal leading-none truncate w-full text-center">
-                            FsXqRL3DchD...sCmGCPAeLuW4
+                            {truncateString(listWallets?.[0]?.eth_address, 17)}
                         </div>
                     </div>
                 </div>
-                <div className="px-6 py-4 bg-gradient-to-l from-indigo-500/20 to-sky-500/20 rounded-xl outline outline-1 outline-offset-[-1px] outline-Colors-Primary-300 backdrop-blur-[5px] flex flex-col justify-start items-center gap-4 min-w-0">
+                <div className="px-6 py-4 bg-gradient-blue-transparent rounded-xl border border-solid border-theme-primary-100 flex flex-col justify-start items-center gap-4 min-w-0">
                     <div className="inline-flex justify-start items-center gap-2 w-full">
                         <div className="w-8 h-8 bg-theme-primary-500 rounded-full flex justify-center items-center relative overflow-hidden flex-shrink-0">
                             <img src="/ethereum.png" alt="Ethereum" className="w-4 h-4 object-cover" />
@@ -117,7 +178,7 @@ export default function WalletPage() {
                     <div className="flex flex-col justify-start items-center gap-2 w-full">
                         <div className="w-full h-10 pl-4 pr-6 relative rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 flex justify-between items-center">
                             <div className="justify-center text-Colors-Neutral-200 text-sm font-normal leading-tight truncate">
-                                TG34....mnop
+                                {truncateString(listWallets?.[0]?.eth_address, 17)}
                             </div>
                             <div className="w-3.5 h-3.5 flex-shrink-0">
                                 <div className="w-3 h-3 bg-Colors-Neutral-100" />
@@ -128,11 +189,10 @@ export default function WalletPage() {
                         </div>
                     </div>
                 </div>
-                <div className="px-6 py-4 bg-gradient-to-br from-yellow-400/20 to-yellow-950/20 rounded-xl outline outline-1 outline-offset-[-1px] outline-Colors-Yellow-100 backdrop-blur-[5px] flex flex-col justify-start items-center gap-4 min-w-0">
+                <div className="px-6 py-4 bg-gradient-yellow-transparent rounded-xl border border-solid border-theme-yellow-300 flex flex-col justify-start items-center gap-4 min-w-0">
                     <div className="inline-flex justify-start items-center gap-2 w-full">
                         <div className="w-8 h-8 relative overflow-hidden flex-shrink-0">
-                            <div className="w-8 h-8 left-0 top-0 absolute bg-gradient-to-l from-yellow-600 to-amber-300" />
-                            <div className="w-4 h-4 left-[7.06px] top-[7.06px] absolute bg-white" />
+                            <img src="/bnb.png" alt="BNB" className="w-full h-full object-cover" />
                         </div>
                         <div className="justify-start truncate">
                             <span className="text-Colors-Neutral-100 text-base font-semibold leading-tight">
@@ -146,7 +206,7 @@ export default function WalletPage() {
                     <div className="flex flex-col justify-start items-center gap-2 w-full">
                         <div className="w-full h-10 pl-4 pr-6 relative rounded-xl outline outline-1 outline-offset-[-1px] outline-amber-400 flex justify-between items-center">
                             <div className="justify-center text-Colors-Neutral-200 text-sm font-normal leading-tight truncate">
-                                TG34....mnop
+                                {truncateString(listWallets?.[0]?.eth_address, 17)}
                             </div>
                             <div className="w-3.5 h-3.5 flex-shrink-0">
                                 <div className="w-3 h-3 bg-Colors-Neutral-100" />
@@ -157,7 +217,7 @@ export default function WalletPage() {
                         </div>
                     </div>
                 </div>
-                <div className="px-6 py-4 bg-gradient-to-br from-blue-950/50 to-purple-600/50 rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] flex flex-col justify-center items-center gap-4 min-w-0">
+                <div className="px-6 py-4 bg-gradient-purple-transparent rounded-xl border border-solid border-theme-primary-300 flex flex-col justify-center items-center gap-4 min-w-0">
                     <div className="inline-flex justify-start items-center gap-2.5 w-full">
                         <img src="/ethereum.png" alt="Ethereum" className="w-4 h-4 object-cover" />
                         <div className="justify-start text-Colors-Neutral-100 text-base font-semibold uppercase leading-normal truncate">
@@ -169,43 +229,39 @@ export default function WalletPage() {
                         <div className="flex flex-col justify-start items-start gap-3 min-w-0">
                             <div className="w-full flex flex-col justify-center items-start gap-1.5">
                                 <div className="text-right justify-start text-Colors-Neutral-100 text-2xl font-bold leading-9 truncate">
-                                    $1.1234
+                                    {walletInfor?.solana_balance} SOL
                                 </div>
                                 <div className="inline-flex justify-start items-center gap-1.5 flex-wrap">
-                                    <div className="text-right justify-start text-Colors-Primary-300 text-lg font-medium leading-relaxed">
-                                        $0
+                                    <div className="text-right justify-start text-theme-primary-300 text-[16px] font-medium leading-relaxed">
+                                        ${walletInfor?.solana_balance_usd}
                                     </div>
-                                    <div className="text-right justify-start text-Colors-Primary-300 text-lg font-medium leading-relaxed">
+                                    <div className="text-right justify-start text-theme-primary-300 text-[16px] font-medium leading-relaxed">
                                         (0.00%)
                                     </div>
-                                    <div className="text-right justify-start text-Colors-Neutral-100 text-lg font-medium leading-relaxed">
+                                    <div className="text-right justify-start text-Colors-Neutral-100 text-[16px] font-medium leading-relaxed">
                                         24H
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-between items-center gap-2 w-full sm:w-auto">
+                        <div className="flex justify-end flex-1 items-center gap-3 w-full sm:w-auto">
                             <div className="flex flex-col justify-start items-center gap-1">
-                                <div data-property-1="Receive" className="w-8 h-8 relative">
-                                    <div className="w-8 h-8 left-0 top-0 absolute bg-gradient-to-br from-blue-950/50 to-purple-600/50 rounded-full border border-Colors-Neutral-700" />
-                                    <div className="w-4 h-4 left-[8px] top-[8px] absolute overflow-hidden">
-                                        <div className="w-4 h-1.5 left-[0.40px] top-[9.97px] absolute bg-Colors-Neutral-200" />
-                                        <div className="w-2 h-2.5 left-[3.75px] top-[0.57px] absolute bg-Colors-Neutral-200" />
-                                    </div>
+                                <div className="w-8 h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center top-[8px] ">
+                                    <ArrowDownToLine className="w-4 h-4" />
                                 </div>
-                                <div className="text-center text-Colors-Neutral-100 text-[10px] font-semibold leading-none">
+                                <div className="text-center text-Colors-Neutral-100 text-[10px] font-semibold ">
                                     Receive
                                 </div>
+
                             </div>
                             <div className="flex flex-col justify-start items-center gap-1">
                                 <div data-property-1="Send" className="w-8 h-8 relative">
-                                    <div className="w-8 h-8 left-0 top-0 absolute bg-gradient-to-br from-blue-950/50 to-purple-600/50 rounded-full border border-Colors-Neutral-700" />
-                                    <div className="w-4 h-4 left-[8px] top-[8px] absolute overflow-hidden">
-                                        <div className="w-4 h-1.5 left-[0.40px] top-[9.97px] absolute bg-Colors-Neutral-200" />
-                                        <div className="w-2 h-2.5 left-[3.75px] top-[0.57px] absolute bg-Colors-Neutral-200" />
+
+                                    <div className="w-8 h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center top-[8px] ">
+                                        <ArrowUpFromLine className="w-4 h-4" />
                                     </div>
                                 </div>
-                                <div className="text-center text-Colors-Neutral-100 text-[10px] font-semibold leading-none">
+                                <div className="text-center text-Colors-Neutral-100 text-[10px] font-semibold ">
                                     Send
                                 </div>
                             </div>
@@ -228,7 +284,7 @@ export default function WalletPage() {
                 </button>
             </div>
 
-            <div className="self-stretch inline-flex justify-between items-center w-full">
+            <div className="self-stretch inline-flex justify-between items-center w-full z-10">
                 <div className="flex justify-start items-center gap-2.5">
                     <div className="w-5 h-5 relative overflow-hidden">
                         <div className="w-3.5 h-3.5 left-[3px] top-[3px] absolute bg-gradient-to-r from-cyan-400 to-sky-600" />
@@ -242,7 +298,7 @@ export default function WalletPage() {
                 </div>
                 <div className="flex justify-start items-center gap-6">
                     <button
-                        onClick={handleAddWallet}
+                        onClick={() => setShowAddWallet(true)}
                         className="px-3 py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-3xl shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-blue-950 flex justify-center items-center gap-2.5"
                     >
                         <div className="w-3 h-3 relative overflow-hidden">
@@ -299,7 +355,7 @@ export default function WalletPage() {
                                 </div>
                                 <div className="w-96 inline-flex justify-start items-center gap-6">
                                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Solana Private Key</div>
+                                        <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight">Solana Private Key</div>
                                         <div className="self-stretch h-10 pl-4 pr-6 relative rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 inline-flex justify-start items-center">
                                             <div className="w-80 justify-center text-Colors-Neutral-200 text-sm font-normal leading-tight truncate">2FpwHKZhkjNej7HmBRPszJNTaSzK1JsavL5Rnwef1x2SWNJpaNib7gmoj7jxJWKCqAn7fLLE96BN9AyB2Cfr3twC</div>
                                             <div className="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 overflow-hidden">
@@ -309,7 +365,7 @@ export default function WalletPage() {
                                     </div>
                                 </div>
                                 <div className="self-stretch flex flex-col justify-start items-start gap-1">
-                                    <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Ethereum Private Key</div>
+                                    <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight">Ethereum Private Key</div>
                                     <div className="self-stretch h-10 pl-4 pr-6 relative rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 inline-flex justify-start items-center">
                                         <div className="w-80 justify-center text-Colors-Neutral-200 text-sm font-normal leading-tight truncate">2FpwHKZhkjNej7HmBRPszJNTaSzK1JsavL5Rnwef1x2SWNJpaNib7gmoj7jxJWKCqAn7fLLE96BN9AyB2Cfr3twC</div>
                                         <div className="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 overflow-hidden">
@@ -318,7 +374,7 @@ export default function WalletPage() {
                                     </div>
                                 </div>
                                 <div className="self-stretch flex flex-col justify-start items-start gap-1">
-                                    <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">BNB Private Key</div>
+                                    <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight">BNB Private Key</div>
                                     <div className="self-stretch h-10 pl-4 pr-6 relative rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 inline-flex justify-start items-center">
                                         <div className="w-80 justify-center text-Colors-Neutral-200 text-sm font-normal leading-tight truncate">2FpwHKZhkjNej7HmBRPszJNTaSzK1JsavL5Rnwef1x2SWNJpaNib7gmoj7jxJWKCqAn7fLLE96BN9AyB2Cfr3twC</div>
                                         <div className="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 overflow-hidden">
@@ -344,73 +400,55 @@ export default function WalletPage() {
 
             {/* Popup Add Wallet */}
             {showAddWallet && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div ref={addWalletRef} className="p-6 bg-neutral-900 rounded-lg shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
-                        <div className="w-96 relative inline-flex flex-col justify-start items-start gap-6">
-                            <div className="self-stretch flex flex-col justify-start items-start gap-4">
-                                <div className="self-stretch inline-flex justify-between items-center">
-                                    <div className="justify-start text-indigo-500 text-lg font-semibold uppercase leading-relaxed">add new wallet</div>
-                                    <button
-                                        onClick={handleCloseAddWallet}
-                                        className="w-5 h-5 relative overflow-hidden"
-                                    >
-                                        <div className="w-3 h-3 left-[4.17px] top-[4.16px] absolute bg-Colors-Neutral-200" />
-                                    </button>
-                                </div>
-                                <div className="w-96 inline-flex justify-start items-center gap-6">
-                                    <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Wallet Name</div>
-                                        <input
-                                            type="text"
-                                            value={walletName}
-                                            onChange={(e) => setWalletName(e.target.value)}
-                                            placeholder="Enter wallet name"
-                                            className="self-stretch h-10 pl-4 pr-6 rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 bg-transparent text-Colors-Neutral-200 text-sm font-normal leading-tight w-full"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="w-96 inline-flex justify-start items-center gap-6">
-                                    <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Wallet Nickname</div>
-                                        <input
-                                            type="text"
-                                            value={walletNickname}
-                                            onChange={(e) => setWalletNickname(e.target.value)}
-                                            placeholder="Enter wallet nickname"
-                                            className="self-stretch h-10 pl-4 pr-6 rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 bg-transparent text-Colors-Neutral-200 text-sm font-normal leading-tight w-full"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="w-96 inline-flex justify-start items-center gap-6">
-                                    <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Network</div>
-                                        <div className="self-stretch h-10 pl-4 pr-6 rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 inline-flex justify-between items-center">
-                                            <div className="flex justify-start items-center gap-2">
-                                                <img className="w-4 h-4 rounded-full" src="https://placehold.co/18x18" alt="Network icon" />
-                                                <div className="text-center justify-start text-Colors-Neutral-100 text-sm font-medium leading-tight">{selectedNetwork}</div>
-                                            </div>
-                                            <div className="w-4 h-4 relative overflow-hidden">
-                                                <div className="w-2.5 h-1.5 left-[2.50px] top-[5px] absolute bg-neutral-50" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div ref={addWalletRef} className="bg-gradient-to-br from-blue-950/90 to-purple-600/90 p-6 rounded-xl w-[400px] max-w-[90vw]">
+                        <h2 className="text-xl font-semibold text-neutral-100 mb-4">Add New Wallet</h2>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-200 mb-1">Wallet Name</label>
+                                <input
+                                    type="text"
+                                    value={walletName}
+                                    onChange={(e) => setWalletName(e.target.value)}
+                                    className="w-full px-3 py-2 bg-white/10 border border-gray-600 rounded-lg text-neutral-100 focus:outline-none focus:border-purple-500"
+                                    placeholder="Enter wallet name"
+                                />
                             </div>
-                            <div className="self-stretch inline-flex justify-center items-center gap-5">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-200 mb-1">Nickname</label>
+                                <input
+                                    type="text"
+                                    value={walletNickname}
+                                    onChange={(e) => setWalletNickname(e.target.value)}
+                                    className="w-full px-3 py-2 bg-white/10 border border-gray-600 rounded-lg text-neutral-100 focus:outline-none focus:border-purple-500"
+                                    placeholder="Enter nickname"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-200 mb-1">Network</label>
+                                <select
+                                    value={selectedNetwork}
+                                    onChange={(e) => setSelectedNetwork(e.target.value)}
+                                    className="w-full px-3 py-2 bg-white/10 border border-gray-600 rounded-lg text-neutral-100 focus:outline-none focus:border-purple-500"
+                                >
+                                    <option value="EN">English</option>
+                                    <option value="VN">Vietnamese</option>
+                                    <option value="CN">Chinese</option>
+                                </select>
+                            </div>
+                            <div className="flex justify-end gap-3 mt-6">
                                 <button
                                     onClick={handleCloseAddWallet}
-                                    className="w-24 self-stretch px-4 py-1 rounded-[30px] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-sm flex justify-center items-center gap-3"
+                                    className="px-4 py-2 text-sm font-medium text-gray-200 hover:text-neutral-100"
                                 >
-                                    <div className="justify-start text-Colors-Neutral-100 text-sm font-medium leading-none">Cancel</div>
+                                    Cancel
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        // Handle add wallet logic here
-                                        handleCloseAddWallet();
-                                    }}
-                                    className="w-24 px-4 py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-[30px] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-sm flex justify-center items-center gap-3"
+                                    onClick={handleAddWallet}
+                                    disabled={isLoading || !walletName || !walletNickname}
+                                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-neutral-100 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    <div className="justify-start text-Colors-Neutral-100 text-sm font-medium leading-none">Add Wallet</div>
+                                    {isLoading ? "Adding..." : "Add Wallet"}
                                 </button>
                             </div>
                         </div>
@@ -437,7 +475,7 @@ export default function WalletPage() {
                                 </div>
                                 <div className="w-96 inline-flex justify-start items-center gap-6">
                                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Wallet Name</div>
+                                        <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight">Wallet Name</div>
                                         <input
                                             type="text"
                                             value={walletName}
@@ -449,7 +487,7 @@ export default function WalletPage() {
                                 </div>
                                 <div className="w-96 inline-flex justify-start items-center gap-6">
                                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Solana Private Key</div>
+                                        <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight">Solana Private Key</div>
                                         <div className="self-stretch h-10 pl-4 pr-6 relative rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 inline-flex justify-start items-center">
                                             <input
                                                 type="password"
@@ -474,7 +512,7 @@ export default function WalletPage() {
                                 </div>
                                 <div className="w-96 inline-flex justify-start items-center gap-6">
                                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Wallet Nickname</div>
+                                        <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight">Wallet Nickname</div>
                                         <input
                                             type="text"
                                             value={walletNickname}
@@ -486,7 +524,7 @@ export default function WalletPage() {
                                 </div>
                                 <div className="w-96 inline-flex justify-start items-center gap-6">
                                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-white text-sm font-normal leading-tight">Network</div>
+                                        <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight">Network</div>
                                         <div className="self-stretch h-10 pl-4 pr-6 rounded-xl outline outline-1 outline-offset-[-1px] outline-indigo-500 inline-flex justify-between items-center">
                                             <div className="flex justify-start items-center gap-2">
                                                 <img className="w-4 h-4 rounded-full" src="https://placehold.co/18x18" alt="Network icon" />
@@ -522,6 +560,13 @@ export default function WalletPage() {
             )}
 
             {/* Popup Import Wallet */}
+
+            {/* Toast Notification */}
+            {showToast && (
+                <div className="fixed bottom-4 right-4 bg-gradient-to-r from-purple-600 to-blue-600 text-neutral-100 px-6 py-3 rounded-lg shadow-lg z-50">
+                    {toastMessage}
+                </div>
+            )}
         </div>
     );
 }
