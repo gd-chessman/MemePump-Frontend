@@ -29,19 +29,6 @@ export default function TokenInfo() {
     queryFn: () => getTokenInforByAddress(address),
   });
 
-  // // Add effect to emit marketCapUpdate event when tokenInfor is loaded/updated
-  // useEffect(() => {
-  //   if (tokenInfor?.marketCap && address) {
-  //     const marketCapEvent = new CustomEvent('marketCapUpdate', {
-  //       detail: {
-  //         marketCap: tokenInfor.marketCap,
-  //         tokenAddress: address,
-  //         timestamp: new Date().toISOString()
-  //       }
-  //     });
-  //     window.dispatchEvent(marketCapEvent);
-  //   }
-  // }, [tokenInfor?.marketCap, address]);
 
   const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
     queryKey: ["myWishlist"],
@@ -53,68 +40,65 @@ export default function TokenInfo() {
   const [socket, setSocket] = useState<any>(null);
   const [wsTokenInfo, setWsTokenInfo] = useState<any>(null);
   const [isConnected, setIsConnected] = useState(false);
-  
+  const [marketCap, setMarketCap] = useState<number>(0);
+
+  // Only listen for marketCap updates from chart
+  useEffect(() => {
+    const handleMarketCapUpdate = (event: CustomEvent) => {
+      const { marketCap: newMarketCap } = event.detail;
+      setMarketCap(newMarketCap);
+      console.log("FIX MC newMarketCap", newMarketCap);
+    };
+
+    window.addEventListener('marketCapUpdate', handleMarketCapUpdate as EventListener);
+    return () => {
+      window.removeEventListener('marketCapUpdate', handleMarketCapUpdate as EventListener);
+    };
+  }, []);
+
   useEffect(() => {
     // Reset state when address changes
     setWsTokenInfo(null);
 
-    // Initialize socket connection
+    // Initialize socket connection for other data
     const socketInstance = io(`${process.env.NEXT_PUBLIC_API_URL}/token-info`, {
       path: '/socket.io',
       transports: ['websocket'],
     });
 
     socketInstance.on('connect', () => {
-      console.log('Connected to WebSocket server');
       setIsConnected(true);
-      
-      // Auto subscribe if address exists
       if (address) {
-        console.log('Subscribing to token:', address);
         socketInstance.emit('subscribe', { tokenAddress: address });
       }
     });
 
     socketInstance.on('disconnect', () => {
-      console.log('Disconnected from WebSocket server');
       setIsConnected(false);
     });
 
     socketInstance.on('tokenInfo', (data: any) => {
-      // Only update state if the data is for current address
       if (data?.tokenAddress === address) {
         setWsTokenInfo(data);
-        
-        // Emit custom event when marketCap updates
-        const marketCapEvent = new CustomEvent('marketCapUpdate', {
-          detail: {
-            marketCap: data?.marketCap?.usd || tokenInfor?.marketCap,
-            tokenAddress: address,
-            timestamp: new Date().toISOString()
-          }
-        });
-        window.dispatchEvent(marketCapEvent);
       }
     });
 
     setSocket(socketInstance);
 
-    // Cleanup on component unmount or address change
     return () => {
       if (socketInstance && address) {
-        // Unsubscribe from current token before disconnecting
         socketInstance.emit('unsubscribe', { tokenAddress: address });
       }
       socketInstance.disconnect();
     };
-  }, [address]); // Only depend on address changes
+  }, [address]);
 
   const dataToken = {
     name: tokenInfor?.name,
     image: tokenInfor?.logoUrl,
     symbol: tokenInfor?.symbol,
     address: tokenInfor?.address,
-    cap: wsTokenInfo?.marketCap?.usd || tokenInfor?.marketCap,
+    cap: marketCap || wsTokenInfo?.marketCap?.usd || tokenInfor?.marketCap || 0,
     aDayVolume: tokenInfor?.volume24h,
     liquidity: wsTokenInfo?.liquidity?.usd || tokenInfor?.liquidity,
     holders: wsTokenInfo?.holders || tokenInfor?.holders,
@@ -153,7 +137,7 @@ export default function TokenInfo() {
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-              <img src={tokenInfor?.logoUrl || ''} width={40} height={40} alt="Token logo" className="rounded-full" />
+              <img src={tokenInfor?.logoUrl || '/placeholder.png'} width={40} height={40} alt="Token logo" className="rounded-full" />
             </div>
             <div>
               <h2 className="font-semibold text-neutral-100 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="text-neutral-300 text-sm font-normal">{tokenInfor?.symbol}</span></h2>
@@ -227,7 +211,7 @@ export default function TokenInfo() {
           <div className=" border-linear-200 rounded-lg p-[10px] flex flex-col items-center justify-center">
             <div className="text-xs text-neutral-100 font-semibold mb-1">Holders</div>
             <div className="font-medium text-sm text-neutral-100 flex items-center">
-              ${formatNumberWithSuffix(dataToken.holders || 0)}
+              {formatNumberWithSuffix(dataToken.holders || 0)}
               {wsTokenInfo?.holders && (
                 <span className="text-green-400 text-xs ml-1">●</span>
               )}

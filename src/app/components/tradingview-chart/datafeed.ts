@@ -3,6 +3,8 @@ import { io, Socket } from 'socket.io-client';
 
 type ResolutionString = '1s' | '5s' | '15s' | '1' | '5' | '1h' | '4h' | '1D' | '1W' | '1MN';
 
+let lastCloseMarketCap: number | null = null;
+
 // Function to fetch data from Solana Tracker API
 const fetchChartData = async (tokenAddress: string, from: number, to: number, marketCap: boolean = false, resolution: ResolutionString) => {
   try {
@@ -19,7 +21,7 @@ const fetchChartData = async (tokenAddress: string, from: number, to: number, ma
       headers
     });
     const data = await response.json();
-    return data.data.oclhv.map((item: any) => ({
+    const bars = data.data.oclhv.map((item: any) => ({
       time: item.time * 1000,
       open: item.open,
       high: item.high,
@@ -27,6 +29,14 @@ const fetchChartData = async (tokenAddress: string, from: number, to: number, ma
       close: item.close,
       volume: item.volume,
     }));
+
+    // Log giá close cuối cùng
+    if (bars.length > 0) {
+      console.log('Last close price:', bars[bars.length - 1].close);
+      lastCloseMarketCap = bars[bars.length - 1].close;
+    }
+
+    return bars;
   } catch (error) {
     console.error('Error fetching chart data:', error);
     return [];
@@ -67,30 +77,8 @@ export class MockDatafeed {
   private subscribers: Map<string, (bar: any) => void> = new Map();
   private isConnected: boolean = false;
   private currentMarketCap: number | undefined;
-  private handleMarketCapUpdate = (event: Event) => {
-    const customEvent = event as CustomEvent;
-    const { marketCap, tokenAddress } = customEvent.detail;
-    
-    if (tokenAddress === this.tokenAddress) {
-      this.currentMarketCap = marketCap;
-      // Emit update to all subscribers when market cap changes
-      if (this.showMarketCap && this.currentMarketCap) {
-        // We need the last price data to calculate totalSupply
-        // So we'll just update the close price for now
-        this.subscribers.forEach((callback) => {
-          callback({
-            time: Date.now(),
-            close: this.currentMarketCap,
-            // Keep other values unchanged until we get new chart data
-            open: undefined,
-            high: undefined,
-            low: undefined,
-            volume: undefined
-          });
-        });
-      }
-    }
-  };
+  private totalSupply: number | null = null;
+  private readonly MARKET_CAP_EVENT = 'marketCapUpdate';
 
   constructor(symbol: string, tokenAddress: string, resolution: ResolutionString, showMarketCap: boolean = false) {
     this.symbol = symbol;
@@ -98,11 +86,31 @@ export class MockDatafeed {
     this.resolution = resolution;
     this.showMarketCap = showMarketCap;
     this.initializeWebSocket();
-    this.initializeMarketCapListener();
   }
 
-  private initializeMarketCapListener() {
-    window.addEventListener('marketCapUpdate', this.handleMarketCapUpdate as EventListener);
+  // Add method to update token address
+  public updateTokenAddress(newTokenAddress: string) {
+    if (this.tokenAddress === newTokenAddress) {
+      return;
+    }
+
+    // Unsubscribe from old token
+    if (this.socket && this.isConnected) {
+      this.socket.emit('unsubscribeFromChart', { tokenAddress: this.tokenAddress });
+    }
+
+    // Update token address
+    this.tokenAddress = newTokenAddress;
+    
+    // Reset total supply for market cap calculation
+    this.totalSupply = null;
+    
+    // Reinitialize WebSocket with new token
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
+    this.initializeWebSocket();
   }
 
   private initializeWebSocket() {
@@ -129,16 +137,32 @@ export class MockDatafeed {
     });
 
     this.socket.on('chartUpdate', (data) => { 
-      if (this.showMarketCap && this.currentMarketCap) {
-        // Calculate totalSupply to properly scale other values
-        const totalSupply = this.currentMarketCap / data.data.close;
+      console.log("FIX CHART chartUpdate tokenAddress", data.tokenAddress);
+      if (this.showMarketCap && lastCloseMarketCap) {
+        // Calculate totalSupply only once when it's null
+        if (this.totalSupply === null) {
+          this.totalSupply = lastCloseMarketCap / data.data.close;
+        }
+        
         const updatedData = {
           ...data.data,
-          close: this.currentMarketCap,
-          high: data.data.high * totalSupply,
-          low: data.data.low * totalSupply,
-          open: data.data.open * totalSupply,
+          close: data.data.close * this.totalSupply,
+          high: data.data.high * this.totalSupply,
+          low: data.data.low * this.totalSupply,
+          open: data.data.open * this.totalSupply,
         };
+
+        // Dispatch marketCap event
+        const marketCapEvent = new CustomEvent(this.MARKET_CAP_EVENT, {
+          detail: {
+            tokenAddress: this.tokenAddress,
+            marketCap: updatedData.close,
+            timestamp: updatedData.time,
+            isInitial: this.totalSupply === lastCloseMarketCap / data.data.close
+          }
+        });
+        window.dispatchEvent(marketCapEvent);
+
         this.subscribers.forEach((callback) => {
           callback(updatedData);
         });
@@ -210,7 +234,16 @@ export class MockDatafeed {
 
   async getBars(symbolInfo: any, resolution: ResolutionString, periodParams: any, onHistoryCallback: (bars: any[], meta: any) => void, onErrorCallback: (error: any) => void) {
     try {
-      const { from, to } = periodParams;
+      const { from, to, firstDataRequest } = periodParams;
+      
+      // Chỉ lấy dữ liệu ở lần gọi đầu tiên
+      if (!firstDataRequest) {
+        onHistoryCallback([], {
+          noData: true,
+        });
+        return;
+      }
+
       const currentTime = Date.now();
 
       if (this.isLoading || (currentTime - this.lastRequestTime < this.requestTimeout)) {
@@ -225,6 +258,20 @@ export class MockDatafeed {
 
       const apiResolution = convertResolution(resolution);
       const bars = await fetchChartData(this.tokenAddress, from, to, this.showMarketCap, apiResolution);
+      
+      // Dispatch marketCap event for initial data if showing market cap
+      if (this.showMarketCap && bars.length > 0) {
+        const lastBar = bars[bars.length - 1];
+        const marketCapEvent = new CustomEvent(this.MARKET_CAP_EVENT, {
+          detail: {
+            tokenAddress: this.tokenAddress,
+            marketCap: lastBar.close,
+            timestamp: lastBar.time,
+            isInitial: true
+          }
+        });
+        window.dispatchEvent(marketCapEvent);
+      }
       
       this.isLoading = false;
       onHistoryCallback(bars, {
@@ -249,14 +296,20 @@ export class MockDatafeed {
   unsubscribeBars(subscriberUID: string) {
     this.subscribers.delete(subscriberUID);
     
-    // If no more subscribers, disconnect the socket and remove event listener
+    // If no more subscribers, disconnect the socket
     if (this.subscribers.size === 0 && this.socket) {
       this.socket.emit('unsubscribeFromChart', { tokenAddress: this.tokenAddress });
       this.socket.disconnect();
       this.socket = null;
       this.isConnected = false;
-      window.removeEventListener('marketCapUpdate', this.handleMarketCapUpdate as EventListener);
+      console.log("FIX CHART unsubscribeBars disconnect", subscriberUID);
     }
+    // console.log("Fix WS unsubscribeBars");
+  }
+
+  // Add public method to get event name
+  public getMarketCapEventName(): string {
+    return this.MARKET_CAP_EVENT;
   }
 }
 

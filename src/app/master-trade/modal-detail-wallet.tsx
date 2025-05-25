@@ -123,6 +123,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
     queryFn: () => getGroupHistories(checkMasterData?.groupConnect, lang),
     enabled: Boolean(checkMasterData?.groupConnect),
   });
+  console.log("checkMasterData", checkMasterData)
 
   const { message: wsMessage } = useWsChatMessage({
     chatType: "group",
@@ -563,61 +564,61 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
           {activeTab === "CHAT" && (
             <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm flex-1 flex flex-col  ">
               {/* Chat Messages */}
-              <div className="flex-1 overflow-y-auto px-4 space-y-4 p-4">
-                {messages.map((msg) => (
-                  <MasterMessage
-                    key={msg.id}
-                    message={{
-                      ch_id: msg.id,
-                      ch_content: msg.text,
-                      ch_wallet_address: msg.sender.name,
-                      ch_is_master: msg.sender.isCurrentUser,
-                      ch_lang: msg.country,
-                      createdAt: msg.timestamp instanceof Date ? msg.timestamp.toISOString() : new Date(msg.timestamp).toISOString(),
-                      chat_id: msg.id,
-                      chat_type: "group",
-                      ch_status: "send",
-                      country: msg.country,
-                      nick_name: msg.sender.name,
-                      _id: msg.id
-                    }}
-                  />
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
+              {checkMasterData?.groupConnect && checkMasterData?.isConnect ? (
+                <>
+                  <div className="flex-1 overflow-y-auto px-4 space-y-4 p-4">
+                    {messages.map((msg) => (
+                      <MasterMessage
+                        key={msg.id}
+                        message={{
+                          ch_id: msg.id,
+                          ch_content: msg.text,
+                          ch_wallet_address: msg.sender.name,
+                          ch_is_master: msg.sender.isCurrentUser,
+                          ch_lang: msg.country,
+                          createdAt: msg.timestamp instanceof Date ? msg.timestamp.toISOString() : new Date(msg.timestamp).toISOString(),
+                          chat_id: msg.id,
+                          chat_type: "group",
+                          ch_status: "send",
+                          country: msg.country,
+                          nick_name: msg.sender.name,
+                          _id: msg.id
+                        }}
+                      />
+                    ))}
+                    <div ref={messagesEndRef} />
+                  </div>
 
-              {/* Chat Input */}
-              <div className="p-4 border-t border-blue-500/30">
-                <div className="flex items-center gap-2">
-                  <div className="relative flex-1">
-                    <input
-                      type="text"
-                      placeholder="Type a message..."
-                      value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault()
-                          handleSendMessage()
-                        }
-                      }}
-                      className="w-full py-2 px-4 bg-[#111111] rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-xs placeholder:text-neutral-400 text-sm"
-                    />
-                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                  {/* Chat Input */}
+                  <div className="border-t border-blue-500/10 p-4">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={inputMessage}
+                        onChange={(e) => setInputMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                        placeholder="Type a message..."
+                        className="flex-1 bg-theme-black-1/2 border border-blue-500/10 rounded-lg px-4 py-2 text-sm text-neutral-100 focus:outline-none focus:border-blue-500"
+                      />
                       <button
                         onClick={handleSendMessage}
                         disabled={!inputMessage.trim()}
-                        className={`p-2 rounded-full ${!inputMessage.trim()
-                            ? "bg-gray-700 text-gray-500"
-                            : "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90"
-                          } transition-all duration-200`}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Send className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
+                </>
+              ) : (
+                <div className="flex-1 flex items-center justify-center text-neutral-400">
+                  {!checkMasterData?.groupConnect ? (
+                    <p>{t("Hiện tại bạn chưa kết nối với nhóm nào")}</p>
+                  ) : !checkMasterData?.isConnect ? (
+                    <p>{t("Hiện tại bạn chưa kết nối với nhóm nào")}</p>
+                  ) : null}
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>

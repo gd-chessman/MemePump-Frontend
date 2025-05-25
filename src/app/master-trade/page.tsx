@@ -610,8 +610,8 @@ export default function MasterTradeTable() {
                                                     Connect
                                                 </button>
                                             )}
-                                            {item.status === "connect" && (
-                                                <>
+                                            {(item.status === "connect" || item.status === "pause") && (
+                                                <div className="flex gap-1" >
                                                     <button
                                                         onClick={() => {
                                                             setShowDetailModal(true)
@@ -637,9 +637,9 @@ export default function MasterTradeTable() {
                                                     >
                                                         Disconnect
                                                     </button>
-                                                </>
+                                                </div>
                                             )}
-                                            {(item.status === "disconnect" || item.status === "pause") && (
+                                            {(item.status === "disconnect") && (
                                                 <button
                                                     onClick={() => {
                                                         handleMemberConnectStatus(item, "connect")
