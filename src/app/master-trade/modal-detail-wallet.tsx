@@ -106,6 +106,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
   const { data: checkMasterData } = useQuery({
     queryKey: ["checkMaster"],
     queryFn: () => checkMaster(info?.address || ""),
+    enabled: Boolean(isOpen && info?.address),
   });
 
   const { data: ordersMyWallet, refetch, isLoading, error } = useQuery({
@@ -525,7 +526,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
               </div>
 
               {/* Pagination */}
-              {!isLoading && !error && ordersMyWallet?.data?.trades?.length > 0 && (
+              {/* {!isLoading && !error && ordersMyWallet?.data?.trades?.length > 0 && (
                 <div className="flex justify-between items-center mt-4 px-4">
                   <div className="text-sm text-gray-400">
                     Showing {((paginationInfo.currentPage - 1) * Number(paginationInfo.itemsPerPage)) + 1} to {Math.min(paginationInfo.currentPage * Number(paginationInfo.itemsPerPage), paginationInfo.totalItems)} of {paginationInfo.totalItems} entries
@@ -555,7 +556,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                     </button>
                   </div>
                 </div>
-              )}
+              )} */}
             </>
           )}
 

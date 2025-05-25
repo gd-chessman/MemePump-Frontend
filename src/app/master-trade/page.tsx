@@ -161,7 +161,7 @@ export default function MasterTradeTable() {
         queryFn: getMasters,
     });
 
-    const { data: masterDetails = [], isLoading: isLoadingDetails } = useQuery({
+    const { data: masterDetails = [], isLoading: isLoadingDetails, refetch: refetchMasterDetails } = useQuery({
         queryKey: ["master-trading/details", masterTraders.map((t: Trader) => t.solana_address || t.eth_address)],
         queryFn: async () => {
             const details = await Promise.all(
@@ -289,13 +289,28 @@ export default function MasterTradeTable() {
         // Thực hiện logic kết nối ở đây
     }
     const handleMemberConnect = async (inforWallet?: any) => {
-        console.log("inforWallet dddddd", inforWallet)
         await MasterTradingService.connectMaster({
             option_limit: "price",
             price_limit: "0.01",
             master_wallet_address: inforWallet.address,
         });
         refetchMasterTraders()
+    }
+    const handleMemberConnectStatus= async (inforWallet?: any, status?: string) => {
+        try {
+            await MasterTradingService.memberSetConnect({
+                master_address: inforWallet.address,
+                master_id: inforWallet.id,
+                status: status,
+            });
+            // Refetch both queries to ensure UI updates
+            await Promise.all([
+                refetchMasterTraders(),
+                refetchMasterDetails()
+            ]);
+        } catch (error) {
+            console.error("Error pausing master:", error);
+        }
     }
 
     const handleDisconnect = (id: string) => {
@@ -608,7 +623,7 @@ export default function MasterTradeTable() {
                                                     </button>
                                                     <button
                                                         onClick={() => {
-                                                            handleMemberConnect(item)
+                                                            handleMemberConnectStatus(item, "pause")
                                                         }}
                                                         className={`px-3 py-1 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs`}
                                                     >
@@ -616,7 +631,7 @@ export default function MasterTradeTable() {
                                                     </button>
                                                     <button
                                                         onClick={() => {
-                                                            handleMemberConnect(item)
+                                                            handleMemberConnectStatus(item, "disconnect")
                                                         }}
                                                         className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
                                                     >
@@ -627,7 +642,7 @@ export default function MasterTradeTable() {
                                             {(item.status === "disconnect" || item.status === "pause") && (
                                                 <button
                                                     onClick={() => {
-                                                        handleMemberConnect(item)
+                                                        handleMemberConnectStatus(item, "connect")
                                                     }}
                                                     className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
                                                 >
