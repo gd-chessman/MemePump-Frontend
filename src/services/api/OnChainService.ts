@@ -61,3 +61,15 @@ export const getOrderMyHistories = async (address: string, walletAddress: string
     return [];
   }
 }
+
+export const getOrdersMyWallet = async (walletAddress: string, page: number = 1) => {
+  try {
+    console.log("API Request URL:", `/on-chain/wallet/${walletAddress}/trades?limit=50&page=${page}`);
+    const temp = await axiosClient.get(`/on-chain/wallet/${walletAddress}/trades?limit=50&page=${page}`);
+    console.log("API Response:", temp.data);
+    return temp.data;
+  } catch (error) {
+    console.error("API Error:", error);
+    return [];
+  }
+}

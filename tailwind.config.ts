@@ -26,6 +26,7 @@ const config: Config = {
         // Theme Colors
         'theme': {
           'primary': {
+            '100': '#15DFFD', // Light blue
             '300': '#15DFFD', // Light blue
             '400': '#02B7D2', // Primary blue
             '500': '#112D60', // Dark blue
@@ -34,6 +35,7 @@ const config: Config = {
             '200': '#BA72EA', // Light purple
             '300': '#761BB3', // Medium purple
             '400': '#8833EE', // Bright purple
+            '500': '#972BDF', // Dark blue
           },
           'neutral': {
             '100': '#eeeeee',
@@ -56,6 +58,7 @@ const config: Config = {
           'yellow': {
               '100': '#fdfce5',
               '200': '#DFB400',
+              '300': '#FFDB43',
             },
             'black': {
               '1/2': 'rgba(0, 0, 0, 0.50)',
@@ -257,6 +260,18 @@ const config: Config = {
           background: `linear-gradient(90deg, ${theme('colors.theme.primary.500')} 0%, ${theme('colors.theme.gradient.linear.apha')} 50%, ${theme('colors.theme.primary.500')} 100%)`,
           backgroundSize: '200% 100%',
           backgroundPosition: '0% 0%',
+        },
+        '.bg-gradient-overlay': {
+          background: 'linear-gradient(93deg, rgba(17, 45, 96, 0.50) 2.14%, rgba(136, 51, 238, 0.50) 98.03%)',
+        },
+        '.bg-gradient-blue-transparent': {
+          background: 'linear-gradient(0deg, rgba(85, 88, 255, 0.20) 0%, rgba(0, 192, 255, 0.20) 100%)',
+        },
+        '.bg-gradient-yellow-transparent': {
+          background: 'linear-gradient(93deg, rgba(255, 222, 0, 0.20) 2.14%, rgba(66, 53, 1, 0.20) 98.03%)',
+        },
+        '.bg-gradient-purple-transparent': {
+          background: 'linear-gradient(93deg, rgba(17, 45, 96, 0.50) 2.14%, rgba(136, 51, 238, 0.50) 98.03%)',
         },
       })
     }),

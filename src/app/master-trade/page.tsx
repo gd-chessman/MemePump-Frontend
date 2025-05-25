@@ -9,6 +9,7 @@ import { MasterTradingService } from "@/services/api"
 import ConnectToMasterModal from "../components/connect-master-trade-modal"
 import { truncateString } from "@/utils/format"
 import DetailMasterModal from "./modal-detail-wallet"
+import { getInforWallet } from "@/services/api/TelegramWalletService"
 
 // Định nghĩa các kiểu dữ liệu
 type TradeStatus = "Not Connected" | "connect" | "disconnect" | "pause" | "pending" | "block"
@@ -47,6 +48,7 @@ interface Trader {
     lastTime?: string;
     type?: string;
     connection_status?: TradeStatus;
+    info?: any;
 }
 
 interface MasterDetail {
@@ -93,10 +95,11 @@ export default function MasterTradeTable() {
     const [activeFilter, setActiveFilter] = useState<FilterType>("All")
     const [searchQuery, setSearchQuery] = useState("")
     const [showConnectModal, setShowConnectModal] = useState<string>("")
+    const [infoWallet, setInfoWallet] = useState<any>(null)
     const [inforWallet, setInforWallet] = useState<any>(null)
     const [showDetailModal, setShowDetailModal] = useState<boolean>(false)
-    const [selectedAddress, setSelectedAddress] = useState<string>("")
     const [copyNotification, setCopyNotification] = useState<{ show: boolean; address: string }>({ show: false, address: "" })
+    const [isLoading, setIsLoading] = useState(true)
     const [combinedMasterData, setCombinedMasterData] = useState<(Trader & MasterDetail)[]>([])
     const router = useRouter()
 
@@ -105,6 +108,10 @@ export default function MasterTradeTable() {
         // Multiply by 100, round up, then divide by 100 to get 2 decimal places
         return Math.ceil(value * 100) / 100;
     };
+    const { data: myWalletInfor, refetch } = useQuery({
+        queryKey: ["wallet-infor"],
+        queryFn: getInforWallet,
+    });
 
     const formatLastTime = (timestamp: string | undefined | null): string => {
         if (!timestamp) return "updating";
@@ -154,17 +161,19 @@ export default function MasterTradeTable() {
         queryFn: getMasters,
     });
 
-    const { data: masterDetails = [] } = useQuery({
+    const { data: masterDetails = [], isLoading: isLoadingDetails, refetch: refetchMasterDetails } = useQuery({
         queryKey: ["master-trading/details", masterTraders.map((t: Trader) => t.solana_address || t.eth_address)],
         queryFn: async () => {
             const details = await Promise.all(
                 masterTraders.map(async (trader: Trader) => {
                     const address = trader.solana_address || trader.eth_address;
-                    const status = trader.connection_status;
+                    console.log("trader.connection_status", trader.connection_status)
                     if (!address) return null;
                     try {
                         const data = await getMasterById(address);
-                        return { ...data.historic.summary, address, lastTime: data?.pnl_since };
+                        console.log("data", data)
+                        const statusConnection = trader.connection_status === "connect" ? data : null;
+                        return { ...data.historic.summary, address, lastTime: data?.pnl_since, info: statusConnection};
                     } catch (error) {
                         console.error(`Error fetching details for ${address}:`, error);
                         return null;
@@ -195,8 +204,16 @@ export default function MasterTradeTable() {
             }).filter(Boolean); // Remove any null entries
 
             setCombinedMasterData(combined);
+            setIsLoading(false);
         }
     }, [masterTraders, masterDetails]);
+
+    // Update loading state when either query is loading
+    useEffect(() => {
+        if (isLoadingMasters || isLoadingDetails) {
+            setIsLoading(true);
+        }
+    }, [isLoadingMasters, isLoadingDetails]);
 
     // Update tradeData to use combinedMasterData instead of masterDetails
     const tradeData = useMemo(() => {
@@ -214,6 +231,7 @@ export default function MasterTradeTable() {
                     losses: trader["7d"]?.losses ?? 0
                 },
                 lastTime: formatLastTime(trader.lastTime),
+                info: trader?.info,
                 type: trader.type || "NORMAL" as TradeType,
                 status: (trader.connection_status ?? "Not Connected") as TradeStatus
             };
@@ -261,23 +279,38 @@ export default function MasterTradeTable() {
     }
 
     // Xử lý các hành động
-    const handleConnect = (address: string, type?: string, inforWallet?: any) => {
-
-        if (type === "NORMAL") {
-            setShowConnectModal(address)
+    const handleConnect = (inforWallet?: any) => {
+        console.log("inforWallet", inforWallet)
+        if (inforWallet.type === "normal") {
+            setShowConnectModal(inforWallet.address)
         } else {
             handleMemberConnect(inforWallet)
         }
         // Thực hiện logic kết nối ở đây
     }
-    const handleMemberConnect = async (inforWallet?: any, status?: string) => {
-        console.log("inforWallet dddddd", inforWallet)
-        await MasterTradingService.memberSetConnect({
-            master_id: inforWallet.id,
-            status: status,
-            master_address: inforWallet.address,
+    const handleMemberConnect = async (inforWallet?: any) => {
+        await MasterTradingService.connectMaster({
+            option_limit: "price",
+            price_limit: "0.01",
+            master_wallet_address: inforWallet.address,
         });
         refetchMasterTraders()
+    }
+    const handleMemberConnectStatus= async (inforWallet?: any, status?: string) => {
+        try {
+            await MasterTradingService.memberSetConnect({
+                master_address: inforWallet.address,
+                master_id: inforWallet.id,
+                status: status,
+            });
+            // Refetch both queries to ensure UI updates
+            await Promise.all([
+                refetchMasterTraders(),
+                refetchMasterDetails()
+            ]);
+        } catch (error) {
+            console.error("Error pausing master:", error);
+        }
     }
 
     const handleDisconnect = (id: string) => {
@@ -426,7 +459,7 @@ export default function MasterTradeTable() {
                         )}
                     </div>
 
-                    {masterTraders.length > 0 && (
+                    {myWalletInfor?.role !== "member" && (
                         <button className="w-full max-w-[400px] create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed mx-auto flex gap-2 text-xs" onClick={() => router.push("/master-trade/manage")}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -451,7 +484,7 @@ export default function MasterTradeTable() {
             </div>
 
             {/* Bảng dữ liệu */}
-            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
+            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
                 <table className="w-full text-neutral-100">
                     <thead>
                         <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
@@ -497,7 +530,7 @@ export default function MasterTradeTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {isLoadingMasters ? (
+                        {isLoading ? (
                             // Show 5 skeleton rows while loading
                             Array(5).fill(0).map((_, index) => (
                                 <TableSkeleton key={index} />
@@ -548,7 +581,7 @@ export default function MasterTradeTable() {
                                     </td>
                                     <td className={`${styleTextRow} text-xs`}>{item.lastTime}</td>
                                     <td className={`${styleTextRow}`}>
-                                        {item.type === "VIP" ? (
+                                        {item.type === "vip" ? (
                                             <div className="flex items-center text-theme-yellow-200 text-xs">
                                                 <Crown className="h-4 w-4 mr-1" />
                                                 VIP
@@ -569,7 +602,7 @@ export default function MasterTradeTable() {
                                             {item.status === "Not Connected" && (
                                                 <button
                                                     onClick={() => {
-                                                        handleConnect(item.address, item.type, item)
+                                                        handleConnect(item)
                                                         setInforWallet(getTraderDetails(item.address))
                                                     }}
                                                     className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
@@ -577,21 +610,12 @@ export default function MasterTradeTable() {
                                                     Connect
                                                 </button>
                                             )}
-                                            {item.status === "connect" && (
-                                                <>
-                                                    <button
-                                                        onClick={() => {
-                                                            handlePause(item.address)
-                                                            setInforWallet(getTraderDetails(item.address))
-                                                        }}
-                                                        className={`px-3 py-1 ${blueBg} rounded-full transition-colors text-xs`}
-                                                    >
-                                                        Chat
-                                                    </button>
+                                            {(item.status === "connect" || item.status === "pause") && (
+                                                <div className="flex gap-1" >
                                                     <button
                                                         onClick={() => {
                                                             setShowDetailModal(true)
-                                                            setSelectedAddress(item.address)
+                                                            setInfoWallet(item)
                                                         }}
                                                         className={`px-3 py-1 ${blueBg} rounded-full transition-colors text-xs`}
                                                     >
@@ -599,7 +623,7 @@ export default function MasterTradeTable() {
                                                     </button>
                                                     <button
                                                         onClick={() => {
-                                                            handleMemberConnect(item, "pause")
+                                                            handleMemberConnectStatus(item, "pause")
                                                         }}
                                                         className={`px-3 py-1 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs`}
                                                     >
@@ -607,18 +631,18 @@ export default function MasterTradeTable() {
                                                     </button>
                                                     <button
                                                         onClick={() => {
-                                                            handleMemberConnect(item, "disconnect")
+                                                            handleMemberConnectStatus(item, "disconnect")
                                                         }}
                                                         className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
                                                     >
                                                         Disconnect
                                                     </button>
-                                                </>
+                                                </div>
                                             )}
-                                            {(item.status === "disconnect" || item.status === "pause") && (
+                                            {(item.status === "disconnect") && (
                                                 <button
                                                     onClick={() => {
-                                                        handleMemberConnect(item, "connect")
+                                                        handleMemberConnectStatus(item, "connect")
                                                     }}
                                                     className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
                                                 >
@@ -633,7 +657,7 @@ export default function MasterTradeTable() {
                         )}
                     </tbody>
                 </table>
-                {isLoadingMasters && (
+                {isLoading && (
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
                         <div className="flex flex-col items-center gap-2">
                             <Loader2 className="h-8 w-8 animate-spin text-theme-primary-300" />
@@ -653,7 +677,7 @@ export default function MasterTradeTable() {
             <DetailMasterModal
                 isOpen={showDetailModal}
                 onClose={() => setShowDetailModal(false)}
-                address={selectedAddress}
+                info={infoWallet}
             />
         </div>
     )

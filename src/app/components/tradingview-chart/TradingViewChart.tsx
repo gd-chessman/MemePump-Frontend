@@ -74,13 +74,15 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     });
   };
 
+  console.log("tokenInfor", tokenInfor);
+
   useEffect(() => {
-    if (!isScriptLoaded || !containerRef.current || !tokenInfor?.symbol) return;
+    if (!isScriptLoaded || !containerRef.current || !tokenInfor ) return;
 
     const widget = new window.TradingView.widget({
-      symbol: tokenInfor?.symbol,
+      symbol: tokenInfor?.symbol || "UNKNOWN",
       // @ts-expect-error: Suppress type error because MockDatafeed is compatible at runtime
-      datafeed: new MockDatafeed(tokenInfor?.symbol, address || '', interval, showMarketCap),
+      datafeed: new MockDatafeed(tokenInfor?.symbol || "UNKNOWN", address || '', interval, showMarketCap),
       // @ts-expect-error: Suppress type error because MockDatafeed is compatible at runtime
       interval: interval,
       container: containerId,
@@ -162,7 +164,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         widgetRef.current.remove();
       }
     };
-  }, [isScriptLoaded, containerId, lang, theme, showMarketCap, tokenInfor]);
+  }, [isScriptLoaded, containerId, lang, theme, showMarketCap, tokenInfor, address ]);
 
   return (
     <div 

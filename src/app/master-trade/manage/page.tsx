@@ -697,7 +697,7 @@ export default function MasterTradeInterface() {
             </div>
             <div className="relative">
               {showGroupDropdown && (
-                <div className="absolute top-10 right-0 mt-2 w-64 bg-theme-neutral-1000 bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-10">
+                <div className="absolute top-10 right-0 mt-2 w-64 bg-theme-neutral-1000 bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-30">
                   <div className="p-2">
                     <div className="relative mb-2">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
