@@ -876,7 +876,7 @@ export default function CreateCoinForm() {
                             onClick={() => router.push(`/trading?address=${coin.address}`)}
                             className="linear-gradient-light dark:linear-gradient-connect hover:border py-2 px-5 border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 rounded-full text-xs"
                           >
-                            {t('createCoin.myCoins.trade')}
+                            {t('createCoin.myCoins.trade')} 
                           </button>
                         </div>
                       </div>

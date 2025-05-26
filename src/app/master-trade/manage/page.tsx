@@ -508,13 +508,7 @@ export default function MasterTradeInterface() {
             >
               <span className={`${activeGroupTab === 'Off' ? 'gradient-hover ' : ''}`}>Off ({offGroupsCount})</span>
             </button>
-            <button
-              onClick={() => setActiveGroupTab("Delete")}
-              className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeGroupTab === "Delete"
-                ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
-            >
-              <span className={`${activeGroupTab === 'Delete' ? 'gradient-hover ' : ''}`}>Delete ({deleteGroupsCount})</span>
-            </button>
+          
           </div>
 
           {/* Bảng cho tab On */}
@@ -678,7 +672,7 @@ export default function MasterTradeInterface() {
             </button>
             <button
               onClick={() => setActiveTab("Block")}
-              className={`h-min rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeTab === "Pending" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
+              className={`h-min rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeTab === "Block" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
             >
               <span className={`${activeTab === 'Block' ? 'gradient-hover ' : ''}`}>Block ({blockedCount})</span>
             </button>
@@ -856,7 +850,8 @@ export default function MasterTradeInterface() {
       </div>
 
       {/* Phần chat */}
-      <div className="z-10 w-1/4 flex flex-col gap-6 justify-end items-end ">
+      <div className="z-10 w-1/4 flex flex-col gap-6
+       items-end ">
         <button className="w-fit create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-xs items-center justify-center " onClick={() => router.push("/master-trade")}>
           <FontAwesomeIcon icon={faUsersGear} className="w-4 h-4" />
           Connect with other Master

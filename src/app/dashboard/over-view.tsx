@@ -1,95 +1,111 @@
 'use client'
 import React from 'react'
-import Image from 'next/image'
-import star from '@/assets/svgs/star.svg'
-import token from '@/assets/svgs/token.svg'
-import dolaLogo from '@/assets/svgs/dolar-logo.svg'
-import hourTradingVolume from '@/assets/svgs/hour-trading-volume.svg'
-import monthTradingVolume from '@/assets/svgs/month-trading-volume.svg'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { useTheme } from 'next-themes'
+import { ArrowDownLeft, ArrowDownToLine, ArrowUpFromLine, ArrowUpRight } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { getInforWallet } from '@/services/api/TelegramWalletService'
+import { formatNumberWithSuffix3 } from '@/utils/format'
+import { useRouter } from 'next/navigation'
+
+const Layout = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <div className='bg-gradient-to-t from-theme-blue-100 to-theme-blue-200 p-[1px] relative w-full rounded-xl transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-lg'>
+            <div className='w-full h-full rounded-xl bg-gradient-to-r from-theme-primary-500 to-theme-secondary-400'>
+                <div className='dark:bg-[#00000054] p-6 rounded-xl w-full h-full flex flex-col items-center justify-center gap-3'>
+                    {children}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const Title = ({ name }: { name: string }) => {
+    return (
+        <div className='flex items-center gap-2'>
+            <img src={"/ethereum.png"} alt="ethereum" className='w-[16px] h-[16px] ' />
+            <span className='text-neutral-100 text-[16px] font-semibold capitalize'>{name}</span>
+            <img src={"/ethereum.png"} alt="ethereum" className='w-[16px] h-[16px]' />
+        </div>
+    )
+}
 
 const OverView = () => {
-    const { theme } = useTheme()
-    const dataFavorite = [
-        {
-            name: 'PopCat',
-            price: '$1.1234',
-            fluctuation: '+12%'
-        },
-        {
-            name: 'PopCat',
-            price: '$1.1234',
-            fluctuation: '+12%'
-        },
-        {
-            name: 'PopCat',
-            price: '$1.1234',
-            fluctuation: '+12%'
-        }
-    ]
-    const dataMarket = {
-        name: 'Universe account',
-        price: '$1.1234',
-        priceChange: '0',
-        fluctuation: '(0.00%)'
-    }
+    const router = useRouter()
+    const { data: walletInfor, refetch } = useQuery({
+        queryKey: ["wallet-infor"],
+        queryFn: getInforWallet,
+    });
+    console.log("walletInfor", walletInfor)
     return (
         <div className='flex flex-col gap-2'>
             <div className='relative clip-text uppercase text-sm font-semibold flex items-center gap-2'>
                 <span className='gradient-hover'>Favorite </span>
-                <img src={"/star.png"} alt="star" width={12}/>
+                <img src={"/star.png"} alt="star" width={12} />
             </div>
-            <div className='flex gap-6 z-10'>
-                <div className='w-full rounded-lg border-1 border-theme-primary-300 dark:border-transparent dark:bg-[#0F0F0FD9] z-1'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 z-10'>
+                <Layout>
+                    <img src="/solana-logo.png" alt="solana" className='w-[48px] h-[48px] md:w-[56px] md:h-[56px] rounded-full' />
+                    <div className='flex gap-2'>
+                        <Title name="Launch your own token" />
+                    </div>
+                    <span className='text-neutral-100 font-normal capitalize text-xs mb-1 text-center px-2 md:px-0'>Customize name, symbol, tax, and supply in just a few simple steps</span>
+                    <button 
+                        onClick={() => router.push('/create-coin')} 
+                        className='group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-2 px-4 md:px-5 rounded-full text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto'
+                    >
+                        <span className='relative z-10'>Create Now</span>
+                        <div className='absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm'></div>
+                    </button>
+                </Layout>
 
-                    {dataFavorite.map((item, index) => (
-                        <div key={index} className={`w-full flex px-6 justify-between max-h-[45px] py-[6px]  ${index !== dataFavorite.length - 1 ? 'border-b-1 border-theme-primary-300 dark:border-theme-neutral-800' : ''}`}>
-                            <div className='flex items-center gap-[14px]'>
-                                <img src={"/token.png"} alt="logo" />
-                                <span className='uppercase text-xs font-medium'>PopCat</span>
-                            </div>
-                            <div className='flex items-center gap-3'>
-                                <div className="flex flex-col font-normal">
-                                    <span className='text-xs font-semibold'>$1.1234</span>
-                                    <span className='fluctuation text-green-200 text-[10px] leading-[15px]'>+12%</span>
+                <Layout>
+                    <div className='flex flex-col items-center gap-2 w-full'>
+                        <img src="/wallet-logo.png" alt="wallet-logo" className='w-[48px] md:w-[56px] h-auto bg-transparent' />
+                        <Title name="UNIVERSAL ACCOUNT" />
+
+                        {/* Balance */}
+                        <div className='flex flex-col md:flex-row justify-evenly w-full mt-2 gap-4 md:gap-0'>
+                            <div className="text-center">
+                                <div className="text-white text-xl md:text-2xl font-bold mb-2">{walletInfor?.solana_balance} SOL</div>
+                                <div className="text-cyan-400 text-xs md:text-sm">
+                                    ${formatNumberWithSuffix3(walletInfor?.solana_balance_usd)} (0.00%) <span className='text-neutral-100'>24H</span>
                                 </div>
-                                <div className='flex items-center justify-center'>
-                                    <FontAwesomeIcon icon={faChevronRight} width={12} height={12} />
+                            </div>
+                            <div className="flex justify-center space-x-4 gap-3">
+                                <div className="flex flex-col justify-start items-center gap-1">
+                                    <div className="w-7 h-7 md:w-8 md:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center top-[8px] ">
+                                        <ArrowDownToLine className="w-3 h-3 md:w-4 md:h-4" />
+                                    </div>
+                                    <div className="text-center text-Colors-Neutral-100 text-[10px] font-semibold">
+                                        Receive
+                                    </div>
+                                </div>
+                                <div className="flex flex-col justify-start items-center gap-1">
+                                    <div className="w-7 h-7 md:w-8 md:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center top-[8px]">
+                                        <ArrowUpFromLine className="w-3 h-3 md:w-4 md:h-4" />
+                                    </div>
+                                    <div className="text-center text-Colors-Neutral-100 text-[10px] font-semibold">
+                                        Send
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    ))}
-                </div>
+                    </div>
+                </Layout>
 
-                <div className={`w-full rounded-lg  pl-[50px] pr-[40px] flex justify-between items-center ${theme !== 'dark' ? 'linear-gradient-light' : 'box-gradient'}`}>
-                    <div className='flex flex-col justify-center gap-[10px]'>
-                        <h3 className='text-neutral-100 text-base font-semibold flex items-center gap-2'>{dataMarket.name} &ensp; <FontAwesomeIcon icon={faChevronRight} width={12} height={12} /></h3>
-                        <div className='flex items-center gap-[41px]'>
-                            <span className='text-white text-sm text-[22px] font-bold leading-[33px]'>{dataMarket.price}</span>
-                            <div className='text-[#15DFFD] text-base font-medium flex items-center gap-[6px]'>${dataMarket.priceChange} {dataMarket.fluctuation}<span className='text-white'>24H</span></div>
-                        </div>
-                        <div className='flex items-center gap-[48px]'>
-                            <span className='text-white text-sm font-medium'>Receive &nbsp; {dataMarket.price}</span>
-                            <span className='text-white text-sm font-medium'>Send &nbsp; ${dataMarket.priceChange}</span>
-                        </div>
+                <Layout>
+                    <div className='flex flex-col items-center gap-3 w-full'>
+                        <img src="/earth-logo.png" alt="earth-logo" className='w-[48px] md:w-[56px] h-auto bg-transparent rounded-full' />
+                        <Title name="Master trade" />
+                        <span className='text-neutral-100 text-xs font-normal mb-1 text-center px-2 md:px-0'>Copy trades from top traders with just one click</span>
+                        <button 
+                            onClick={() => router.push('/master-trade')} 
+                            className='group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-2 px-4 md:px-5 rounded-full text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto'
+                        >
+                            <span className='relative z-10'>Explore</span>
+                            <div className='absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm'></div>
+                        </button>
                     </div>
-                    <img src={"/dolaLogo.png"} alt='dola-logo' className='xl:mr-12 w-[60px] h-[60px]'/>
-
-                </div>
-                <div className='w-full rounded-lg box-gradient flex justify-between items-center px-[60px] z-1'>
-                    <div className='flex flex-col items-center gap-2'>
-                        <img src={"/hourTradingVolume.png"} alt='hour-trading-volume' />
-                        <span className='text-neutral-100 text-sm font-semibold capitalize'>Total 24h trading volume</span>
-                        <span className='text-neutral-100 text-[22px] font-bold leading-[33px]'>$1.30M</span>
-                    </div>
-                    <div className='flex flex-col items-center gap-2'>
-                        <img src={"/monthTradingVolume.png"} alt='hour-trading-volume' />
-                        <span className='text-neutral-100 text-sm font-semibold capitalize'>Total 30d trading volume</span>
-                        <span className='text-neutral-100 text-[22px] font-bold leading-[33px]'>$1.30M</span>
-                    </div>
-                </div>
+                </Layout>
             </div>
         </div>
     )
