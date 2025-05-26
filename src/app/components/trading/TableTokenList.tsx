@@ -38,6 +38,11 @@ interface TableTokenListProps {
     isFavorite?: boolean;
     liquidity: any;
     holder: number;
+    price?: number;
+    volume_1h_usd?: number;
+    volume_1h_change_percent?: number;
+    volume_24h_usd?: number;
+    volume_24h_change_percent?: number;
   }[];
   onCopyAddress: (address: string, e: React.MouseEvent) => void;
   onStarClick: (token: any) => void;
@@ -49,14 +54,35 @@ interface TableTokenListProps {
   enableSort?: boolean;
 }
 
+const sortTokens = (tokens: TableTokenListProps['tokens'], sortBy: string, sortType: string) => {
+  return [...tokens].sort((a, b) => {
+    let valueA = a[sortBy as keyof typeof a];
+    let valueB = b[sortBy as keyof typeof b];
+
+    // Handle null/undefined values
+    if (valueA === null || valueA === undefined) valueA = 0;
+    if (valueB === null || valueB === undefined) valueB = 0;
+
+    // Convert to numbers for numeric comparisons
+    if (typeof valueA === 'string') valueA = parseFloat(valueA) || 0;
+    if (typeof valueB === 'string') valueB = parseFloat(valueB) || 0;
+
+    if (sortType === 'asc') {
+      return valueA > valueB ? 1 : -1;
+    } else {
+      return valueA < valueB ? 1 : -1;
+    }
+  });
+};
+
 export function TableTokenList({
   tokens,
   onCopyAddress,
   onStarClick,
   isFavoritesTab = false,
   isLoading = false,
-  sortBy,
-  sortType,
+  sortBy = 'market_cap',
+  sortType = 'desc',
   onSort,
   enableSort = false
 }: TableTokenListProps) {
@@ -67,6 +93,9 @@ export function TableTokenList({
     queryFn: getMyWishlist,
     refetchOnMount: true,
   });
+
+  // Sort tokens client-side
+  const sortedTokens = enableSort ? sortTokens(tokens, sortBy, sortType) : tokens;
 
   const renderSortIcon = (field: string) => {
     if (!enableSort) return null;
@@ -167,14 +196,14 @@ export function TableTokenList({
                     </div>
                   </TableCell>
                 </TableRow>
-              ) : tokens.length === 0 ? (
+              ) : sortedTokens.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={11} className="h-32 text-center text-muted-foreground">
                     {t("trading.noTokens")}
                   </TableCell>
                 </TableRow>
               ) : (
-                tokens.map((token: any, index: any) => (
+                sortedTokens.map((token: any, index: any) => (
                   <TableRow
                     key={index}
                     className="hover:bg-neutral-500 ease-linear cursor-pointer transition-all duration-300 pl-[14px] group"

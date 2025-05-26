@@ -22,6 +22,16 @@ import axiosClient from "@/utils/axiosClient";
     }
   };
 
+  export const getNewCoins = async (item: any) => {
+    try {
+      const temp = await axiosClient.get(`/on-chain/latest-coins`);
+      return temp.data.data.items;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  };
+
 export const getOrderHistories = async (item: any) => {
   try {
     const temp = await axiosClient.get(`/on-chain/histories?address=${item.address}&offset=${item.offset}&limit=${item.limit}`);
@@ -73,3 +83,23 @@ export const getOrdersMyWallet = async (walletAddress: string, page: number = 1)
     return [];
   }
 }
+
+export const getSearchTokenInfor = async (query: string) => {
+  try {
+    const temp = await axiosClient.get(`/on-chain/search?query=${query}`);
+    return temp.data.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export const getStatsToken = async (address: any) => {
+  try {
+    const temp = await axiosClient.get(`/on-chain/stats-token/${address}`);
+    return temp.data.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};

@@ -37,6 +37,10 @@ const config: Config = {
             '400': '#8833EE', // Bright purple
             '500': '#972BDF', // Dark blue
           },
+          'blue': {
+            '100': '#00C0FF',
+            '200': '#0071BC',
+          },
           'neutral': {
             '100': '#eeeeee',
             '200': '#D7D7D7',
@@ -61,8 +65,14 @@ const config: Config = {
               '300': '#FFDB43',
             },
             'black': {
+              '100': '#000000',
+              '200': '#161616',
+              '1/3': '#0E0E0ECC',
               '1/2': 'rgba(0, 0, 0, 0.50)',
               '9/10': 'rgba(0, 0, 0, 0.90)',
+            },
+            'purple': {
+              '100': '#5558FF',
             },
           'gradient': {
             'start': '#15DFFD',
@@ -246,6 +256,9 @@ const config: Config = {
         },
         '.linear-200-bg': {
           background: 'var(--Linear-200, linear-gradient(0deg, #5558FF 0%, #00C0FF 100%))',
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
         },
         '.linear-gradient-blue': {
           background: 'linear-gradient(0deg, #5558FF 0%, #00C0FF 100%)',
@@ -272,6 +285,15 @@ const config: Config = {
         },
         '.bg-gradient-purple-transparent': {
           background: 'linear-gradient(93deg, rgba(17, 45, 96, 0.50) 2.14%, rgba(136, 51, 238, 0.50) 98.03%)',
+        },
+        '.gradient-overlay-custom': {
+          background: 'linear-gradient(93deg, rgba(17, 45, 96, 0.50) 2.14%, rgba(136, 51, 238, 0.50) 98.03%)',
+        },
+        '.backdrop-blur-sm': {
+          backdropFilter: 'blur(5px)',
+        },
+        '.text-fill-transparent': {
+          WebkitTextFillColor: 'transparent',
         },
       })
     }),

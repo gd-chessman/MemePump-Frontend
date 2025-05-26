@@ -13,14 +13,34 @@ const TradingPage = () => {
   const [windowHeight, setWindowHeight] = useState(800); // Default height
   const [chartHeight, setChartHeight] = useState(51); // Changed default to 50%
   const [isDragging, setIsDragging] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const checkScreenSize = () => {
+    // Get screen dimensions in pixels
+    const width = window.screen.width;
+    const height = window.screen.height;
+    
+    // Get pixel density (DPI)
+    const dpi = window.devicePixelRatio;
+    
+    // Calculate physical size in inches
+    // Using Pythagorean theorem to get diagonal size
+    const diagonalPixels = Math.sqrt(width * width + height * height);
+    const diagonalInches = diagonalPixels / (dpi * 96); // 96 is the standard DPI
+    
+    // Check if screen is approximately 14.2 inches (with some tolerance)
+    return Math.abs(diagonalInches - 14.2) < 0.5;
+  };
 
   useEffect(() => {
     setIsMounted(true);
     setWindowHeight(window.innerHeight);
+    setIsSmallScreen(checkScreenSize());
     
     const handleResize = () => {
       setWindowHeight(window.innerHeight);
+      setIsSmallScreen(checkScreenSize());
     };
     
     const handleMouseMove = (e: MouseEvent) => {
@@ -60,11 +80,11 @@ const TradingPage = () => {
 
   console.log("height", height)
   return (
-    <div className={`h-[92vh] flex flex-col gap-4 container-trading py-4 relative z-10 ${height > 700 ? 'px-[40px]' : 'px-[10px]'}`}>
+    <div className={`h-[92vh] flex flex-col gap-4 container-trading py-4 relative z-10 ${isSmallScreen ? 'px-[10px]' : 'px-[40px]'}`}>
       <Interface />
       <div className='flex-1 flex gap-4 w-full relative z-10 overflow-hidden'>
         {/* Left Column */}
-        <div className={`flex flex-col gap-4 overflow-hidden w-1/6 ${height > 600 ? 'w-1/6' : 'w-1/5'}`}>
+        <div className={`flex flex-col gap-4 overflow-hidden ${isSmallScreen ? 'w-1/5' : 'w-1/6'}`}>
           <TokenInfo />
           <ListToken />
         </div>
@@ -101,7 +121,7 @@ const TradingPage = () => {
         </div>
 
         {/* Right Column */}
-        <div className={`${height > 700 ? 'w-1/6' : 'w-1/5'} h-full overflow-hidden`}>
+        <div className={`${isSmallScreen ? 'w-1/5' : 'w-1/6'} h-full overflow-hidden`}>
           <div className='h-full overflow-auto'>
             <Control/>
           </div>
