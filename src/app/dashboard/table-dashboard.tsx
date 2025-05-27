@@ -288,10 +288,10 @@ export default function Trading() {
                               <div className="text-xs text-gray-500 dark:text-gray-400">Market Cap</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
                             </div>
-                            <div className="flex gap-2 items-center">
+                            {/* <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Volume 24h</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.volume24h || 0)}</div>
-                            </div>
+                            </div> */}
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Holders</div>
                               <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
@@ -424,10 +424,10 @@ export default function Trading() {
                               <div className="text-xs text-gray-500 dark:text-gray-400">Market Cap</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
                             </div>
-                            <div className="flex gap-2 items-center">
+                            {/* <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Volume 24h</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.volume24h || 0)}</div>
-                            </div>
+                            </div> */}
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Holders</div>
                               <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>

@@ -21,6 +21,7 @@ import { Button } from "@/ui/button"
 import MasterMessage from "@/app/components/chat/MasterMessage"
 import { useMasterChatStore } from "@/store/masterChatStore"
 import type { MasterMessage as StoreMasterMessage } from "@/store/masterChatStore"
+import { truncateString } from "@/utils/format"
 
 // Định nghĩa các kiểu dữ liệu
 type TabType = "Connected" | "Paused" | "Pending" | "Block"
@@ -92,6 +93,35 @@ type WsMessage = {
 
 const textHeaderTable = "text-xs font-normal text-neutral-200"
 const textBodyTable = "text-xs font-normal text-neutral-100"
+
+// Add these styles at the top of the file after imports
+const styles = {
+  container: "lg:container-body h-screen pb-6 lg:pb-0 lg:h-[92vh] px-[16px] lg:px-[40px] flex gap-6 lg:pt-[30px] relative mx-auto z-10 md:flex-row flex-col",
+  groupSection: "w-full md:w-auto",
+  tradeSection: "flex-1 z-10 flex flex-col gap-6 w-full",
+  chatSection: "z-10 w-full md:w-1/4 flex flex-col gap-6 lg:items-end lg:pb-0 pb-6",
+  tableContainer: "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm",
+  table: "w-full text-neutral-100 text-[10px] sm:text-xs md:text-sm",
+  button: "h-min rounded-sm text-[10px] sm:text-xs md:text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer",
+  input: "w-full py-1 px-3 bg-[#111111] rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-[10px] sm:placeholder:text-xs placeholder:text-neutral-100 text-[10px] sm:text-xs md:text-sm",
+  chatContainer: "bg-black bg-opacity-30 backdrop-blur-sm w-full rounded-xl border border-y-[#15DFFD] border-x-[#720881] overflow-hidden shadow-lg flex flex-col h-[300px] md:h-[600px]",
+  chatHeader: "p-2 md:p-4 border-b border-cyan-500/30",
+  chatTitle: "text-center text-[14px] md:text-[16px] font-semibold text-neutral-100 mb-2 md:mb-4 flex items-center justify-center",
+  chatMessages: "flex-1 overflow-y-auto p-2 md:p-3 space-y-1 md:space-y-2",
+  chatInput: "p-2 md:p-3",
+  groupCard: "bg-black bg-opacity-30 backdrop-blur-sm rounded-xl border border-blue-500/30 p-[15px] md:p-[30px] shadow-lg",
+  groupTitle: "text-center text-[14px] md:text-lg font-bold text-neutral-100 mb-4 md:mb-6 flex items-center justify-center gap-2",
+  groupInput: "rounded-full py-1 md:py-2 px-3 md:px-4 w-full md:w-64 text-[10px] sm:text-xs md:text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[25px] md:max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-[10px] sm:placeholder:text-xs",
+  groupButton: "w-full max-w-[400px] create-coin-bg hover-bg-delay dark:text-neutral-100 font-medium px-3 md:px-4 py-[4px] md:py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-80 disabled:cursor-not-allowed mx-auto gap-2 text-[10px] sm:text-xs flex items-center justify-center",
+  tabButton: "h-min rounded-sm text-[10px] sm:text-xs md:text-sm font-medium text-neutral-400 px-1 md:px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer",
+  actionButton: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200",
+  selectTrigger: "w-[150px] md:w-[200px] pl-3 md:pl-4 h-[25px] md:h-[30px] bg-black/60 border-theme-primary-300/30 hover:border-theme-primary-300/50 text-neutral-100 text-[10px] sm:text-xs md:text-sm rounded-full",
+  selectContent: "bg-black/90 border-theme-primary-300/30 text-[10px] sm:text-xs md:text-sm",
+  selectItem: "text-neutral-100 hover:bg-theme-primary-300/20 focus:bg-theme-primary-300/10 cursor-pointer text-[10px] sm:text-xs md:text-sm",
+  dialogContent: "bg-theme-neutral-1000 border border-blue-500/30 w-[90vw] md:w-[400px] max-w-[400px]",
+  dialogTitle: "text-neutral-100 text-center text-[10px] sm:text-xs md:text-sm",
+  dialogButton: "px-2 md:px-3 py-1 text-neutral-100 border border-blue-500/30 hover:bg-blue-500/10 h-[25px] md:h-[30px] text-[10px] sm:text-xs"
+};
 
 export default function MasterTradeInterface() {
   const router = useRouter()
@@ -458,16 +488,15 @@ export default function MasterTradeInterface() {
   }));
 
   return (
-    <div className="container-body h-[92vh] px-[40px] flex gap-6 pt-[30px] relative mx-auto z-10">
-      {/* Phần tạo nhóm */}
-      <div className="">
-        <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-xl border border-blue-500/30 p-[30px] shadow-lg">
-          <h2 className="text-center text-lg font-bold text-neutral-100 mb-6 flex items-center justify-center gap-2">
-            {ethereumIcon(16, 16)}
+    <div className={styles.container}>
+      {/* Group Management Section */}
+      <div className={styles.groupSection}>
+        <div className={styles.groupCard}>
+          <h2 className={styles.groupTitle}>
+            {ethereumIcon(14, 14)}
             CREATE GROUP
-            {ethereumIcon(16, 16)}
+            {ethereumIcon(14, 14)}
           </h2>
-
           <div className="space-y-4">
             <div>
               <label htmlFor="group-name" className="block text-sm font-medium text-neutral-100 mb-1">
@@ -479,14 +508,14 @@ export default function MasterTradeInterface() {
                 value={newGroupName}
                 onChange={(e) => setNewGroupName(e.target.value)}
                 placeholder="Enter group name"
-                className="rounded-full py-2 px-4 w-64 text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-xs"
+                className={styles.groupInput}
               />
             </div>
 
             <button
               onClick={handleCreateGroup}
               disabled={!newGroupName.trim()}
-              className={`w-full max-w-[400px] create-coin-bg  hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-80 disabled:cursor-not-allowed mx-auto gap-2 text-xs flex items-center justify-center ${newGroupName.trim() ? 'hover:linear-200-bg' : ''}`}
+              className={styles.groupButton}
             >
               CREATE
             </button>
@@ -498,13 +527,13 @@ export default function MasterTradeInterface() {
           <div className="flex gap-6 mb-4 ">
             <button
               onClick={() => setActiveGroupTab("On")}
-              className={` rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeGroupTab === "On" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
+              className={` ${styles.button} ${activeGroupTab === "On" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
             >
               <span className={`${activeGroupTab === 'On' ? 'gradient-hover ' : ''}`}>On ({onGroupsCount})</span>
             </button>
             <button
               onClick={() => setActiveGroupTab("Off")}
-              className={` rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeGroupTab === "Off" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
+              className={` ${styles.button} ${activeGroupTab === "Off" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
             >
               <span className={`${activeGroupTab === 'Off' ? 'gradient-hover ' : ''}`}>Off ({offGroupsCount})</span>
             </button>
@@ -513,8 +542,8 @@ export default function MasterTradeInterface() {
 
           {/* Bảng cho tab On */}
           {activeGroupTab === "On" && (
-            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
-              <table className="w-full bg-black text-neutral-100">
+            <div className={styles.tableContainer}>
+              <table className={styles.table}>
                 <thead>
                   <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
                     <th className={`text-center ${textHeaderTable}`}>Group</th>
@@ -541,13 +570,13 @@ export default function MasterTradeInterface() {
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => handleToggleGroup(group.mg_id, group.mg_status)}
-                            className="px-4 py-1 rounded-full text-xs text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200"
+                            className={styles.actionButton}
                           >
                             Off
                           </button>
                           <button
                             onClick={() => handleDeleteGroup(group.mg_id)}
-                            className="px-3 py-1 rounded-full text-xs text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200"
+                            className={styles.actionButton}
                           >
                             Delete
                           </button>
@@ -562,8 +591,8 @@ export default function MasterTradeInterface() {
 
           {/* Bảng cho tab Off */}
           {activeGroupTab === "Off" && (
-            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
-              <table className="w-full bg-black text-neutral-100">
+            <div className={styles.tableContainer}>
+              <table className={styles.table}>
                 <thead>
                   <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
                     <th className={`text-center ${textHeaderTable}`}>Group</th>
@@ -590,13 +619,13 @@ export default function MasterTradeInterface() {
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => handleToggleGroup(group.mg_id, group.mg_status)}
-                            className="px-4 py-1 rounded-full text-xs text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200"
+                            className={styles.actionButton}
                           >
                             On
                           </button>
                           <button
                             onClick={() => handleDeleteGroup(group.mg_id)}
-                            className="px-3 py-1 rounded-full text-xs text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200"
+                            className={styles.actionButton}
                           >
                             Delete
                           </button>
@@ -611,8 +640,8 @@ export default function MasterTradeInterface() {
 
           {/* Bảng cho tab Delete */}
           {activeGroupTab === "Delete" && (
-            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
-              <table className="w-full bg-black text-neutral-100">
+            <div className={styles.tableContainer}>
+              <table className={styles.table}>
                 <thead>
                   <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
                     <th className={`text-center ${textHeaderTable}`}>Group</th>
@@ -649,217 +678,215 @@ export default function MasterTradeInterface() {
         </div>
       </div>
 
-      {/* Phần bảng giao dịch */}
-      <div className="flex-1 z-10 flex flex-col gap-6">
-          <div className="flex gap-6  ">
-            <button
-              onClick={() => setActiveTab("Connected")}
-              className={`h-min rounded-sm text-sm font-medium text-neutral-400  px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeTab === "Connected" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
-            >
-              <span className={`${activeTab === 'Connected' ? 'gradient-hover ' : ''}`}>Connected ({connectedCount})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("Paused")}
-              className={`h-min rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeTab === "Paused" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
-            >
-              <span className={`${activeTab === 'Paused' ? 'gradient-hover ' : ''}`}>Paused ({pausedCount})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("Pending")}
-              className={`h-min rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeTab === "Pending" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
-            >
-              <span className={`${activeTab === 'Pending' ? 'gradient-hover ' : ''}`}>Pending ({pendingCount})</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("Block")}
-              className={`h-min rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeTab === "Block" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
-            >
-              <span className={`${activeTab === 'Block' ? 'gradient-hover ' : ''}`}>Block ({blockedCount})</span>
-            </button>
-            <div className="flex-1 flex items-center justify-end">
-              {selectedItems.length > 0 && (
-                <button
-                  onClick={() => setShowGroupDropdown(!showGroupDropdown)}
-                  className="flex items-center gap-2 px-4 py-1 bg-black bg-opacity-60 rounded-full text-neutral-100 border border-blue-500/30"
-                >
-                  <span className="text-xs">Choose group</span>
-                  <svg className="w-2 h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-              )}
-            </div>
-            <div className="relative">
-              {showGroupDropdown && (
-                <div className="absolute top-10 right-0 mt-2 w-64 bg-theme-neutral-1000 bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-30">
-                  <div className="p-2">
-                    <div className="relative mb-2">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                      <input
-                        type="text"
-                        placeholder="Search group..."
-                        value={groupSearchQuery}
-                        onChange={(e) => setGroupSearchQuery(e.target.value)}
-                        className="rounded-full py-2 pl-10 pr-4 w-full text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-xs"
-                      />
-                    </div>
+      {/* Trade Table Section */}
+      <div className={styles.tradeSection}>
+        <div className="flex gap-6  ">
+          <button
+            onClick={() => setActiveTab("Connected")}
+            className={`${styles.button} ${activeTab === "Connected" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
+          >
+            <span className={`${activeTab === 'Connected' ? 'gradient-hover ' : ''}`}>Connected ({connectedCount})</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("Paused")}
+            className={`${styles.button} ${activeTab === "Paused" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
+          >
+            <span className={`${activeTab === 'Paused' ? 'gradient-hover ' : ''}`}>Paused ({pausedCount})</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("Pending")}
+            className={`${styles.button} ${activeTab === "Pending" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
+          >
+            <span className={`${activeTab === 'Pending' ? 'gradient-hover ' : ''}`}>Pending ({pendingCount})</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("Block")}
+            className={`${styles.button} ${activeTab === "Block" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
+          >
+            <span className={`${activeTab === 'Block' ? 'gradient-hover ' : ''}`}>Block ({blockedCount})</span>
+          </button>
+          <div className="flex-1 flex items-center justify-end">
+            {selectedItems.length > 0 && (
+              <button
+                onClick={() => setShowGroupDropdown(!showGroupDropdown)}
+                className={`${styles.button} flex items-center gap-2 px-4 py-1 bg-black bg-opacity-60 rounded-full text-neutral-100 border border-blue-500/30`}
+              >
+                <span className="text-xs">Choose group</span>
+                <svg className="w-2 h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            )}
+          </div>
+          <div className="relative">
+            {showGroupDropdown && (
+              <div className="absolute top-10 right-0 mt-2 w-64 bg-theme-neutral-1000 bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-30">
+                <div className="p-2">
+                  <div className="relative mb-2">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      placeholder="Search group..."
+                      value={groupSearchQuery}
+                      onChange={(e) => setGroupSearchQuery(e.target.value)}
+                      className={styles.input}
+                    />
+                  </div>
 
-                    <div className="max-h-48 overflow-y-auto">
-                      {filteredGroupsForDropdown.map((group) => (
-                        <button
-                          key={group.mg_id}
-                          onClick={() => handleGroupSelect(group)}
-                          className="w-full text-left px-4 py-2 text-neutral-100 hover:bg-blue-900/30 rounded-md text-xs"
-                        >
-                          {group.mg_name}
-                        </button>
-                      ))}
-                    </div>
+                  <div className="max-h-48 overflow-y-auto">
+                    {filteredGroupsForDropdown.map((group) => (
+                      <button
+                        key={group.mg_id}
+                        onClick={() => handleGroupSelect(group)}
+                        className={styles.selectItem}
+                      >
+                        {group.mg_name}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
+        </div>
 
-          <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm">
-            <table className="w-full text-neutral-100">
-              <thead>
-                <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                  <th className={`px-4 py-3 text-center ${textHeaderTable}`}>
-                    {activeTab === "Connected" && (
+        <div className={styles.tableContainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
+                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>
+                  {activeTab === "Connected" && (
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.length === filteredTradeItems.filter(item => item.status === "connect").length}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedItems(filteredTradeItems.filter(item => item.status === "connect").map(item => item.connection_id.toString()));
+                        } else {
+                          setSelectedItems([]);
+                        }
+                      }}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                  )}
+                </th>
+                <th className={`px-4 py-3 text-left ${textHeaderTable}`}>Address</th>
+                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Group</th>
+                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Status</th>
+                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTradeItems.map((item) => (
+                <tr key={item.connection_id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
+                  <td className="px-4 py-3 text-center">
+                    {item.status === "connect" && (
                       <input
                         type="checkbox"
-                        checked={selectedItems.length === filteredTradeItems.filter(item => item.status === "connect").length}
+                        checked={selectedItems.includes(item.connection_id.toString())}
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setSelectedItems(filteredTradeItems.filter(item => item.status === "connect").map(item => item.connection_id.toString()));
+                            setSelectedItems([...selectedItems, item.connection_id.toString()]);
                           } else {
-                            setSelectedItems([]);
+                            setSelectedItems(selectedItems.filter(id => id !== item.connection_id.toString()));
                           }
                         }}
                         className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                     )}
-                  </th>
-                  <th className={`px-4 py-3 text-left ${textHeaderTable}`}>Address</th>
-                  <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Group</th>
-                  <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Status</th>
-                  <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredTradeItems.map((item) => (
-                  <tr key={item.connection_id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
-                    <td className="px-4 py-3 text-center">
-                      {item.status === "connect" && (
-                        <input
-                          type="checkbox"
-                          checked={selectedItems.includes(item.connection_id.toString())}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedItems([...selectedItems, item.connection_id.toString()]);
-                            } else {
-                              setSelectedItems(selectedItems.filter(id => id !== item.connection_id.toString()));
-                            }
-                          }}
-                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        />
-                      )}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center">
-                        <span className={`${textBodyTable}`}>{item.member_address}</span>
-                        <button
-                          onClick={() => handleCopyAddress(item.member_address)}
-                          className="ml-2 text-gray-400 hover:text-neutral-100 transition-colors"
-                        >
-                          {copiedAddress === item.member_address ? (
-                            <Check className="h-4 w-4 text-green-500" />
-                          ) : (
-                            <Copy className="h-4 w-4" />
-                          )}
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <span className={`${textBodyTable}`}>
-                        {item.joined_groups.length > 0 
-                          ? item.joined_groups.map(g => g.group_name).join(", ")
-                          : "Không có nhóm"
-                        }
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <span className={`${textBodyTable} capitalize`}>{item.status}</span>
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <div className="flex justify-center gap-2">
-                        {item.status === "pending" && (
-                          <>
-                            <button
-                              onClick={() => handleToggleConnection(item.connection_id, "connect")}
-                              className="px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full text-xs"
-                            >
-                              Connect
-                            </button>
-                            <button
-                              onClick={() => handleToggleConnection(item.connection_id, "block")}
-                              className="px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full text-xs"
-                            >
-                              Block
-                            </button>
-                          </>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center">
+                      <span className={`${textBodyTable}`}>{truncateString(item.member_address, 12)}</span>
+                      <button
+                        onClick={() => handleCopyAddress(item.member_address)}
+                        className="ml-2 text-gray-400 hover:text-neutral-100 transition-colors"
+                      >
+                        {copiedAddress === item.member_address ? (
+                          <Check className="h-4 w-4 text-green-500" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
                         )}
-                        {item.status === "connect" && (
-                          <>
-                           
-                            <button
-                              onClick={() => handleToggleConnection(item.connection_id, "block")}
-                              className="px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full text-xs"
-                            >
-                              Block
-                            </button>
-                          </>
-                        )}
-                        {item.status === "block" && (
+                      </button>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <span className={`${textBodyTable}`}>
+                      {item.joined_groups.length > 0 
+                        ? item.joined_groups.map(g => g.group_name).join(", ")
+                        : "Không có nhóm"
+                      }
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <span className={`${textBodyTable} capitalize`}>{item.status}</span>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <div className="flex justify-center gap-2">
+                      {item.status === "pending" && (
+                        <>
                           <button
-                            onClick={() => handleToggleConnection(item.connection_id, "pause")}
-                            className="px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full text-xs"
+                            onClick={() => handleToggleConnection(item.connection_id, "connect")}
+                            className={styles.actionButton}
                           >
-                            Unblock
+                            Connect
                           </button>
-                        )}
-                        {item.status === "pause" && (
-                         
-                          <>
-                             <button
+                          <button
                             onClick={() => handleToggleConnection(item.connection_id, "block")}
-                            className="px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full text-xs"
+                            className={styles.actionButton}
                           >
                             Block
                           </button>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                        </>
+                      )}
+                      {item.status === "connect" && (
+                        <>
+                         
+                          <button
+                            onClick={() => handleToggleConnection(item.connection_id, "block")}
+                            className={styles.actionButton}
+                          >
+                            Block
+                          </button>
+                        </>
+                      )}
+                      {item.status === "block" && (
+                        <button
+                          onClick={() => handleToggleConnection(item.connection_id, "pause")}
+                          className={styles.actionButton}
+                        >
+                          Unblock
+                        </button>
+                      )}
+                      {item.status === "pause" && (
+                       
+                        <>
+                           <button
+                          onClick={() => handleToggleConnection(item.connection_id, "block")}
+                          className={styles.actionButton}
+                        >
+                          Block
+                        </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Phần chat */}
-      <div className="z-10 w-1/4 flex flex-col gap-6
-       items-end ">
+      {/* Chat Section */}
+      <div className={styles.chatSection}>
         <button className="w-fit create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-xs items-center justify-center " onClick={() => router.push("/master-trade")}>
           <FontAwesomeIcon icon={faUsersGear} className="w-4 h-4" />
           Connect with other Master
         </button>
-        <div className="bg-black bg-opacity-30 backdrop-blur-sm w-full rounded-xl border border-y-[#15DFFD] border-x-[#720881] overflow-hidden shadow-lg flex flex-col h-[600px]">
-          {/* Chat Header */}
-          <div className="p-4 border-b border-cyan-500/30">
-            <h2 className="text-center text-[16px] font-semibold text-neutral-100 mb-4 flex items-center justify-center">
+        <div className={styles.chatContainer}>
+          <div className={styles.chatHeader}>
+            <h2 className={styles.chatTitle}>
               <span className="text-cyan-400 mr-2">✦</span>
               MASTER CHATROOM
               <span className="text-cyan-400 ml-2">✦</span>
@@ -871,15 +898,15 @@ export default function MasterTradeInterface() {
                 value={selectedChatGroup}
                 onValueChange={(value) => setSelectedChatGroup(value)}
               >
-                <SelectTrigger className="w-[200px] pl-4 h-[30px] bg-black/60 border-theme-primary-300/30 hover:border-theme-primary-300/50 text-neutral-100 text-sm rounded-full">
+                <SelectTrigger className={styles.selectTrigger}>
                   <SelectValue placeholder="Select a group..." />
                 </SelectTrigger>
-                <SelectContent className="bg-black/90 border-theme-primary-300/30">
+                <SelectContent className={styles.selectContent}>
                   {groupOptions.map((option) => (
                     <SelectItem 
                       key={option.value} 
                       value={option.value}
-                      className="text-neutral-100 hover:bg-theme-primary-300/20 focus:bg-theme-primary-300/10 cursor-pointer"
+                      className={styles.selectItem}
                     >
                       {option.label}
                     </SelectItem>
@@ -889,8 +916,7 @@ export default function MasterTradeInterface() {
             </div>
           </div>
 
-          {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+          <div className={styles.chatMessages}>
             {messages.map((msg) => (
               <MasterMessage 
                 key={msg.id} 
@@ -913,8 +939,7 @@ export default function MasterTradeInterface() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Chat Input */}
-          <div className="p-3 ">
+          <div className={styles.chatInput}>
             <div className="flex items-center">
               <div className="relative flex-1">
                 <input
@@ -928,7 +953,7 @@ export default function MasterTradeInterface() {
                       handleSendMessage()
                     }
                   }}
-                  className="w-full py-1 px-3 bg-[#111111] rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-xs placeholder:text-neutral-100 text-sm"
+                  className={styles.input}
                 />
                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
                   <button
@@ -951,27 +976,27 @@ export default function MasterTradeInterface() {
 
       {/* Dialog xác nhận join group */}
       <Dialog open={isJoinDialogOpen} onOpenChange={setIsJoinDialogOpen}>
-        <DialogContent className="bg-theme-neutral-1000 border border-blue-500/30 w-[400px]">
+        <DialogContent className={styles.dialogContent}>
           <DialogHeader>
-            <DialogTitle className="text-neutral-100 text-center text-sm">
+            <DialogTitle className={styles.dialogTitle}>
               Xác nhận kết nối {selectedItems.length} ví đã chọn vào nhóm "{selectedGroupName}"
             </DialogTitle>
           </DialogHeader>
-          <DialogFooter className="">
-            <div className="flex w-full gap-6 justify-center">
-            <Button
-              variant="outline"
-              onClick={() => setIsJoinDialogOpen(false)}
-              className="px-3 py-1 text-neutral-100 border border-blue-500/30 hover:bg-blue-500/10 h-[30px]"
-            >
-              Hủy
-            </Button>
-            <Button
-              onClick={handleJoin}
-              className="px-3 py-1 bg-blue-500 text-neutral-100 hover:bg-blue-600 h-[30px]"
-            >
-              Xác nhận
-            </Button>
+          <DialogFooter>
+            <div className="flex w-full gap-4 md:gap-6 justify-center">
+              <Button
+                variant="outline"
+                onClick={() => setIsJoinDialogOpen(false)}
+                className={styles.dialogButton}
+              >
+                Hủy
+              </Button>
+              <Button
+                onClick={handleJoin}
+                className={`${styles.dialogButton} bg-blue-500 hover:bg-blue-600`}
+              >
+                Xác nhận
+              </Button>
             </div>
           </DialogFooter>
         </DialogContent>

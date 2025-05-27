@@ -91,6 +91,18 @@ const yellowBg = "text-theme-yellow-200 border border-theme-yellow-200"
 const blueBg = "text-theme-blue-200 border border-theme-blue-200"
 const textHeaderTable = "text-xs font-normal text-neutral-200"
 
+// Add these new style constants
+const mobileContainerClass = "px-4 md:px-[40px]" // Reduced padding on mobile
+const mobileFilterWrapperClass = "w-full md:w-auto overflow-x-auto md:overflow-visible"
+const mobileFilterButtonClass = "whitespace-nowrap rounded-sm text-xs md:text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer flex-shrink-0"
+const mobileSearchWrapperClass = "flex flex-col md:flex-row items-start md:items-center gap-4 w-full" // Stack search on mobile
+const mobileTableWrapperClass = "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative md:block hidden" // Hide table on mobile
+const mobileCardWrapperClass = "flex flex-col gap-4 md:hidden" // Show cards on mobile only
+const mobileCardClass = "rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm p-4" // Card style for mobile
+
+// Add new wrapper class for the filter buttons container
+const filterButtonsWrapperClass = "flex gap-2 md:gap-6 md:flex-wrap min-w-max md:min-w-0 pb-2 md:pb-0"
+
 export default function MasterTradeTable() {
     const [activeFilter, setActiveFilter] = useState<FilterType>("All")
     const [searchQuery, setSearchQuery] = useState("")
@@ -390,7 +402,7 @@ export default function MasterTradeTable() {
     };
 
     return (
-        <div className="container-body h-[92vh] px-[40px] flex flex-col gap-6 pt-[30px] relative mx-auto z-10">
+        <div className={`lg:container-body pb-4 lg:pb-0 h-screen lg:h-[92vh] ${mobileContainerClass} flex flex-col gap-4 md:gap-6 pt-[20px] md:pt-[30px] relative mx-auto z-10`}>
             {/* Thông báo copy */}
             {copyNotification.show && (
                 <div className="fixed top-4 right-4 bg-theme-green-200 text-black px-4 py-2 rounded-lg shadow-lg transition-opacity duration-300 animate-fade-in-out">
@@ -398,56 +410,58 @@ export default function MasterTradeTable() {
                 </div>
             )}
 
-            {/* Bộ lọc và Tìm kiếm */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div className="flex flex-wrap gap-6">
-                    <button
-                        onClick={() => setActiveFilter("All")}
-                        className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeFilter === "All" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
-                    >
-                        <span className={`${activeFilter === 'All' ? 'gradient-hover' : ''}`}>All master trade ({tradeData.length})</span>
-                    </button>
-                    <button
-                        onClick={() => setActiveFilter("Not Connected")}
-                        className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeFilter === "Not Connected" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
-                    >
-                        <span className={`${activeFilter === 'Not Connected' ? 'gradient-hover' : ''}`}>Not connected ({notConnectedCount})</span>
-                    </button>
-                    <button
-                        onClick={() => setActiveFilter("connect")}
-                        className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeFilter === "connect" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
-                    >
-                        <span className={`${activeFilter === 'connect' ? 'gradient-hover' : ''}`}>Connected ({connectedCount})</span>
-                    </button>
-                    <button
-                        onClick={() => setActiveFilter("disconnect")}
-                        className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeFilter === "disconnect" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
-                    >
-                        <span className={`${activeFilter === 'disconnect' ? 'gradient-hover' : ''}`}>Disconnected ({disconnectedCount})</span>
-                    </button>
-                    <button
-                        onClick={() => setActiveFilter("pause")}
-                        className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeFilter === "pause" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
-                    >
-                        <span className={`${activeFilter === 'pause' ? 'gradient-hover' : ''}`}>Paused ({pausedCount})</span>
-                    </button>
-                    <button
-                        onClick={() => setActiveFilter("pending")}
-                        className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer ${activeFilter === "pending" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
-                    >
-                        <span className={`${activeFilter === 'pending' ? 'gradient-hover' : ''}`}>Pending ({pendingCount})</span>
-                    </button>
+            {/* Filters and Search - Updated for mobile */}
+            <div className={mobileSearchWrapperClass}>
+                <div className={mobileFilterWrapperClass}>
+                    <div className={filterButtonsWrapperClass}>
+                        <button
+                            onClick={() => setActiveFilter("All")}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "All" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                        >
+                            <span className={`${activeFilter === 'All' ? 'gradient-hover' : ''}`}>All ({tradeData.length})</span>
+                        </button>
+                        <button
+                            onClick={() => setActiveFilter("Not Connected")}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "Not Connected" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                        >
+                            <span className={`${activeFilter === 'Not Connected' ? 'gradient-hover' : ''}`}>Not connected ({notConnectedCount})</span>
+                        </button>
+                        <button
+                            onClick={() => setActiveFilter("connect")}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "connect" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                        >
+                            <span className={`${activeFilter === 'connect' ? 'gradient-hover' : ''}`}>Connected ({connectedCount})</span>
+                        </button>
+                        <button
+                            onClick={() => setActiveFilter("disconnect")}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "disconnect" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                        >
+                            <span className={`${activeFilter === 'disconnect' ? 'gradient-hover' : ''}`}>Disconnected ({disconnectedCount})</span>
+                        </button>
+                        <button
+                            onClick={() => setActiveFilter("pause")}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "pause" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                        >
+                            <span className={`${activeFilter === 'pause' ? 'gradient-hover' : ''}`}>Paused ({pausedCount})</span>
+                        </button>
+                        <button
+                            onClick={() => setActiveFilter("pending")}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "pending" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                        >
+                            <span className={`${activeFilter === 'pending' ? 'gradient-hover' : ''}`}>Pending ({pendingCount})</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-4 w-full md:w-auto">
-                    <div className="relative flex-1 md:flex-none">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
+                    <div className="relative w-full md:w-auto">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                         <input
                             type="text"
                             placeholder="Search by wallet address..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="rounded-full py-2 pl-10 pr-4 w-64 text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-xs"
+                            className="rounded-full py-2 pl-10 pr-4 w-full md:w-64 text-xs md:text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-xs"
                         />
                         {searchQuery && (
                             <button
@@ -460,7 +474,7 @@ export default function MasterTradeTable() {
                     </div>
 
                     {myWalletInfor?.role !== "member" && (
-                        <button className="w-full max-w-[400px] create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed mx-auto flex gap-2 text-xs" onClick={() => router.push("/master-trade/manage")}>
+                        <button className="w-full md:w-auto create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-xs justify-center" onClick={() => router.push("/master-trade/manage")}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -483,189 +497,322 @@ export default function MasterTradeTable() {
                 </div>
             </div>
 
-            {/* Bảng dữ liệu */}
-            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
-                <table className="w-full text-neutral-100">
-                    <thead>
-                        <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                            <th className={`${styleTextRow} text-left ${textHeaderTable} w-[15%]`}>Address</th>
-                            <th className={`${styleTextRow} text-center ${textHeaderTable} w-[12%]`}>
-                                <div className={`flex items-center justify-center ${textHeaderTable}`}>
-                                    7D PnL
-                                    <ChevronDown className="ml-1 h-4 w-4" />
-                                </div>
-                            </th>
-                            <th className={`${styleTextRow} text-center w-[12%]`}>
-                                <div className={`flex items-center justify-center ${textHeaderTable}`}>
-                                    30D PnL
-                                    <ChevronDown className="ml-1 h-4 w-4" />
-                                </div>
-                            </th>
-                            <th className={`${styleTextRow} text-center w-[10%]`}>
-                                <div className={`flex items-center justify-center ${textHeaderTable}`}>
-                                    7D Win Rate
-                                    <ChevronDown className="ml-1 h-4 w-4" />
-                                </div>
-                            </th>
-                            <th className={`${styleTextRow} text-left w-[8%]`}>
-                                <div className={`flex items-center ${textHeaderTable}`}>
-                                    7D TXs
-                                    <ChevronDown className="ml-1 h-4 w-4" />
-                                </div>
-                            </th>
-                            <th className={`${styleTextRow} text-left w-[10%]`}>
-                                <div className={`flex items-center ${textHeaderTable}`}>
-                                    Last Time
-                                    <ChevronDown className="ml-1 h-4 w-4" />
-                                </div>
-                            </th>
-                            <th className={`${styleTextRow} text-left w-[8%]`}>
-                                <div className={`flex items-center ${textHeaderTable}`}>
-                                    Type
-                                    <ChevronDown className="ml-1 h-4 w-4" />
-                                </div>
-                            </th>
-                            <th className={`${styleTextRow} text-start ${textHeaderTable} w-[8%]`}>Status</th>
-                            <th className={`${styleTextRow} text-start ${textHeaderTable} whitespace-nowrap`}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {isLoading ? (
-                            // Show 5 skeleton rows while loading
-                            Array(5).fill(0).map((_, index) => (
-                                <TableSkeleton key={index} />
-                            ))
-                        ) : filteredData.length === 0 ? (
-                            <tr>
-                                <td colSpan={9} className="text-center py-8 text-neutral-400">
-                                    No data available
-                                </td>
+            {/* Desktop Table */}
+            <div className={mobileTableWrapperClass}>
+                <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
+                    <table className="w-full text-neutral-100">
+                        <thead>
+                            <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
+                                <th className={`${styleTextRow} text-left ${textHeaderTable} w-[15%]`}>Address</th>
+                                <th className={`${styleTextRow} text-center ${textHeaderTable} w-[12%]`}>
+                                    <div className={`flex items-center justify-center ${textHeaderTable}`}>
+                                        7D PnL
+                                        <ChevronDown className="ml-1 h-4 w-4" />
+                                    </div>
+                                </th>
+                                <th className={`${styleTextRow} text-center w-[12%]`}>
+                                    <div className={`flex items-center justify-center ${textHeaderTable}`}>
+                                        30D PnL
+                                        <ChevronDown className="ml-1 h-4 w-4" />
+                                    </div>
+                                </th>
+                                <th className={`${styleTextRow} text-center w-[10%]`}>
+                                    <div className={`flex items-center justify-center ${textHeaderTable}`}>
+                                        7D Win Rate
+                                        <ChevronDown className="ml-1 h-4 w-4" />
+                                    </div>
+                                </th>
+                                <th className={`${styleTextRow} text-left w-[8%]`}>
+                                    <div className={`flex items-center ${textHeaderTable}`}>
+                                        7D TXs
+                                        <ChevronDown className="ml-1 h-4 w-4" />
+                                    </div>
+                                </th>
+                                <th className={`${styleTextRow} text-left w-[10%]`}>
+                                    <div className={`flex items-center ${textHeaderTable}`}>
+                                        Last Time
+                                        <ChevronDown className="ml-1 h-4 w-4" />
+                                    </div>
+                                </th>
+                                <th className={`${styleTextRow} text-left w-[8%]`}>
+                                    <div className={`flex items-center ${textHeaderTable}`}>
+                                        Type
+                                        <ChevronDown className="ml-1 h-4 w-4" />
+                                    </div>
+                                </th>
+                                <th className={`${styleTextRow} text-start ${textHeaderTable} w-[8%]`}>Status</th>
+                                <th className={`${styleTextRow} text-start ${textHeaderTable} whitespace-nowrap`}>Action</th>
                             </tr>
-                        ) : (
-                            filteredData.map((item) => (
-                                <tr key={item.id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
-                                    <td className={`${styleTextRow}`}>
-                                        <div className="flex items-center text-xs font-normal text-neutral-200">
-                                            <span className="text-neutral-100 text-xs font-medium">{truncateString(item.address, 12)}</span>
-                                            <button
-                                                onClick={() => copyAddress(item.address)}
-                                                className="ml-2 text-neutral-100 transition-colors group relative"
-                                            >
-                                                <Copy className="h-4 w-4" />
-                                                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-neutral-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                                                    Copy address
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td className={`${styleTextRow} text-center`}>
-                                        <div className={`text-xs ${getValueColor(Number(item.pnlPercent7d))}`}>{item.pnlPercent7d} %</div>
-                                        <div className={`text-xs ${getValueColor(Number(item.pnl7d))}`}>${item.pnl7d}</div>
-                                    </td>
-                                    <td className={`${styleTextRow} text-center`}>
-                                        <div className={`text-xs ${getValueColor(Number(item.pnlPercent30d))}`}>{item.pnlPercent30d} %</div>
-                                        <div className={`text-xs ${getValueColor(Number(item.pnl30d))}`}>${item.pnl30d}</div>
-                                    </td>
-                                    <td className={`${styleTextRow} text-center`}>
-                                        <div className={`${getValueColor(Number(item.winRate7d))}`}>{item.winRate7d}%</div>
-                                    </td>
-                                    <td className={`${styleTextRow} text-xs flex flex-col gap-1`}>
-                                        <div>
-                                            <span className="text-xs">{item.transactions7d.wins + item.transactions7d.losses}</span>
-                                        </div>
-                                        <div className="flex gap-1">
-                                            <div className="text-theme-green-200 text-xs">{item.transactions7d.wins}</div>
-                                            <div className="text-theme-red-200 text-xs">{item.transactions7d.losses}</div>
-                                        </div>
-                                        {/* <div className="text-theme-primary-400">3/4</div> */}
-                                    </td>
-                                    <td className={`${styleTextRow} text-xs`}>{item.lastTime}</td>
-                                    <td className={`${styleTextRow}`}>
-                                        {item.type === "vip" ? (
-                                            <div className="flex items-center text-theme-yellow-200 text-xs">
-                                                <Crown className="h-4 w-4 mr-1" />
-                                                VIP
-                                            </div>
-                                        ) : (
-                                            <div className="text-theme-primary-400 text-xs">NORMAL</div>
-                                        )}
-                                    </td>
-                                    <td className={`${styleTextRow} text-start`}>
-                                        <span
-                                            className={` py-1 rounded-full text-xs`}
-                                        >
-                                            {item.status}
-                                        </span>
-                                    </td>
-                                    <td className={`${styleTextRow} text-center`}>
-                                        <div className="flex  gap-1 justify-start">
-                                            {item.status === "Not Connected" && (
-                                                <button
-                                                    onClick={() => {
-                                                        handleConnect(item)
-                                                        setInforWallet(getTraderDetails(item.address))
-                                                    }}
-                                                    className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
-                                                >
-                                                    Connect
-                                                </button>
-                                            )}
-                                            {(item.status === "connect" || item.status === "pause") && (
-                                                <div className="flex gap-1" >
-                                                    <button
-                                                        onClick={() => {
-                                                            setShowDetailModal(true)
-                                                            setInfoWallet(item)
-                                                        }}
-                                                        className={`px-3 py-1 ${blueBg} rounded-full transition-colors text-xs`}
-                                                    >
-                                                        Details
-                                                    </button>
-                                                    <button
-                                                        onClick={() => {
-                                                            handleMemberConnectStatus(item, "pause")
-                                                        }}
-                                                        className={`px-3 py-1 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs`}
-                                                    >
-                                                        Pause
-                                                    </button>
-                                                    <button
-                                                        onClick={() => {
-                                                            handleMemberConnectStatus(item, "disconnect")
-                                                        }}
-                                                        className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
-                                                    >
-                                                        Disconnect
-                                                    </button>
-                                                </div>
-                                            )}
-                                            {(item.status === "disconnect") && (
-                                                <button
-                                                    onClick={() => {
-                                                        handleMemberConnectStatus(item, "connect")
-                                                    }}
-                                                    className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
-                                                >
-                                                    Reconnect
-                                                </button>
-                                            )}
-
-                                        </div>
+                        </thead>
+                        <tbody>
+                            {isLoading ? (
+                                // Show 5 skeleton rows while loading
+                                Array(5).fill(0).map((_, index) => (
+                                    <TableSkeleton key={index} />
+                                ))
+                            ) : filteredData.length === 0 ? (
+                                <tr>
+                                    <td colSpan={9} className="text-center py-8 text-neutral-400">
+                                        No data available
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-                {isLoading && (
-                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
-                        <div className="flex flex-col items-center gap-2">
-                            <Loader2 className="h-8 w-8 animate-spin text-theme-primary-300" />
-                            <span className="text-sm text-neutral-200">Loading...</span>
+                            ) : (
+                                filteredData.map((item) => (
+                                    <tr key={item.id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
+                                        <td className={`${styleTextRow}`}>
+                                            <div className="flex items-center text-xs font-normal text-neutral-200">
+                                                <span className="text-neutral-100 text-xs font-medium">{truncateString(item.address, 12)}</span>
+                                                <button
+                                                    onClick={() => copyAddress(item.address)}
+                                                    className="ml-2 text-neutral-100 transition-colors group relative"
+                                                >
+                                                    <Copy className="h-4 w-4" />
+                                                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-neutral-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                                        Copy address
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td className={`${styleTextRow} text-center`}>
+                                            <div className={`text-xs ${getValueColor(Number(item.pnlPercent7d))}`}>{item.pnlPercent7d} %</div>
+                                            <div className={`text-xs ${getValueColor(Number(item.pnl7d))}`}>${item.pnl7d}</div>
+                                        </td>
+                                        <td className={`${styleTextRow} text-center`}>
+                                            <div className={`text-xs ${getValueColor(Number(item.pnlPercent30d))}`}>{item.pnlPercent30d} %</div>
+                                            <div className={`text-xs ${getValueColor(Number(item.pnl30d))}`}>${item.pnl30d}</div>
+                                        </td>
+                                        <td className={`${styleTextRow} text-center`}>
+                                            <div className={`${getValueColor(Number(item.winRate7d))}`}>{item.winRate7d}%</div>
+                                        </td>
+                                        <td className={`${styleTextRow} text-xs flex flex-col gap-1`}>
+                                            <div>
+                                                <span className="text-xs">{item.transactions7d.wins + item.transactions7d.losses}</span>
+                                            </div>
+                                            <div className="flex gap-1">
+                                                <div className="text-theme-green-200 text-xs">{item.transactions7d.wins}</div>
+                                                <div className="text-theme-red-200 text-xs">{item.transactions7d.losses}</div>
+                                            </div>
+                                            {/* <div className="text-theme-primary-400">3/4</div> */}
+                                        </td>
+                                        <td className={`${styleTextRow} text-xs`}>{item.lastTime}</td>
+                                        <td className={`${styleTextRow}`}>
+                                            {item.type === "vip" ? (
+                                                <div className="flex items-center text-theme-yellow-200 text-xs">
+                                                    <Crown className="h-4 w-4 mr-1" />
+                                                    VIP
+                                                </div>
+                                            ) : (
+                                                <div className="text-theme-primary-400 text-xs">NORMAL</div>
+                                            )}
+                                        </td>
+                                        <td className={`${styleTextRow} text-start`}>
+                                            <span
+                                                className={` py-1 rounded-full text-xs`}
+                                            >
+                                                {item.status}
+                                            </span>
+                                        </td>
+                                        <td className={`${styleTextRow} text-center`}>
+                                            <div className="flex  gap-1 justify-start">
+                                                {item.status === "Not Connected" && (
+                                                    <button
+                                                        onClick={() => {
+                                                            handleConnect(item)
+                                                            setInforWallet(getTraderDetails(item.address))
+                                                        }}
+                                                        className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
+                                                    >
+                                                        Connect
+                                                    </button>
+                                                )}
+                                                {(item.status === "connect" || item.status === "pause") && (
+                                                    <div className="flex gap-1" >
+                                                        <button
+                                                            onClick={() => {
+                                                                setShowDetailModal(true)
+                                                                setInfoWallet(item)
+                                                            }}
+                                                            className={`px-3 py-1 ${blueBg} rounded-full transition-colors text-xs`}
+                                                        >
+                                                            Details
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                handleMemberConnectStatus(item, "pause")
+                                                            }}
+                                                            className={`px-3 py-1 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs`}
+                                                        >
+                                                            Pause
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                handleMemberConnectStatus(item, "disconnect")
+                                                            }}
+                                                            className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
+                                                        >
+                                                            Disconnect
+                                                        </button>
+                                                    </div>
+                                                )}
+                                                {(item.status === "disconnect") && (
+                                                    <button
+                                                        onClick={() => {
+                                                            handleMemberConnectStatus(item, "connect")
+                                                        }}
+                                                        className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
+                                                    >
+                                                        Reconnect
+                                                    </button>
+                                                )}
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                    {isLoading && (
+                        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                            <div className="flex flex-col items-center gap-2">
+                                <Loader2 className="h-8 w-8 animate-spin text-theme-primary-300" />
+                                <span className="text-sm text-neutral-200">Loading...</span>
+                            </div>
                         </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className={mobileCardWrapperClass}>
+                {isLoading ? (
+                    // Mobile loading skeleton
+                    Array(3).fill(0).map((_, index) => (
+                        <div key={index} className={mobileCardClass}>
+                            <div className="animate-pulse space-y-4">
+                                <div className="h-4 bg-gray-700 rounded w-3/4"></div>
+                                <div className="space-y-2">
+                                    <div className="h-4 bg-gray-700 rounded"></div>
+                                    <div className="h-4 bg-gray-700 rounded w-5/6"></div>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : filteredData.length === 0 ? (
+                    <div className="text-center py-8 text-neutral-400">
+                        No data available
                     </div>
+                ) : (
+                    filteredData.map((item) => (
+                        <div key={item.id} className={mobileCardClass}>
+                            {/* Card Header */}
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center">
+                                    <span className="text-neutral-100 text-sm font-medium">{truncateString(item.address, 12)}</span>
+                                    <button
+                                        onClick={() => copyAddress(item.address)}
+                                        className="ml-2 text-neutral-100"
+                                    >
+                                        <Copy className="h-4 w-4" />
+                                    </button>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    {item.type === "vip" ? (
+                                        <div className="flex items-center text-theme-yellow-200 text-xs">
+                                            <Crown className="h-4 w-4 mr-1" />
+                                            VIP
+                                        </div>
+                                    ) : (
+                                        <div className="text-theme-primary-400 text-xs">NORMAL</div>
+                                    )}
+                                    <span className={`text-xs px-2 py-1 rounded-full ${item.status === 'connect' ? 'bg-theme-green-200/20 text-theme-green-200' : 
+                                        item.status === 'disconnect' ? 'bg-theme-red-200/20 text-theme-red-200' : 
+                                        'bg-theme-yellow-200/20 text-theme-yellow-200'}`}>
+                                        {item.status}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Card Content */}
+                            <div className="grid grid-cols-2 gap-3 text-xs">
+                                <div className="flex lg:block gap-1">
+                                    <div className="text-neutral-400 mb-1">7D PnL</div>
+                                    <div className={`${getValueColor(Number(item.pnlPercent7d))}`}>{item.pnlPercent7d}%</div>
+                                    <div className={`${getValueColor(Number(item.pnl7d))}`}>${item.pnl7d}</div>
+                                </div>
+                                <div className="flex lg:block gap-1">
+                                    <div className="text-neutral-400 mb-1">30D PnL</div>
+                                    <div className={`${getValueColor(Number(item.pnlPercent30d))}`}>{item.pnlPercent30d}%</div>
+                                    <div className={`${getValueColor(Number(item.pnl30d))}`}>${item.pnl30d}</div>
+                                </div>
+                                <div className="flex lg:block gap-1">
+                                    <div className="text-neutral-400 mb-1">Win Rate</div>
+                                    <div className={`${getValueColor(Number(item.winRate7d))}`}>{item.winRate7d}%</div>
+                                </div>
+                                <div className="flex lg:block gap-1">
+                                    <div className="text-neutral-400 mb-1">Transactions</div>
+                                    <div className="flex gap-2">
+                                        <span className="text-theme-green-200">{item.transactions7d.wins}W</span>
+                                        <span className="text-theme-red-200">{item.transactions7d.losses}L</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Card Footer - Actions */}
+                            <div className="lg:mt-4 pt-3 border-t border-blue-500/10">
+                                <div className="flex flex-wrap gap-2">
+                                    {item.status === "Not Connected" && (
+                                        <button
+                                            onClick={() => {
+                                                handleConnect(item)
+                                                setInforWallet(getTraderDetails(item.address))
+                                            }}
+                                            className="flex-1 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
+                                        >
+                                            Connect
+                                        </button>
+                                    )}
+                                    {(item.status === "connect" || item.status === "pause") && (
+                                        <>
+                                            <button
+                                                onClick={() => {
+                                                    setShowDetailModal(true)
+                                                    setInfoWallet(item)
+                                                }}
+                                                className="flex-1 px-3 py-1.5 text-theme-blue-200 border border-theme-blue-200 hover:text-neutral-100 hover:bg-theme-blue-200 rounded-full transition-colors text-xs text-center"
+                                            >
+                                                Details
+                                            </button>
+                                            <button
+                                                onClick={() => handleMemberConnectStatus(item, "pause")}
+                                                className="flex-1 px-3 py-1.5 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs text-center"
+                                            >
+                                                Pause
+                                            </button>
+                                            <button
+                                                onClick={() => handleMemberConnectStatus(item, "disconnect")}
+                                                className="flex-1 px-3 py-1.5 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs text-center"
+                                            >
+                                                Disconnect
+                                            </button>
+                                        </>
+                                    )}
+                                    {item.status === "disconnect" && (
+                                        <button
+                                            onClick={() => handleMemberConnectStatus(item, "connect")}
+                                            className="lg:w-auto mx-auto lg:mx-0 w-36 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
+                                        >
+                                            Reconnect
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))
                 )}
             </div>
+
+            {/* Keep existing modals */}
             <ConnectToMasterModal
                 refetchMasterTraders={refetchMasterTraders}
                 inforWallet={inforWallet}
