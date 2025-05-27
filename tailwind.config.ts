@@ -213,7 +213,6 @@ const config: Config = {
         '.linear-gradient-connect': {
           background: `linear-gradient(93deg, ${theme('colors.theme.gradient.overlay.start')} 2.14%, ${theme('colors.theme.gradient.overlay.end')} 98.03%)`,
           borderRadius: '24px',
-          fontSize: '0.875rem',
           fontWeight: '500',
         },
         '.linear-gradient-light': {

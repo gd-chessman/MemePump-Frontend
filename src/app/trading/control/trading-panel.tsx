@@ -255,29 +255,7 @@ export default function TradingPanel({
     return (
         <div>
             <div className="rounded-lg flex flex-col 2xl:justify-between gap-3 h-full overflow-y-auto">
-                {/* BUY/SELL Toggle */}
-                <div className="flex bg-gray-100 dark:bg-theme-neutral-1000 rounded-xl">
-                    <button
-                        className={`flex-1 rounded-3xl py-1 text-sm cursor-pointer uppercase text-center ${mode === "buy"
-                                ? "border-green-500 text-green-600 dark:text-theme-green-200 border-1 bg-green-50 dark:bg-theme-green-100 font-semibold"
-                                : "text-gray-500 dark:text-neutral-400"
-                            }`}
-                        onClick={() => setMode("buy")}
-                    >
-                        {t('trading.panel.buy')}
-                    </button>
-                    <button
-                        className={`flex-1 rounded-3xl py-1 cursor-pointer text-sm uppercase text-center ${mode === "sell"
-                                ? "border-red-500 text-red-600 dark:text-theme-red-100 border-1 bg-red-50 dark:bg-theme-red-300 font-semibold"
-                                : "text-gray-500 dark:text-neutral-400"
-                            }`}
-                        onClick={() => setMode("sell")}
-                    >
-                        {t('trading.panel.sell')}
-                    </button>
-                </div>
-
-                {/* Amount Input */}
+               {/* Amount Input */}
                 <div className="relative mt-2">
                     <div className={`bg-gray-50 dark:bg-neutral-900 rounded-full border border-blue-200 dark:border-blue-500 px-3 py-2 flex justify-between items-center ${height > 700 ? 'py-2' : 'h-[30px]'}`}>
                         <input

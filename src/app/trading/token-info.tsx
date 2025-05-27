@@ -19,12 +19,16 @@ import { useLang } from "@/lang";
 import { UpdateFavorite } from "../components/UpdateFavorite"
 import { io } from 'socket.io-client';
 import { getStatsToken } from "@/services/api/OnChainService"
+import TokenInfoMobile from "./token-info-mobile"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
+
 type TimeFrame = '5m' | '1h' | '4h' | '24h'
 
 export default function TokenInfo() {
   const searchParams = useSearchParams();
   const address = searchParams?.get("address");
   const { t } = useLang();  
+  const isMobile = useMediaQuery('(max-width: 768px)')
   const { data: tokenInfor, refetch } = useQuery({
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
@@ -138,8 +142,31 @@ export default function TokenInfo() {
     }
   }
   console.log("dataToken", dataToken)
+
+  const handleToggleWishlist = (data: { token_address: string; status: string }) => {
+    SolonaTokenService.toggleWishlist(data).then(() => {
+      refetchMyWishlist()
+    })
+  }
+
+  // If mobile, render mobile component
+  if (isMobile) {
+    return (
+      <TokenInfoMobile
+        tokenInfor={tokenInfor}
+        myWishlist={myWishlist}
+        wsTokenInfo={wsTokenInfo}
+        statsToken={statsToken}
+        dataToken={dataToken}
+        onToggleWishlist={handleToggleWishlist}
+        refetchMyWishlist={refetchMyWishlist}
+      />
+    )
+  }
+
+  // Desktop version
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <div className="bg-neutral-1000 box-shadow-info rounded-xl p-3 h-full flex flex-col ">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
@@ -171,9 +198,7 @@ export default function TokenInfo() {
                 token_address: tokenInfor?.address,
                 status: myWishlist?.tokens?.some((t: { address: string }) => t.address === tokenInfor?.address) ? "off" : "on",
               };
-              SolonaTokenService.toggleWishlist(data).then(() => {
-                refetchMyWishlist();
-              });
+              handleToggleWishlist(data);
             }}>
               <Star className={`w-4 h-4 ${myWishlist?.tokens?.some((t: { address: string }) => t.address === tokenInfor?.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
             </button>

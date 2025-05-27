@@ -10,37 +10,25 @@ import TradingViewChart from '@/app/components/tradingview-chart/TradingViewChar
 
 const TradingPage = () => {
   const [isMounted, setIsMounted] = useState(false);
-  const [windowHeight, setWindowHeight] = useState(800); // Default height
-  const [chartHeight, setChartHeight] = useState(51); // Changed default to 50%
+  const [windowHeight, setWindowHeight] = useState(800);
+  const [chartHeight, setChartHeight] = useState(51);
   const [isDragging, setIsDragging] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const checkScreenSize = () => {
-    // Get screen dimensions in pixels
-    const width = window.screen.width;
-    const height = window.screen.height;
-    
-    // Get pixel density (DPI)
-    const dpi = window.devicePixelRatio;
-    
-    // Calculate physical size in inches
-    // Using Pythagorean theorem to get diagonal size
-    const diagonalPixels = Math.sqrt(width * width + height * height);
-    const diagonalInches = diagonalPixels / (dpi * 96); // 96 is the standard DPI
-    
-    // Check if screen is approximately 14.2 inches (with some tolerance)
-    return Math.abs(diagonalInches - 14.2) < 0.5;
+    // Check if screen width is less than 768px (typical mobile breakpoint)
+    return window.innerWidth < 768;
   };
 
   useEffect(() => {
     setIsMounted(true);
     setWindowHeight(window.innerHeight);
-    setIsSmallScreen(checkScreenSize());
+    setIsMobile(checkScreenSize());
     
     const handleResize = () => {
       setWindowHeight(window.innerHeight);
-      setIsSmallScreen(checkScreenSize());
+      setIsMobile(checkScreenSize());
     };
     
     const handleMouseMove = (e: MouseEvent) => {
@@ -80,20 +68,28 @@ const TradingPage = () => {
 
   console.log("height", height)
   return (
-    <div className={`h-[92vh] flex flex-col gap-4 container-trading py-4 relative z-10 ${isSmallScreen ? 'px-[10px]' : 'px-[40px]'}`}>
-      <Interface />
-      <div className='flex-1 flex gap-4 w-full relative z-10 overflow-hidden'>
+    <div className={`h-[92vh] flex flex-col gap-4 container-trading py-4 relative z-10 ${
+      isMobile ? 'px-2' : 'px-[40px]'
+    }`}>
+      {!isMobile && <Interface />}
+      <div className={`flex-1 flex ${
+        isMobile ? 'flex-col' : 'flex-row'
+      } gap-4 w-full relative z-10 lg:overflow-hidden`}>
         {/* Left Column */}
-        <div className={`flex flex-col gap-4 overflow-hidden ${isSmallScreen ? 'w-1/5' : 'w-1/6'}`}>
+        <div className={`flex ${
+          isMobile ? 'flex-row w-full lg:h-[200px]' : 'flex-col w-1/6 '
+        } gap-4 lg:overflow-hidden`}>
           <TokenInfo />
-          <ListToken />
+          {!isMobile && <ListToken />}
         </div>
 
         {/* Center Column */}
-        <div ref={containerRef} className='flex flex-col flex-1 overflow-hidden relative'>
+        <div ref={containerRef} className={`flex flex-col ${
+          isMobile ? 'w-full h-[calc(100%-200px)]' : 'flex-1'
+        } overflow-hidden relative`}>
           <div 
-            style={{ height: `${chartHeight}%` }} 
-            className='bg-neutral-800 rounded-xl p-4 overflow-auto min-h-[20rem] transition-all duration-100 relative'
+            style={{ height: isMobile ? '350px' : `${chartHeight}%` }} 
+            className='bg-neutral-800 rounded-xl p-2 md:p-4 overflow-auto lg:min-h-[20rem] transition-all duration-100 relative'
           >
             <TradingViewChart className='h-full' />
             {isDragging && (
@@ -105,29 +101,31 @@ const TradingPage = () => {
           </div>
           
           <div 
-            className='h-1 m-2 bg-neutral-700 cursor-row-resize hover:bg-neutral-600 transition-colors relative z-50'
+            className='h-1 m-1 md:m-2 bg-neutral-700 cursor-row-resize hover:bg-neutral-600 transition-colors relative z-50'
             onMouseDown={handleDragStart}
             style={{ touchAction: 'none' }}
           />
           
           <div 
-            style={{ height: `${100 - chartHeight}%` }} 
+            style={{ height: !isMobile ? `${100 - chartHeight}%` : 'auto' }} 
             className='transition-all duration-100 overflow-hidden flex'
           >
-            <div className='flex flex-1'>
+            <div className='flex flex-1 w-full'>
               <TransactionHistory />
             </div>
           </div>
         </div>
 
         {/* Right Column */}
-        <div className={`${isSmallScreen ? 'w-1/5' : 'w-1/6'} h-full overflow-hidden`}>
+        <div className={`${
+          isMobile ? 'w-full h-[200px]' : 'w-1/6 h-full overflow-hidden'
+        } `}>
           <div className='h-full overflow-auto'>
             <Control/>
           </div>
         </div>
       </div>
-      <Slider />
+      {/* <Slider /> */}
     </div>
   )
 }
