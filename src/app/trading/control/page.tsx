@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import TradingPanel from './trading-panel'
 import MasterTradeChat from './master-trade'
 import { useQuery } from '@tanstack/react-query'
@@ -84,27 +84,31 @@ const Control = () => {
       case 'buy':
       case 'sell':
         return (
-          <TradingPanel 
-            defaultMode={activeTab as TradingMode}
-            currency={currencies}
-            isConnected={isConnected}
-            onConnect={() => setIsConnected(!isConnected)}
-            selectedGroups={selectedGroups}
-            setSelectedGroups={setSelectedGroups}
-            selectedConnections={selectedConnections}
-            setSelectedConnections={setSelectedConnections}
-          />
+          <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <TradingPanel 
+              defaultMode={activeTab as TradingMode}
+              currency={currencies}
+              isConnected={isConnected}
+              onConnect={() => setIsConnected(!isConnected)}
+              selectedGroups={selectedGroups}
+              setSelectedGroups={setSelectedGroups}
+              selectedConnections={selectedConnections}
+              setSelectedConnections={setSelectedConnections}
+            />
+          </Suspense>
         )
       case 'chat':
         return (
           <div className="h-[70vh] flex flex-col">
             <div className="flex-1 overflow-y-auto">
-              <MasterTradeChat
-                selectedGroups={selectedGroups}
-                setSelectedGroups={setSelectedGroups}
-                selectedConnections={selectedConnections}
-                setSelectedConnections={setSelectedConnections}
-              />
+              <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+                <MasterTradeChat
+                  selectedGroups={selectedGroups}
+                  setSelectedGroups={setSelectedGroups}
+                  selectedConnections={selectedConnections}
+                  setSelectedConnections={setSelectedConnections}
+                />
+              </Suspense>
             </div>
           </div>
         )
@@ -213,24 +217,28 @@ const Control = () => {
   return (
     <div className='flex flex-col h-full gap-4'>
       <div className={classLayout + " p-3 flex-none"}>
-        <TradingPanel 
-          defaultMode={activeTab as TradingMode}
-          currency={currencies} 
-          isConnected={isConnected} 
-          onConnect={() => setIsConnected(!isConnected)}
-          selectedGroups={selectedGroups}
-          setSelectedGroups={setSelectedGroups}
-          selectedConnections={selectedConnections}
-          setSelectedConnections={setSelectedConnections}
-        />
+        <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+          <TradingPanel 
+            defaultMode={activeTab as TradingMode}
+            currency={currencies} 
+            isConnected={isConnected} 
+            onConnect={() => setIsConnected(!isConnected)}
+            selectedGroups={selectedGroups}
+            setSelectedGroups={setSelectedGroups}
+            selectedConnections={selectedConnections}
+            setSelectedConnections={setSelectedConnections}
+          />
+        </Suspense>
       </div>
       <div className={classLayout + " flex-1 min-h-0"}>
-        <MasterTradeChat 
-          selectedGroups={selectedGroups}
-          setSelectedGroups={setSelectedGroups}
-          selectedConnections={selectedConnections}
-          setSelectedConnections={setSelectedConnections}
-        />
+        <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+          <MasterTradeChat 
+            selectedGroups={selectedGroups}
+            setSelectedGroups={setSelectedGroups}
+            selectedConnections={selectedConnections}
+            setSelectedConnections={setSelectedConnections}
+          />
+        </Suspense>
       </div>
     </div>
   )
