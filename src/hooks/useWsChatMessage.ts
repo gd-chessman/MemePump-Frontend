@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from './useAuth';
-import { useLang } from '@/lang/useLang';
 
 interface ChatMetrics {
     connectedClients: number;
@@ -37,7 +36,6 @@ interface UseWsChatMessageReturn {
 }
 
 export const useWsChatMessage = ({ chatType, tokenAddress, groupId }: UseWsChatMessageProps): UseWsChatMessageReturn => {
-    const { lang } = useLang();
     
     const { payloadToken, token } = useAuth();
     const [message, setMessage] = useState<{
@@ -81,16 +79,16 @@ export const useWsChatMessage = ({ chatType, tokenAddress, groupId }: UseWsChatM
                 // Join chat based on type
                 switch (chatType) {
                     case 'all':
-                        socketRef.current?.emit('join-chat', { type: 'all', lang: lang });
+                        socketRef.current?.emit('join-chat', { type: 'all' });
                         break;
                     case 'token':
                         if (tokenAddress) {
-                            socketRef.current?.emit('join-token', { token_address: tokenAddress, lang: lang });
+                            socketRef.current?.emit('join-token', { token_address: tokenAddress });
                         }
                         break;
                     case 'group':
                         if (groupId) {
-                            socketRef.current?.emit('join-group', { group_id: groupId, lang: lang });
+                            socketRef.current?.emit('join-group', { group_id: groupId });
                         }
                         break;
                     default:
@@ -148,7 +146,7 @@ export const useWsChatMessage = ({ chatType, tokenAddress, groupId }: UseWsChatM
                 clearTimeout(typingTimeoutRef.current);
             }
         };
-    }, [chatType, tokenAddress, groupId, lang]);
+    }, [chatType, tokenAddress, groupId]);
 
     const handleTyping = () => {
         const tokenPayload = payloadToken as { wallet_id: number };

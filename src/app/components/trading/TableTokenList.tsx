@@ -30,7 +30,7 @@ interface TableTokenListProps {
     symbol: string;
     address: string;
     decimals: number;
-    logoUrl: string;
+    logo_uri: string;
     coingeckoId: string | null;
     tradingviewSymbol: string | null;
     isVerified: boolean;
@@ -224,11 +224,11 @@ export function TableTokenList({
                         >
                           {isFavoritesTab || (myWishlist?.tokens?.some((item: any) => item.address === token.address)) ? <FontAwesomeIcon icon={['fas', 'star']} /> : <Star className="h-4 w-4" />}
                         </Button>
-                        <Image
-                          src={token.logo_uri || token.logoUrl || "/placeholder.png"}
+                        <img
+                          src={token.logo_uri || "/placeholder.png"}
                           alt="token logo"
                           width={30} height={30}
-                          className="rounded-full"
+                          className="rounded-full h-[30px]"
                         />
                         <div className="flex gap-2">
                           <span className="line-clamp-2 text-xs font-semibold text-neutral-100">{token.name}</span>

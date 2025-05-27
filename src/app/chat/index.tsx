@@ -86,19 +86,22 @@ const ChatWidget = () => {
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      dragOffset.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      };
-      dragStartPos.current = {
-        x: e.clientX,
-        y: e.clientY
-      };
-      setIsDragging(true);
-      document.body.style.userSelect = "none";
+    // Only start dragging if clicking on the logo image itself
+    if (e.target === containerRef.current?.querySelector('.chat-logo img')) {
+      e.preventDefault();
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        dragOffset.current = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+        dragStartPos.current = {
+          x: e.clientX,
+          y: e.clientY
+        };
+        setIsDragging(true);
+        document.body.style.userSelect = "none";
+      }
     }
   };
 
@@ -127,19 +130,92 @@ const ChatWidget = () => {
 
   const handleMouseUp = (e: MouseEvent): void => {
     if (isDragging) {
-      // Check if this was a click (minimal movement) or a drag
-      const moved = Math.abs(e.clientX - dragStartPos.current.x) > 5 ||
-                   Math.abs(e.clientY - dragStartPos.current.y) > 5;
-      
-      // If it was a click (not a drag) and the click was on the logo
-      if (!moved && e.target === containerRef.current?.querySelector('.chat-logo')) {
-        setOpen(!open);
-      }
-      
       setIsDragging(false);
       document.body.style.userSelect = "";
+    } else if (e.target === containerRef.current?.querySelector('.chat-logo')) {
+      // Only toggle if it wasn't a drag and clicked on the logo container
+      setOpen(!open);
     }
   };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    // Only start dragging if touching the logo image itself
+    if (e.target === containerRef.current?.querySelector('.chat-logo img')) {
+      e.preventDefault();
+      if (containerRef.current) {
+        const touch = e.touches[0];
+        const rect = containerRef.current.getBoundingClientRect();
+        dragOffset.current = {
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top
+        };
+        dragStartPos.current = {
+          x: touch.clientX,
+          y: touch.clientY
+        };
+        setIsDragging(true);
+      }
+    }
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    if (!isDragging || !containerRef.current) return;
+
+    const touch = e.touches[0];
+    const newX = touch.clientX - dragOffset.current.x;
+    const newY = touch.clientY - dragOffset.current.y;
+    
+    // Calculate boundaries
+    const maxX = window.innerWidth - containerRef.current.offsetWidth;
+    const maxY = window.innerHeight - containerRef.current.offsetHeight;
+    
+    // Update position with boundaries
+    const boundedX = Math.max(0, Math.min(newX, maxX));
+    const boundedY = Math.max(0, Math.min(newY, maxY));
+    
+    setContainerPosition({
+      x: boundedX,
+      y: boundedY
+    });
+
+    // Update box position based on new logo position
+    updateBoxPosition(boundedX, boundedY);
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (isDragging) {
+      setIsDragging(false);
+    } else if (e.target === containerRef.current?.querySelector('.chat-logo')) {
+      // Only toggle if it wasn't a drag and tapped on the logo container
+      setOpen(!open);
+    }
+  };
+
+  // Add mouse event listeners
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
+
+  // Add touch event listeners
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('touchmove', handleTouchMove, { passive: false });
+      window.addEventListener('touchend', handleTouchEnd);
+    }
+
+    return () => {
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isDragging]);
 
   // Update container position effect
   React.useEffect(() => {
@@ -254,17 +330,28 @@ const ChatWidget = () => {
     >
       <div className="relative">
         {/* Chat Logo */}
-        <img
-          src={chatLogo}
-          alt="Chat Logo"
-          className="chat-logo cursor-move w-[60px] h-[60px]"
-          onMouseDown={handleMouseDown}
-        />
+        <div 
+          className="chat-logo cursor-pointer"
+          onClick={(e) => {
+            // Prevent click if it was a drag
+            if (!isDragging) {
+              setOpen(!open);
+            }
+          }}
+        >
+          <img
+            src={chatLogo}
+            alt="Chat Logo"
+            className="w-[40px] h-[40px] lg:w-[60px] lg:h-[60px]"
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+          />
+        </div>
         
         {/* Chat Box */}
         {open && (
           <div 
-            className={`${getBoxPositionClasses()} shadow-lg rounded-lg  w-96 h-[40vh] flex flex-col border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400`}
+            className={`${getBoxPositionClasses()} shadow-lg rounded-lg  lg:w-96 h-[40vh] flex flex-col border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400`}
             onMouseDown={(e) => {
               e.stopPropagation();
             }}
@@ -301,7 +388,7 @@ const ChatWidget = () => {
                 <button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim()}
-                  className={`px-4 py-1 rounded-lg text-xs font-medium transition-colors
+                  className={`px-2 lg:px-4 py-1 rounded-lg text-xs font-medium transition-colors
                     ${inputMessage.trim()
                       ? 'bg-theme-primary-400 hover:bg-theme-primary-500 text-white'
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}`}
@@ -318,4 +405,5 @@ const ChatWidget = () => {
 };
 
 export default ChatWidget; 
+
 
