@@ -222,7 +222,6 @@ export default function Trading() {
                 {/* Mobile Card View */}
                 <div className="md:hidden space-y-4">
                   {displayTokens.map((token) => {
-                    console.log("token", token)
                     return (
                     <div 
                       key={token.address}
