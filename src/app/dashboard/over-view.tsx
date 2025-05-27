@@ -37,10 +37,6 @@ const OverView = () => {
     console.log("walletInfor", walletInfor)
     return (
         <div className='flex flex-col gap-2'>
-            <div className='relative clip-text uppercase text-sm font-semibold flex items-center gap-2'>
-                <span className='gradient-hover'>Favorite </span>
-                <img src={"/star.png"} alt="star" width={12} />
-            </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 z-10'>
                 <Layout>
                     <img src="/solana-logo.png" alt="solana" className='w-[48px] h-[48px] md:w-[56px] md:h-[56px] rounded-full' />

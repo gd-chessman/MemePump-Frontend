@@ -3,9 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
 import { useLang } from "@/lang";
 import { useRouter } from "next/navigation";
 import { Search, Loader2, Copy, Star, BarChart4, ChevronDown, ChevronUp } from "lucide-react";
-import { Input } from "@/ui/input";
 import { useState, useEffect } from "react";
-import { useWsSubscribeTokens } from "@/hooks/useWsSubscribeTokens";
 import { SolonaTokenService } from "@/services/api";
 import { useDebounce } from "@/hooks/useDebounce";
 import { truncateString } from "@/utils/format";
@@ -13,11 +11,9 @@ import { ToastNotification } from "@/ui/toast";
 import { useAuth } from "@/hooks/useAuth";
 import { TableTokenList } from "@/app/components/trading/TableTokenList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
-import LogWarring from "@/ui/log-warring";
 import { getMyWishlist } from "@/services/api/SolonaTokenService";
 import { useQuery } from "@tanstack/react-query";
 import { getNewCoins, getTopCoins } from "@/services/api/OnChainService";
-import { UpdateFavorite } from "@/app/components/UpdateFavorite";
 import { formatNumberWithSuffix3 } from "@/utils/format";
 
 interface Token {
@@ -26,7 +22,7 @@ interface Token {
   symbol: string;
   address: string;
   decimals: number;
-  logoUrl: string;
+  logo_uri: string;
   coingeckoId: string | null;
   tradingviewSymbol: string | null;
   isVerified: boolean;
@@ -79,9 +75,17 @@ export default function Trading() {
   // Update tokens when topCoins or newCoins data changes
   useEffect(() => {
     if (activeTab === '1' && topCoins && topCoins.length > 0) {
-      setTokens(topCoins);
+      const transformedTokens = topCoins.map((token: any) => ({
+        ...token,
+        logoUrl: token.logo_url || token.logo_uri || "/token-placeholder.png"
+      }));
+      setTokens(transformedTokens);
     } else if (activeTab === '2' && newCoins && newCoins.length > 0) {
-      setTokens(newCoins);
+      const transformedTokens = newCoins.map((token: any) => ({
+        ...token,
+        logoUrl: token.logo_url || token.logo_uri || "/token-placeholder.png"
+      }));
+      setTokens(transformedTokens);
     }
   }, [topCoins, newCoins, activeTab]);
 
@@ -119,7 +123,7 @@ export default function Trading() {
 
   // Use search results if available, otherwise use tokens data
   const displayTokens = debouncedSearchQuery.trim() ? searchResults : tokens;
-
+  console.log("displayTokens", displayTokens)
   const handleCopyAddress = (address: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -217,7 +221,9 @@ export default function Trading() {
 
                 {/* Mobile Card View */}
                 <div className="md:hidden space-y-4">
-                  {displayTokens.map((token) => (
+                  {displayTokens.map((token) => {
+                    console.log("token", token)
+                    return (
                     <div 
                       key={token.address}
                       className="bg-white dark:bg-neutral-900 rounded-lg p-4 border border-gray-200 dark:border-neutral-800"
@@ -225,7 +231,7 @@ export default function Trading() {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <img 
-                            src={token.logoUrl || "/token-placeholder.png"} 
+                            src={token.logo_uri || "/placeholder.png"} 
                             alt={token.symbol} 
                             className="w-8 h-8 rounded-full"
                           />
@@ -235,6 +241,12 @@ export default function Trading() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => router.push(`/trading?address=${token.address}`)}
+                            className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-2 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
+                          >
+                            Trade
+                          </button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -257,12 +269,12 @@ export default function Trading() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 mb-3">
-                        <div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="flex gap-2 items-center">
                           <div className="text-xs text-gray-500 dark:text-gray-400">Price</div>
                           <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
                         </div>
-                        <div>
+                        <div className="flex items-center gap-2">
                           <div className="text-xs text-gray-500 dark:text-gray-400">24h Change</div>
                           <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                             {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
@@ -272,20 +284,20 @@ export default function Trading() {
 
                       {expandedRows[token.address] && (
                         <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-800">
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
+                          <div className="grid grid-cols-2 gap-4 gap-y-2">
+                            <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Market Cap</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
                             </div>
-                            <div>
+                            <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Volume 24h</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.volume24h || 0)}</div>
                             </div>
-                            <div>
+                            <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Holders</div>
                               <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
                             </div>
-                            <div>
+                            <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Address</div>
                               <div className="flex items-center gap-1">
                                 <span className="font-medium text-sm">{truncateString(token.address, 6)}</span>
@@ -301,7 +313,8 @@ export default function Trading() {
                         </div>
                       )}
                     </div>
-                  ))}
+                  )
+                  })}
                 </div>
               </CardContent>
             )}
@@ -354,16 +367,22 @@ export default function Trading() {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <img 
-                            src={token.logoUrl || "/token-placeholder.png"} 
+                            src={token.logo_uri || "/token-placeholder.png"} 
                             alt={token.symbol} 
                             className="w-8 h-8 rounded-full"
                           />
-                          <div>
+                          <div className="flex items-center gap-2">
                             <div className="font-medium text-sm">{token.symbol}</div>
                             <div className="text-xs text-gray-500 dark:text-gray-400">{token.name}</div>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => router.push(`/trading?address=${token.address}`)}
+                            className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-2 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
+                          >
+                            Trade
+                          </button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -386,12 +405,12 @@ export default function Trading() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 mb-3">
-                        <div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="flex gap-2 items-center">
                           <div className="text-xs text-gray-500 dark:text-gray-400">Price</div>
                           <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
                         </div>
-                        <div>
+                        <div className="flex gap-2 items-center">
                           <div className="text-xs text-gray-500 dark:text-gray-400">24h Change</div>
                           <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                             {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
@@ -402,19 +421,19 @@ export default function Trading() {
                       {expandedRows[token.address] && (
                         <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-800">
                           <div className="grid grid-cols-2 gap-4">
-                            <div>
+                            <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Market Cap</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
                             </div>
-                            <div>
+                            <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Volume 24h</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.volume24h || 0)}</div>
                             </div>
-                            <div>
+                            <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Holders</div>
                               <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
                             </div>
-                            <div>
+                            <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">Address</div>
                               <div className="flex items-center gap-1">
                                 <span className="font-medium text-sm">{truncateString(token.address, 6)}</span>
