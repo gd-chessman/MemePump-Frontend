@@ -73,6 +73,7 @@ const config: Config = {
             },
             'purple': {
               '100': '#5558FF',
+              '200': '#720881',
             },
           'gradient': {
             'start': '#15DFFD',
@@ -231,6 +232,36 @@ const config: Config = {
         '.glow-purple': {
           background: theme('colors.theme.gradient.glow.purple'),
           filter: 'blur(50px)',
+        },
+        '.container-glow': {
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: '150px',
+            left: '-200px',
+            width: '476px',
+            height: '139px',
+            transform: 'rotate(-33.023deg)',
+            flexShrink: '0',
+            borderRadius: '476px',
+            background: theme('colors.theme.gradient.glow.blue'),
+            filter: 'blur(50px)',
+            zIndex: '0',
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: '168px',
+            right: '-100px',
+            width: '476px',
+            height: '139px',
+            flexShrink: '0',
+            borderRadius: '476px',
+            background: theme('colors.theme.gradient.glow.purple'),
+            filter: 'blur(50px)',
+            zIndex: '0',
+          }
         },
         '.gradient-primary': {
           background: `linear-gradient(0deg, ${theme('colors.theme.primary.400')} 0%, ${theme('colors.theme.secondary.400')} 100%)`,

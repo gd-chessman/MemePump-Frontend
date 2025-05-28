@@ -9,6 +9,7 @@ import { WalletTable } from "@/app/components/wallet/WalletTable";
 import { useToast } from "@/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { langConfig, useLang } from "@/lang";
+import { useRouter } from "next/navigation";
 
 interface Token {
     token_address: string;
@@ -41,7 +42,7 @@ interface TokenListResponse {
 const wrapGradientStyle = "bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end p-[1px] relative w-full rounded-xl"
 
 // Add responsive styles
-const containerStyles = "lg:container-body w-full px-4 sm:px-[40px] flex flex-col gap-4 sm:gap-6 pt-4 sm:pt-[30px] relative mx-auto z-10"
+const containerStyles = "lg:container-glow w-full px-4 sm:px-[40px] flex flex-col gap-4 sm:gap-6 pt-4 sm:pt-[30px] relative mx-auto z-10"
 const walletGridStyles = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full"
 const walletCardStyles = "px-4 sm:px-6 py-4 border border-solid border-theme-secondary-500 rounded-xl flex flex-col justify-start items-center gap-3 sm:gap-4 min-w-0 bg-gradient-overlay"
 const walletTitleStyles = "text-Colors-Neutral-100 text-sm sm:text-base font-semibold uppercase leading-tight"
@@ -77,6 +78,7 @@ export default function WalletPage() {
     const [walletName, setWalletName] = useState("");
     const [walletNickname, setWalletNickname] = useState("");
     const [selectedNetwork, setSelectedNetwork] = useState("EN");
+    const router = useRouter();
     const [privateKey, setPrivateKey] = useState("");
     const [privateKeyDefault, setPrivateKeyDefault] = useState<PrivateKeys>({
         sol_private_key: "",
@@ -110,13 +112,12 @@ export default function WalletPage() {
     useEffect(() => {
         fetchWallets();
     }, []);
-    
+
     const { data: myWallets, refetch: refetchInforWallets } = useQuery({
         queryKey: ["my-wallets"],
         queryFn: getMyWallets,
         enabled: isAuthenticated,
     });
-    console.log("myWallets", myWallets)
 
     const { data: tokenList, refetch: refetchTokenList } = useQuery({
         queryKey: ["token-buy-list"],
@@ -510,24 +511,27 @@ export default function WalletPage() {
                                 </div>
                                 <div className="flex justify-end flex-1 items-center gap-3 w-full sm:w-auto">
                                     <div className="flex flex-col justify-start items-center gap-1">
-                                        <div className="w-8 h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center top-[8px] ">
-                                            <ArrowDownToLine className="w-4 h-4" />
-                                        </div>
-                                        <div className="text-center text-Colors-Neutral-100 text-[10px] font-semibold ">
-                                            Receive
-                                        </div>
+
+
+                                        <button onClick={() => router.push('/universal-account')} className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
+                                            <div className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center group  transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95">
+                                                <ArrowDownToLine className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
+                                            </div>
+                                            <div className="text-center text-Colors-Neutral-100 text-[9px] md:text-[10px] font-semibold">
+                                                Receive
+                                            </div>
+                                        </button>
 
                                     </div>
                                     <div className="flex flex-col justify-start items-center gap-1">
-                                        <div data-property-1="Send" className="w-8 h-8 relative">
-
-                                            <div className="w-8 h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center top-[8px] ">
-                                                <ArrowUpFromLine className="w-4 h-4" />
+                                        <button onClick={() => router.push('/universal-account')} className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
+                                            <div className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center transition-all hover:scale-105">
+                                                <ArrowUpFromLine className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
                                             </div>
-                                        </div>
-                                        <div className="text-center text-Colors-Neutral-100 text-[10px] font-semibold ">
-                                            Send
-                                        </div>
+                                            <div className="text-center text-Colors-Neutral-100 text-[9px] md:text-[10px] font-semibold">
+                                                Send
+                                            </div>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -682,16 +686,16 @@ export default function WalletPage() {
                                         </div>
                                         {/* Token Address */}
                                         <div className="flex items-center gap-2">
-                                                <span className="text-xs text-neutral-200 truncate flex-1">
-                                                    {truncateString(token.token_address, 12)}
-                                                </span>
-                                                <button
-                                                    onClick={(e) => handleCopyAddress(token.token_address, e)}
-                                                    className="text-gray-400 hover:text-gray-200 p-1"
-                                                >
-                                                    <Copy className="w-4 h-4" />
-                                                </button>
-                                            </div>
+                                            <span className="text-xs text-neutral-200 truncate flex-1">
+                                                {truncateString(token.token_address, 12)}
+                                            </span>
+                                            <button
+                                                onClick={(e) => handleCopyAddress(token.token_address, e)}
+                                                className="text-gray-400 hover:text-gray-200 p-1"
+                                            >
+                                                <Copy className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </div>
 
                                     {/* Token Details */}

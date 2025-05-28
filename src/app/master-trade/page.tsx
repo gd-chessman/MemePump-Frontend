@@ -96,9 +96,9 @@ const mobileContainerClass = "px-4 md:px-[40px]" // Reduced padding on mobile
 const mobileFilterWrapperClass = "w-full md:w-auto overflow-x-auto md:overflow-visible"
 const mobileFilterButtonClass = "whitespace-nowrap rounded-sm text-xs md:text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer flex-shrink-0"
 const mobileSearchWrapperClass = "flex flex-col md:flex-row items-start md:items-center gap-4 w-full" // Stack search on mobile
-const mobileTableWrapperClass = "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative md:block hidden" // Hide table on mobile
+const mobileTableWrapperClass = "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative md:block hidden" // Hide table on mobile
 const mobileCardWrapperClass = "flex flex-col gap-4 md:hidden" // Show cards on mobile only
-const mobileCardClass = "rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm p-4" // Card style for mobile
+const mobileCardClass = "rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm p-4" // Card style for mobile
 
 // Add new wrapper class for the filter buttons container
 const filterButtonsWrapperClass = "flex gap-2 md:gap-6 md:flex-wrap min-w-max md:min-w-0 pb-2 md:pb-0"
@@ -402,7 +402,7 @@ export default function MasterTradeTable() {
     };
 
     return (
-        <div className={`lg:container-body pb-4 lg:pb-0 h-screen lg:h-[92vh] ${mobileContainerClass} flex flex-col gap-4 md:gap-6 pt-[20px] md:pt-[30px] relative mx-auto z-10`}>
+        <div className={`lg:container-glow pb-4 lg:pb-0 h-screen lg:h-[92vh] ${mobileContainerClass} flex flex-col gap-4 md:gap-6 pt-[20px] md:pt-[30px] relative mx-auto z-10`}>
             {/* Thông báo copy */}
             {copyNotification.show && (
                 <div className="fixed top-4 right-4 bg-theme-green-200 text-black px-4 py-2 rounded-lg shadow-lg transition-opacity duration-300 animate-fade-in-out">
@@ -499,7 +499,7 @@ export default function MasterTradeTable() {
 
             {/* Desktop Table */}
             <div className={mobileTableWrapperClass}>
-                <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
+                <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
                     <table className="w-full text-neutral-100">
                         <thead>
                             <tr className="border-b border-blue-500/30 text-gray-400 text-sm">

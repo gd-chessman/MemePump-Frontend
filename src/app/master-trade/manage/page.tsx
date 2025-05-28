@@ -96,15 +96,15 @@ const textBodyTable = "text-xs font-normal text-neutral-100"
 
 // Add these styles at the top of the file after imports
 const styles = {
-  container: "lg:container-body h-screen pb-6 lg:pb-0 lg:h-[92vh] px-[16px] lg:px-[40px] flex gap-6 lg:pt-[30px] relative mx-auto z-10 md:flex-row flex-col",
+  container: "lg:container-glow h-screen pb-6 lg:pb-0 lg:h-[92vh] px-[16px] lg:px-[40px] flex gap-6 lg:pt-[30px] relative mx-auto z-10 md:flex-row flex-col",
   groupSection: "w-full md:w-auto",
   tradeSection: "flex-1 z-10 flex flex-col gap-6 w-full",
   chatSection: "z-10 w-full md:w-1/4 flex flex-col gap-6 lg:items-end lg:pb-0 pb-6",
-  tableContainer: "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm",
+  tableContainer: "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm",
   table: "w-full text-neutral-100 text-[10px] sm:text-xs md:text-sm",
   button: "h-min rounded-sm text-[10px] sm:text-xs md:text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer",
   input: "w-full py-1 px-3 bg-[#111111] rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-[10px] sm:placeholder:text-xs placeholder:text-neutral-100 text-[10px] sm:text-xs md:text-sm",
-  chatContainer: "bg-black bg-opacity-30 backdrop-blur-sm w-full rounded-xl border border-y-[#15DFFD] border-x-[#720881] overflow-hidden shadow-lg flex flex-col h-[300px] md:h-[600px]",
+  chatContainer: "bg-black bg-opacity-30 backdrop-blur-sm w-full rounded-xl border border-y-theme-primary-100 border-x-theme-purple-200 overflow-hidden shadow-lg flex flex-col h-[300px] md:h-[600px]",
   chatHeader: "p-2 md:p-4 border-b border-cyan-500/30",
   chatTitle: "text-center text-[14px] md:text-[16px] font-semibold text-neutral-100 mb-2 md:mb-4 flex items-center justify-center",
   chatMessages: "flex-1 overflow-y-auto p-2 md:p-3 space-y-1 md:space-y-2",

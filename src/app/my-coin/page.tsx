@@ -150,7 +150,7 @@ export default function MyCoinsTable() {
     };
 
     return (
-        <div className="lg:container-body px-3 md:px-6 lg:px-[40px] flex flex-col pt-4 md:pt-6 lg:pt-[30px] relative mx-auto z-10">
+        <div className="lg:container-glow px-3 md:px-6 lg:px-[40px] flex flex-col pt-4 md:pt-6 lg:pt-[30px] relative mx-auto z-10">
             <div className="pb-4 md:pb-6 flex flex-col md:flex-row justify-between gap-3 md:gap-4">
                 <div className="flex flex-col md:flex-row w-full items-center justify-between gap-3 md:gap-4">
                     {/* Mobile layout */}

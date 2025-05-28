@@ -49,7 +49,7 @@ const textContent = 'text-neutral-100 text-xs font-normal py-3'
 
 // Add new styles for mobile wallet cards only
 const mobileStyles = {
-    card: "sm:hidden bg-theme-black-200/50 rounded-xl p-3 border border-solid border-y-[#15DFFD] border-x-[#720881]",
+    card: "sm:hidden bg-theme-black-200/50 rounded-xl p-3 border border-solid border-y-theme-primary-100 border-x-theme-purple-200",
     header: "flex items-start justify-between gap-2 mb-2",
     nameContainer: "flex flex-col gap-1 min-w-0",
     label: "text-[10px] text-gray-400",
@@ -389,7 +389,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
             <Card className="border-none dark:shadow-blue-900/5">
                 <CardContent className="p-0 relative">
                     {/* Desktop Table View */}
-                    <div className="hidden sm:block overflow-hidden rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881]">
+                    <div className="hidden sm:block overflow-hidden rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200">
                         <Table>
                             <TableHeader className="border-b-1 border-b-solid border-b-neutral-400">
                                 <TableRow className="bg-muted/50">

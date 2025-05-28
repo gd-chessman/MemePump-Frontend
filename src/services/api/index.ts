@@ -4,3 +4,4 @@ export * as TradingService from './TradingService';
 export * as CopyTradeService from './CopyTradeService';
 export * as SolonaTokenService from './SolonaTokenService';
 export * as ChatService from './ChatService';
+export * as HistoryTransactionWallet from './HistoryTransactionWallet';

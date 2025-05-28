@@ -114,7 +114,7 @@ export function TableTokenList({
   return (
     <Card className="border-none dark:shadow-blue-900/5">
       <CardContent className="p-0 relative">
-        <div className="overflow-hidden rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881]">
+        <div className="overflow-hidden rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200">
           <Table className="">
             <TableHeader className="border-b-1 border-b-solid border-b-neutral-400">
               <TableRow className="bg-muted/50">
