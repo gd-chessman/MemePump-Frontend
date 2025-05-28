@@ -20,13 +20,18 @@ export const getInforWallet = async ()=>{
     }
 }
 
-export const getPrivate = async ()=>{
+export const getPrivate = async (password: string)=>{
     try {
-        const temp = await axiosClient.post("/telegram-wallets/private-keys")
+        const temp = await axiosClient.post("/telegram-wallets/private-keys", {password})
+        console.log("API Response:", temp.data); // Log full API response
+        if (!temp.data.data) {
+            throw new Error("No data received from API");
+        }
         return temp.data.data;
-    } catch (error) {
-        console.log(error)
-        return {};
+    } catch (error: any) {
+        console.error("Error in getPrivate:", error.response?.data || error.message);
+        // Throw the error instead of returning empty object
+        throw error.response?.data || error;
     }
 }
 
@@ -138,5 +143,15 @@ export const getWalletInfoByPrivateKey = async (privateKey: string) => {
     } catch (error) {
         console.log(error)
         return {};
+    }
+}
+
+export const setPassword = async (password: string)=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/set-password", {password})
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
     }
 }

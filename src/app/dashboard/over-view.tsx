@@ -55,7 +55,7 @@ const OverView = () => {
 
                 <Layout>
                     <div className='flex flex-col items-center gap-1.5 md:gap-2 w-full'>
-                        <img src="/wallet-logo.png" alt="wallet-logo" className='w-[40px] md:w-[48px] lg:w-[56px] h-auto bg-transparent' />
+                        <img src="/wallet-logo.png" alt="wallet-logo" className='w-[40px] md:w-[48px] lg:w-[75px] h-auto bg-transparent' />
                         <Title name="UNIVERSAL ACCOUNT" />
 
                         {/* Balance */}
