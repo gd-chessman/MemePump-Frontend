@@ -2,11 +2,10 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { X, Search, TrendingUp, TrendingDown } from "lucide-react"
-import Image from "next/image"
-import { SolonaTokenService } from "@/services/api"
 import { getOrderMyHistories, getSearchTokenInfor } from "@/services/api/OnChainService"
 import { useQuery } from "@tanstack/react-query"
 import { formatNumberWithSuffix3 } from "@/utils/format"
+import { useRouter } from "next/navigation"
 
 interface TokenData {
   address: string
@@ -59,6 +58,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
   const [sortField, setSortField] = useState<SortField>("marketCap")
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc")
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
 
   // Add debounced search input with shorter delay
   const debouncedSearchInput = useDebounce(searchInput, 300)
@@ -188,7 +188,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
 
     return filtered
   }, [debouncedSearchInput, activeTab, sortField, sortDirection, listToken])
-
+  console.log("filteredAndSortedTokens", filteredAndSortedTokens)
   // Handle sort
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -276,152 +276,200 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl max-h-[80vh]">
+      <div className="relative w-full max-w-2xl max-h-[80vh] mx-4 sm:mx-auto">
         {/* Gradient border wrapper */}
-        <div className="p-[2px] rounded-2xl bg-gradient-to-r from-[#5558FF] to-[#00C0FF] animate-fadeIn">
-          <div className="bg-[#1a1a1a] rounded-2xl overflow-hidden">
+        <div className="p-[1px] sm:p-[2px] rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#5558FF] to-[#00C0FF] animate-fadeIn">
+          <div className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl overflow-hidden">
             {/* Header */}
-            <div className="flex justify-between items-center p-6 pb-4">
-              <h2 className="text-[18px] font-bold linear-200-bg">SEARCH</h2>
+            <div className="flex justify-between items-center p-4 sm:p-6 pb-2 sm:pb-4">
+              <h2 className="text-[16px] sm:text-[18px] font-bold linear-200-bg">SEARCH</h2>
               <button
                 onClick={onClose}
                 className="text-gray-400 hover:text-white transition-colors hover:rotate-90 transform duration-300"
               >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
             </div>
 
             {/* Search Input */}
-            <div className="px-6 pb-4">
+            <div className="px-4 sm:px-6 pb-3 sm:pb-4">
               <div className="p-[1px] rounded-full bg-gradient-to-b from-[#83E] to-[#112D60]">
                 <div className="relative bg-[#111111] rounded-full">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 sm:h-5 sm:w-5" />
                   <input
                     type="text"
                     value={searchInput}
                     onChange={(e) => {
-                      console.log("Input changed:", e.target.value) // Debug log
+                      console.log("Input changed:", e.target.value)
                       setSearchInput(e.target.value)
                     }}
                     placeholder="Search tokens..."
-                    className="w-full bg-transparent py-1 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none"
+                    className="w-full bg-transparent py-1.5 sm:py-1 pl-10 sm:pl-12 pr-4 text-sm sm:text-base text-white placeholder-gray-400 focus:outline-none"
                   />
                   {isLoading && (
-                    <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <div className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2">
+                      <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-white"></div>
                     </div>
                   )}
                 </div>
               </div>
             </div>
-            {/* Table Header */}
-            <div className="px-6 pb-2">
-              <div className="grid grid-cols-12 gap-6 text-xs text-gray-400 font-medium">
-                <div className="col-span-2 min-w-[150px] text-left">Token</div>
+
+            {/* Table Header - Hide some columns on mobile */}
+            <div className="px-4 sm:px-6 pb-2">
+              <div className="grid grid-cols-12 gap-2 sm:gap-6 text-[10px] sm:text-xs text-gray-400 font-medium border-b border-gray-800 pb-2">
+                <div className="col-span-4 sm:col-span-2 min-w-[100px] sm:min-w-[150px] text-left">Token</div>
                 <div
-                  className="col-span-2 min-w-[90px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="hidden sm:flex col-span-2 min-w-[90px] cursor-pointer hover:text-white items-center justify-end"
                   onClick={() => handleSort("marketCap")}
                 >
-                  MC
-                  {sortField === "marketCap" && <span className="ml-1">{sortDirection === "desc" ? "↓" : "↑"}</span>}
+                  <span className="flex items-center">
+                    Market Cap
+                    {sortField === "marketCap" && (
+                      <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
+                    )}
+                  </span>
                 </div>
                 <div
-                  className="col-span-1 min-w-[60px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="hidden sm:flex col-span-1 min-w-[60px] cursor-pointer hover:text-white items-center justify-end"
                   onClick={() => handleSort("volume1h")}
                 >
-                  1h Vol
-                  {sortField === "volume1h" && <span className="ml-1">{sortDirection === "desc" ? "↓" : "↑"}</span>}
+                  <span className="flex items-center">
+                    1h Vol
+                    {sortField === "volume1h" && (
+                      <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
+                    )}
+                  </span>
                 </div>
                 <div
-                  className="col-span-1 min-w-[80px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="col-span-3 sm:col-span-1 min-w-[60px] sm:min-w-[80px] cursor-pointer hover:text-white flex items-center justify-end"
                   onClick={() => handleSort("volume24h")}
                 >
-                  24h Vol
-                  {sortField === "volume24h" && <span className="ml-1">{sortDirection === "desc" ? "↓" : "↑"}</span>}
+                  <span className="flex items-center">
+                    24h Vol
+                    {sortField === "volume24h" && (
+                      <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
+                    )}
+                  </span>
                 </div>
                 <div
-                  className="col-span-4 min-w-[100px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="col-span-3 sm:col-span-4 min-w-[80px] sm:min-w-[100px] cursor-pointer hover:text-white flex items-center justify-end"
                   onClick={() => handleSort("price")}
                 >
-                  Price
-                  {sortField === "price" && <span className="ml-1">{sortDirection === "desc" ? "↓" : "↑"}</span>}
+                  <span className="flex items-center">
+                    Price
+                    {sortField === "price" && (
+                      <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
+                    )}
+                  </span>
                 </div>
                 <div
-                  className="col-span-2 min-w-[80px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="col-span-2 min-w-[60px] sm:min-w-[80px] cursor-pointer hidden sm:flex hover:text-white items-center justify-end"
                   onClick={() => handleSort("holders")}
                 >
-                  Holders
-                  {sortField === "holders" && <span className="ml-1">{sortDirection === "desc" ? "↓" : "↑"}</span>}
+                  <span className="flex items-center">
+                    Holders
+                    {sortField === "holders" && (
+                      <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Token List */}
-            <div className="px-6 pb-6 max-h-[calc(80vh-200px)] overflow-y-auto">
-              <div className="space-y-2">
+            <div className="px-4 sm:px-6 pb-4 sm:pb-6 max-h-[calc(80vh-180px)] sm:max-h-[calc(80vh-200px)] overflow-y-auto">
+              <div className="space-y-1 sm:space-y-2">
                 {filteredAndSortedTokens.map((token) => (
                   <div
                     key={token.address}
-                    onClick={() => onSelectToken?.(token)}
-                    className="grid grid-cols-12 gap-6 items-center py-3 px-3 rounded-lg hover:bg-[#2a2a2a] transition-colors cursor-pointer group"
+                    onClick={() => router.push(`/trading?address=${token.address}`)}
+                    className="grid grid-cols-12 gap-2 sm:gap-6 items-center py-2.5 sm:py-3 px-2 sm:px-3 rounded-lg hover:bg-[#2a2a2a] transition-colors cursor-pointer group border border-transparent hover:border-gray-800"
                   >
                     {/* Token Info */}
-                    <div className="col-span-2 min-w-[150px] flex items-center space-x-3">
+                    <div className="col-span-4 sm:col-span-2 min-w-[100px] sm:min-w-[150px] flex items-center space-x-2 sm:space-x-3">
                       <div className="relative flex-shrink-0">
-                        <img
-                          src={token.image || "/placeholder.svg?height=32&width=32&query=token"}
-                          alt={token.name}
-                          width={32}
-                          height={32}
-                          className="rounded-full"
-                        />
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-gray-800 flex items-center justify-center">
+                          <img
+                            src={token.image || "/placeholder.svg?height=32&width=32&query=token"}
+                            alt={""}
+                            width={28}
+                            height={28}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
                         {token.verified && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"></div>
+                          <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-blue-500 rounded-full border border-[#1a1a1a]"></div>
                         )}
                         {token.isNew && (
-                          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
+                          <div className="absolute -bottom-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full border border-[#1a1a1a]"></div>
                         )}
                       </div>
-                      <div className="min-w-0">
-                        <div className="text-white font-medium text-sm">
-                          {truncateTokenName(token.name)}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1">
+                          <div className="text-white font-medium text-xs sm:text-sm truncate">
+                            {truncateTokenName(token.name, 8)}
+                          </div>
+                          {token.verified && (
+                            <span className="text-[8px] sm:text-[10px] px-1 py-0.5 bg-blue-500/20 text-blue-400 rounded">Verified</span>
+                          )}
+                          {token.isNew && (
+                            <span className="text-[8px] sm:text-[10px] px-1 py-0.5 bg-green-500/20 text-green-400 rounded">New</span>
+                          )}
                         </div>
-                        <div className="text-gray-400 text-xs truncate">{token.symbol}</div>
+                        <div className="text-gray-400 text-[10px] sm:text-xs truncate">{token.symbol}</div>
                       </div>
                     </div>
 
-                    {/* Market Cap */}
-                    <div className="col-span-2 min-w-[90px] text-white text-sm text-right">
-                      {truncateNumber(token.marketCapUsd)}
+                    {/* Market Cap - Hidden on mobile */}
+                    <div className="hidden sm:flex col-span-2 min-w-[90px] text-white text-sm text-right items-center justify-end">
+                      <div className="flex flex-col items-end">
+                        <span className="text-gray-400 text-[10px]">Market Cap</span>
+                        <span>{truncateNumber(token.marketCapUsd)}</span>
+                      </div>
                     </div>
 
-                    {/* 1h Volume */}
-                    <div className="col-span-1 min-w-[60px] text-white text-sm text-right">
-                      {truncateNumber(token.volume_1h)}
+                    {/* 1h Volume - Hidden on mobile */}
+                    <div className="hidden sm:flex col-span-1 min-w-[60px] text-white text-sm text-right items-center justify-end">
+                      <div className="flex flex-col items-end">
+                        <span className="text-gray-400 text-[10px]">1h Vol</span>
+                        <span>{truncateNumber(token.volume_1h)}</span>
+                      </div>
                     </div>
 
                     {/* 24h Volume */}
-                    <div className="col-span-1 min-w-[80px] text-white text-sm text-right">
-                      {truncateNumber(token.volume_24h)}
+                    <div className="col-span-3 sm:col-span-1 min-w-[60px] sm:min-w-[80px] text-white text-xs sm:text-sm text-right items-center justify-end">
+                      <div className="flex flex-col items-end">
+                        <span className="text-gray-400 text-[10px]">24h Vol</span>
+                        <span className="font-medium">{truncateNumber(token.volume_24h)}</span>
+                      </div>
                     </div>
 
                     {/* Price */}
-                    <div className="col-span-4 min-w-[120px] text-white text-sm text-right">
-                      ${formatNumberWithSuffix3(token.priceUsd)}
+                    <div className="col-span-3 sm:col-span-4 min-w-[80px] sm:min-w-[120px] text-white text-xs sm:text-sm text-right items-center justify-end">
+                      <div className="flex flex-col items-end">
+                        <span className="text-gray-400 text-[10px]">Price</span>
+                        <span className="font-medium text-[#5558FF]">${formatNumberWithSuffix3(token.priceUsd)}</span>
+                      </div>
                     </div>
 
                     {/* Holders */}
-                    <div className="col-span-2 min-w-[80px] text-white text-sm text-right">
-                      {truncateNumber(token.holders)}
+                    <div className="hidden sm:flex col-span-2 min-w-[60px] sm:min-w-[80px] text-white text-xs sm:text-sm text-right items-center justify-end">
+                      <div className="flex flex-col items-end">
+                        <span className="text-gray-400 text-[10px]">Holders</span>
+                        <span className="font-medium">{truncateNumber(token.holders)}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
               {filteredAndSortedTokens.length === 0 && (
-                <div className="text-center py-8 text-gray-400">
-                  <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>No tokens found matching your search criteria</p>
+                <div className="text-center py-6 sm:py-8 text-gray-400">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-gray-800 flex items-center justify-center">
+                    <Search className="h-6 w-6 sm:h-8 sm:w-8 opacity-50" />
+                  </div>
+                  <p className="text-sm sm:text-base">No tokens found matching your search criteria</p>
                 </div>
               )}
             </div>

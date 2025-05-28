@@ -429,7 +429,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
           {/* Tab Content */}
           {activeTab === "DETAILS" && (
             <>
-              <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
+              <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
                 {isLoading ? (
                   <div className="flex items-center justify-center h-32">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -562,7 +562,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
           )}
 
           {activeTab === "CHAT" && (
-            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881] bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm flex-1 flex flex-col  ">
+            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm flex-1 flex flex-col  ">
               {/* Chat Messages */}
               {checkMasterData?.groupConnect && checkMasterData?.isConnect ? (
                 <>

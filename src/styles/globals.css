@@ -146,19 +146,11 @@ body {
 }
 
 .container-body {
-  @apply max-w-[1920px] w-full ;
+  @apply max-w-[1920px] w-full container-glow;
 }
 
-.container-trading:before,
-.container-body::before {
-  content: '';
-  @apply absolute top-[150px] -left-[200px] w-[476px] h-[139px] -rotate-[33.023deg] flex-shrink-0 rounded-[476px] glow-blue z-0;
-}
-
-.container-trading::after,
-.container-body::after {
-  content: '';
-  @apply absolute top-[168px] -right-[100px] w-[476px] h-[139px] flex-shrink-0 rounded-[476px] glow-purple z-0;
+.container-trading {
+  @apply container-glow;
 }
 
 .box-gradient {

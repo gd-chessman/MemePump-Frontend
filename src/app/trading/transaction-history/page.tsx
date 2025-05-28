@@ -37,6 +37,49 @@ function TransactionHistoryContent() {
   
   const searchParams = useSearchParams();
   const address = searchParams?.get("address");
+  // WebSocket connection setup
+  useEffect(() => {
+    if (typeof window === 'undefined' || !address) return;
+
+    const socketInstance = socketIO(`${process.env.NEXT_PUBLIC_API_URL}/token-txs`, {
+      path: '/socket.io',
+      transports: ['websocket'],
+    });
+
+    socketInstance.on('connect', () => {
+      console.log('Connected to WebSocket server');
+      setIsConnected(true);
+      setError(null);
+      socketInstance.emit('subscribe', { tokenAddress: address });
+    });
+
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from WebSocket server');
+      setIsConnected(false);
+    });
+
+    socketInstance.on('error', (error) => {
+      console.error('WebSocket error:', error);
+      setError(error.message);
+    });
+
+    socketInstance.on('transaction', (transaction: any) => {
+      setRealTimeTransactions((prev) => [transaction, ...prev].slice(0, 50));
+    });
+
+    socketInstance.on('subscribed', (data) => {
+      console.log('Subscribed to token:', data.tokenAddress);
+    });
+
+    setSocket(socketInstance);
+
+    return () => {
+      if (socketInstance) {
+        socketInstance.emit('unsubscribe', { tokenAddress: address });
+        socketInstance.disconnect();
+      }
+    };
+  }, [address]);
 
   const { data: orderHistories, isLoading: isLoadingOrderHistories, refetch: refetchOrderHistories } = useQuery(
     {

@@ -55,7 +55,7 @@ const OverView = () => {
 
                 <Layout>
                     <div className='flex flex-col items-center gap-1.5 md:gap-2 w-full'>
-                        <img src="/wallet-logo.png" alt="wallet-logo" className='w-[40px] md:w-[48px] lg:w-[56px] h-auto bg-transparent' />
+                        <img src="/wallet-logo.png" alt="wallet-logo" className='w-[40px] md:w-[48px] lg:w-[75px] h-auto bg-transparent' />
                         <Title name="UNIVERSAL ACCOUNT" />
 
                         {/* Balance */}
@@ -67,22 +67,22 @@ const OverView = () => {
                                 </div>
                             </div>
                             <div className="flex justify-center space-x-3 md:space-x-4 gap-2 md:gap-3">
-                                <div className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
-                                    <div className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center">
+                                <button onClick={() => router.push('/universal-account')} className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
+                                    <div className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center group  transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95">
                                         <ArrowDownToLine className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
                                     </div>
                                     <div className="text-center text-Colors-Neutral-100 text-[9px] md:text-[10px] font-semibold">
                                         Receive
                                     </div>
-                                </div>
-                                <div className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
-                                    <div className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center">
+                                </button>
+                                <button onClick={() => router.push('/universal-account')} className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
+                                    <div className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center transition-all hover:scale-105">
                                         <ArrowUpFromLine className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
                                     </div>
                                     <div className="text-center text-Colors-Neutral-100 text-[9px] md:text-[10px] font-semibold">
                                         Send
                                     </div>
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>

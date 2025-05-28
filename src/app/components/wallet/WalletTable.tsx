@@ -44,8 +44,23 @@ interface WalletTableProps {
     onUpdateWallet?: () => void;
 }
 
-const textTitle = 'text-neutral-200 font-normal text-xs px-4 py-3'
-const textContent = 'text-neutral-100 text-xs font-normal px-4 py-3'
+const textTitle = 'text-neutral-200 font-normal text-xs py-3'
+const textContent = 'text-neutral-100 text-xs font-normal py-3'
+
+// Add new styles for mobile wallet cards only
+const mobileStyles = {
+    card: "sm:hidden bg-theme-black-200/50 rounded-xl p-3 border border-solid border-y-theme-primary-100 border-x-theme-purple-200",
+    header: "flex items-start justify-between gap-2 mb-2",
+    nameContainer: "flex flex-col gap-1 min-w-0",
+    label: "text-[10px] text-gray-400",
+    value: "text-xs font-medium text-neutral-100",
+    badge: "text-[10px] px-1.5 py-0.5 rounded-full",
+    actionBar: "flex items-center gap-2 mt-2 pt-2 border-t border-gray-700",
+    addressContainer: "space-y-2 mt-2",
+    editButton: "h-5 w-5 p-0 hover:bg-neutral-700/50",
+    copyButton: "h-6 w-6 p-0 hover:bg-neutral-700/50 flex-shrink-0",
+    icon: "h-3 w-3"
+}
 
 export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTableProps) {
     const { toast } = useToast();
@@ -191,6 +206,132 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
         }
     };
 
+    const renderMobileWalletCard = (wallet: WalletData) => (
+        <div key={wallet.wallet_id} className={mobileStyles.card}>
+            {/* Header with Name and Type */}
+            <div className={mobileStyles.header}>
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className={mobileStyles.nameContainer}>
+                            <div className="flex items-center gap-2">
+                                <span className={mobileStyles.value}>{wallet.wallet_name}</span>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className={mobileStyles.editButton}
+                                    onClick={() => handleStartEdit(wallet.wallet_id, 'name', wallet.wallet_name)}
+                                >
+                                    <Edit className={mobileStyles.icon} />
+                                </Button>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className={mobileStyles.value}>{wallet.wallet_nick_name}</span>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className={mobileStyles.editButton}
+                                    onClick={() => handleStartEdit(wallet.wallet_id, 'nickname', wallet.wallet_nick_name)}
+                                >
+                                    <Edit className={mobileStyles.icon} />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Badge
+                            className={`${wallet.wallet_type === "main"
+                                ? "bg-green-900 border-green-600 text-green-300"
+                                : wallet.wallet_type === "import"
+                                    ? "bg-blue-900 border-blue-600 text-blue-300"
+                                    : "bg-gray-700 border-gray-600 text-gray-300"
+                                } ${mobileStyles.badge}`}
+                        >
+                            {wallet.wallet_type.charAt(0).toUpperCase() + wallet.wallet_type.slice(1)}
+                        </Badge>
+                        <Badge
+                            className={`${wallet.wallet_auth === "master"
+                                ? "bg-purple-900 border-purple-600 text-purple-300"
+                                : "bg-gray-700 border-gray-600 text-gray-300"
+                                } ${mobileStyles.badge}`}
+                        >
+                            {wallet.wallet_auth.charAt(0).toUpperCase() + wallet.wallet_auth.slice(1)}
+                        </Badge>
+                    </div>
+                </div>
+            </div>
+
+            {/* Addresses */}
+            <div className={mobileStyles.addressContainer}>
+                <div>
+                    <div className={mobileStyles.label}>Solana Address</div>
+                    <div className="flex items-center gap-2">
+                        <span className={`${mobileStyles.value} truncate flex-1`}>
+                            {truncateString(wallet.solana_address, 12)}
+                        </span>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className={mobileStyles.copyButton}
+                            onClick={(e) => handleCopyAddress(wallet.solana_address, e)}
+                        >
+                            {copiedAddress === wallet.solana_address ? (
+                                <Check className={`${mobileStyles.icon} text-green-500`} />
+                            ) : (
+                                <Copy className={mobileStyles.icon} />
+                            )}
+                        </Button>
+                    </div>
+                </div>
+                <div>
+                    <div className={mobileStyles.label}>ETH Address</div>
+                    <div className="flex items-center gap-2">
+                        <span className={`${mobileStyles.value} truncate flex-1`}>
+                            {truncateString(wallet.eth_address, 12)}
+                        </span>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className={mobileStyles.copyButton}
+                            onClick={(e) => handleCopyAddress(wallet.eth_address, e)}
+                        >
+                            {copiedAddress === wallet.eth_address ? (
+                                <Check className={`${mobileStyles.icon} text-green-500`} />
+                            ) : (
+                                <Copy className={mobileStyles.icon} />
+                            )}
+                        </Button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Actions */}
+            <div className={mobileStyles.actionBar}>
+                <div className="flex items-center gap-2">
+                    <div
+                        className={`w-2 h-2 rounded-full ${walletInfor?.solana_address === wallet.solana_address
+                            ? 'bg-theme-green-200 cursor-default'
+                            : 'bg-neutral-200 hover:bg-theme-green-200 cursor-pointer'
+                            }`}
+                        onClick={() => walletInfor?.solana_address !== wallet.solana_address && handleChangeWallet(wallet)}
+                    />
+                    <span className={mobileStyles.value}>
+                        {walletInfor?.solana_address === wallet.solana_address ? 'Active' : 'Switch'}
+                    </span>
+                </div>
+                {wallet.wallet_type !== 'main' && walletInfor?.solana_address !== wallet.solana_address && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className={`${mobileStyles.copyButton} hover:bg-red-700/50 ml-auto`}
+                        onClick={(e) => handleDeleteClick(wallet, e)}
+                    >
+                        <Trash2 className={`${mobileStyles.icon} text-red-500`} />
+                    </Button>
+                )}
+            </div>
+        </div>
+    );
+
     const renderEditableCell = (wallet: WalletData, field: 'name' | 'nickname' | 'country') => {
         const isEditing = editingWalletId === wallet.wallet_id && editingField === field;
         const value = field === 'name' ? wallet.wallet_name :
@@ -247,18 +388,19 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
         <>
             <Card className="border-none dark:shadow-blue-900/5">
                 <CardContent className="p-0 relative">
-                    <div className="overflow-hidden rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881]">
+                    {/* Desktop Table View */}
+                    <div className="hidden sm:block overflow-hidden rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200">
                         <Table>
                             <TableHeader className="border-b-1 border-b-solid border-b-neutral-400">
                                 <TableRow className="bg-muted/50">
-                                    <TableHead className={`pl-4 ${textTitle}`}>Wallet Name</TableHead>
-                                    <TableHead className={textTitle}>Nickname</TableHead>
-                                    <TableHead className={textTitle}>Country</TableHead>
-                                    <TableHead className={textTitle}>Solana Address</TableHead>
-                                    <TableHead className={textTitle}>ETH Address</TableHead>
-                                    <TableHead className={textTitle}>Type</TableHead>
-                                    <TableHead className={textTitle}>Wallet Key</TableHead>
-                                    <TableHead className={`${textTitle} w-[min-content]`}>Actions</TableHead>
+                                    <TableHead className={`${textTitle} w-[15%] px-4`}>Wallet Name</TableHead>
+                                    <TableHead className={`${textTitle} w-[12%] px-4`}>Nickname</TableHead>
+                                    <TableHead className={`${textTitle} w-[8%] px-4`}>Country</TableHead>
+                                    <TableHead className={`${textTitle} w-[20%] px-4`}>Solana Address</TableHead>
+                                    <TableHead className={`${textTitle} w-[20%] px-4`}>ETH Address</TableHead>
+                                    <TableHead className={`${textTitle} w-[8%] px-4`}>Type</TableHead>
+                                    <TableHead className={`${textTitle} w-[8%] px-4`}>Wallet Key</TableHead>
+                                    <TableHead className={`${textTitle} w-[9%] px-4`}>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -267,24 +409,24 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                         key={wallet.wallet_id}
                                         className="hover:bg-neutral-800/30 transition-colors"
                                     >
-                                        <TableCell className={textContent}>
+                                        <TableCell className={`px-4 ${textContent}`}>
                                             {renderEditableCell(wallet, 'name')}
                                         </TableCell>
-                                        <TableCell className={textContent}>
+                                        <TableCell className={`px-4 ${textContent}`}>
                                             {renderEditableCell(wallet, 'nickname')}
                                         </TableCell>
-                                        <TableCell className={textContent}>
+                                        <TableCell className={`px-4 ${textContent}`}>
                                             {renderEditableCell(wallet, 'country')}
                                         </TableCell>
-                                        <TableCell className={textContent}>
-                                            <div className="flex items-center gap-3">
-                                                <span className={`truncate max-w-[200px]`}>
-                                                    {truncateString(wallet.solana_address, 14)}
+                                        <TableCell className={`px-4 ${textContent}`}>
+                                            <div className="flex items-center gap-2">
+                                                <span className="truncate max-w-[180px]">
+                                                    {truncateString(wallet.solana_address, 12)}
                                                 </span>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-6 w-6 p-0 hover:bg-neutral-700/50"
+                                                    className="h-6 w-6 p-0 hover:bg-neutral-700/50 flex-shrink-0"
                                                     onClick={(e) => handleCopyAddress(wallet.solana_address, e)}
                                                 >
                                                     {copiedAddress === wallet.solana_address ? (
@@ -295,15 +437,15 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                                 </Button>
                                             </div>
                                         </TableCell>
-                                        <TableCell className={textContent}>
-                                            <div className="flex items-center gap-3">
-                                                <span className={`truncate max-w-[200px]`}>
-                                                    {truncateString(wallet.eth_address, 14)}
+                                        <TableCell className={`px-4 ${textContent}`}>
+                                            <div className="flex items-center gap-2">
+                                                <span className="truncate max-w-[180px]">
+                                                    {truncateString(wallet.eth_address, 12)}
                                                 </span>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-6 w-6 p-0 hover:bg-neutral-700/50"
+                                                    className="h-6 w-6 p-0 hover:bg-neutral-700/50 flex-shrink-0"
                                                     onClick={(e) => handleCopyAddress(wallet.eth_address, e)}
                                                 >
                                                     {copiedAddress === wallet.eth_address ? (
@@ -314,37 +456,37 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                                 </Button>
                                             </div>
                                         </TableCell>
-                                        <TableCell className={textContent}>
+                                        <TableCell className={`px-4 ${textContent}`}>
                                             <Badge
                                                 className={`${wallet.wallet_type === "main"
                                                     ? "bg-green-900 border-green-600 text-green-300"
                                                     : wallet.wallet_type === "import"
                                                         ? "bg-blue-900 border-blue-600 text-blue-300"
                                                         : "bg-gray-700 border-gray-600 text-gray-300"
-                                                    } px-2 py-1`}
+                                                    } px-2 py-1 whitespace-nowrap`}
                                             >
                                                 {wallet.wallet_type.charAt(0).toUpperCase() + wallet.wallet_type.slice(1)}
                                             </Badge>
                                         </TableCell>
-                                        <TableCell className={textContent}>
+                                        <TableCell className={`px-4 ${textContent}`}>
                                             <Badge
                                                 className={`${wallet.wallet_auth === "master"
                                                     ? "bg-purple-900 border-purple-600 text-purple-300"
                                                     : "bg-gray-700 border-gray-600 text-gray-300"
-                                                    } px-2 py-1`}
+                                                    } px-2 py-1 whitespace-nowrap`}
                                             >
                                                 {wallet.wallet_auth.charAt(0).toUpperCase() + wallet.wallet_auth.slice(1)}
                                             </Badge>
                                         </TableCell>
-                                        <TableCell className={`${textContent}`}>
-                                            <div className="flex items-center space-x-2 cursor-pointer gap-2 p-2 rounded-md">
+                                        <TableCell className={`px-4 ${textContent}`}>
+                                            <div className="flex items-center gap-1 cursor-pointer p-1 rounded-md">
                                                 <div
                                                     className={`w-2.5 h-2.5 rounded-full ${walletInfor?.solana_address === wallet.solana_address
                                                         ? 'bg-theme-green-200 cursor-default'
                                                         : 'bg-neutral-200 hover:bg-theme-green-200 cursor-pointer'
                                                         }`}
                                                     onClick={() => walletInfor?.solana_address !== wallet.solana_address && handleChangeWallet(wallet)}
-                                                ></div>
+                                                />
                                                 {wallet.wallet_type !== 'main' && walletInfor?.solana_address !== wallet.solana_address && (
                                                     <Button
                                                         variant="ghost"
@@ -362,13 +504,18 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                             </TableBody>
                         </Table>
                     </div>
+
+                    {/* Mobile Card View */}
+                    <div className="sm:hidden space-y-3 p-2">
+                        {wallets?.map((wallet) => renderMobileWalletCard(wallet))}
+                    </div>
                 </CardContent>
             </Card>
 
             <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
                 <DialogContent className="sm:max-w-[425px] p-0 border-none border-transparent">
                     <div className="bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end p-[1px] relative w-full rounded-xl">
-                        <div className="w-full px-3 py-2 bg-theme-black-200  rounded-xl text-neutral-100">
+                        <div className="w-full px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100">
                             <DialogHeader className="p-2">
                                 <DialogTitle className="text-xl font-semibold text-indigo-500 backdrop-blur-sm boxShadow linear-200-bg mb-2 text-fill-transparent bg-clip-text">Xác nhận xóa ví</DialogTitle>
                                 <DialogDescription className="text-neutral-100 text-sm">
@@ -376,10 +523,10 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                     Hành động này không thể hoàn tác.
                                 </DialogDescription>
                             </DialogHeader>
-                            <DialogFooter className="flex gap-2 sm:gap-0 mb-1">
-                                <div className="bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end p-[1px] relative  rounded-full">
+                            <DialogFooter className="flex justify-end gap-2 p-2">
+                                <div className="bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end p-[1px] relative rounded-full">
                                     <button
-                                        className="bg-theme-black-200 h-[30px] text-neutral-100 px-5  rounded-full"
+                                        className="bg-theme-black-200 h-[30px] text-neutral-100 px-5 rounded-full"
                                         onClick={() => setDeleteModalOpen(false)}
                                     >
                                         Hủy
