@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { Toaster, toast } from 'react-hot-toast'
 
