@@ -16,7 +16,6 @@ export default function Display() {
     useEffect(() => {
         setIsDark(theme);
     }, [theme]);
-    console.log("isDark", isDark);
     return (
         <div>
             <DropdownMenu>
@@ -34,10 +33,10 @@ export default function Display() {
                     align="end" 
                     style={{ width: '200px' }}
                 >
-                    <LangToggle />
+                    <LangToggle className='hover:bg-theme-blue-300 dark:hover:bg-theme-blue-100' />
                     <div className='flex items-center justify-evenly gap-4 mt-3'>
                         <Moon 
-                            className="cursor-pointer transition-colors" 
+                            className="cursor-pointer transition-colors " 
                             onClick={() => isDark === "light" && setTheme("dark")} 
                             style={isDark === "dark" ? { color: "#fff" } : { color: "#6b7280" }}
                         />

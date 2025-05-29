@@ -1,146 +1,599 @@
 {
-  "connect": "연결",
-  "overview": "개요",
-  "trade": "거래",
-  "create coin": "코인 생성",
-  "createCoin": {
-    "title": "새 코인 생성",
-    "form": {
-      "name": {
-        "label": "이름",
-        "placeholder": "코인 이름 입력",
-        "required": "코인 이름은 필수입니다"
-      },
-      "symbol": {
-        "label": "심볼",
-        "placeholder": "코인 심볼 입력",
-        "required": "코인 심볼은 필수입니다",
-        "maxLength": "심볼은 10자 이내로 입력해주세요"
-      },
-      "amount": {
-        "label": "수량",
-        "placeholder": "초기 유동성 SOL 수량 입력",
-        "required": "초기 유동성은 필수입니다",
-        "invalid": "유효한 수량을 입력해주세요"
-      },
-      "categories": {
-        "label": "카테고리",
-        "placeholder": "카테고리 선택...",
-        "search": "카테고리 검색...",
-        "noResults": "카테고리를 찾을 수 없습니다"
-      },
-      "description": {
-        "label": "설명",
-        "placeholder": "코인 설명 입력"
-      },
-      "logo": {
-        "label": "로고",
-        "required": "코인 로고는 필수입니다",
-        "upload": "클릭하여 업로드",
-        "invalidType": "이미지 파일을 업로드해주세요",
-        "maxSize": "이미지 크기는 2MB 미만이어야 합니다"
-      },
-      "preview": {
-        "label": "미리보기",
-        "name": "당신의 코인 이름",
-        "symbol": "심볼",
-        "description": "코인 설명이 여기에 표시됩니다",
-        "undo": "실행 취소"
-      },
-      "otherOptions": {
-        "title": "기타 옵션",
-        "telegram": {
-          "label": "텔레그램",
-          "placeholder": "텔레그램 그룹 링크 입력"
-        },
-        "twitter": {
-          "label": "트위터",
-          "placeholder": "트위터 사용자 이름 입력"
-        },
-        "website": {
-          "label": "웹사이트",
-          "placeholder": "코인 웹사이트 입력",
-          "invalid": "http:// 또는 https://로 시작하는 유효한 URL을 입력해주세요"
-        }
-      },
-      "submit": {
-        "create": "코인 생성",
-        "creating": "생성 중..."
+    "connect": "로그인",
+    "overviews": "대시보드",
+    "wallet manager": "지갑 관리",
+    "my wallet": "내 지갑",
+    "listWalletss": {
+      "walletType": {
+        "main": "메인 지갑",
+        "import": "불러온 지갑",
+        "other": "서브 지갑",
+        "master": "마스터",
+        "member": "멤버"
       }
     },
-    "myCoins": {
-      "title": "내 코인",
+    "overview": {
+      "launchToken": {
+        "title": "자신만의 토큰 발행",
+        "description": "몇 가지 간단한 단계로 이름, 심볼, 세금 및 공급량을 맞춤 설정",
+        "createNow": "지금 만들기"
+      },
+      "universalAccount": {
+        "title": "유니버설 계정",
+        "receive": "받기",
+        "send": "보내기"
+      },
+      "masterTrade": {
+        "name": "마스터 트레이드",
+        "title": "마스터 트레이드",
+        "description": "최고 트레이더의 거래를 한 번의 클릭으로 복사",
+        "explore": "탐색"
+      }
+    },
+    "trade": "거래",
+    "create coin": "코인 생성",
+    "createCoin": {
+      "title": "새로운 코인 생성",
       "tabs": {
+        "general": "일반",
+        "advanced": "고급",
         "today": "오늘",
         "last8days": "최근 8일",
-        "lastMonth": "지난달"
+        "lastMonth": "최근 한달",
+        "noCoins": "코인이 없습니다",
+        "trade": "거래",
+        "seeAll": "모두 보기"
       },
-      "noCoins": "최근 생성한 코인이 없습니다",
-      "seeAll": "모든 내 코인 보기",
-      "trade": "거래"
+      "form": {
+        "name": {
+          "label": "이름",
+          "placeholder": "코인 이름 입력",
+          "required": "코인 이름은 필수입니다"
+        },
+        "symbol": {
+          "label": "심볼",
+          "placeholder": "코인 심볼 입력",
+          "required": "코인 심볼은 필수입니다",
+          "maxLength": "심볼은 10자 이내로 입력해주세요"
+        },
+        "amount": {
+          "label": "수량",
+          "placeholder": "초기 유동성 SOL 수량 입력",
+          "required": "초기 유동성은 필수입니다",
+          "invalid": "유효한 수량을 입력해주세요"
+        },
+        "categories": {
+          "label": "카테고리",
+          "placeholder": "카테고리 선택...",
+          "search": "카테고리 검색...",
+          "noResults": "카테고리를 찾을 수 없습니다"
+        },
+        "description": {
+          "label": "설명",
+          "placeholder": "코인 설명 입력"
+        },
+        "logo": {
+          "label": "로고",
+          "required": "코인 로고는 필수입니다",
+          "upload": "클릭하여 업로드",
+          "invalidType": "이미지 파일을 업로드해주세요",
+          "maxSize": "이미지 크기는 2MB 미만이어야 합니다"
+        },
+        "preview": {
+          "label": "미리보기",
+          "name": "당신의 코인 이름",
+          "symbol": "심볼",
+          "description": "코인 설명이 여기에 표시됩니다",
+          "undo": "실행 취소"
+        },
+        "otherOptions": {
+          "title": "기타 옵션",
+          "telegram": {
+            "label": "텔레그램",
+            "placeholder": "텔레그램 그룹 링크 입력"
+          },
+          "twitter": {
+            "label": "트위터",
+            "placeholder": "트위터 사용자 이름 입력"
+          },
+          "website": {
+            "label": "웹사이트",
+            "placeholder": "코인 웹사이트 입력",
+            "invalid": "http:// 또는 https://로 시작하는 유효한 URL을 입력해주세요"
+          }
+        },
+        "submit": {
+          "create": "코인 생성",
+          "creating": "생성 중..."
+        }
+      },
+      "myCoins": {
+        "title": "내 코인",
+        "createCoin": "코인 생성",
+        "searchPlaceholder": "토큰 이름/ 주소",
+        "table": {
+          "time": "시간",
+          "memeCoin": "밈 코인",
+          "symbol": "심볼",
+          "address": "주소",
+          "decimals": "소수점",
+          "actions": "작업"
+        },
+        "actions": {
+          "copy": "주소 복사",
+          "copied": "클립보드에 주소가 복사되었습니다",
+          "convert": "변환"
+        }
+      },
+      "guide": {
+        "title": "가이드",
+        "rules": [
+          "생성 후에는 삭제하거나 수정할 수 없습니다",
+          "Solana에 배포됩니다",
+          "조건을 충족하면 거래 가능합니다",
+          "각 코인은 고유한 지갑과 토큰을 가집니다 - 안전하게 보관하세요"
+        ]
+      }
     },
-    "guide": {
-      "title": "가이드",
-      "rules": [
-        "생성 후에는 삭제하거나 수정할 수 없습니다",
-        "Solana에 배포됩니다",
-        "조건을 충족하면 거래 가능합니다",
-        "각 코인은 고유한 지갑과 토큰을 가집니다 - 안전하게 보관하세요"
-      ]
-    }
-  },
-  "masterTrade": "마스터 거래",
-  "wallet": "지갑",
-  "searchPlaceholder": "토큰 이름/주소",
-  "languages": {
-    "korea": "한국어",
-    "english": "영어",
-    "vietnamese": "베트남어",
-    "japan": "일본어"
-  },
-  "trading": {
-    "token": "토큰",
-    "address": "주소",
-    "price": "가격",
-    "marketCap": "시가총액",
-    "liquidity": "유동성",
-    "holder": "보유자",
-    "volume1h": "1시간 거래량",
-    "volume1hChange": "1시간 거래량 변화",
-    "volume24h": "24시간 거래량",
-    "volume24hChange": "24시간 거래량 변화",
-    "noTokens": "토큰을 찾을 수 없습니다",
-    "trade": "거래",
-    "panel": {
-      "buy": "구매",
-      "sell": "판매",
-      "percentage": "비율",
+    "masterTrade": {
+      "tabs": {
+        "trade": "거래",
+        "chat": "채팅",
+        "member": "회원"
+      },
+      "unreadCount": "읽지 않은 메시지",
+      "loading": "로딩 중...",
+      "page": {
+        "filters": {
+          "all": "전체",
+          "notConnected": "미연결",
+          "connected": "연결됨",
+          "disconnected": "연결 해제",
+          "paused": "일시 중지",
+          "pending": "대기 중"
+        },
+        "search": {
+          "placeholder": "지갑 주소로 검색..."
+        },
+        "manageMaster": "마스터 관리",
+        "table": {
+          "address": "주소",
+          "pnl7d": "7일 수익",
+          "pnl30d": "30일 수익",
+          "winRate7d": "7일 승률",
+          "txs7d": "7일 거래 수",
+          "lastTime": "마지막 시간",
+          "type": "유형",
+          "status": "상태",
+          "action": "행동",
+          "noData": "데이터 없음",
+          "copyAddress": "주소 복사",
+          "copySuccess": "주소 복사됨: {address}"
+        },
+        "traderType": {
+          "vip": "VIP",
+          "normal": "일반"
+        },
+        "actions": {
+          "connect": "연결",
+          "reconnect": "재연결",
+          "details": "상세",
+          "pause": "일시 중지",
+          "disconnect": "연결 해제"
+        },
+        "status": {
+          "notConnected": "미연결",
+          "connect": "연결됨",
+          "disconnect": "연결 해제",
+          "pause": "일시 중지",
+          "pending": "대기 중",
+          "block": "차단됨"
+        },
+        "timeAgo": {
+          "seconds": "{count}초 전",
+          "minute": "{count}분 전",
+          "minutes": "{count}분 전",
+          "hour": "{count}시간 전",
+          "hours": "{count}시간 전",
+          "day": "{count}일 전",
+          "days": "{count}일 전",
+          "week": "{count}주 전",
+          "weeks": "{count}주 전",
+          "month": "{count}개월 전",
+          "months": "{count}개월 전",
+          "year": "{count}년 전",
+          "years": "{count}년 전",
+          "updating": "업데이트 중"
+        }
+      },
+      "manage": {
+        "createNewGroup": {
+          "success": "그룹 생성 성공",
+          "error": "그룹 생성 실패",
+          "title": "그룹 생성",
+          "groupName": "그룹 이름",
+          "enterGroupName": "그룹 이름 입력",
+          "create": "생성"
+        },
+        "connectionManagement": {
+          "joinSuccess": "그룹 참여 성공",
+          "joinError": "그룹 참여 실패",
+          "connectSuccess": "연결 성공",
+          "blockSuccess": "차단 성공",
+          "pauseSuccess": "일시 중지 성공",
+          "unblockSuccess": "차단 해제 성공",
+          "error": "오류가 발생했습니다",
+          "confirmJoin": "선택한 {count}개의 지갑을 그룹 \"{groupName}\"에 참여시키시겠습니까?",
+          "cancel": "취소",
+          "confirm": "확인",
+          "connect": "연결",
+          "pause": "일시 중지",
+          "pending": "대기 중",
+          "block": "차단",
+          "unblock": "차단 해제",
+          "chooseGroup": "그룹 선택",
+          "searchGroup": "그룹 검색...",
+          "noGroup": "그룹 없음",
+          "copyAddress": "주소 복사",
+          "addressCopied": "주소가 복사되었습니다"
+        },
+        "groupManagement": {
+          "createGroup": "그룹 생성",
+          "groupName": "그룹 이름",
+          "enterGroupName": "그룹 이름 입력",
+          "create": "생성",
+          "on": "켜기",
+          "off": "끄기",
+          "delete": "삭제",
+          "status": "상태",
+          "action": "작업",
+          "noGroup": "그룹 없음",
+          "onCount": "켜기 ({count})",
+          "offCount": "끄기 ({count})",
+          "deleteCount": "삭제 ({count})"
+        },
+        "connectionTable": {
+          "address": "주소",
+          "group": "그룹",
+          "status": "상태",
+          "action": "작업",
+          "connect": "연결",
+          "block": "차단",
+          "unblock": "차단 해제",
+          "chooseGroup": "그룹 선택",
+          "searchGroup": "그룹 검색...",
+          "noGroup": "그룹 없음",
+          "copyAddress": "주소 복사",
+          "addressCopied": "주소가 복사되었습니다"
+        },
+        "chat": {
+          "title": "마스터 채팅방",
+          "selectGroup": "그룹 선택...",
+          "typeMessage": "메시지 입력...",
+          "connectWithMaster": "다른 마스터와 연결",
+          "send": "전송",
+          "noMessages": "아직 메시지가 없습니다",
+          "communityChatroom": "전체 채팅",
+          "type_a_message": "메시지를 입력하세요..."
+        }
+      }
+    },
+    "wallet": {
+      "solana": "Solana",
+      "eth": "ETH",
+      "bnb": "BNB",
+      "wallet": "지갑",
+      "universalAccount": "유니버설 계정",
+      "receive": "받기",
+      "send": "보내기",
+      "getPrivateKey": "개인 키 가져오기",
+      "solanaWallet": "솔라나 지갑",
+      "addWallet": "지갑 추가",
+      "importWallet": "지갑 가져오기",
+      "assets": "자산",
+      "token": "토큰",
       "balance": "잔액",
-      "selectGroups": "그룹 선택...",
-      "amount": "수량",
-      "masterTrade": "마스터 거래",
-      "searchMasterTrade": "마스터 거래 검색",
-      "copyAddress": "주소 복사",
-      "addressCopied": "복사됨",
-      "noConnections": "연결이 없습니다",
-      "selectConnection": "연결 선택",
-      "noGroupsAvailable": "사용 가능한 그룹이 없습니다"
+      "price": "가격",
+      "value": "가치",
+      "address": "주소",
+      "walletName": "지갑 이름",
+      "nickname": "별명",
+      "network": "네트워크",
+      "privateKeys": "개인 키",
+      "solanaPrivateKey": "솔라나 개인 키",
+      "ethereumPrivateKey": "이더리움 개인 키",
+      "bnbPrivateKey": "BNB 개인 키",
+      "createPassword": "비밀번호 생성",
+      "newPassword": "새 비밀번호",
+      "confirmPassword": "비밀번호 확인",
+      "passwordRequirements": "(i) 비밀번호는 최소 8자 이상이며 대문자, 소문자, 숫자 및 특수 문자를 포함해야 합니다.\n이 비밀번호는 향후 개인 키를 보기 위해 필요합니다.",
+      "creating": "생성 중...",
+      "enterPassword": "비밀번호 입력",
+      "password": "비밀번호",
+      "enterPasswordToView": "(i) 개인 키를 보려면 비밀번호를 입력하세요",
+      "verifying": "확인 중...",
+      "submit": "제출",
+      "adding": "추가 중...",
+      "privateKeySecurity": "개인 키는 암호화되어 안전하게 저장됩니다",
+      "walletNickname": "지갑 별명",
+      "country": "국가",
+      "solanaAddress": "솔라나 주소",
+      "ethAddress": "이더리움 주소",
+      "walletKey": "지갑 키",
+      "type": "유형",
+      "actions": "작업",
+      "addNewWallet": "새 지갑 추가",
+      "enterWalletName": "지갑 이름 입력",
+      "enterNickname": "별명 입력",
+      "enterSolanaPrivateKey": "솔라나 개인 키 입력",
+      "enterWalletNickname": "지갑 별명 입력",
+      "walletLevel": "네 알겠습니다"
     },
-    "interface": {
+    "searchPlaceholder": "토큰 이름/주소",
+    "languages": {
+      "korea": "한국어",
+      "english": "영어",
+      "vietnamese": "베트남어",
+      "japan": "일본어"
+    },
+    "trading": {
+      "token": "토큰",
+      "address": "주소",
+      "price": "가격",
+      "marketCap": "시가총액",
+      "liquidity": "유동성",
+      "holder": "보유자",
+      "volume1h": "1시간 거래량",
+      "volume1hChange": "1시간 거래량",
+      "volume24h": "24시간 거래량",
+      "volume24hChange": "24시간 거래량",
+      "noTokens": "토큰을 찾을 수 없습니다",
+      "trade": "거래",
+      "panel": {
+        "buy": "구매",
+        "sell": "판매",
+        "percentage": "비율",
+        "balance": "잔액",
+        "selectGroups": "그룹 선택...",
+        "amount": "수량",
+        "masterTrade": "마스터 거래",
+        "searchMasterTrade": "마스터 거래 검색",
+        "copyAddress": "주소 복사",
+        "addressCopied": "복사됨",
+        "noConnections": "연결이 없습니다",
+        "selectConnection": "연결 선택",
+        "noGroupsAvailable": "사용 가능한 그룹이 없습니다"
+      },
+      "interface": {
+        "loading": "토큰 정보를 불러오는 중...",
+        "noTokens": "최근 본 토큰이 없습니다",
+        "recentTokens": "최근 토큰",
+        "openInNewTab": "새 탭에서 열기",
+        "tokenInfo": {
+          "price": "가격",
+          "change": "변화",
+          "marketCap": "시가총액",
+          "volume24h": "24시간 거래량",
+          "holders": "보유자 수",
+          "liquidity": "유동성",
+          "vol": "거래량",
+          "buy": "매수",
+          "sells": "매도",
+          "netBuy": "순매수"
+        },
+        "error": {
+          "loadingFailed": "토큰 정보를 불러오는데 실패했습니다",
+          "invalidToken": "유효하지 않은 토큰 주소입니다"
+        },
+        "searchPlaceholder": "토큰 이름 / 주소",
+        "minSearchLength": "검색하려면 최소 2자 이상 입력하세요"
+      },
+      "listToken": {
+        "allMarkets": "모든 토큰 시장",
+        "newTrending": "신규 및 트렌딩",
+        "meme": "밈"
+      },
+      "tokenInfo": {
+        "price": "가격",
+        "change": "변화",
+        "marketCap": "시장 가치",
+        "volume24h": "24h 거래량",
+        "holders": "홀더",
+        "liquidity": "유동성",
+        "vol": "거래량",
+        "buy": "매수",
+        "sells": "매도",
+        "netBuy": "순매수"
+      }
+    },
+    "auth": {
+      "connect": "텔레그램 연결",
+      "disconnect": "연결 해제",
+      "connecting": "연결 중...",
+      "connected": "연결됨",
+      "loginSuccess": "로그인 성공",
+      "loginFailed": "로그인 실패",
+      "pleaseConnect": "텔레그램 계정을 연결해주세요",
+      "userProfile": "사용자 프로필"
+    },
+    "tableDashboard": {
+      "tabs": {
+        "trending": "인기",
+        "new": "신규"
+      },
+      "mobile": {
+        "price": "가격",
+        "24hChange": "24시간 변화",
+        "marketCap": "시가총액",
+        "holders": "보유자",
+        "address": "주소"
+      },
+      "pagination": {
+        "page": "페이지",
+        "of": "/",
+        "first": "«",
+        "previous": "‹",
+        "next": "›",
+        "last": "»"
+      },
+      "toast": {
+        "addressCopied": "주소가 클립보드에 복사되었습니다",
+        "addToWishlistSuccess": "위시리스트에 성공적으로 추가되었습니다",
+        "addToWishlistFailed": "위시리스트 추가에 실패했습니다",
+        "addWishlistSuccess": "위시리스트에 성공적으로 추가되었습니다",
+        "addWishlistFailed": "위시리스트 추가에 실패했습니다"
+      }
+    },
+    "header": {
+      "search": {
+        "placeholder": "검색...",
+        "loading": "로딩 중..."
+      },
+      "wallet": {
+        "selectWallet": "지갑 선택",
+        "logout": "로그아웃",
+        "connecting": "연결 중...",
+        "loading": "로딩 중..."
+      },
+      "notifications": {
+        "switchWalletSuccess": "지갑 전환이 성공했습니다!",
+        "switchWalletFailed": "지갑 전환에 실패했습니다!",
+        "loginSuccess": "로그인 성공!",
+        "completeProfile": "프로필 정보를 완성해주세요!",
+        "loginRequired": "계속하려면 로그인해주세요!"
+      }
+    },
+    "listWallet": {
+      "search": {
+        "placeholder": "지갑 이름/주소"
+      },
+      "selectedWallet": {
+        "title": "선택된 지갑"
+      },
+      "changeWallet": {
+        "title": "지갑 변경"
+      },
+      "walletType": {
+        "master": "마스터",
+        "sub": "서브"
+      },
+      "copyAddress": {
+        "copied": "복사됨",
+        "copy": "복사"
+      }
+    },
+    "tokenInfo": {
+      "marketCap": "시가총액",
+      "volume24h": "24시간 거래량",
+      "liquidity": "유동성",
+      "holders": "보유자 수",
+      "timeFrames": {
+        "5m": "5분",
+        "1h": "1시간",
+        "4h": "4시간",
+        "24h": "24시간"
+      },
+      "stats": {
+        "vol": "거래량",
+        "buy": "매수",
+        "sells": "매도",
+        "netBuy": "순매수"
+      },
       "loading": "토큰 정보를 불러오는 중...",
-      "noTokens": "최근 본 토큰이 없습니다",
-      "recentTokens": "최근 토큰",
-      "openInNewTab": "새 탭에서 열기"
+      "error": {
+        "loadingFailed": "토큰 정보를 불러오는데 실패했습니다",
+        "invalidToken": "유효하지 않은 토큰 주소입니다"
+      }
+    },
+    "transactionHistory": {
+      "allTransactions": "모든 거래",
+      "myTransactions": "내 거래",
+      "time": "시간",
+      "type": "유형",
+      "price": "가격",
+      "amount": "수량",
+      "total": "총액",
+      "source": "소스",
+      "transactionHash": "거래 해시",
+      "status": "상태",
+      "address": "주소",
+      "completed": "완료",
+      "pending": "처리 중",
+      "failed": "실패",
+      "buy": "매수",
+      "sell": "매도",
+      "copy": "복사",
+      "copied": "복사됨",
+      "noTransactions": "거래 내역이 없습니다",
+      "loading": "거래 내역을 불러오는 중...",
+      "error": {
+        "loadFailed": "거래 내역을 불러오는데 실패했습니다",
+        "invalidAddress": "유효하지 않은 주소입니다"
+      },
+      "filters": {
+        "all": "전체",
+        "buy": "매수",
+        "sell": "매도",
+        "today": "오늘",
+        "week": "이번 주",
+        "month": "이번 달"
+      }
+    },
+    "common": {
+      "loading": "로딩 중...",
+      "error": "오류가 발생했습니다",
+      "retry": "다시 시도",
+      "cancel": "취소",
+      "confirm": "확인",
+      "save": "저장",
+      "delete": "삭제",
+      "edit": "수정",
+      "search": "검색",
+      "noResults": "결과가 없습니다",
+      "required": "필수",
+      "optional": "선택",
+      "actions": "작업"
+    },
+    "universal_account": {
+      "deposit": "입금",
+      "withdraw": "출금",
+      "history": "거래내역",
+      "time": "시간",
+      "type": "유형",
+      "status": "상태",
+      "amount": "금액",
+      "transaction_id": "거래 ID",
+      "from": "보낸 주소",
+      "to": "받는 주소",
+      "from_address": "보낸 주소",
+      "to_address": "받는 주소",
+      "no_transactions": "{type} 거래 내역이 없습니다",
+      "copied": "복사됨!",
+      "copied_description": "거래 해시가 클립보드에 복사되었습니다",
+      "enter_amount": "보낼 금액 입력",
+      "transaction_progress": "거래 처리 중...",
+      "available": "전송 가능한 잔액: {amount} SOL",
+      "recipient_address": "받는 지갑 주소",
+      "recipient_placeholder": "받는 지갑 주소 입력...",
+      "sending": "전송 중...",
+      "send": "전송",
+      "minimum_withdrawal_amount": "최소 출금 금액은 {amount} SOL입니다",
+      "maximum_withdrawal_amount": "최대 출금 금액은 {amount} SOL입니다",
+      "amount_cannot_exceed_balance": "잔액 {balance} SOL을 초과할 수 없습니다",
+      "deposit_wallet": {
+        "title": "당신의 솔라나 주소",
+        "warning": {
+          "title": "솔라나 네트워크에서의 SOL 출금만 지원됩니다.",
+          "description": "솔라나 네트워크에서 SOL을 출금하고 올바른 솔라나 지갑 주소를 사용하세요."
+        },
+        "copy_success": "지갑 주소가 클립보드에 복사되었습니다!"
+      },
+      "errors": {
+        "max_withdrawal": "최대 출금 금액은 1 SOL입니다",
+        "min_withdrawal": "최소 출금 금액은 0.001 SOL입니다",
+        "insufficient_balance": "잔액 {balance} SOL을 초과할 수 없습니다",
+        "transaction_failed": "거래 실패. 다시 시도해 주세요.",
+        "transaction_success": "거래가 성공적으로 전송되었습니다!"
+      }
     }
-  },
-  "auth": {
-    "connect": "텔레그램 연결",
-    "disconnect": "연결 해제",
-    "connecting": "연결 중...",
-    "connected": "연결됨",
-    "loginSuccess": "로그인 성공",
-    "loginFailed": "로그인 실패",
-    "pleaseConnect": "텔레그램 계정을 연결해주세요",
-    "userProfile": "사용자 프로필"
   }
-}

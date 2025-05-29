@@ -169,7 +169,6 @@ export default function CreateCoinForm() {
     );
   }, [categories, searchQuery]);
 
-  console.log("categories", categories)
   useEffect(() => {
     const style = document.createElement("style");
     style.textContent = globalStyles;
@@ -801,7 +800,7 @@ export default function CreateCoinForm() {
                       : "text-gray-400"
                     }`}
                 >
-                  {t('createCoin.myCoins.tabs.today')}
+                  {t('createCoin.tabs.today')}
                 </button>
                 <button
                   onClick={() => setActiveTab("last8days")}
@@ -810,7 +809,7 @@ export default function CreateCoinForm() {
                       : "text-gray-400"
                     }`}
                 >
-                  {t('createCoin.myCoins.tabs.last8days')}
+                  {t('createCoin.tabs.last8days')}
                 </button>
                 <button
                   onClick={() => setActiveTab("lastmonth")}
@@ -819,14 +818,14 @@ export default function CreateCoinForm() {
                       : "text-gray-400"
                     }`}
                 >
-                  {t('createCoin.myCoins.tabs.lastMonth')}
+                  {t('createCoin.tabs.lastMonth')}
                 </button>
               </div>
               {filteredMemeCoins.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-4 md:py-6 lg:py-8">
                   <img src={"/no-list-token.png"} alt="no-coin-icon" width={100} height={100} className="md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px]" />
                   <p className="text-neutral-100 mt-2 md:mt-3 font-medium text-xs md:text-sm lg:text-base">
-                    {t('createCoin.myCoins.noCoins')}
+                    {t('createCoin.tabs.noCoins')}
                   </p>
                 </div>
               ) : (
@@ -875,7 +874,7 @@ export default function CreateCoinForm() {
                             onClick={() => router.push(`/trading?address=${coin.address}`)}
                             className="linear-gradient-light dark:linear-gradient-connect hover:border py-1 px-2 md:py-1.5 md:px-3 lg:py-2 lg:px-5 border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 rounded-full text-[10px] md:text-xs whitespace-nowrap"
                           >
-                            {t('createCoin.myCoins.trade')} 
+                            {t('createCoin.tabs.trade')} 
                           </button>
                         </div>
                       </div>
@@ -891,7 +890,7 @@ export default function CreateCoinForm() {
                   href="/my-coin"
                   className="text-neutral-100 font-medium text-[10px] md:text-xs lg:text-sm"
                 >
-                  {t('createCoin.myCoins.seeAll')}
+                  {t('createCoin.tabs.seeAll')}
                 </Link>
                 <img src={"/arrow.png"} alt="arrow-icon" width={10} height={10} className="md:w-[12px] md:h-[12px] lg:w-[15px] lg:h-[14px]" />
               </button>

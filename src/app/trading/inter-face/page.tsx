@@ -47,7 +47,7 @@ const InterfaceContent = () => {
   const address = searchParams?.get("address");
   const [recentTokens, setRecentTokens] = useState<TokenInfo[]>([]);
 
-  const { data: tokenInfor, isLoading } = useQuery<TokenInfo>({
+  const { data: tokenInfor, isLoading, error } = useQuery<TokenInfo>({
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
   });
@@ -112,7 +112,27 @@ const InterfaceContent = () => {
   };
 
   if (isLoading) {
-    return <div>{t('trading.interface.loading')}</div>;
+    return (
+      <div className="flex items-center justify-center text-gray-500 dark:text-gray-400">
+        {t('trading.interface.loading')}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center text-red-500">
+        {t('trading.interface.error.loadingFailed')}
+      </div>
+    );
+  }
+
+  if (!address) {
+    return (
+      <div className="flex items-center justify-center text-red-500">
+        {t('trading.interface.error.invalidToken')}
+      </div>
+    );
   }
 
   return (
@@ -137,7 +157,9 @@ const InterfaceContent = () => {
           </div>
         </>
       ) : (
-        <div className="text-sm text-gray-500">{t('trading.interface.noTokens')}</div>
+        <div className="text-sm text-gray-500 dark:text-gray-400">
+          {t('trading.interface.noTokens')}
+        </div>
       )}
     </div>
   )
@@ -145,8 +167,14 @@ const InterfaceContent = () => {
 
 // Main component with Suspense
 const Interface = () => {
+  const { t } = useLang();
+  
   return (
-    <Suspense fallback={<div></div>}>
+    <Suspense fallback={
+      <div className="flex items-center justify-center p-4 text-gray-500 dark:text-gray-400">
+        {t('trading.interface.loading')}
+      </div>
+    }>
       <InterfaceContent />
     </Suspense>
   );

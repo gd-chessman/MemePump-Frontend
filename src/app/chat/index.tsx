@@ -270,7 +270,6 @@ const ChatWidget = () => {
   useEffect(() => {
     if (wsMessage) {
       const wsMsg = wsMessage as WsMessage;
-      console.log("wsMsg", wsMsg)
       const newMessage: Message = {
         id: wsMsg._id,
         sender: {
@@ -361,7 +360,7 @@ const ChatWidget = () => {
               onMouseDown={handleMouseDown}
             >
               <img src={"/ethereum.png"} alt="ethereum-icon" width={15} height={15} />
-              <span className="text-white font-bold">Community Chatroom</span>
+              <span className="text-white font-bold">{t("masterTrade.manage.chat.communityChatroom")}</span>
               <img src={"/ethereum.png"} alt="ethereum-icon" width={15} height={15} />
             </div>
             <div className="flex-1 overflow-y-auto p-3 pb-1 bg-gray-50 dark:bg-neutral-900">
@@ -382,7 +381,7 @@ const ChatWidget = () => {
                       handleSendMessage();
                     }
                   }}
-                  placeholder={t("Type a message...")}
+                  placeholder={t("masterTrade.manage.chat.type_a_message")}
                   className="flex-1 px-3 py-1 h-[30px] text-xs bg-gray-50 dark:bg-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-theme-primary-400/50"
                 />
                 <button
@@ -393,7 +392,7 @@ const ChatWidget = () => {
                       ? 'bg-theme-primary-400 hover:bg-theme-primary-500 text-white'
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}`}
                 >
-                  {t("Send")}
+                  {t("masterTrade.manage.chat.send")}
                 </button>
               </div>
             </div>

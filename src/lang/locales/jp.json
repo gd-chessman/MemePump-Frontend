@@ -1,6 +1,25 @@
 {
   "connect": "接続",
-  "overview": "概要",
+  "over view": "概要",
+  "my wallet": "マイウォレット",
+  "wallet manager": "ウォレットマネージャー",
+  "overview": {
+    "launchToken": {
+      "title": "独自のトークンを発行",
+      "description": "数ステップで名前、シンボル、税金、供給量をカスタマイズ",
+      "createNow": "今すぐ作成"
+    },
+    "universalAccount": {
+      "title": "ユニバーサルアカウント",
+      "receive": "受信",
+      "send": "送信"
+    },
+    "masterTrade": {
+      "title": "マスタートレード",
+      "description": "トップトレーダーの取引をワンクリックでコピー",
+      "explore": "探索"
+    }
+  },
   "trade": "取引",
   "create coin": "コイン作成",
   "createCoin": {
@@ -70,6 +89,21 @@
     },
     "myCoins": {
       "title": "マイコイン",
+      "createCoin": "コイン作成",
+      "searchPlaceholder": "トークン名/ アドレス",
+      "table": {
+        "time": "時間",
+        "memeCoin": "ミームコイン",
+        "symbol": "シンボル",
+        "address": "アドレス",
+        "decimals": "小数点",
+        "actions": "操作"
+      },
+      "actions": {
+        "copy": "アドレスをコピー",
+        "copied": "クリップボードにアドレスをコピーしました",
+        "convert": "変換"
+      },
       "tabs": {
         "today": "今日",
         "last8days": "過去8日間",
@@ -89,8 +123,184 @@
       ]
     }
   },
-  "masterTrade": "マスタートレード",
-  "wallet": "ウォレット",
+  "masterTrade": {
+    "tabs": {
+      "trade": "取引",
+      "chat": "チャット",
+      "member": "メンバー"
+    },
+    "unreadCount": "未読メッセージ",
+    "loading": "読み込み中...",
+    "page": {
+      "filters": {
+        "all": "すべて",
+        "notConnected": "未接続",
+        "connected": "接続済み",
+        "disconnected": "切断済み",
+        "paused": "一時停止",
+        "pending": "保留中"
+      },
+      "search": {
+        "placeholder": "ウォレットアドレスで検索..."
+      },
+      "manageMaster": "マスター管理",
+      "table": {
+        "address": "アドレス",
+        "pnl7d": "7日間の損益",
+        "pnl30d": "30日間の損益",
+        "winRate7d": "7日間の勝率",
+        "transactions7d": "7日間の取引",
+        "lastTime": "最終更新",
+        "type": "タイプ",
+        "status": "ステータス",
+        "action": "アクション",
+        "noData": "データなし",
+        "copyAddress": "アドレスをコピー",
+        "copySuccess": "アドレスをコピーしました: {address}"
+      },
+      "traderType": {
+        "vip": "VIP",
+        "normal": "通常"
+      },
+      "actions": {
+        "connect": "接続",
+        "reconnect": "再接続",
+        "details": "詳細",
+        "pause": "一時停止",
+        "disconnect": "切断"
+      },
+      "status": {
+        "notConnected": "未接続",
+        "connect": "接続済み",
+        "disconnect": "切断済み",
+        "pause": "一時停止",
+        "pending": "保留中",
+        "block": "ブロック済み"
+      },
+      "timeAgo": {
+        "seconds": "{count}秒前",
+        "minute": "{count}分前",
+        "minutes": "{count}分前",
+        "hour": "{count}時間前",
+        "hours": "{count}時間前",
+        "day": "{count}日前",
+        "days": "{count}日前",
+        "week": "{count}週間前",
+        "weeks": "{count}週間前",
+        "month": "{count}ヶ月前",
+        "months": "{count}ヶ月前",
+        "year": "{count}年前",
+        "years": "{count}年前",
+        "updating": "更新中"
+      }
+    },
+    "manage": {
+      "createNewGroup": {
+        "success": "グループの作成に成功しました",
+        "error": "グループの作成に失敗しました",
+        "title": "グループ作成",
+        "groupName": "グループ名",
+        "enterGroupName": "グループ名を入力",
+        "create": "作成"
+      },
+      "connectionManagement": {
+        "joinSuccess": "グループへの参加に成功しました",
+        "joinError": "グループへの参加に失敗しました",
+        "connectSuccess": "接続に成功しました",
+        "blockSuccess": "ブロックに成功しました",
+        "pauseSuccess": "一時停止に成功しました",
+        "unblockSuccess": "ブロック解除に成功しました",
+        "error": "エラーが発生しました",
+        "confirmJoin": "選択した{count}つのウォレットをグループ「{groupName}」に参加させますか？",
+        "cancel": "キャンセル",
+        "confirm": "確認"
+      },
+      "groupManagement": {
+        "createGroup": "グループ作成",
+        "groupName": "グループ名",
+        "enterGroupName": "グループ名を入力",
+        "create": "作成",
+        "on": "オン",
+        "off": "オフ",
+        "delete": "削除",
+        "status": "ステータス",
+        "action": "アクション",
+        "noGroup": "グループなし",
+        "onCount": "オン ({count})",
+        "offCount": "オフ ({count})",
+        "deleteCount": "削除 ({count})"
+      },
+      "connectionTable": {
+        "address": "アドレス",
+        "group": "グループ",
+        "status": "ステータス",
+        "action": "アクション",
+        "connect": "接続",
+        "block": "ブロック",
+        "unblock": "ブロック解除",
+        "chooseGroup": "グループを選択",
+        "searchGroup": "グループを検索...",
+        "noGroup": "グループなし",
+        "copyAddress": "アドレスをコピー",
+        "addressCopied": "アドレスをコピーしました"
+      },
+      "chat": {
+        "title": "マスターチャットルーム",
+        "selectGroup": "グループを選択...",
+        "typeMessage": "メッセージを入力...",
+        "connectWithMaster": "他のマスターと接続",
+        "send": "送信",
+        "noMessages": "メッセージはまだありません",
+        "communityChatroom": "コミュニティチャットルーム"
+      }
+    }
+  },
+  "wallet": {
+    "solana": "Solana",
+    "eth": "ETH",
+    "bnb": "BNB",
+    "wallet": "ウォレット",
+    "universalAccount": "ユニバーサルアカウント",
+    "receive": "受け取る",
+    "send": "送信",
+    "getPrivateKey": "秘密鍵を取得",
+    "solanaWallet": "ソラナウォレット",
+    "addWallet": "ウォレットを追加",
+    "importWallet": "ウォレットをインポート",
+    "assets": "資産",
+    "token": "トークン",
+    "balance": "残高",
+    "price": "価格",
+    "value": "価値",
+    "address": "アドレス",
+    "walletName": "ウォレット名",
+    "nickname": "ニックネーム",
+    "network": "ネットワーク",
+    "privateKeys": "秘密鍵",
+    "solanaPrivateKey": "ソラナ秘密鍵",
+    "ethereumPrivateKey": "イーサリアム秘密鍵",
+    "bnbPrivateKey": "BNB秘密鍵",
+    "createPassword": "パスワードを作成",
+    "newPassword": "新しいパスワード",
+    "confirmPassword": "パスワードを確認",
+    "passwordRequirements": "(i) パスワードは8文字以上で、大文字、小文字、数字、特殊文字を含める必要があります。\nこのパスワードは将来秘密鍵を表示する際に必要になります。",
+    "creating": "作成中...",
+    "enterPassword": "パスワードを入力",
+    "password": "パスワード",
+    "enterPasswordToView": "(i) 秘密鍵を表示するにはパスワードを入力してください",
+    "verifying": "確認中...",
+    "submit": "送信",
+    "adding": "追加中...",
+    "privateKeySecurity": "秘密鍵は暗号化されて安全に保存されます",
+    "walletNickname": "ウォレットニックネーム",
+    "country": "国",
+    "solanaAddress": "ソラナアドレス",
+    "ethAddress": "イーサリアムアドレス",
+    "walletKey": "ウォレットキー",
+    "type": "タイプ",
+    "actions": "アクション",
+    "walletLevel": "ウォレットレベル"
+  },
   "searchPlaceholder": "トークン名/アドレス",
   "languages": {
     "korea": "韓国語",
@@ -130,7 +340,30 @@
       "loading": "トークン情報を読み込み中...",
       "noTokens": "最近閲覧したトークンはありません",
       "recentTokens": "最近のトークン",
-      "openInNewTab": "新しいタブで開く"
+      "openInNewTab": "新しいタブで開く",
+      "tokenInfo": {
+        "price": "価格",
+        "change": "変化",
+        "marketCap": "時価総額",
+        "volume24h": "24時間取引量",
+        "holders": "保有者数",
+        "liquidity": "流動性",
+        "vol": "取引量",
+        "buy": "買い",
+        "sells": "売り",
+        "netBuy": "純買い"
+      },
+      "error": {
+        "loadingFailed": "トークン情報の読み込みに失敗しました",
+        "invalidToken": "無効なトークンアドレスです"
+      },
+      "searchPlaceholder": "トークン名 / アドレス",
+      "minSearchLength": "検索するには2文字以上入力してください"
+    },
+    "listToken": {
+      "allMarkets": "すべてのトークン市場",
+      "newTrending": "新規 & トレンド",
+      "meme": "ミーム"
     }
   },
   "auth": {
@@ -142,5 +375,179 @@
     "loginFailed": "ログイン失敗",
     "pleaseConnect": "Telegramアカウントを接続してください",
     "userProfile": "ユーザープロフィール"
+  },
+  "tableDashboard": {
+    "tabs": {
+      "trending": "トレンド",
+      "new": "新着"
+    },
+    "mobile": {
+      "price": "価格",
+      "24hChange": "24時間変化",
+      "marketCap": "時価総額",
+      "holders": "保有者",
+      "address": "アドレス"
+    },
+    "pagination": {
+      "page": "ページ",
+      "of": "/",
+      "first": "«",
+      "previous": "‹",
+      "next": "›",
+      "last": "»"
+    },
+    "toast": {
+      "addressCopied": "アドレスをクリップボードにコピーしました",
+      "addToWishlistSuccess": "お気に入りリストに追加しました",
+      "addToWishlistFailed": "お気に入りリストへの追加に失敗しました"
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "検索...",
+      "loading": "読み込み中..."
+    },
+    "wallet": {
+      "selectWallet": "ウォレットを選択",
+      "logout": "ログアウト",
+      "connecting": "接続中...",
+      "loading": "読み込み中..."
+    },
+    "notifications": {
+      "switchWalletSuccess": "ウォレットの切り替えに成功しました！",
+      "switchWalletFailed": "ウォレットの切り替えに失敗しました！",
+      "loginSuccess": "ログインに成功しました！",
+      "completeProfile": "プロフィール情報を完成させてください！",
+      "loginRequired": "続行するにはログインしてください！"
+    }
+  },
+  "listWallet": {
+    "search": {
+      "placeholder": "ウォレット名/アドレス"
+    },
+    "selectedWallet": {
+      "title": "選択されたウォレット"
+    },
+    "changeWallet": {
+      "title": "ウォレット変更"
+    },
+    "walletType": {
+      "master": "マスター",
+      "sub": "サブ"
+    },
+    "copyAddress": {
+      "copied": "コピーしました",
+      "copy": "コピー"
+    }
+  },
+  "tokenInfo": {
+    "marketCap": "時価総額",
+    "volume24h": "24時間取引量",
+    "liquidity": "流動性",
+    "holders": "保有者数",
+    "timeFrames": {
+      "5m": "5分",
+      "1h": "1時間",
+      "4h": "4時間",
+      "24h": "24時間"
+    },
+    "stats": {
+      "vol": "取引量",
+      "buy": "買い",
+      "sells": "売り",
+      "netBuy": "純買い"
+    },
+    "loading": "トークン情報を読み込み中...",
+    "error": {
+      "loadingFailed": "トークン情報の読み込みに失敗しました",
+      "invalidToken": "無効なトークンアドレスです"
+    }
+  },
+  "transactionHistory": {
+    "allTransactions": "すべての取引",
+    "myTransactions": "マイ取引",
+    "time": "時間",
+    "type": "タイプ",
+    "price": "価格",
+    "amount": "数量",
+    "total": "合計",
+    "source": "ソース",
+    "transactionHash": "取引ハッシュ",
+    "status": "ステータス",
+    "address": "アドレス",
+    "completed": "完了",
+    "pending": "処理中",
+    "failed": "失敗",
+    "buy": "購入",
+    "sell": "売却",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "noTransactions": "取引履歴がありません",
+    "loading": "取引履歴を読み込み中...",
+    "error": {
+      "loadFailed": "取引履歴の読み込みに失敗しました",
+      "invalidAddress": "無効なアドレスです"
+    },
+    "filters": {
+      "all": "すべて",
+      "buy": "購入",
+      "sell": "売却",
+      "today": "今日",
+      "week": "今週",
+      "month": "今月"
+    }
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "retry": "再試行",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "search": "検索",
+    "noResults": "結果が見つかりません",
+    "required": "必須",
+    "optional": "任意"
+  },
+  "universal_account": {
+    "deposit": "入金",
+    "withdraw": "出金",
+    "history": "履歴",
+    "time": "時間",
+    "type": "種類",
+    "status": "状態",
+    "amount": "金額",
+    "transaction_id": "取引ID",
+    "from": "送信元",
+    "to": "送信先",
+    "from_address": "送信元アドレス",
+    "to_address": "送信先アドレス",
+    "no_transactions": "{type}の取引が見つかりません",
+    "copied": "コピーしました！",
+    "copied_description": "取引ハッシュをクリップボードにコピーしました",
+    "enter_amount": "送金額を入力",
+    "transaction_progress": "取引処理中...",
+    "available": "利用可能: {amount} SOL",
+    "recipient_address": "受取人アドレス",
+    "recipient_placeholder": "受取人アドレスを入力...",
+    "sending": "送信中...",
+    "send": "送信",
+    "deposit_wallet": {
+      "title": "あなたのソラナアドレス",
+      "warning": {
+        "title": "ソラナネットワークからのSOLの出金のみサポートしています。",
+        "description": "ソラナネットワークでSOLを出金し、正しいソラナウォレットアドレスを使用してください。"
+      },
+      "copy_success": "ウォレットアドレスをクリップボードにコピーしました！"
+    },
+    "errors": {
+      "max_withdrawal": "最大出金額は1 SOLです",
+      "min_withdrawal": "最小出金額は0.001 SOLです",
+      "insufficient_balance": "残高{balance} SOLを超えることはできません",
+      "transaction_failed": "取引に失敗しました。もう一度お試しください。",
+      "transaction_success": "取引が正常に送信されました！"
+    }
   }
 }

@@ -65,6 +65,7 @@ const Control = () => {
         balance: walletInfor.sol_balance || 0.0,
         name: "Solana"
       })
+      setIsConnected(!!walletInfor.solana_address)
     }
   }, [walletInfor])
 

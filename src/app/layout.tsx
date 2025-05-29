@@ -1,6 +1,4 @@
 import "@/styles/globals.css";
-import { LangProvider } from "@/lang/LangProvider";
-import { ThemeProvider } from "@/theme/ThemeProvider";
 import ClientLayout from "@/app/components/ClientLayout";
 
 export default function RootLayout({
@@ -12,7 +10,7 @@ export default function RootLayout({
     <html suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <title>{process.env.NEXT_PUBLIC_APP_NAME}</title>
         <link rel="icon" href="/logo.png" type="image/png" />
         <link

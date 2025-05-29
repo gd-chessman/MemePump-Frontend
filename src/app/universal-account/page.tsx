@@ -10,6 +10,7 @@ import { ExternalLink, Copy } from 'lucide-react';
 import { getTransactionHistory } from '@/services/api/HistoryTransactionWallet';
 import { toast } from '@/hooks/use-toast';
 import { truncateString } from '@/utils/format';
+import { useLang } from '@/lang';
 
 type Transaction = {
     id: number
@@ -25,25 +26,15 @@ type Transaction = {
     updated_at: string
 }
 
-const UniversalAccountPage = () => {
+const universal_accountPage = () => {
+    const { t } = useLang();
     const { data: walletInfor, isLoading, isError, error } = useQuery({
         queryKey: ["wallet-infor"],
         queryFn: getInforWallet,
     });
 
-    // Add detailed logging
-    useEffect(() => {
-        console.log("UniversalAccountPage - Query state:", {
-            isLoading,
-            isError,
-            error,
-            hasData: !!walletInfor,
-            walletInfor
-        });
-    }, [walletInfor, isLoading, isError, error]);
 
-    console.log("walletInfor", walletInfor)
-    const [tab, setTab] = useState<("Deposit" | "Withdraw")>("Deposit");
+    const [tab, setTab] = useState<("deposit" | "withdraw")>("deposit");
 
     const { data: transactions } = useQuery({
         queryKey: ["transactions"],
@@ -52,7 +43,7 @@ const UniversalAccountPage = () => {
 
     // Filter transactions based on current tab
     const filteredTransactions = transactions?.filter((tx: Transaction) => {
-        const isMatch = tab === "Deposit" ? tx.type === "deposit" : tx.type === "withdraw";
+        const isMatch = tab === "deposit" ? tx.type === "deposit" : tx.type === "withdraw";
         return isMatch;
     }) || [];
 
@@ -70,24 +61,24 @@ const UniversalAccountPage = () => {
                     <div className="flex items-center justify-center flex-col gap-3 sm:gap-4 lg:gap-6">
                         <div className="flex w-full border-gray-200 dark:border-neutral-800 max-w-[280px] sm:max-w-[320px] h-[36px] sm:h-[40px] bg-gray-100 dark:bg-theme-neutral-1000 rounded-full">
                             <button
-                                className={`flex-1 rounded-xl text-sm sm:text-base cursor-pointer font-medium uppercase text-center ${tab === "Deposit" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
-                                onClick={() => setTab("Deposit")}
+                                className={`flex-1 rounded-xl text-sm sm:text-base cursor-pointer font-medium uppercase text-center ${tab === "deposit" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
+                                onClick={() => setTab("deposit")}
                             >
-                                Deposit
+                                {t('universal_account.deposit')}
                             </button>
                             <button
-                                className={`flex-1 rounded-xl cursor-pointer text-sm sm:text-base font-medium uppercase text-center ${tab === "Withdraw" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
-                                onClick={() => setTab("Withdraw")}
+                                className={`flex-1 rounded-xl cursor-pointer text-sm sm:text-base font-medium uppercase text-center ${tab === "withdraw" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
+                                onClick={() => setTab("withdraw")}
                             >
-                                Withdraw
+                                {t('universal_account.withdraw')}
                             </button>
                         </div>
 
                         <div className="flex-1 container">
-                            {tab === "Deposit" && (
+                            {tab === "deposit" && (
                                 <DepositWallet walletAddress={walletInfor.solana_address} />
                             )}
-                            {tab === "Withdraw" && (
+                            {tab === "withdraw" && (
                                 <WithdrawWallet walletInfor={walletInfor} />
                             )}
                         </div>
@@ -99,7 +90,7 @@ const UniversalAccountPage = () => {
             <div className='container px-0 lg:mt-6 sm:mt-8'>
                 <div className="flex items-center gap-2 mb-3 sm:mb-4 mt-4 lg:mt-0">
                     <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-cyan-400 rounded-full"></div>
-                    <h3 className="font-bold text-white text-sm sm:text-base uppercase">{tab} HISTORY</h3>
+                    <h3 className="font-bold text-white text-sm sm:text-base uppercase">{t(`universal_account.${tab}`)} {t('universal_account.history')}</h3>
                     <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-cyan-400 rounded-full"></div>
                 </div>
 
@@ -109,41 +100,39 @@ const UniversalAccountPage = () => {
                         filteredTransactions.map((tx: Transaction) => (
                             <div key={tx.id} className="bg-theme-neutral-1000/50 rounded-xl border border-theme-purple-200 p-3 space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[10px] text-gray-400">Time</span>
+                                    <span className="text-[10px] text-gray-400">{t('universal_account.time')}</span>
                                     <span className="text-[11px] text-gray-300">{formatDate(tx.created_at)}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[10px] text-gray-400">Type</span>
-                                    <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-medium ${
-                                        tx.type === "deposit" 
-                                            ? "bg-blue-500/20 text-blue-400" 
+                                    <span className="text-[10px] text-gray-400">{t('universal_account.type')}</span>
+                                    <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-medium ${tx.type === "deposit"
+                                            ? "bg-blue-500/20 text-blue-400"
                                             : "bg-purple-500/20 text-purple-400"
-                                    }`}>
+                                        }`}>
                                         {tx.type.toUpperCase()}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[10px] text-gray-400">Status</span>
-                                    <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-medium ${
-                                        tx.status === "completed" 
-                                            ? "bg-green-500/20 text-green-400" 
+                                    <span className="text-[10px] text-gray-400">{t('universal_account.status')}</span>
+                                    <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-medium ${tx.status === "completed"
+                                            ? "bg-green-500/20 text-green-400"
                                             : tx.status === "pending"
-                                            ? "bg-yellow-500/20 text-yellow-400"
-                                            : "bg-red-500/20 text-red-400"
-                                    }`}>
+                                                ? "bg-yellow-500/20 text-yellow-400"
+                                                : "bg-red-500/20 text-red-400"
+                                        }`}>
                                         {tx.status.toUpperCase()}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[10px] text-gray-400">Amount</span>
+                                    <span className="text-[10px] text-gray-400">{t('universal_account.amount')}</span>
                                     <span className="text-[11px] text-gray-300">{tx.amount} SOL</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[10px] text-gray-400">Transaction ID</span>
+                                    <span className="text-[10px] text-gray-400">{t('universal_account.transactionId')}</span>
                                     {tx.transaction_hash && (
                                         <div className="flex items-center gap-1">
                                             <span className="text-[11px] text-gray-300">{truncateString(tx.transaction_hash, 8)}</span>
-                                            <button 
+                                            <button
                                                 onClick={() => {
                                                     navigator.clipboard.writeText(tx.transaction_hash);
                                                     toast({
@@ -160,11 +149,11 @@ const UniversalAccountPage = () => {
                                 </div>
                                 <div className="pt-2 border-t border-theme-purple-200/20">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-[10px] text-gray-400">From</span>
+                                        <span className="text-[10px] text-gray-400">{t('universal_account.from')}</span>
                                         <span className="text-[11px] text-gray-300">{truncateString(tx.wallet_address_from, 8)}</span>
                                     </div>
                                     <div className="flex items-center justify-between mt-1">
-                                        <span className="text-[10px] text-gray-400">To</span>
+                                        <span className="text-[10px] text-gray-400">{t('universal_account.to')}</span>
                                         <span className="text-[11px] text-gray-300">{truncateString(tx.wallet_address_to, 8)}</span>
                                     </div>
                                 </div>
@@ -172,7 +161,7 @@ const UniversalAccountPage = () => {
                         ))
                     ) : (
                         <div className="text-center py-6 text-gray-400 text-xs border border-theme-purple-200 rounded-xl p-2">
-                            No {tab.toLowerCase()} transactions found
+                            {t('universal_account.no_transactions', { type: t(`universal_account.${tab}`) })}
                         </div>
                     )}
                 </div>
@@ -182,13 +171,13 @@ const UniversalAccountPage = () => {
                     <Table className="w-full">
                         <TableHeader>
                             <TableRow className="border-b border-theme-purple-200 hover:bg-transparent">
-                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400">Time</TableHead>
-                                <TableHead className="py-2 px-4 text-xs font-medium text-gray-400">Type</TableHead>
-                                <TableHead className="py-2 px-3 text-xs font-medium text-gray-400">Status</TableHead>
-                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400 text-right">Amount</TableHead>
-                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400">From Address</TableHead>
-                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400">To Address</TableHead>
-                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400">Transaction ID</TableHead>
+                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400">{t('universal_account.time')}</TableHead>
+                                <TableHead className="py-2 px-4 text-xs font-medium text-gray-400">{t('universal_account.type')}</TableHead>
+                                <TableHead className="py-2 px-3 text-xs font-medium text-gray-400">{t('universal_account.status')}</TableHead>
+                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400 text-right">{t('universal_account.amount')}</TableHead>
+                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400">{t('universal_account.from_address')}</TableHead>
+                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400">{t('universal_account.to_address')}</TableHead>
+                                <TableHead className="py-2 px-6 text-xs font-medium text-gray-400">{t('universal_account.transaction_id')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -199,22 +188,20 @@ const UniversalAccountPage = () => {
                                             {formatDate(tx.created_at)}
                                         </TableCell>
                                         <TableCell className="py-2 px-4">
-                                            <span className={`px-2 py-1 rounded-full text-[10px] font-medium ${
-                                                tx.type === "deposit" 
-                                                    ? "bg-blue-500/20 text-blue-400" 
+                                            <span className={`px-2 py-1 rounded-full text-[10px] font-medium ${tx.type === "deposit"
+                                                    ? "bg-blue-500/20 text-blue-400"
                                                     : "bg-purple-500/20 text-purple-400"
-                                            }`}>
+                                                }`}>
                                                 {tx.type.toUpperCase()}
                                             </span>
                                         </TableCell>
                                         <TableCell className="py-2 px-3">
-                                            <span className={`px-2 py-1 rounded-full text-[10px] font-medium ${
-                                                tx.status === "completed" 
-                                                    ? "bg-green-500/20 text-green-400" 
+                                            <span className={`px-2 py-1 rounded-full text-[10px] font-medium ${tx.status === "completed"
+                                                    ? "bg-green-500/20 text-green-400"
                                                     : tx.status === "pending"
-                                                    ? "bg-yellow-500/20 text-yellow-400"
-                                                    : "bg-red-500/20 text-red-400"
-                                            }`}>
+                                                        ? "bg-yellow-500/20 text-yellow-400"
+                                                        : "bg-red-500/20 text-red-400"
+                                                }`}>
                                                 {tx.status.toUpperCase()}
                                             </span>
                                         </TableCell>
@@ -231,7 +218,7 @@ const UniversalAccountPage = () => {
                                             {tx.transaction_hash && (
                                                 <div className="flex items-center gap-2">
                                                     {truncateString(tx.transaction_hash, 12)}
-                                                    <button 
+                                                    <button
                                                         onClick={() => {
                                                             navigator.clipboard.writeText(tx.transaction_hash);
                                                             toast({
@@ -251,7 +238,7 @@ const UniversalAccountPage = () => {
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={7} className="py-8 text-center text-gray-400">
-                                        No {tab.toLowerCase()} transactions found
+                                        {t('universal_account.no_transactions', { type: t(`universal_account.${tab}`) })}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -264,4 +251,4 @@ const UniversalAccountPage = () => {
     )
 }
 
-export default UniversalAccountPage
+export default universal_accountPage

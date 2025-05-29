@@ -63,13 +63,13 @@ const Header = () => {
             updateToken(res.token);
             await refetch();
             notify({
-                message: 'Chuyển đổi ví thành công!',
+                message: t('header.notifications.switchWalletSuccess'),
                 type: 'success'
             });
         } catch (error) {
             console.error('Error changing wallet:', error);
             notify({
-                message: 'Chuyển đổi ví thất bại!',
+                message: t('header.notifications.switchWalletFailed'),
                 type: 'error'
             });
         }
@@ -85,7 +85,7 @@ const Header = () => {
     useEffect(() => {
         if (walletInfor?.status === 403) {
             notify({
-                message: 'Vui lòng hoàn thiện thông tin cá nhân!',
+                message: t('header.notifications.completeProfile'),
                 type: 'error'
             });
             router.push("/complete-profile");
@@ -96,12 +96,12 @@ const Header = () => {
         if (walletInfor && walletInfor.status === 200) {
             if (!isWalletDialogOpen) {
                 notify({
-                    message: 'Đăng nhập thành công!',
+                    message: t('header.notifications.loginSuccess'),
                     type: 'success'
                 });
             }
         }
-    }, [walletInfor, router, logout, isWalletDialogOpen]);
+    }, [walletInfor, router, logout, isWalletDialogOpen, t]);
 
     useEffect(() => {
         const checkMobile = () => {
@@ -126,7 +126,6 @@ const Header = () => {
     }, [isMobile]);
 
     useEffect(() => {
-        console.log("isSearchModalOpen", isSearchModalOpen);
         if (!isSearchModalOpen) {
             setSearchQuery("");
         }
@@ -134,7 +133,7 @@ const Header = () => {
 
     const listSidebar = [
         {
-            name: t('overview'),
+            name: t('over view'),
             href: '/dashboard',
             icon: LayoutDashboard
         },
@@ -144,12 +143,12 @@ const Header = () => {
             icon: Coins
         },
         {
-            name: t('masterTrade'),
+            name: t('overview.masterTrade.name'),
             href: '/master-trade',
             icon: LineChart
         },
         {
-            name: t('wallet'),
+            name: t("wallet manager"),
             href: '/wallet',
             icon: WalletIcon
         },
@@ -184,16 +183,14 @@ const Header = () => {
                                 value={searchQuery}
                                 onChange={(e) => {
                                     setSearchQuery(e.target.value);
-                                    // setIsSearchModalOpen(e.target.value.length > 0);
                                 }}
                                 onFocus={() => {
                                     setIsSearchModalOpen(true);
                                 }}
-                                placeholder="Search..."
+                                placeholder={t('header.search.placeholder')}
                                 className="rounded-full py-1 pl-8 pr-3 w-32 text-xs focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400"
                             />
                             <Search className="absolute left-2 top-1.5 h-3 w-3 text-gray-500 dark:text-muted-foreground" />
-
                         </div>
                     </div>
                     <SearchModal
@@ -304,11 +301,11 @@ const Header = () => {
                                                 onClick={handleSelectWallet}
                                             >
                                                 <Wallet2 className="mr-2 h-4 w-4" />
-                                                <span>Select Wallet</span>
+                                                <span>{t('header.wallet.selectWallet')}</span>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
-                                                <span>Logout</span>
+                                                <span>{t('header.wallet.logout')}</span>
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -316,7 +313,7 @@ const Header = () => {
                                     <button
                                         className="bg-blue-500 hover:bg-blue-600 dark:linear-gradient-connect text-white dark:text-neutral-100 font-medium px-4 md:px-6 py-[6px] rounded-full transition-colors whitespace-nowrap"
                                     >
-                                        Loading...
+                                        {t('header.wallet.loading')}
                                     </button>
                                 )}
                             </>
@@ -324,7 +321,7 @@ const Header = () => {
                             <button
                                 className="bg-blue-500 hover:bg-blue-600 dark:linear-gradient-connect text-white dark:text-neutral-100 font-medium px-4 md:px-6 py-[6px] rounded-full transition-colors whitespace-nowrap"
                             >
-                                Connecting...
+                                {t('header.wallet.connecting')}
                             </button>
                         )}
                     </div>
@@ -373,25 +370,6 @@ const Header = () => {
                                             <button className='linear-gradient-light dark:linear-gradient-connect text-sm text-black dark:text-neutral-100 font-medium px-4 py-3 rounded-full transition-colors w-full'>
                                                 {walletInfor.solana_balance} SOL &ensp; {'$' + formatNumberWithSuffix3(walletInfor.solana_balance_usd)}
                                             </button>
-
-                                            {/* <div className="relative w-full">
-                                            <input
-                                                type="text"
-                                                value={searchQuery}
-                                                onChange={(e) => {
-                                                    setSearchQuery(e.target.value);
-                                                    setIsSearchModalOpen(e.target.value.length > 0);
-                                                }}
-                                                onFocus={() => {
-                                                    if (searchQuery.length > 0) {
-                                                        setIsSearchModalOpen(true);
-                                                    }
-                                                }}
-                                                placeholder={t('searchPlaceholder')}
-                                                className="w-full rounded-full py-3 pl-10 pr-4 text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-xs"
-                                            />
-                                            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500 dark:text-muted-foreground" />
-                                        </div> */}
                                         </div>
                                     )}
 
@@ -418,7 +396,7 @@ const Header = () => {
                                                         }}
                                                         className="linear-gradient-light dark:linear-gradient-connect text-red-600 dark:text-red-400 font-medium px-6 py-3 rounded-full transition-colors"
                                                     >
-                                                        Logout
+                                                        {t('header.wallet.logout')}
                                                     </button>
                                                 )}
                                             </>
@@ -427,13 +405,12 @@ const Header = () => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 )}
 
                 {/* Desktop Dialog */}
                 <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
-                    <DialogContent className="sm:max-w-[425px] bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800">
+                    <DialogContent className="sm:max-w-[425px] bg-white p-0 border-none dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800">
                         <ListWallet
                             isOpen={isWalletDialogOpen}
                             onClose={() => setIsWalletDialogOpen(false)}

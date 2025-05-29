@@ -47,7 +47,6 @@ function TelegramLoginContent() {
         try {
             const data = {id: telegramId, code : code}
             const res = await TelegramWalletService.login(data);
-            console.log(res)
             if(res.status == 401){
                 toast.warn("Invalid authentication !")
             }

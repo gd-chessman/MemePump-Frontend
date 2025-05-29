@@ -10,6 +10,7 @@ import ConnectToMasterModal from "../components/connect-master-trade-modal"
 import { truncateString } from "@/utils/format"
 import DetailMasterModal from "./modal-detail-wallet"
 import { getInforWallet } from "@/services/api/TelegramWalletService"
+import { useLang } from '@/lang/useLang'
 
 // Định nghĩa các kiểu dữ liệu
 type TradeStatus = "Not Connected" | "connect" | "disconnect" | "pause" | "pending" | "block"
@@ -114,6 +115,7 @@ export default function MasterTradeTable() {
     const [isLoading, setIsLoading] = useState(true)
     const [combinedMasterData, setCombinedMasterData] = useState<(Trader & MasterDetail)[]>([])
     const router = useRouter()
+    const { t } = useLang()
 
     const roundToTwoDecimals = (value: number | undefined | null): number | string => {
         if (value === undefined || value === null) return "updating";
@@ -126,45 +128,45 @@ export default function MasterTradeTable() {
     });
 
     const formatLastTime = (timestamp: string | undefined | null): string => {
-        if (!timestamp) return "updating";
+        if (!timestamp) return t('masterTrade.page.timeAgo.updating');
         try {
             const date = new Date(timestamp);
             const now = new Date();
             const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
             if (diffInSeconds < 60) {
-                return `${diffInSeconds} seconds ago`;
+                return t('masterTrade.page.timeAgo.seconds', { count: diffInSeconds });
             }
 
             const diffInMinutes = Math.floor(diffInSeconds / 60);
             if (diffInMinutes < 60) {
-                return `${diffInMinutes} ${diffInMinutes === 1 ? 'minute' : 'minutes'} ago`;
+                return t('masterTrade.page.timeAgo.minutes', { count: diffInMinutes });
             }
 
             const diffInHours = Math.floor(diffInMinutes / 60);
             if (diffInHours < 24) {
-                return `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`;
+                return t('masterTrade.page.timeAgo.hours', { count: diffInHours });
             }
 
             const diffInDays = Math.floor(diffInHours / 24);
             if (diffInDays < 7) {
-                return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
+                return t('masterTrade.page.timeAgo.days', { count: diffInDays });
             }
 
             const diffInWeeks = Math.floor(diffInDays / 7);
             if (diffInWeeks < 4) {
-                return `${diffInWeeks} ${diffInWeeks === 1 ? 'week' : 'weeks'} ago`;
+                return t('masterTrade.page.timeAgo.weeks', { count: diffInWeeks });
             }
 
             const diffInMonths = Math.floor(diffInDays / 30);
             if (diffInMonths < 12) {
-                return `${diffInMonths} ${diffInMonths === 1 ? 'month' : 'months'} ago`;
+                return t('masterTrade.page.timeAgo.months', { count: diffInMonths });
             }
 
             const diffInYears = Math.floor(diffInDays / 365);
-            return `${diffInYears} ${diffInYears === 1 ? 'year' : 'years'} ago`;
+            return t('masterTrade.page.timeAgo.years', { count: diffInYears });
         } catch (error) {
-            return "updating";
+            return t('masterTrade.page.timeAgo.updating');
         }
     };
 
@@ -179,11 +181,10 @@ export default function MasterTradeTable() {
             const details = await Promise.all(
                 masterTraders.map(async (trader: Trader) => {
                     const address = trader.solana_address || trader.eth_address;
-                    console.log("trader.connection_status", trader.connection_status)
+        
                     if (!address) return null;
                     try {
                         const data = await getMasterById(address);
-                        console.log("data", data)
                         const statusConnection = trader.connection_status === "connect" ? data : null;
                         return { ...data.historic.summary, address, lastTime: data?.pnl_since, info: statusConnection};
                     } catch (error) {
@@ -278,7 +279,6 @@ export default function MasterTradeTable() {
 
         return filtered;
     }, [tradeData, activeFilter, searchQuery]);
-    console.log("filteredData", filteredData)
 
     // Xử lý sao chép địa chỉ
     const copyAddress = (address: string) => {
@@ -292,7 +292,6 @@ export default function MasterTradeTable() {
 
     // Xử lý các hành động
     const handleConnect = (inforWallet?: any) => {
-        console.log("inforWallet", inforWallet)
         if (inforWallet.type === "normal") {
             setShowConnectModal(inforWallet.address)
         } else {
@@ -323,26 +322,6 @@ export default function MasterTradeTable() {
         } catch (error) {
             console.error("Error pausing master:", error);
         }
-    }
-
-    const handleDisconnect = (id: string) => {
-        console.log(`Disconnecting from ${id}`)
-        // Thực hiện logic ngắt kết nối ở đây
-    }
-
-    const handlePause = (id: string) => {
-        console.log(`Pausing ${id}`)
-        // Thực hiện logic tạm dừng ở đây
-    }
-
-    const handleReconnect = (id: string) => {
-        console.log(`Reconnecting to ${id}`)
-        // Thực hiện logic kết nối lại ở đây
-    }
-
-    const handleCancel = (id: string) => {
-        console.log(`Cancelling ${id}`)
-        // Thực hiện logic hủy ở đây
     }
 
     // Loading skeleton component
@@ -418,37 +397,37 @@ export default function MasterTradeTable() {
                             onClick={() => setActiveFilter("All")}
                             className={`${mobileFilterButtonClass} ${activeFilter === "All" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'All' ? 'gradient-hover' : ''}`}>All ({tradeData.length})</span>
+                            <span className={`${activeFilter === 'All' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.all')} ({tradeData.length})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("Not Connected")}
                             className={`${mobileFilterButtonClass} ${activeFilter === "Not Connected" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'Not Connected' ? 'gradient-hover' : ''}`}>Not connected ({notConnectedCount})</span>
+                            <span className={`${activeFilter === 'Not Connected' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.notConnected')} ({notConnectedCount})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("connect")}
                             className={`${mobileFilterButtonClass} ${activeFilter === "connect" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'connect' ? 'gradient-hover' : ''}`}>Connected ({connectedCount})</span>
+                            <span className={`${activeFilter === 'connect' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.connected')} ({connectedCount})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("disconnect")}
                             className={`${mobileFilterButtonClass} ${activeFilter === "disconnect" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'disconnect' ? 'gradient-hover' : ''}`}>Disconnected ({disconnectedCount})</span>
+                            <span className={`${activeFilter === 'disconnect' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.disconnected')} ({disconnectedCount})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("pause")}
                             className={`${mobileFilterButtonClass} ${activeFilter === "pause" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'pause' ? 'gradient-hover' : ''}`}>Paused ({pausedCount})</span>
+                            <span className={`${activeFilter === 'pause' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.paused')} ({pausedCount})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("pending")}
                             className={`${mobileFilterButtonClass} ${activeFilter === "pending" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'pending' ? 'gradient-hover' : ''}`}>Pending ({pendingCount})</span>
+                            <span className={`${activeFilter === 'pending' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.pending')} ({pendingCount})</span>
                         </button>
                     </div>
                 </div>
@@ -458,7 +437,7 @@ export default function MasterTradeTable() {
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                         <input
                             type="text"
-                            placeholder="Search by wallet address..."
+                            placeholder={t('masterTrade.page.search.placeholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="rounded-full py-2 pl-10 pr-4 w-full md:w-64 text-xs md:text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-xs"
@@ -491,7 +470,7 @@ export default function MasterTradeTable() {
                                 <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
                                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                             </svg>
-                            Manage Master
+                            {t('masterTrade.page.manageMaster')}
                         </button>
                     )}
                 </div>
@@ -503,45 +482,45 @@ export default function MasterTradeTable() {
                     <table className="w-full text-neutral-100">
                         <thead>
                             <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                                <th className={`${styleTextRow} text-left ${textHeaderTable} w-[15%]`}>Address</th>
+                                <th className={`${styleTextRow} text-left ${textHeaderTable} w-[15%]`}>{t('masterTrade.page.table.address')}</th>
                                 <th className={`${styleTextRow} text-center ${textHeaderTable} w-[12%]`}>
                                     <div className={`flex items-center justify-center ${textHeaderTable}`}>
-                                        7D PnL
+                                        {t('masterTrade.page.table.pnl7d')}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </div>
                                 </th>
                                 <th className={`${styleTextRow} text-center w-[12%]`}>
                                     <div className={`flex items-center justify-center ${textHeaderTable}`}>
-                                        30D PnL
+                                        {t('masterTrade.page.table.pnl30d')}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </div>
                                 </th>
                                 <th className={`${styleTextRow} text-center w-[10%]`}>
                                     <div className={`flex items-center justify-center ${textHeaderTable}`}>
-                                        7D Win Rate
+                                        {t('masterTrade.page.table.winRate7d')}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </div>
                                 </th>
                                 <th className={`${styleTextRow} text-left w-[8%]`}>
                                     <div className={`flex items-center ${textHeaderTable}`}>
-                                        7D TXs
+                                        {t('masterTrade.page.table.txs7d')}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </div>
                                 </th>
                                 <th className={`${styleTextRow} text-left w-[10%]`}>
                                     <div className={`flex items-center ${textHeaderTable}`}>
-                                        Last Time
+                                        {t('masterTrade.page.table.lastTime')}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </div>
                                 </th>
                                 <th className={`${styleTextRow} text-left w-[8%]`}>
                                     <div className={`flex items-center ${textHeaderTable}`}>
-                                        Type
+                                        {t('masterTrade.page.table.type')}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </div>
                                 </th>
-                                <th className={`${styleTextRow} text-start ${textHeaderTable} w-[8%]`}>Status</th>
-                                <th className={`${styleTextRow} text-start ${textHeaderTable} whitespace-nowrap`}>Action</th>
+                                <th className={`${styleTextRow} text-start ${textHeaderTable} w-[8%]`}>{t('masterTrade.page.table.status')}</th>
+                                <th className={`${styleTextRow} text-start ${textHeaderTable} whitespace-nowrap`}>{t('masterTrade.page.table.action')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -553,7 +532,7 @@ export default function MasterTradeTable() {
                             ) : filteredData.length === 0 ? (
                                 <tr>
                                     <td colSpan={9} className="text-center py-8 text-neutral-400">
-                                        No data available
+                                        {t('masterTrade.page.table.noData')}
                                     </td>
                                 </tr>
                             ) : (
@@ -568,7 +547,7 @@ export default function MasterTradeTable() {
                                                 >
                                                     <Copy className="h-4 w-4" />
                                                     <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-neutral-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                                                        Copy address
+                                                        {t('masterTrade.page.actions.copy')}
                                                     </span>
                                                 </button>
                                             </div>
@@ -599,17 +578,19 @@ export default function MasterTradeTable() {
                                             {item.type === "vip" ? (
                                                 <div className="flex items-center text-theme-yellow-200 text-xs">
                                                     <Crown className="h-4 w-4 mr-1" />
-                                                    VIP
+                                                    {t('masterTrade.page.traderType.vip')}
                                                 </div>
                                             ) : (
-                                                <div className="text-theme-primary-400 text-xs">NORMAL</div>
+                                                <div className="text-theme-primary-400 text-xs">
+                                                    {t('masterTrade.page.traderType.normal')}
+                                                </div>
                                             )}
                                         </td>
                                         <td className={`${styleTextRow} text-start`}>
                                             <span
                                                 className={` py-1 rounded-full text-xs`}
                                             >
-                                                {item.status}
+                                                {t(`masterTrade.page.status.${item.status.toLowerCase()}`)}
                                             </span>
                                         </td>
                                         <td className={`${styleTextRow} text-center`}>
@@ -622,7 +603,7 @@ export default function MasterTradeTable() {
                                                         }}
                                                         className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
                                                     >
-                                                        Connect
+                                                        {t('masterTrade.page.actions.connect')}
                                                     </button>
                                                 )}
                                                 {(item.status === "connect" || item.status === "pause") && (
@@ -634,7 +615,7 @@ export default function MasterTradeTable() {
                                                             }}
                                                             className={`px-3 py-1 ${blueBg} rounded-full transition-colors text-xs`}
                                                         >
-                                                            Details
+                                                            {t('masterTrade.page.actions.details')}
                                                         </button>
                                                         <button
                                                             onClick={() => {
@@ -642,7 +623,7 @@ export default function MasterTradeTable() {
                                                             }}
                                                             className={`px-3 py-1 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs`}
                                                         >
-                                                            Pause
+                                                            {t('masterTrade.page.actions.pause')}
                                                         </button>
                                                         <button
                                                             onClick={() => {
@@ -650,7 +631,7 @@ export default function MasterTradeTable() {
                                                             }}
                                                             className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
                                                         >
-                                                            Disconnect
+                                                            {t('masterTrade.page.actions.disconnect')}
                                                         </button>
                                                     </div>
                                                 )}
@@ -661,7 +642,7 @@ export default function MasterTradeTable() {
                                                         }}
                                                         className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
                                                     >
-                                                        Reconnect
+                                                        {t('masterTrade.page.actions.reconnect')}
                                                     </button>
                                                 )}
 
@@ -700,7 +681,7 @@ export default function MasterTradeTable() {
                     ))
                 ) : filteredData.length === 0 ? (
                     <div className="text-center py-8 text-neutral-400">
-                        No data available
+                        {t('masterTrade.page.table.noData')}
                     </div>
                 ) : (
                     filteredData.map((item) => (
@@ -720,15 +701,17 @@ export default function MasterTradeTable() {
                                     {item.type === "vip" ? (
                                         <div className="flex items-center text-theme-yellow-200 text-xs">
                                             <Crown className="h-4 w-4 mr-1" />
-                                            VIP
+                                            {t('masterTrade.page.traderType.vip')}
                                         </div>
                                     ) : (
-                                        <div className="text-theme-primary-400 text-xs">NORMAL</div>
+                                        <div className="text-theme-primary-400 text-xs">
+                                            {t('masterTrade.page.traderType.normal')}
+                                        </div>
                                     )}
                                     <span className={`text-xs px-2 py-1 rounded-full ${item.status === 'connect' ? 'bg-theme-green-200/20 text-theme-green-200' : 
                                         item.status === 'disconnect' ? 'bg-theme-red-200/20 text-theme-red-200' : 
                                         'bg-theme-yellow-200/20 text-theme-yellow-200'}`}>
-                                        {item.status}
+                                        {t(`masterTrade.page.status.${item.status.toLowerCase()}`)}
                                     </span>
                                 </div>
                             </div>
@@ -769,7 +752,7 @@ export default function MasterTradeTable() {
                                             }}
                                             className="flex-1 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
                                         >
-                                            Connect
+                                            {t('masterTrade.page.actions.connect')}
                                         </button>
                                     )}
                                     {(item.status === "connect" || item.status === "pause") && (
@@ -781,19 +764,19 @@ export default function MasterTradeTable() {
                                                 }}
                                                 className="flex-1 px-3 py-1.5 text-theme-blue-200 border border-theme-blue-200 hover:text-neutral-100 hover:bg-theme-blue-200 rounded-full transition-colors text-xs text-center"
                                             >
-                                                Details
+                                                {t('masterTrade.page.actions.details')}
                                             </button>
                                             <button
                                                 onClick={() => handleMemberConnectStatus(item, "pause")}
                                                 className="flex-1 px-3 py-1.5 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs text-center"
                                             >
-                                                Pause
+                                                {t('masterTrade.page.actions.pause')}
                                             </button>
                                             <button
                                                 onClick={() => handleMemberConnectStatus(item, "disconnect")}
                                                 className="flex-1 px-3 py-1.5 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs text-center"
                                             >
-                                                Disconnect
+                                                {t('masterTrade.page.actions.disconnect')}
                                             </button>
                                         </>
                                     )}
@@ -802,7 +785,7 @@ export default function MasterTradeTable() {
                                             onClick={() => handleMemberConnectStatus(item, "connect")}
                                             className="lg:w-auto mx-auto lg:mx-0 w-36 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
                                         >
-                                            Reconnect
+                                            {t('masterTrade.page.actions.reconnect')}
                                         </button>
                                     )}
                                 </div>

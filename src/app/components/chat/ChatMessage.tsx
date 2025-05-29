@@ -7,7 +7,6 @@ interface ChatMessageProps {
 
 const ChatMessage = ({ message }: ChatMessageProps) => {
   const currentLang = langConfig.listLangs.find(l => l.code === message.country);
-  console.log("message", message)
   return (
     <div className={`flex `}>
       {!message.sender.isCurrentUser && (

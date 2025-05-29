@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { SolonaTokenService } from "@/services/api";
 import { useDebounce } from "@/hooks/useDebounce";
 import { truncateString } from "@/utils/format";
-import { ToastNotification } from "@/ui/toast";
+import notify from "@/app/components/notify";
 import { useAuth } from "@/hooks/useAuth";
 import { TableTokenList } from "@/app/components/trading/TableTokenList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
@@ -42,12 +42,10 @@ export default function Trading() {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [isSearching, setIsSearching] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [activeTab, setActiveTab] = useState("1");
-  const [sortBy, setSortBy] = useState("market_cap");
+  const [sortBy, setSortBy] = useState("volume_24h_usd");
   const [sortType, setSortType] = useState("desc");
   
   const { data: topCoins, isLoading: isLoadingTopCoins } = useQuery({
@@ -123,16 +121,24 @@ export default function Trading() {
 
   // Use search results if available, otherwise use tokens data
   const displayTokens = debouncedSearchQuery.trim() ? searchResults : tokens;
-  console.log("displayTokens", displayTokens)
   const handleCopyAddress = (address: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     navigator.clipboard.writeText(address);
-    setToastMessage("Đã sao chép địa chỉ ví vào clipboard");
-    setShowToast(true);
-    setTimeout(() => {
-      setShowToast(false);
-    }, 3000);
+    notify({ message: t('tableDashboard.toast.addressCopied'), type: 'success' });
+  };
+
+  const handleStarClick = (token: Token) => {
+    const data = {
+      token_address: token.address,
+      status: myWishlist?.tokens?.some((t: { address: string }) => t.address === token.address) ? "off" : "on",
+    };
+    SolonaTokenService.toggleWishlist(data).then(() => {
+      refetchMyWishlist();
+      notify({ message: t("tableDashboard.toast.addWishlistSuccess"), type: 'success' });
+    }).catch(() => {
+      notify({ message: t("tableDashboard.toast.addWishlistFailed"), type: 'error' });
+    });
   };
 
   const handlePageChange = (page: number) => {
@@ -155,30 +161,23 @@ export default function Trading() {
     }));
   };
 
-  console.log("activeTab", activeTab)
   return (
-    <div className="z-1">
-      {showToast && (
-        <ToastNotification
-          message={toastMessage}
-          onClose={() => setShowToast(false)}
-        />
-      )}
+    <div className="z-20">
       <Card className="mb-6 border-none shadow-none bg-transparent">
        
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
           <div className="flex flex-wrap gap-4 mb-4">
             <button 
-              className={`rounded-sm text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '1' ? 'bg-[#0F0F0F]' : 'border-transparent hover:bg-[#0F0F0F]/50'}`} 
+              className={`rounded-sm text-sm font-medium  px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '1' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
               onClick={() => setActiveTab('1')}
             >
-              <span className={`${activeTab === '1' ? 'gradient-hover' : ''}`}>Trending</span>
+              <span className={`${activeTab === '1' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.trending')}</span>
             </button>
             <button 
-              className={`rounded-sm text-neutral-400 text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '2' ? 'bg-[#0F0F0F]' : 'border-transparent hover:bg-[#0F0F0F]/50'}`} 
+              className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '2' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
               onClick={() => setActiveTab('2')}
             >
-              <span className={`${activeTab === '2' ? 'gradient-hover' : ''}`}>New</span>
+              <span className={`${activeTab === '2' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.new')}</span>
             </button>
           </div>
 
@@ -190,26 +189,7 @@ export default function Trading() {
                   <TableTokenList
                     tokens={displayTokens}
                     onCopyAddress={handleCopyAddress}
-                    onStarClick={(token) => {
-                      const data = {
-                        token_address: token.address,
-                        status: myWishlist?.tokens?.some((t: { address: string }) => t.address === token.address) ? "off" : "on",
-                      };
-                      SolonaTokenService.toggleWishlist(data).then(() => {
-                        refetchMyWishlist();
-                        setToastMessage("Thêm vào danh sách token yêu thích thành công");
-                        setShowToast(true);
-                        setTimeout(() => {
-                          setShowToast(false);
-                        }, 3000);
-                      }).catch(() => {
-                        setToastMessage("Thêm vào danh sách token yêu thích thất bại");
-                        setShowToast(true);
-                        setTimeout(() => {
-                          setShowToast(false);
-                        }, 3000);
-                      });
-                    }}
+                    onStarClick={handleStarClick}
                     isFavoritesTab={false}
                     isLoading={isLoadingTopCoins}
                     sortBy={sortBy}
@@ -225,7 +205,7 @@ export default function Trading() {
                     return (
                     <div 
                       key={token.address}
-                      className="bg-white dark:bg-neutral-900 rounded-lg p-4 border border-gray-200 dark:border-neutral-800"
+                      className="bg-white dark:bg-neutral-900  rounded-lg p-4 border border-gray-200 dark:border-neutral-800"
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
@@ -270,11 +250,11 @@ export default function Trading() {
 
                       <div className="grid grid-cols-2 gap-2">
                         <div className="flex gap-2 items-center">
-                          <div className="text-xs text-gray-500 dark:text-gray-400">Price</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.price')}</div>
                           <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="text-xs text-gray-500 dark:text-gray-400">24h Change</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.24hChange')}</div>
                           <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                             {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
                           </div>
@@ -283,21 +263,17 @@ export default function Trading() {
 
                       {expandedRows[token.address] && (
                         <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-800">
-                          <div className="grid grid-cols-2 gap-4 gap-y-2">
+                          <div className="grid grid-cols-2 gap-4">
                             <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">Market Cap</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.marketCap')}</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
                             </div>
-                            {/* <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">Volume 24h</div>
-                              <div className="font-medium text-sm">${formatNumberWithSuffix3(token.volume24h || 0)}</div>
-                            </div> */}
                             <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">Holders</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.holders')}</div>
                               <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
                             </div>
                             <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">Address</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.address')}</div>
                               <div className="flex items-center gap-1">
                                 <span className="font-medium text-sm">{truncateString(token.address, 6)}</span>
                                 <button
@@ -321,32 +297,13 @@ export default function Trading() {
 
           <TabsContent value="2">
             {displayTokens && (
-              <CardContent className="w-full p-0 md:p-6">
+              <CardContent className="w-full">
                 {/* Desktop Table View */}
                 <div className="hidden md:block">
                   <TableTokenList
                     tokens={displayTokens}
                     onCopyAddress={handleCopyAddress}
-                    onStarClick={(token) => {
-                      const data = {
-                        token_address: token.address,
-                        status: myWishlist?.tokens?.some((t: { address: string }) => t.address === token.address) ? "off" : "on",
-                      };
-                      SolonaTokenService.toggleWishlist(data).then(() => {
-                        refetchMyWishlist();
-                        setToastMessage("Thêm vào danh sách token yêu thích thành công");
-                        setShowToast(true);
-                        setTimeout(() => {
-                          setShowToast(false);
-                        }, 3000);
-                      }).catch(() => {
-                        setToastMessage("Thêm vào danh sách token yêu thích thất bại");
-                        setShowToast(true);
-                        setTimeout(() => {
-                          setShowToast(false);
-                        }, 3000);
-                      });
-                    }}
+                    onStarClick={handleStarClick}
                     isFavoritesTab={false}
                     isLoading={isLoadingNewCoins}
                     sortBy={sortBy}
@@ -406,11 +363,11 @@ export default function Trading() {
 
                       <div className="grid grid-cols-2 gap-2">
                         <div className="flex gap-2 items-center">
-                          <div className="text-xs text-gray-500 dark:text-gray-400">Price</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.price')}</div>
                           <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
                         </div>
                         <div className="flex gap-2 items-center">
-                          <div className="text-xs text-gray-500 dark:text-gray-400">24h Change</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.24hChange')}</div>
                           <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                             {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
                           </div>
@@ -421,19 +378,15 @@ export default function Trading() {
                         <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-800">
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">Market Cap</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.marketCap')}</div>
                               <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
                             </div>
-                            {/* <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">Volume 24h</div>
-                              <div className="font-medium text-sm">${formatNumberWithSuffix3(token.volume24h || 0)}</div>
-                            </div> */}
                             <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">Holders</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.holders')}</div>
                               <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
                             </div>
                             <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">Address</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.address')}</div>
                               <div className="flex items-center gap-1">
                                 <span className="font-medium text-sm">{truncateString(token.address, 6)}</span>
                                 <button
@@ -466,67 +419,20 @@ export default function Trading() {
                   disabled={currentPage === 1}
                   className="px-2 md:px-3 py-1 rounded-md bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 >
-                  «
+                  {t('tableDashboard.pagination.first')}
                 </button>
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
                   className="px-2 md:px-3 py-1 rounded-md bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 >
-                  ‹
+                  {t('tableDashboard.pagination.previous')}
                 </button>
 
-                {/* Show fewer page numbers on mobile */}
-                <div className="hidden md:flex items-center gap-2">
-                  {currentPage > 2 && (
-                    <button
-                      onClick={() => handlePageChange(1)}
-                      className="px-3 py-1 rounded-md bg-muted hover:bg-muted/80 text-sm"
-                    >
-                      1
-                    </button>
-                  )}
-                  {currentPage > 3 && <span className="px-2">...</span>}
-
-                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                    let page;
-                    if (currentPage <= 3) {
-                      page = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      page = totalPages - 4 + i;
-                    } else {
-                      page = currentPage - 2 + i;
-                    }
-                    return page;
-                  }).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`px-3 py-1 rounded-md text-sm ${
-                        currentPage === page
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted hover:bg-muted/80"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
-
-                  {currentPage < totalPages - 2 && <span className="px-2">...</span>}
-                  {currentPage < totalPages - 1 && (
-                    <button
-                      onClick={() => handlePageChange(totalPages)}
-                      className="px-3 py-1 rounded-md bg-muted hover:bg-muted/80 text-sm"
-                    >
-                      {totalPages}
-                    </button>
-                  )}
-                </div>
-
-                {/* Mobile pagination - show current page and total */}
+                {/* Mobile pagination */}
                 <div className="md:hidden flex items-center gap-2">
                   <span className="text-sm">
-                    Page {currentPage} of {totalPages}
+                    {t('tableDashboard.pagination.page')} {currentPage} {t('tableDashboard.pagination.of')} {totalPages}
                   </span>
                 </div>
 
@@ -535,14 +441,14 @@ export default function Trading() {
                   disabled={currentPage === totalPages}
                   className="px-2 md:px-3 py-1 rounded-md bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 >
-                  ›
+                  {t('tableDashboard.pagination.next')}
                 </button>
                 <button
                   onClick={() => handlePageChange(totalPages)}
                   disabled={currentPage === totalPages}
                   className="px-2 md:px-3 py-1 rounded-md bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 >
-                  »
+                  {t('tableDashboard.pagination.last')}
                 </button>
               </div>
             </div>

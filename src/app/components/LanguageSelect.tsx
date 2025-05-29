@@ -9,7 +9,6 @@ import { ChevronDown } from "lucide-react"
 export function LangToggle({className, showArrow = false}: {className?: string, showArrow?: boolean}) {
   const { lang, setLang, t } = useLang();
   const currentLang = langConfig.listLangs.find(l => l.code === lang);
-    console.log("langConfig", langConfig);
   return (
     <DropdownMenu >
       <DropdownMenuTrigger className={className} asChild>

@@ -17,11 +17,10 @@ import { formatNumberWithSuffix, truncateString } from "@/utils/format";
 import { Card, CardContent } from "@/ui/card";
 import { getMyWishlist } from "@/services/api/SolonaTokenService";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const textTitle = 'text-neutral-200 font-normal text-xs max-h-[38px]'
-const textContent = 'text-neutral-100 text-xs font-normal font-medium'
+const textTitle = 'dark:text-neutral-200 text-black-300 font-normal text-xs max-h-[38px]'
+const textContent = 'dark:text-neutral-100 text-black-300 text-xs font-normal font-medium'
 
 interface TableTokenListProps {
   tokens: {
@@ -81,7 +80,7 @@ export function TableTokenList({
   onStarClick,
   isFavoritesTab = false,
   isLoading = false,
-  sortBy = 'market_cap',
+  sortBy = 'volume_24h_usd',
   sortType = 'desc',
   onSort,
   enableSort = false
@@ -117,7 +116,7 @@ export function TableTokenList({
         <div className="overflow-hidden rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200">
           <Table className="">
             <TableHeader className="border-b-1 border-b-solid border-b-neutral-400">
-              <TableRow className="bg-muted/50">
+              <TableRow className="bg-muted/50 ">
                 <TableHead className={`pl-[50px] ${textTitle}`}>{t("trading.token")}</TableHead>
                 <TableHead className={`${textTitle}`}>{t("trading.address")}</TableHead>
                 <TableHead className={`${textTitle}`}>{t("trading.price")}</TableHead>
@@ -206,7 +205,7 @@ export function TableTokenList({
                 sortedTokens.map((token: any, index: any) => (
                   <TableRow
                     key={index}
-                    className="hover:bg-neutral-500 ease-linear cursor-pointer transition-all duration-300 pl-[14px] group"
+                    className="hover:dark:bg-neutral-500 group hover:bg-theme-blue-300 ease-linear cursor-pointer transition-all duration-300 pl-[14px] group"
                     onClick={() =>
                       router.push(`trading?address=${token.address}`)
                     }
@@ -231,8 +230,8 @@ export function TableTokenList({
                           className="rounded-full h-[30px]"
                         />
                         <div className="flex gap-2">
-                          <span className="line-clamp-2 text-xs font-semibold text-neutral-100">{token.name}</span>
-                          <span className="text-xs uppercase text-neutral-300">{token.symbol}</span>
+                          <span className="line-clamp-2 text-xs font-semibold dark:text-neutral-100 text-black-300">{token.name}</span>
+                          <span className="text-xs uppercase dark:text-neutral-300 text-theme-brown-100">{token.symbol}</span>
                           {token.program === "pumpfun" && (
                             <img
                               src="/pump.webp"
@@ -271,11 +270,12 @@ export function TableTokenList({
                       {token.volume_24h_change_percent ? `${formatNumberWithSuffix(token.volume_24h_change_percent)}%` : <span style={{ color: '#FFD700' }}>-</span>}
                     </TableCell>
                     <TableCell>
-                      <div className="flex space-x-2">
+                      <div className="flex ">
                         <button
-                          className="linear-gradient-connect cursor-pointer px-4 py-1 rounded-xl text-sm font-medium inline-block group-hover:bg-neutral-1000"
+                          className="lg:max-w-auto max-w-[120px] relative border-1 border-t-theme-secondary-400 border-r-theme-primary-400 border-l-theme-secondary-400 border-b-theme-primary-400 bg-transparent md:py-1 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 group-hover:from-theme-blue-100 group-hover:to-theme-blue-200 group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto group-hover:border-none"
                         >
-                          {t("trading.trade")}
+                          <span className="relative z-10 group-hover:text-neutral-100 text-theme-secondary-400">{t("trading.trade")}</span>
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-t from-theme-linear-start to-theme-linear-end opacity-0 group-hover:opacity-100 transition-opacity duration-500 " />
                         </button>
                       </div>
                     </TableCell>

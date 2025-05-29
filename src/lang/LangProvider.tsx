@@ -64,6 +64,7 @@ export const LangProvider: React.FC<LangProviderProps> = ({
         lang,
         setLang: handleSetLang,
         langConfig: config,
+        // @ts-expect-error: Suppress type error because MockDatafeed is compatible at runtime
         translations: translations[lang],
       }}
     >

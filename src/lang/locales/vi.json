@@ -1,6 +1,25 @@
 {
   "connect": "Kết nối",
-  "overview": "Tổng quan",
+  "over view": "Tổng quan",
+  "my wallet": "Ví của tôi",
+  "wallet manager": "Quản lý ví",
+  "overview": {
+    "launchToken": {
+      "title": "Phát hành token của riêng bạn",
+      "description": "Tùy chỉnh tên, ký hiệu, thuế và nguồn cung chỉ trong vài bước đơn giản",
+      "createNow": "Tạo Ngay"
+    },
+    "universalAccount": {
+      "title": "TÀI KHOẢN PHỔ THÔNG",
+      "receive": "Nhận",
+      "send": "Gửi"
+    },
+    "masterTrade": {
+      "title": "Giao dịch thông thái",
+      "description": "Sao chép giao dịch từ các trader hàng đầu chỉ với một cú nhấp chuột",
+      "explore": "Khám Phá"
+    }
+  },
   "trade": "Giao dịch",
   "create coin": "Tạo Coin",
   "createCoin": {
@@ -70,14 +89,21 @@
     },
     "myCoins": {
       "title": "COIN CỦA TÔI",
-      "tabs": {
-        "today": "Hôm nay",
-        "last8days": "8 ngày qua",
-        "lastMonth": "Tháng trước"
+      "createCoin": "TẠO COIN",
+      "searchPlaceholder": "Tên/ Địa chỉ Token",
+      "table": {
+        "time": "Thời gian",
+        "memeCoin": "Meme coin",
+        "symbol": "Ký hiệu",
+        "address": "Địa chỉ",
+        "decimals": "Số thập phân",
+        "actions": "Thao tác"
       },
-      "noCoins": "Chưa tạo coin nào gần đây",
-      "seeAll": "XEM TẤT CẢ COIN CỦA TÔI",
-      "trade": "Giao dịch"
+      "actions": {
+        "copy": "Sao chép địa chỉ",
+        "copied": "Đã sao chép địa chỉ vào clipboard",
+        "convert": "Chuyển đổi"
+      }
     },
     "guide": {
       "title": "HƯỚNG DẪN",
@@ -89,8 +115,184 @@
       ]
     }
   },
-  "masterTrade": "Giao dịch chuyên nghiệp",
-  "wallet": "Ví",
+  "masterTrade": {
+    "tabs": {
+      "trade": "GIAO DỊCH",
+      "chat": "CHAT",
+      "member": "THÀNH VIÊN"
+    },
+    "unreadCount": "tin nhắn chưa đọc",
+    "loading": "Đang tải...",
+    "page": {
+      "filters": {
+        "all": "Tất cả",
+        "notConnected": "Chưa kết nối",
+        "connected": "Đã kết nối",
+        "disconnected": "Đã ngắt kết nối",
+        "paused": "Tạm dừng",
+        "pending": "Đang chờ"
+      },
+      "search": {
+        "placeholder": "Tìm kiếm theo địa chỉ ví..."
+      },
+      "manageMaster": "Quản lý Master",
+      "table": {
+        "address": "Địa chỉ",
+        "pnl7d": "Lợi nhuận 7 ngày",
+        "pnl30d": "Lợi nhuận 30 ngày",
+        "winRate7d": "Tỷ lệ thắng 7 ngày",
+        "transactions7d": "Giao dịch 7 ngày",
+        "lastTime": "Lần cuối",
+        "type": "Loại",
+        "status": "Trạng thái",
+        "action": "Hành động",
+        "noData": "Không có dữ liệu",
+        "copyAddress": "Sao chép địa chỉ",
+        "copySuccess": "Đã sao chép địa chỉ: {address}"
+      },
+      "traderType": {
+        "vip": "VIP",
+        "normal": "THƯỜNG"
+      },
+      "actions": {
+        "connect": "Kết nối",
+        "reconnect": "Kết nối lại",
+        "details": "Chi tiết",
+        "pause": "Tạm dừng",
+        "disconnect": "Ngắt kết nối"
+      },
+      "status": {
+        "notConnected": "Chưa kết nối",
+        "connect": "Đã kết nối",
+        "disconnect": "Đã ngắt kết nối",
+        "pause": "Đã tạm dừng",
+        "pending": "Đang chờ",
+        "block": "Đã chặn"
+      },
+      "timeAgo": {
+        "seconds": "{count} giây trước",
+        "minute": "{count} phút trước",
+        "minutes": "{count} phút trước",
+        "hour": "{count} giờ trước",
+        "hours": "{count} giờ trước",
+        "day": "{count} ngày trước",
+        "days": "{count} ngày trước",
+        "week": "{count} tuần trước",
+        "weeks": "{count} tuần trước",
+        "month": "{count} tháng trước",
+        "months": "{count} tháng trước",
+        "year": "{count} năm trước",
+        "years": "{count} năm trước",
+        "updating": "đang cập nhật"
+      }
+    },
+    "manage": {
+      "createNewGroup": {
+        "success": "Tạo nhóm thành công",
+        "error": "Không thể tạo nhóm",
+        "title": "TẠO NHÓM",
+        "groupName": "Tên nhóm",
+        "enterGroupName": "Nhập tên nhóm",
+        "create": "TẠO"
+      },
+      "connectionManagement": {
+        "joinSuccess": "Tham gia nhóm thành công",
+        "joinError": "Không thể tham gia nhóm",
+        "connectSuccess": "Kết nối thành công",
+        "blockSuccess": "Chặn thành công",
+        "pauseSuccess": "Tạm dừng thành công",
+        "unblockSuccess": "Bỏ chặn thành công",
+        "error": "Đã xảy ra lỗi",
+        "confirmJoin": "Xác nhận kết nối {count} ví đã chọn vào nhóm \"{groupName}\"",
+        "cancel": "Hủy",
+        "confirm": "Xác nhận"
+      },
+      "groupManagement": {
+        "createGroup": "TẠO NHÓM",
+        "groupName": "Tên nhóm",
+        "enterGroupName": "Nhập tên nhóm",
+        "create": "TẠO",
+        "on": "Bật",
+        "off": "Tắt",
+        "delete": "Xóa",
+        "status": "Trạng thái",
+        "action": "Thao tác",
+        "noGroup": "Không có nhóm",
+        "onCount": "Bật ({count})",
+        "offCount": "Tắt ({count})",
+        "deleteCount": "Xóa ({count})"
+      },
+      "connectionTable": {
+        "address": "Địa chỉ",
+        "group": "Nhóm",
+        "status": "Trạng thái",
+        "action": "Thao tác",
+        "connect": "Kết nối",
+        "block": "Chặn",
+        "unblock": "Bỏ chặn",
+        "chooseGroup": "Chọn nhóm",
+        "searchGroup": "Tìm kiếm nhóm...",
+        "noGroup": "Không có nhóm",
+        "copyAddress": "Sao chép địa chỉ",
+        "addressCopied": "Đã sao chép địa chỉ"
+      },
+      "chat": {
+        "title": "PHÒNG CHAT MASTER",
+        "selectGroup": "Chọn nhóm...",
+        "typeMessage": "Nhập tin nhắn...",
+        "connectWithMaster": "Kết nối với Master khác",
+        "send": "Gửi",
+        "noMessages": "Chưa có tin nhắn nào",
+        "communityChatroom": "Phòng Chat Cộng Đồng"
+      }
+    }
+  },
+  "wallet": {
+    "solana": "Solana",
+    "eth": "ETH",
+    "bnb": "BNB",
+    "wallet": "Ví",
+    "universalAccount": "Tài Khoản Phổ Thông",
+    "receive": "Nhận",
+    "send": "Gửi",
+    "getPrivateKey": "Lấy Khóa Riêng Tư",
+    "solanaWallet": "VÍ SOLANA",
+    "addWallet": "Thêm Ví",
+    "importWallet": "Nhập ví",
+    "assets": "TÀI SẢN",
+    "token": "Token",
+    "balance": "Số dư",
+    "price": "Giá",
+    "value": "Giá trị",
+    "address": "Địa chỉ",
+    "walletName": "Tên Ví",
+    "nickname": "Biệt danh",
+    "network": "Mạng",
+    "privateKeys": "Khóa Riêng Tư",
+    "solanaPrivateKey": "Khóa Riêng Tư Solana",
+    "ethereumPrivateKey": "Khóa Riêng Tư Ethereum",
+    "bnbPrivateKey": "Khóa Riêng Tư BNB",
+    "createPassword": "Tạo Mật Khẩu",
+    "newPassword": "Mật Khẩu Mới",
+    "confirmPassword": "Xác Nhận Mật Khẩu",
+    "passwordRequirements": "(i) Mật khẩu phải có ít nhất 8 ký tự và chứa chữ hoa, chữ thường, số và ký tự đặc biệt.\nMật khẩu này sẽ được yêu cầu để xem khóa riêng tư của bạn trong tương lai.",
+    "creating": "Đang tạo...",
+    "enterPassword": "Nhập Mật Khẩu",
+    "password": "Mật khẩu",
+    "enterPasswordToView": "(i) Nhập mật khẩu của bạn để xem khóa riêng tư",
+    "verifying": "Đang xác minh...",
+    "submit": "Xác nhận",
+    "adding": "Đang thêm...",
+    "privateKeySecurity": "Khóa riêng tư của bạn sẽ được mã hóa và lưu trữ an toàn",
+    "walletNickname": "Biệt Danh Ví",
+    "country": "Quốc Gia",
+    "solanaAddress": "Địa Chỉ Solana",
+    "ethAddress": "Địa Chỉ Ethereum",
+    "walletKey": "Khóa Ví",
+    "type": "Loại",
+    "actions": "Thao Tác",
+    "walletLevel": "Cấp Độ Ví"
+  },
   "searchPlaceholder": "Tên Token/ Địa chỉ",
   "languages": {
     "korea": "Hàn Quốc",
@@ -130,7 +332,30 @@
       "loading": "Đang tải thông tin token...",
       "noTokens": "Chưa có token nào được xem gần đây",
       "recentTokens": "Token gần đây",
-      "openInNewTab": "Mở trong tab mới"
+      "openInNewTab": "Mở trong tab mới",
+      "tokenInfo": {
+        "price": "Giá",
+        "change": "Thay đổi",
+        "marketCap": "Vốn hóa thị trường",
+        "volume24h": "Khối lượng 24h",
+        "holders": "Người nắm giữ",
+        "liquidity": "Thanh khoản",
+        "vol": "KL",
+        "buy": "Mua",
+        "sells": "Bán",
+        "netBuy": "Mua ròng"
+      },
+      "error": {
+        "loadingFailed": "Không thể tải thông tin token",
+        "invalidToken": "Địa chỉ token không hợp lệ"
+      },
+      "searchPlaceholder": "Tên Token / Địa chỉ",
+      "minSearchLength": "Nhập ít nhất 2 ký tự để tìm kiếm"
+    },
+    "listToken": {
+      "allMarkets": "Tất cả thị trường token",
+      "newTrending": "Mới & thịnh hành",
+      "meme": "Meme"
     }
   },
   "auth": {
@@ -142,5 +367,179 @@
     "loginFailed": "Đăng nhập thất bại",
     "pleaseConnect": "Vui lòng kết nối tài khoản Telegram của bạn",
     "userProfile": "Thông tin người dùng"
+  },
+  "tableDashboard": {
+    "tabs": {
+      "trending": "Thịnh hành",
+      "new": "Mới nhất"
+    },
+    "mobile": {
+      "price": "Giá",
+      "24hChange": "Thay đổi 24h",
+      "marketCap": "Vốn hóa",
+      "holders": "Người nắm giữ",
+      "address": "Địa chỉ"
+    },
+    "pagination": {
+      "page": "Trang",
+      "of": "trên",
+      "first": "«",
+      "previous": "‹",
+      "next": "›",
+      "last": "»"
+    },
+    "toast": {
+      "addressCopied": "Đã sao chép địa chỉ vào clipboard",
+      "addToWishlistSuccess": "Thêm vào danh sách yêu thích thành công",
+      "addToWishlistFailed": "Thêm vào danh sách yêu thích thất bại"
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "Tìm kiếm...",
+      "loading": "Đang tải..."
+    },
+    "wallet": {
+      "selectWallet": "Chọn Ví",
+      "logout": "Đăng xuất",
+      "connecting": "Đang kết nối...",
+      "loading": "Đang tải..."
+    },
+    "notifications": {
+      "switchWalletSuccess": "Chuyển đổi ví thành công!",
+      "switchWalletFailed": "Chuyển đổi ví thất bại!",
+      "loginSuccess": "Đăng nhập thành công!",
+      "completeProfile": "Vui lòng hoàn thiện thông tin cá nhân!",
+      "loginRequired": "Vui lòng đăng nhập để tiếp tục!"
+    }
+  },
+  "listWallet": {
+    "search": {
+      "placeholder": "Tên Ví/ Địa chỉ"
+    },
+    "selectedWallet": {
+      "title": "Ví Đã Chọn"
+    },
+    "changeWallet": {
+      "title": "THAY ĐỔI VÍ"
+    },
+    "walletType": {
+      "master": "Chính",
+      "sub": "Phụ"
+    },
+    "copyAddress": {
+      "copied": "Đã sao chép",
+      "copy": "Sao chép"
+    }
+  },
+  "tokenInfo": {
+    "marketCap": "Vốn hóa thị trường",
+    "volume24h": "Khối lượng 24h",
+    "liquidity": "Thanh khoản",
+    "holders": "Người nắm giữ",
+    "timeFrames": {
+      "5m": "5 phút",
+      "1h": "1 giờ",
+      "4h": "4 giờ",
+      "24h": "24 giờ"
+    },
+    "stats": {
+      "vol": "KL",
+      "buy": "Mua",
+      "sells": "Bán",
+      "netBuy": "Mua ròng"
+    },
+    "loading": "Đang tải thông tin token...",
+    "error": {
+      "loadingFailed": "Không thể tải thông tin token",
+      "invalidToken": "Địa chỉ token không hợp lệ"
+    }
+  },
+  "transactionHistory": {
+    "allTransactions": "TẤT CẢ GIAO DỊCH",
+    "myTransactions": "GIAO DỊCH CỦA TÔI",
+    "time": "Thời gian",
+    "type": "Loại",
+    "price": "Giá",
+    "amount": "Số lượng",
+    "total": "Tổng",
+    "source": "Nguồn",
+    "transactionHash": "Mã giao dịch",
+    "status": "Trạng thái",
+    "address": "Địa chỉ",
+    "completed": "HOÀN THÀNH",
+    "pending": "ĐANG XỬ LÝ",
+    "failed": "THẤT BẠI",
+    "buy": "MUA",
+    "sell": "BÁN",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép",
+    "noTransactions": "Không có giao dịch nào",
+    "loading": "Đang tải giao dịch...",
+    "error": {
+      "loadFailed": "Không thể tải lịch sử giao dịch",
+      "invalidAddress": "Địa chỉ không hợp lệ"
+    },
+    "filters": {
+      "all": "Tất cả",
+      "buy": "Mua",
+      "sell": "Bán",
+      "today": "Hôm nay",
+      "week": "Tuần này",
+      "month": "Tháng này"
+    }
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "retry": "Thử lại",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "edit": "Sửa",
+    "search": "Tìm kiếm",
+    "noResults": "Không tìm thấy kết quả",
+    "required": "Bắt buộc",
+    "optional": "Tùy chọn"
+  },
+  "universal_account": {
+    "deposit": "Nạp tiền",
+    "withdraw": "Rút tiền",
+    "history": "LỊCH SỬ",
+    "time": "Thời gian",
+    "type": "Loại",
+    "status": "Trạng thái",
+    "amount": "Số tiền",
+    "transaction_id": "Mã giao dịch",
+    "from": "Từ",
+    "to": "Đến",
+    "from_address": "Địa chỉ gửi",
+    "to_address": "Địa chỉ nhận",
+    "no_transactions": "Không tìm thấy giao dịch {type}",
+    "copied": "Đã sao chép!",
+    "copied_description": "Đã sao chép mã giao dịch vào clipboard",
+    "enter_amount": "Nhập số tiền gửi",
+    "transaction_progress": "Đang xử lý giao dịch...",
+    "available": "Số dư: {amount} SOL",
+    "recipient_address": "Địa chỉ người nhận",
+    "recipient_placeholder": "Nhập địa chỉ người nhận...",
+    "sending": "Đang gửi...",
+    "send": "GỬI",
+    "deposit_wallet": {
+      "title": "ĐỊA CHỈ SOLANA CỦA BẠN",
+      "warning": {
+        "title": "Chỉ hỗ trợ rút SOL từ mạng Solana.",
+        "description": "Vui lòng rút SOL trên mạng Solana và đảm bảo sử dụng đúng địa chỉ ví Solana của bạn."
+      },
+      "copy_success": "Đã sao chép địa chỉ ví vào clipboard!"
+    },
+    "errors": {
+      "max_withdrawal": "Số tiền rút tối đa là 1 SOL",
+      "min_withdrawal": "Số tiền rút tối thiểu là 0.001 SOL",
+      "insufficient_balance": "Số tiền không được vượt quá số dư {balance} SOL",
+      "transaction_failed": "Giao dịch thất bại. Vui lòng thử lại.",
+      "transaction_success": "Gửi giao dịch thành công!"
+    }
   }
 }

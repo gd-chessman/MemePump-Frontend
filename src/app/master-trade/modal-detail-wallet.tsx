@@ -112,18 +112,15 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
   const { data: ordersMyWallet, refetch, isLoading, error } = useQuery({
     queryKey: ["ordersMyWallet", info?.address, currentPage],
     queryFn: () => {
-      console.log("Calling getOrdersMyWallet with address:", info?.address);
       return getOrdersMyWallet(info?.address || "", currentPage);
     },
     enabled: Boolean(isOpen && info?.address),
   });
-  console.log("ordersMyWallet", ordersMyWallet)
   const { data: chatGroupHistoriesMember } = useQuery({
     queryKey: ["chatGroupHistoriesMember", checkMasterData?.groupConnect],
     queryFn: () => getGroupHistories(checkMasterData?.groupConnect, lang),
     enabled: Boolean(checkMasterData?.groupConnect),
   });
-  console.log("checkMasterData", checkMasterData)
 
   const { message: wsMessage } = useWsChatMessage({
     chatType: "group",
@@ -273,9 +270,6 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
       setPaginationInfo(ordersMyWallet.data.pagination)
     }
   }, [ordersMyWallet])
-
-  console.log("Modal info:", info);
-  console.log("ordersMyWallet response:", ordersMyWallet);
 
   if (!isOpen || !info) return null;
 

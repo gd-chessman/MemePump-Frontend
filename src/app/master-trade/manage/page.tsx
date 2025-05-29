@@ -115,6 +115,9 @@ const styles = {
   groupButton: "w-full max-w-[400px] create-coin-bg hover-bg-delay dark:text-neutral-100 font-medium px-3 md:px-4 py-[4px] md:py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-80 disabled:cursor-not-allowed mx-auto gap-2 text-[10px] sm:text-xs flex items-center justify-center",
   tabButton: "h-min rounded-sm text-[10px] sm:text-xs md:text-sm font-medium text-neutral-400 px-1 md:px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer",
   actionButton: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200",
+  actionButtonConnect: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200",
+  actionButtonBlock: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200",
+  actionButtonPause: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200",
   selectTrigger: "w-[150px] md:w-[200px] pl-3 md:pl-4 h-[25px] md:h-[30px] bg-black/60 border-theme-primary-300/30 hover:border-theme-primary-300/50 text-neutral-100 text-[10px] sm:text-xs md:text-sm rounded-full",
   selectContent: "bg-black/90 border-theme-primary-300/30 text-[10px] sm:text-xs md:text-sm",
   selectItem: "text-neutral-100 hover:bg-theme-primary-300/20 focus:bg-theme-primary-300/10 cursor-pointer text-[10px] sm:text-xs md:text-sm",
@@ -152,18 +155,16 @@ export default function MasterTradeInterface() {
     queryFn: getMyConnects,
   });
 
-  const { data: myGroups = [] , refetch: refetchMyGroups} = useQuery<Group[]>({
+  const { data: myGroups = [], refetch: refetchMyGroups } = useQuery<Group[]>({
     queryKey: ["my-groups-manage"],
     queryFn: async () => {
       const response = await getMyGroups();
-      console.log("API Response:", response);
       if (Array.isArray(response)) {
         return response;
       }
       return response.data || [];
     },
   });
-  console.log("selectedChatGroup", selectedChatGroup)
 
   const { data: chatGroupHistories, refetch: refetchChatGroupHistories } =
     useQuery({
@@ -171,7 +172,7 @@ export default function MasterTradeInterface() {
       queryFn: () => getGroupHistories(selectedChatGroup, lang),
       enabled: !!selectedChatGroup,
     });
-  
+
   const { message: wsMessage } = useWsChatMessage({
     chatType: "group",
     groupId: selectedGroup,
@@ -189,8 +190,7 @@ export default function MasterTradeInterface() {
   }, [chatMessages]);
 
   const { messages, setMessages, addMessage, clearMessages } = useMasterChatStore();
-  console.log("messages", messages)
-  
+
   // Clear messages when changing chat group
   useEffect(() => {
     if (selectedChatGroup) {
@@ -213,7 +213,6 @@ export default function MasterTradeInterface() {
           timestamp: new Date(chat.createdAt || Date.now()),
           country: chat.country || lang
         }));
-      console.log("Setting messages from history:", convertedMessages);
       setMessages(convertedMessages);
     }
   }, [chatGroupHistories, setMessages, lang, selectedChatGroup]);
@@ -221,7 +220,6 @@ export default function MasterTradeInterface() {
   // Handle new websocket messages
   useEffect(() => {
     if (wsMessage && selectedChatGroup) {
-      console.log("New websocket message:", wsMessage);
       const newMessage: StoreMasterMessage = {
         id: wsMessage._id || String(wsMessage.ch_chat_id),
         sender: {
@@ -232,14 +230,13 @@ export default function MasterTradeInterface() {
         timestamp: new Date(wsMessage.createdAt || Date.now()),
         country: wsMessage.country || lang
       };
-      console.log("Adding new message to store:", newMessage);
       addMessage(newMessage);
     }
   }, [wsMessage, addMessage, lang, selectedChatGroup]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedChatGroup) return;
-    
+
     try {
       // Add message to store immediately for optimistic update
       const optimisticMessage: StoreMasterMessage = {
@@ -253,11 +250,11 @@ export default function MasterTradeInterface() {
         country: lang
       };
       addMessage(optimisticMessage);
-      
+
       // Send message to server
       await ChatService.sendGroupMessage(newMessage, selectedChatGroup, lang);
       setNewMessage("");
-      
+
       // The actual message will be received via websocket and replace the optimistic one
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -278,18 +275,7 @@ export default function MasterTradeInterface() {
   // Xử lý xóa nhóm
   const handleDeleteGroup = async (id: number) => {
     try {
-      console.log(`Deleting group ${id}`);
       await MasterTradingService.changeStatusGroup(id, "delete");
-      await refetchMyGroups();
-    } catch (error) {
-    }
-  };
-
-  // Xử lý khôi phục nhóm
-  const handleRestoreGroup = async (id: number) => {
-    try {
-      console.log(`Restoring group ${id}`);
-      await MasterTradingService.changeStatusGroup(id, "OFF");
       await refetchMyGroups();
     } catch (error) {
     }
@@ -300,12 +286,12 @@ export default function MasterTradeInterface() {
       try {
         await MasterTradingService.masterCreateGroup({ mg_name: newGroupName });
         setNewGroupName("");
-        setToastMessage(t("masterTrade.manage.createNewGroup.success"));
+        setToastMessage(t("masterTrade.manage.groupManagement.createGroupSuccess"));
         setShowToast(true);
         refetchMyGroups();
         setTimeout(() => setShowToast(false), 3000);
       } catch (error) {
-        setToastMessage(t("masterTrade.manage.createNewGroup.error"));
+        setToastMessage(t("masterTrade.manage.groupManagement.createGroupError"));
         setShowToast(true);
         setTimeout(() => setShowToast(false), 3000);
       }
@@ -346,10 +332,10 @@ export default function MasterTradeInterface() {
         setSelectedGroup(null);
         setSelectedGroupName("");
         setIsJoinDialogOpen(false);
-        
+
         // Refresh dữ liệu
         await Promise.all([refetchMyGroups(), refetchMyConnects()]);
-        
+
         setTimeout(() => setShowToast(false), 3000);
       }
     } catch (error) {
@@ -386,9 +372,9 @@ export default function MasterTradeInterface() {
           throw new Error("Invalid action");
       }
 
-      await MasterTradingService.masterSetConnect({ 
-        mc_id: id, 
-        status: status 
+      await MasterTradingService.masterSetConnect({
+        mc_id: id,
+        status: status
       });
 
       // Hiển thị thông báo thành công
@@ -430,12 +416,12 @@ export default function MasterTradeInterface() {
   const filteredGroupsForDropdown = myGroups.filter((group) => {
     // Chỉ lấy các nhóm có status là "ON"
     if (group.mg_status?.toUpperCase() !== "ON") return false;
-    
+
     // Lọc theo tìm kiếm nếu có
     if (groupSearchQuery) {
       return group.mg_name.toLowerCase().includes(groupSearchQuery.toLowerCase());
     }
-    
+
     return true;
   });
 
@@ -487,6 +473,37 @@ export default function MasterTradeInterface() {
     label: group.mg_name
   }));
 
+  const transaleStatus = (status: string) => {
+    let title = "";
+    switch (status) {
+      case "connect":
+        title = t('masterTrade.manage.connectionManagement.connect');
+        break;
+      case "pause":
+        title = t('masterTrade.manage.connectionManagement.pause');
+        break;
+      case "pending":
+        title = t('masterTrade.manage.connectionManagement.pending');
+        break;
+      case "block":
+        title = t('masterTrade.manage.connectionManagement.block');
+        break;
+      case "on":
+        title = t('masterTrade.manage.groupManagement.on');
+        break;
+      case "off":
+        title = t('masterTrade.manage.groupManagement.off');
+        break;
+      case "delete":
+        title = t('masterTrade.manage.groupManagement.delete');
+        break;
+    }
+
+
+
+    return title;
+  }
+
   return (
     <div className={styles.container}>
       {/* Group Management Section */}
@@ -494,20 +511,20 @@ export default function MasterTradeInterface() {
         <div className={styles.groupCard}>
           <h2 className={styles.groupTitle}>
             {ethereumIcon(14, 14)}
-            CREATE GROUP
+            {t('masterTrade.manage.groupManagement.createGroup')}
             {ethereumIcon(14, 14)}
           </h2>
           <div className="space-y-4">
             <div>
               <label htmlFor="group-name" className="block text-sm font-medium text-neutral-100 mb-1">
-                Group Name
+                {t('masterTrade.manage.groupManagement.groupName')}
               </label>
               <input
                 type="text"
                 id="group-name"
                 value={newGroupName}
                 onChange={(e) => setNewGroupName(e.target.value)}
-                placeholder="Enter group name"
+                placeholder={t('masterTrade.manage.groupManagement.enterGroupName')}
                 className={styles.groupInput}
               />
             </div>
@@ -517,7 +534,7 @@ export default function MasterTradeInterface() {
               disabled={!newGroupName.trim()}
               className={styles.groupButton}
             >
-              CREATE
+              {t('masterTrade.manage.groupManagement.create')}
             </button>
           </div>
         </div>
@@ -529,15 +546,15 @@ export default function MasterTradeInterface() {
               onClick={() => setActiveGroupTab("On")}
               className={` ${styles.button} ${activeGroupTab === "On" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
             >
-              <span className={`${activeGroupTab === 'On' ? 'gradient-hover ' : ''}`}>On ({onGroupsCount})</span>
+              <span className={`${activeGroupTab === 'On' ? 'gradient-hover ' : ''}`}>{t('masterTrade.manage.groupManagement.on')} ({onGroupsCount})</span>
             </button>
             <button
               onClick={() => setActiveGroupTab("Off")}
               className={` ${styles.button} ${activeGroupTab === "Off" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
             >
-              <span className={`${activeGroupTab === 'Off' ? 'gradient-hover ' : ''}`}>Off ({offGroupsCount})</span>
+              <span className={`${activeGroupTab === 'Off' ? 'gradient-hover ' : ''}`}>{t('masterTrade.manage.groupManagement.off')} ({offGroupsCount})</span>
             </button>
-          
+
           </div>
 
           {/* Bảng cho tab On */}
@@ -546,12 +563,12 @@ export default function MasterTradeInterface() {
               <table className={styles.table}>
                 <thead>
                   <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                    <th className={`text-center ${textHeaderTable}`}>Group</th>
+                    <th className={`text-center ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.groupName')}</th>
                     <th className={`px-4 py-2`}>
-                      <div className={`px ${textHeaderTable}`}>Status</div>
+                      <div className={`px ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.status')}</div>
                     </th>
                     <th className={`px-4 py-2`}>
-                      <div className={`px ${textHeaderTable}`}>Action</div>
+                      <div className={`px ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.action')}</div>
                     </th>
                   </tr>
                 </thead>
@@ -564,21 +581,21 @@ export default function MasterTradeInterface() {
                         </div>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className={`${textBodyTable}`}>{group.mg_status}</span>
+                        <span className={`${textBodyTable}`}>{transaleStatus(group.mg_status)}</span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => handleToggleGroup(group.mg_id, group.mg_status)}
-                            className={styles.actionButton}
+                            className={styles.actionButtonConnect}
                           >
-                            Off
+                            {t('masterTrade.manage.groupManagement.off')}
                           </button>
                           <button
                             onClick={() => handleDeleteGroup(group.mg_id)}
-                            className={styles.actionButton}
+                            className={styles.actionButtonBlock}
                           >
-                            Delete
+                            {t('masterTrade.manage.groupManagement.delete')}
                           </button>
                         </div>
                       </td>
@@ -595,12 +612,12 @@ export default function MasterTradeInterface() {
               <table className={styles.table}>
                 <thead>
                   <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                    <th className={`text-center ${textHeaderTable}`}>Group</th>
+                    <th className={`text-center ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.groupName')}</th>
                     <th className={`px-4 py-2`}>
-                      <div className={`px ${textHeaderTable}`}>Status</div>
+                      <div className={`px ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.status')}</div>
                     </th>
                     <th className={`px-4 py-2`}>
-                      <div className={`px ${textHeaderTable}`}>Action</div>
+                      <div className={`px ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.action')}</div>
                     </th>
                   </tr>
                 </thead>
@@ -613,21 +630,21 @@ export default function MasterTradeInterface() {
                         </div>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className={`${textBodyTable}`}>{group.mg_status}</span>
+                        <span className={`${textBodyTable}`}>{transaleStatus(group.mg_status)}</span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => handleToggleGroup(group.mg_id, group.mg_status)}
-                            className={styles.actionButton}
+                            className={styles.button}
                           >
-                            On
+                            {t('masterTrade.manage.groupManagement.on')}
                           </button>
                           <button
                             onClick={() => handleDeleteGroup(group.mg_id)}
                             className={styles.actionButton}
                           >
-                            Delete
+                            {t('masterTrade.manage.groupManagement.delete')}
                           </button>
                         </div>
                       </td>
@@ -644,12 +661,12 @@ export default function MasterTradeInterface() {
               <table className={styles.table}>
                 <thead>
                   <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                    <th className={`text-center ${textHeaderTable}`}>Group</th>
+                    <th className={`text-center ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.groupName')}</th>
                     <th className={`px-4 py-2`}>
-                      <div className={`px ${textHeaderTable}`}>Status</div>
+                      <div className={`px ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.status')}</div>
                     </th>
                     <th className={`px-4 py-2`}>
-                      <div className={`px ${textHeaderTable}`}>Action</div>
+                      <div className={`px ${textHeaderTable}`}>{t('masterTrade.manage.groupManagement.action')}</div>
                     </th>
                   </tr>
                 </thead>
@@ -662,11 +679,11 @@ export default function MasterTradeInterface() {
                         </div>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className={`${textBodyTable}`}>{group.mg_status}</span>
+                        <span className={`${textBodyTable}`}>{transaleStatus(group.mg_status)}</span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex justify-center gap-2">
-                          
+
                         </div>
                       </td>
                     </tr>
@@ -685,25 +702,25 @@ export default function MasterTradeInterface() {
             onClick={() => setActiveTab("Connected")}
             className={`${styles.button} ${activeTab === "Connected" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
           >
-            <span className={`${activeTab === 'Connected' ? 'gradient-hover ' : ''}`}>Connected ({connectedCount})</span>
+            <span className={`${activeTab === 'Connected' ? 'gradient-hover ' : ''}`}>{t('masterTrade.manage.connectionManagement.connect')} ({connectedCount})</span>
           </button>
           <button
             onClick={() => setActiveTab("Paused")}
             className={`${styles.button} ${activeTab === "Paused" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
           >
-            <span className={`${activeTab === 'Paused' ? 'gradient-hover ' : ''}`}>Paused ({pausedCount})</span>
+            <span className={`${activeTab === 'Paused' ? 'gradient-hover ' : ''}`}>{t('masterTrade.manage.connectionManagement.pause')} ({pausedCount})</span>
           </button>
           <button
             onClick={() => setActiveTab("Pending")}
             className={`${styles.button} ${activeTab === "Pending" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
           >
-            <span className={`${activeTab === 'Pending' ? 'gradient-hover ' : ''}`}>Pending ({pendingCount})</span>
+            <span className={`${activeTab === 'Pending' ? 'gradient-hover ' : ''}`}>{t('masterTrade.manage.connectionManagement.pending')} ({pendingCount})</span>
           </button>
           <button
             onClick={() => setActiveTab("Block")}
             className={`${styles.button} ${activeTab === "Block" ? ' bg-[#0F0F0F]' : 'border-transparent'}`}
           >
-            <span className={`${activeTab === 'Block' ? 'gradient-hover ' : ''}`}>Block ({blockedCount})</span>
+            <span className={`${activeTab === 'Block' ? 'gradient-hover ' : ''}`}>{t('masterTrade.manage.connectionManagement.block')} ({blockedCount})</span>
           </button>
           <div className="flex-1 flex items-center justify-end">
             {selectedItems.length > 0 && (
@@ -711,7 +728,7 @@ export default function MasterTradeInterface() {
                 onClick={() => setShowGroupDropdown(!showGroupDropdown)}
                 className={`${styles.button} flex items-center gap-2 px-4 py-1 bg-black bg-opacity-60 rounded-full text-neutral-100 border border-blue-500/30`}
               >
-                <span className="text-xs">Choose group</span>
+                <span className="text-xs">{t('masterTrade.manage.connectionManagement.chooseGroup')}</span>
                 <svg className="w-2 h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -726,7 +743,7 @@ export default function MasterTradeInterface() {
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <input
                       type="text"
-                      placeholder="Search group..."
+                      placeholder={t('masterTrade.manage.connectionManagement.searchGroup')}
                       value={groupSearchQuery}
                       onChange={(e) => setGroupSearchQuery(e.target.value)}
                       className={styles.input}
@@ -770,10 +787,10 @@ export default function MasterTradeInterface() {
                     />
                   )}
                 </th>
-                <th className={`px-4 py-3 text-left ${textHeaderTable}`}>Address</th>
-                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Group</th>
-                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Status</th>
-                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>Action</th>
+                <th className={`px-4 py-3 text-left ${textHeaderTable}`}>{t('masterTrade.manage.connectionTable.address')}</th>
+                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>{t('masterTrade.manage.connectionTable.group')}</th>
+                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>{t('masterTrade.manage.connectionTable.status')}</th>
+                <th className={`px-4 py-3 text-center ${textHeaderTable}`}>{t('masterTrade.manage.connectionTable.action')}</th>
               </tr>
             </thead>
             <tbody>
@@ -812,14 +829,14 @@ export default function MasterTradeInterface() {
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span className={`${textBodyTable}`}>
-                      {item.joined_groups.length > 0 
+                      {item.joined_groups.length > 0
                         ? item.joined_groups.map(g => g.group_name).join(", ")
-                        : "Không có nhóm"
+                        : t('masterTrade.manage.connectionTable.noGroup')
                       }
                     </span>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span className={`${textBodyTable} capitalize`}>{item.status}</span>
+                    <span className={`${textBodyTable} capitalize`}>{transaleStatus(item.status)}</span>
                   </td>
                   <td className="px-4 py-3 text-center">
                     <div className="flex justify-center gap-2">
@@ -829,44 +846,44 @@ export default function MasterTradeInterface() {
                             onClick={() => handleToggleConnection(item.connection_id, "connect")}
                             className={styles.actionButton}
                           >
-                            Connect
+                            {t('masterTrade.manage.connectionTable.connect')}
                           </button>
                           <button
                             onClick={() => handleToggleConnection(item.connection_id, "block")}
-                            className={styles.actionButton}
+                            className={styles.actionButtonBlock}
                           >
-                            Block
+                            {t('masterTrade.manage.connectionTable.block')}
                           </button>
                         </>
                       )}
                       {item.status === "connect" && (
                         <>
-                         
+
                           <button
                             onClick={() => handleToggleConnection(item.connection_id, "block")}
-                            className={styles.actionButton}
+                            className={styles.actionButtonBlock}
                           >
-                            Block
+                            {t('masterTrade.manage.connectionTable.block')}
                           </button>
                         </>
                       )}
                       {item.status === "block" && (
                         <button
                           onClick={() => handleToggleConnection(item.connection_id, "pause")}
-                          className={styles.actionButton}
+                          className={styles.actionButtonPause}
                         >
-                          Unblock
+                          {t('masterTrade.manage.connectionTable.unblock')}
                         </button>
                       )}
                       {item.status === "pause" && (
-                       
+
                         <>
-                           <button
-                          onClick={() => handleToggleConnection(item.connection_id, "block")}
-                          className={styles.actionButton}
-                        >
-                          Block
-                        </button>
+                          <button
+                            onClick={() => handleToggleConnection(item.connection_id, "block")}
+                            className={styles.actionButtonBlock}
+                          >
+                            {t('masterTrade.manage.connectionTable.block')}
+                          </button>
                         </>
                       )}
                     </div>
@@ -882,29 +899,29 @@ export default function MasterTradeInterface() {
       <div className={styles.chatSection}>
         <button className="w-fit create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-xs items-center justify-center " onClick={() => router.push("/master-trade")}>
           <FontAwesomeIcon icon={faUsersGear} className="w-4 h-4" />
-          Connect with other Master
+          {t('masterTrade.manage.chat.connectWithMaster')}
         </button>
         <div className={styles.chatContainer}>
           <div className={styles.chatHeader}>
             <h2 className={styles.chatTitle}>
               <span className="text-cyan-400 mr-2">✦</span>
-              MASTER CHATROOM
+              {t('masterTrade.manage.chat.title')}
               <span className="text-cyan-400 ml-2">✦</span>
             </h2>
 
             <div className="relative flex items-center justify-center">
               <Select
-                
+
                 value={selectedChatGroup}
                 onValueChange={(value) => setSelectedChatGroup(value)}
               >
                 <SelectTrigger className={styles.selectTrigger}>
-                  <SelectValue placeholder="Select a group..." />
+                  <SelectValue placeholder={t('masterTrade.manage.chat.selectGroup')} />
                 </SelectTrigger>
                 <SelectContent className={styles.selectContent}>
                   {groupOptions.map((option) => (
-                    <SelectItem 
-                      key={option.value} 
+                    <SelectItem
+                      key={option.value}
                       value={option.value}
                       className={styles.selectItem}
                     >
@@ -918,8 +935,8 @@ export default function MasterTradeInterface() {
 
           <div className={styles.chatMessages}>
             {messages.map((msg) => (
-              <MasterMessage 
-                key={msg.id} 
+              <MasterMessage
+                key={msg.id}
                 message={{
                   ch_id: msg.id,
                   ch_content: msg.text,
@@ -933,7 +950,7 @@ export default function MasterTradeInterface() {
                   country: msg.country,
                   nick_name: msg.sender.name,
                   _id: msg.id
-                }} 
+                }}
               />
             ))}
             <div ref={messagesEndRef} />
@@ -944,7 +961,7 @@ export default function MasterTradeInterface() {
               <div className="relative flex-1">
                 <input
                   type="text"
-                  placeholder="Type a message..."
+                  placeholder={t('masterTrade.manage.chat.typeMessage')}
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => {
@@ -959,11 +976,10 @@ export default function MasterTradeInterface() {
                   <button
                     onClick={handleSendMessage}
                     disabled={!newMessage.trim()}
-                    className={`p-1.5 rounded-full ${
-                      !newMessage.trim()
+                    className={`p-1.5 rounded-full ${!newMessage.trim()
                         ? "bg-gray-700 text-gray-500"
                         : "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                    }`}
+                      }`}
                   >
                     <Send className="h-3 w-3" />
                   </button>
@@ -979,7 +995,7 @@ export default function MasterTradeInterface() {
         <DialogContent className={styles.dialogContent}>
           <DialogHeader>
             <DialogTitle className={styles.dialogTitle}>
-              Xác nhận kết nối {selectedItems.length} ví đã chọn vào nhóm "{selectedGroupName}"
+              {t('masterTrade.manage.connectionManagement.confirmJoin', { count: selectedItems.length, groupName: selectedGroupName })}
             </DialogTitle>
           </DialogHeader>
           <DialogFooter>
@@ -989,13 +1005,13 @@ export default function MasterTradeInterface() {
                 onClick={() => setIsJoinDialogOpen(false)}
                 className={styles.dialogButton}
               >
-                Hủy
+                {t('masterTrade.manage.connectionManagement.cancel')}
               </Button>
               <Button
                 onClick={handleJoin}
                 className={`${styles.dialogButton} bg-blue-500 hover:bg-blue-600`}
               >
-                Xác nhận
+                {t('masterTrade.manage.connectionManagement.confirm')}
               </Button>
             </div>
           </DialogFooter>
