@@ -143,7 +143,7 @@ const Header = () => {
             icon: Coins
         },
         {
-            name: t('overview.masterTrade.name'),
+            name: t('overview.masterTrade.title'),
             href: '/master-trade',
             icon: LineChart
         },
