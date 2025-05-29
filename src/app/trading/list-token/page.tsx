@@ -10,12 +10,14 @@ import { getTopCoins } from '@/services/api/OnChainService'
 import { formatNumberWithSuffix } from '@/utils/format'
 import { SolonaTokenService } from '@/services/api'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useLang } from '@/lang/useLang'
 
 const ListToken = () => {
+    const { t } = useLang()
     const router = useRouter()
     const [sortBy, setSortBy] = useState("volume_1h_usd");
     const [sortType, setSortType] = useState("desc");
-    const [activeTab, setActiveTab] = useState("all");
+    const [activeTab, setActiveTab] = useState("new");
     const [searchQuery, setSearchQuery] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const debouncedSearchQuery = useDebounce(searchQuery, 200);
@@ -52,15 +54,15 @@ const ListToken = () => {
     }, [debouncedSearchQuery, topCoins]);
 
     return (
-        <div className='bg-neutral-1000 box-shadow-info rounded-xl p-3 pr-0 pb-0 h-[69%] overflow-hidden'>
-            <div className="relative mb-4 pr-3">
-                <div className="flex relative items-center bg-neutral-800 rounded-full px-3 py-1 border-1 border-t-theme-primary-300 border-l-theme-primary-300 border-b-theme-secondary-400 border-r-theme-secondary-400">
+        <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 h-[69%] pt-3 overflow-hidden'>
+            <div className="relative mb-4 pr-3 px-3">
+                <div className="flex relative items-center dark:bg-neutral-800 bg-white rounded-full px-3 py-1 border-1 border-t-theme-primary-300 border-l-theme-primary-300 border-b-theme-secondary-400 border-r-theme-secondary-400">
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Token Name / Address"
-                        className="bg-transparent pl-6 w-full text-sm focus:outline-none"
+                        placeholder={t('trading.interface.searchPlaceholder')}
+                        className="bg-transparent pl-6 w-full text-sm focus:outline-none dark:placeholder:text-theme-neutral-100 placeholder:text-theme-neutral-800"
                     />
                     {isSearching ? (
                         <div className="absolute right-3 top-1.5">
@@ -71,29 +73,17 @@ const ListToken = () => {
                     )}
                 </div>
                 {searchQuery.length > 0 && searchQuery.length < 2 && (
-                    <p className="text-xs text-neutral-400 mt-1 ml-2">Enter at least 2 characters to search</p>
+                    <p className="text-xs text-neutral-400 mt-1 ml-2">{t('trading.interface.minSearchLength')}</p>
                 )}
             </div>
 
            <div className='pr-1 h-full'>
-           <div className="flex  border-neutral-800 mb-2 justify-between pr-1">
+           <div className="flex gap-2 pr-1 pb-2 bg-theme-neutral-200 dark:bg-theme-neutral-1000">
                 <button
-                    className={`text-sm cursor-pointer py-1 px-2 rounded-xs font-normal ${activeTab === "all" ? "text-neutral-100 linear-gradient-connect" : "text-neutral-400"}`}
-                    onClick={() => setActiveTab("all")}
-                >
-                    All token markets
-                </button>
-                <button
-                    className={`text-sm cursor-pointer p-1 ${activeTab === "new" ? "text-white linear-gradient-connect" : "text-neutral-400"}`}
+                    className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "text-neutral-800"}`}
                     onClick={() => setActiveTab("new")}
                 >
-                    New & trending
-                </button>
-                <button
-                    className={`text-sm cursor-pointer p-1 ${activeTab === "meme" ? "text-white linear-gradient-connect" : "text-neutral-400"}`}
-                    onClick={() => setActiveTab("meme")}
-                >
-                    Meme
+                    {t('trading.listToken.newTrending')}
                 </button>
             </div>
 
@@ -111,12 +101,12 @@ const ListToken = () => {
                                 </button>
                                 <Image src={item.logo_uri || "/placeholder.png"} alt="axie" width={24} height={24} className='rounded-full' />
                                 <div className='flex gap-1 items-center'>
-                                    <span className="text-xs font-semibold text-neutral-100 capitalize">{item.name}</span>
+                                    <span className="text-xs font-semibold dark:text-theme-neutral-100 text-theme-neutral-800 capitalize">{item.name}</span>
                                     <span className='text-xs font-light text-neutral-300'>{item.symbol}</span>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <span className='text-neutral-100 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>
+                                <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>
                             </div>
                         </div>
                     ))}

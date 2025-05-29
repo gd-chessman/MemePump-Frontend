@@ -96,7 +96,6 @@ export default function ConnectToMasterModal({
   }, [masterAddress])
 
   if (masterAddress.length === 0) return null
-  console.log("inforWallet", inforWallet)
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}

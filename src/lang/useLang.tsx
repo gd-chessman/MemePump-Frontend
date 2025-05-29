@@ -21,9 +21,14 @@ export const useLang = () => {
     return current;
   };
 
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, any>): string => {
     const value = getNestedValue(context.translations, key.split("."));
     if (typeof value === "string") {
+      if (params) {
+        return Object.entries(params).reduce((str, [key, val]) => {
+          return str.replace(new RegExp(`{${key}}`, 'g'), String(val));
+        }, value);
+      }
       return value;
     }
     if (Array.isArray(value)) {

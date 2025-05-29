@@ -80,14 +80,6 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
     refetchOnWindowFocus: false, // Prevent refetch on window focus
   })
 
-  // Debug logs
-  useEffect(() => {
-    console.log("Search Input:", searchInput)
-    console.log("Debounced Input:", debouncedSearchInput)
-    console.log("Is Open:", isOpen)
-    console.log("Query Enabled:", isOpen && debouncedSearchInput.length > 0)
-  }, [searchInput, debouncedSearchInput, isOpen])
-
   // Update loading state
   useEffect(() => {
     setIsLoading(isQueryLoading)
@@ -188,7 +180,6 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
 
     return filtered
   }, [debouncedSearchInput, activeTab, sortField, sortDirection, listToken])
-  console.log("filteredAndSortedTokens", filteredAndSortedTokens)
   // Handle sort
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -300,8 +291,11 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     type="text"
                     value={searchInput}
                     onChange={(e) => {
-                      console.log("Input changed:", e.target.value)
                       setSearchInput(e.target.value)
+                    }}
+                    onPaste={(e) => {
+                      const pastedText = e.clipboardData.getData('text');
+                      setSearchInput(pastedText);
                     }}
                     placeholder="Search tokens..."
                     className="w-full bg-transparent py-1.5 sm:py-1 pl-10 sm:pl-12 pr-4 text-sm sm:text-base text-white placeholder-gray-400 focus:outline-none"

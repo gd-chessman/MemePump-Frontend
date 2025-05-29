@@ -1,6 +1,23 @@
 {
   "connect": "Connect",
-  "overview": "Overview",
+  "over view": "Overview",
+  "overview": {
+    "launchToken": {
+      "title": "Launch your own token",
+      "description": "Customize name, symbol, tax, and supply in just a few simple steps",
+      "createNow": "Create Now"
+    },
+    "universalAccount": {
+      "title": "UNIVERSAL ACCOUNT",
+      "receive": "Receive",
+      "send": "Send"
+    },
+    "masterTrade": {
+      "title": "Master trade",
+      "description": "Copy trades from top traders with just one click",
+      "explore": "Explore"
+    }
+  },
   "trade": "Trade",
   "create coin": "Create Coin",
   "createCoin": {
@@ -70,14 +87,21 @@
     },
     "myCoins": {
       "title": "MY COINS",
-      "tabs": {
-        "today": "Today",
-        "last8days": "Last 8 days",
-        "lastMonth": "Last month"
+      "createCoin": "CREATE COIN",
+      "searchPlaceholder": "Token Name/ Address",
+      "table": {
+        "time": "Time",
+        "memeCoin": "Meme coin",
+        "symbol": "Symbol",
+        "address": "Address",
+        "decimals": "Decimals",
+        "actions": "Actions"
       },
-      "noCoins": "No coins created recently",
-      "seeAll": "SEE ALL MY COINS",
-      "trade": "Trade"
+      "actions": {
+        "copy": "Copy address",
+        "copied": "Address copied to clipboard",
+        "convert": "Convert"
+      }
     },
     "guide": {
       "title": "GUIDE",
@@ -89,8 +113,183 @@
       ]
     }
   },
-  "masterTrade": "Master Trade",
-  "wallet": "Wallet",
+  "masterTrade": {
+    "tabs": {
+      "trade": "TRADE",
+      "chat": "CHAT",
+      "member": "MEMBER"
+    },
+    "unreadCount": "unread messages",
+    "loading": "Loading...",
+    "page": {
+      "filters": {
+        "all": "All",
+        "notConnected": "Not connected",
+        "connected": "Connected",
+        "disconnected": "Disconnected",
+        "paused": "Paused",
+        "pending": "Pending"
+      },
+      "search": {
+        "placeholder": "Search by wallet address..."
+      },
+      "manageMaster": "Manage Master",
+      "table": {
+        "address": "Address",
+        "pnl7d": "7D PnL",
+        "pnl30d": "30D PnL",
+        "winRate7d": "7D Win Rate",
+        "transactions7d": "7D TXs",
+        "lastTime": "Last Time",
+        "type": "Type",
+        "status": "Status",
+        "action": "Action",
+        "noData": "No data available",
+        "copyAddress": "Copy address",
+        "copySuccess": "Copied address: {address}"
+      },
+      "traderType": {
+        "vip": "VIP",
+        "normal": "NORMAL"
+      },
+      "actions": {
+        "connect": "Connect",
+        "reconnect": "Reconnect",
+        "details": "Details",
+        "pause": "Pause",
+        "disconnect": "Disconnect"
+      },
+      "status": {
+        "notConnected": "Not Connected",
+        "connect": "Connected",
+        "disconnect": "Disconnected",
+        "pause": "Paused",
+        "pending": "Pending",
+        "block": "Blocked"
+      },
+      "timeAgo": {
+        "seconds": "{count} seconds ago",
+        "minute": "{count} minute ago",
+        "minutes": "{count} minutes ago",
+        "hour": "{count} hour ago",
+        "hours": "{count} hours ago",
+        "day": "{count} day ago",
+        "days": "{count} days ago",
+        "week": "{count} week ago",
+        "weeks": "{count} weeks ago",
+        "month": "{count} month ago",
+        "months": "{count} months ago",
+        "year": "{count} year ago",
+        "years": "{count} years ago",
+        "updating": "updating"
+      }
+    },
+    "manage": {
+      "createNewGroup": {
+        "success": "Group created successfully",
+        "error": "Failed to create group",
+        "title": "CREATE GROUP",
+        "groupName": "Group Name",
+        "enterGroupName": "Enter group name",
+        "create": "CREATE"
+      },
+      "connectionManagement": {
+        "joinSuccess": "Successfully joined group",
+        "joinError": "Failed to join group",
+        "connectSuccess": "Successfully connected",
+        "blockSuccess": "Successfully blocked",
+        "pauseSuccess": "Successfully paused",
+        "unblockSuccess": "Successfully unblocked",
+        "error": "An error occurred",
+        "confirmJoin": "Confirm joining {count} selected wallets to group \"{groupName}\"",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      },
+      "groupManagement": {
+        "createGroup": "CREATE GROUP",
+        "groupName": "Group Name",
+        "enterGroupName": "Enter group name",
+        "create": "CREATE",
+        "on": "On",
+        "off": "Off",
+        "delete": "Delete",
+        "status": "Status",
+        "action": "Action",
+        "noGroup": "No group",
+        "onCount": "On ({count})",
+        "offCount": "Off ({count})",
+        "deleteCount": "Delete ({count})"
+      },
+      "connectionTable": {
+        "address": "Address",
+        "group": "Group",
+        "status": "Status",
+        "action": "Action",
+        "connect": "Connect",
+        "block": "Block",
+        "unblock": "Unblock",
+        "chooseGroup": "Choose group",
+        "searchGroup": "Search group...",
+        "noGroup": "No group",
+        "copyAddress": "Copy address",
+        "addressCopied": "Address copied"
+      },
+      "chat": {
+        "title": "MASTER CHATROOM",
+        "selectGroup": "Select a group...",
+        "typeMessage": "Type a message...",
+        "connectWithMaster": "Connect with other Master",
+        "send": "Send",
+        "noMessages": "No messages yet"
+      }
+    }
+  },
+  "wallet": {
+    "solana": "Solana",
+    "eth": "ETH",
+    "bnb": "BNB",
+    "wallet": "Wallet",
+    "universalAccount": "Universal Account",
+    "receive": "Receive",
+    "send": "Send",
+    "getPrivateKey": "Get Private Key",
+    "solanaWallet": "SOLANA WALLET",
+    "addWallet": "Add Wallet",
+    "importWallet": "Import wallet",
+    "assets": "ASSETS",
+    "token": "Token",
+    "balance": "Balance",
+    "price": "Price",
+    "value": "Value",
+    "address": "Address",
+    "walletName": "Wallet Name",
+    "nickname": "Nickname",
+    "network": "Network",
+    "privateKeys": "Private Keys",
+    "solanaPrivateKey": "Solana Private Key",
+    "ethereumPrivateKey": "Ethereum Private Key",
+    "bnbPrivateKey": "BNB Private Key",
+    "createPassword": "Create Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "passwordRequirements": "(i) Password must be at least 8 characters long and contain uppercase, lowercase, number and special character.\nThis password will be required to view your private keys in the future.",
+    "creating": "Creating...",
+    "enterPassword": "Enter Password",
+    "password": "Password",
+    "enterPasswordToView": "(i) Enter your password to view your private keys",
+    "verifying": "Verifying...",
+    "submit": "Submit",
+    "adding": "Adding...",
+    "privateKeySecurity": "Your private key will be encrypted and stored securely",
+    "walletNickname": "Wallet Nickname",
+    "country": "Country",
+    "solanaAddress": "Solana Address",
+    "ethAddress": "Ethereum Address",
+    "walletKey": "Wallet Key",
+    "type": "Type",
+    "actions": "Actions",
+    "walletLevel": "Wallet Level"
+  },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {
     "korea": "Korea",
@@ -129,7 +328,38 @@
       "loading": "Loading token information...",
       "noTokens": "No recently viewed tokens",
       "recentTokens": "Recent Tokens",
-      "openInNewTab": "Open in new tab"
+      "openInNewTab": "Open in new tab",
+      "tokenInfo": {
+        "price": "Price",
+        "change": "Change",
+        "marketCap": "Market Cap",
+        "volume24h": "24h Volume",
+        "holders": "Holders",
+        "liquidity": "Liquidity"
+      },
+      "error": {
+        "loadingFailed": "Failed to load token information",
+        "invalidToken": "Invalid token address"
+      },
+      "searchPlaceholder": "Token Name / Address",
+      "minSearchLength": "Enter at least 2 characters to search"
+    },
+    "listToken": {
+      "allMarkets": "All token markets",
+      "newTrending": "New & trending",
+      "meme": "Meme"
+    },
+    "tokenInfo": {
+      "price": "Price",
+      "change": "Change",
+      "marketCap": "Market Cap",
+      "volume24h": "24h Volume",
+      "holders": "Holders",
+      "liquidity": "Liquidity",
+      "vol": "Vol",
+      "buy": "Buy",
+      "sells": "Sells",
+      "netBuy": "Net Buy"
     }
   },
   "auth": {
@@ -141,5 +371,159 @@
     "loginFailed": "Login failed",
     "pleaseConnect": "Please connect your Telegram account",
     "userProfile": "User Profile"
+  },
+  "tableDashboard": {
+    "tabs": {
+      "trending": "Trending",
+      "new": "New"
+    },
+    "mobile": {
+      "price": "Price",
+      "24hChange": "24h Change",
+      "marketCap": "Market Cap",
+      "holders": "Holders",
+      "address": "Address"
+    },
+    "pagination": {
+      "page": "Page",
+      "of": "of",
+      "first": "«",
+      "previous": "‹",
+      "next": "›",
+      "last": "»"
+    },
+    "toast": {
+      "addressCopied": "Address copied to clipboard",
+      "addToWishlistSuccess": "Successfully added to wishlist",
+      "addToWishlistFailed": "Failed to add to wishlist"
+    }
+  },
+  "header": {
+    "search": {
+      "placeholder": "Search...",
+      "loading": "Loading..."
+    },
+    "wallet": {
+      "selectWallet": "Select Wallet",
+      "logout": "Logout",
+      "connecting": "Connecting...",
+      "loading": "Loading..."
+    },
+    "notifications": {
+      "switchWalletSuccess": "Wallet switched successfully!",
+      "switchWalletFailed": "Failed to switch wallet!",
+      "loginSuccess": "Login successful!",
+      "completeProfile": "Please complete your profile information!",
+      "loginRequired": "Please login to continue!"
+    }
+  },
+  "listWallet": {
+    "search": {
+      "placeholder": "Wallet Name/ Address"
+    },
+    "selectedWallet": {
+      "title": "Selected Wallet"
+    },
+    "changeWallet": {
+      "title": "CHANGE WALLET"
+    },
+    "walletType": {
+      "master": "Master",
+      "sub": "Sub"
+    },
+    "copyAddress": {
+      "copied": "Copied",
+      "copy": "Copy"
+    }
+  },
+  "transactionHistory": {
+    "allTransactions": "ALL TRANSACTIONS",
+    "myTransactions": "MY TRANSACTIONS",
+    "time": "Time",
+    "type": "Type",
+    "price": "Price",
+    "amount": "Amount",
+    "total": "Total",
+    "source": "Source",
+    "transactionHash": "Transaction Hash",
+    "status": "Status",
+    "address": "Address",
+    "completed": "COMPLETED",
+    "pending": "PENDING",
+    "failed": "FAILED",
+    "buy": "BUY",
+    "sell": "SELL",
+    "copy": "Copy",
+    "copied": "Copied",
+    "noTransactions": "No transactions found",
+    "loading": "Loading transactions...",
+    "error": {
+      "loadFailed": "Failed to load transaction history",
+      "invalidAddress": "Invalid address"
+    },
+    "filters": {
+      "all": "All",
+      "buy": "Buy",
+      "sell": "Sell",
+      "today": "Today",
+      "week": "This Week",
+      "month": "This Month"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "noResults": "No results found",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "universal_account": {
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "history": "HISTORY",
+    "time": "Time",
+    "type": "Type",
+    "status": "Status",
+    "amount": "Amount",
+    "transaction_id": "Transaction ID",
+    "from": "From",
+    "to": "To",
+    "from_address": "From Address",
+    "to_address": "To Address",
+    "no_transactions": "No {type} transactions found",
+    "copied": "Copied!",
+    "copied_description": "Transaction hash copied to clipboard",
+    "enter_amount": "Enter send amount",
+    "transaction_progress": "Transaction in progress...",
+    "available": "Available: {amount} SOL",
+    "recipient_address": "Recipient Address",
+    "recipient_placeholder": "Recipient address...",
+    "sending": "Sending...",
+    "send": "SEND",
+    "deposit_wallet": {
+      "title": "YOUR SOLANA ADDRESS",
+      "warning": {
+        "title": "Only withdrawals of SOL from the Solana network are supported.",
+        "description": "Please withdraw SOL on the Solana network and make sure to use your correct Solana wallet address."
+      },
+      "copy_success": "Wallet address copied to clipboard!"
+    },
+    "errors": {
+      "max_withdrawal": "Maximum withdrawal amount is 1 SOL",
+      "min_withdrawal": "Minimum withdrawal amount is 0.001 SOL",
+      "insufficient_balance": "Amount cannot exceed your balance of {balance} SOL",
+      "transaction_failed": "Transaction failed. Please try again.",
+      "transaction_success": "Transaction sent successfully!"
+    }
+  },
+  "chat": {
+    "communityChatroom": "Community Chatroom"
   }
 }

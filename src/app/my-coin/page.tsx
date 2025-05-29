@@ -16,10 +16,10 @@ import {
 } from "@/ui/table";
 import { Card } from "@/ui/card";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
-import convertIcon from "@/assets/svgs/convert-icon.svg"
 import { useRouter } from "next/navigation";
 import { getMyTokens } from "@/services/api/TelegramWalletService"
 import { useQuery } from "@tanstack/react-query"
+import { useLang } from "@/lang/useLang";
 
 type CoinData = {
     id: string
@@ -48,6 +48,7 @@ type SortDirection = "asc" | "desc"
 
 export default function MyCoinsTable() {
     const router = useRouter();
+    const { t } = useLang();
     const [searchQuery, setSearchQuery] = useState("")
     const [sortField, setSortField] = useState<SortField>("time")
     const [sortDirection, setSortDirection] = useState<SortDirection>("desc")
@@ -157,7 +158,7 @@ export default function MyCoinsTable() {
                     <div className="flex md:hidden items-center justify-between w-full gap-2">
                         <h2 className="text-base font-bold text-black dark:text-neutral-100 flex items-center gap-1.5">
                             <img src={"/ethereum.png"} alt="ethereum-icon" width={18} height={18} />
-                            MY COINS
+                            {t('createCoin.myCoins.title')}
                             <img src={"/ethereum.png"} alt="ethereum-icon" width={18} height={18} />
                             <span className="ml-1.5 text-neutral-400 dark:text-neutral-400 text-xs">({sortedAndFilteredCoins.length})</span>
                         </h2>
@@ -166,14 +167,14 @@ export default function MyCoinsTable() {
                             onClick={handleCreateCoin}
                             className="linear-gradient-light dark:create-coin-bg hover:linear-200-bg hover-bg-delay text-black dark:text-neutral-100 text-xs font-medium px-3 py-1 rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed whitespace-nowrap"
                         >
-                            CREATE COIN
+                            {t('createCoin.myCoins.createCoin')}
                         </button>
                     </div>
 
                     {/* Desktop layout */}
                     <h2 className="hidden md:flex text-lg lg:text-xl font-bold text-black dark:text-neutral-100 items-center gap-2 flex-1 md:flex-none">
                         <img src={"/ethereum.png"} alt="ethereum-icon" width={24} height={24} />
-                        MY COINS
+                        {t('createCoin.myCoins.title')}
                         <img src={"/ethereum.png"} alt="ethereum-icon" width={24} height={24} />
                         <span className="ml-2 text-neutral-400 dark:text-neutral-400 text-sm">({sortedAndFilteredCoins.length})</span>
                     </h2>
@@ -182,7 +183,7 @@ export default function MyCoinsTable() {
                         <Search className="absolute left-2.5 md:left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 dark:text-neutral-400 w-3.5 h-3.5 md:w-4 md:h-4" />
                         <input
                             type="text"
-                            placeholder="Token Name/ Address"
+                            placeholder={t('createCoin.myCoins.searchPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="rounded-full py-1.5 md:py-2 pl-8 md:pl-10 pr-3 md:pr-4 w-full md:w-64 text-xs md:text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[28px] md:max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400"
@@ -194,7 +195,7 @@ export default function MyCoinsTable() {
                         onClick={handleCreateCoin}
                         className="hidden md:block linear-gradient-light dark:create-coin-bg hover:linear-200-bg hover-bg-delay text-black dark:text-neutral-100 text-sm font-medium px-6 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                        CREATE COIN
+                        {t('createCoin.myCoins.createCoin')}
                     </button>
                 </div>
             </div>
@@ -210,7 +211,7 @@ export default function MyCoinsTable() {
                                         onClick={() => handleSort("time")}
                                     >
                                         <div className="flex items-center justify-start gap-0.5 md:gap-1 pl-2 md:pl-4">
-                                            Time
+                                            {t('createCoin.myCoins.table.time')}
                                             {renderSortIcon("time")}
                                         </div>
                                     </TableHead>
@@ -219,7 +220,7 @@ export default function MyCoinsTable() {
                                         onClick={() => handleSort("name")}
                                     >
                                         <div className="flex items-center justify-start gap-0.5 md:gap-1">
-                                            Meme coin
+                                            {t('createCoin.myCoins.table.memeCoin')}
                                             {renderSortIcon("name")}
                                         </div>
                                     </TableHead>
@@ -228,21 +229,25 @@ export default function MyCoinsTable() {
                                         onClick={() => handleSort("symbol")}
                                     >
                                         <div className="flex items-center justify-start gap-0.5 md:gap-1">
-                                            Symbol
+                                            {t('createCoin.myCoins.table.symbol')}
                                             {renderSortIcon("symbol")}
                                         </div>
                                     </TableHead>
-                                    <TableHead className="text-neutral-600 dark:text-neutral-300 font-normal text-[10px] md:text-xs text-center whitespace-nowrap">Address</TableHead>
+                                    <TableHead className="text-neutral-600 dark:text-neutral-300 font-normal text-[10px] md:text-xs text-center whitespace-nowrap">
+                                        {t('createCoin.myCoins.table.address')}
+                                    </TableHead>
                                     <TableHead
                                         className={`text-neutral-600 dark:text-neutral-300 font-normal text-[10px] md:text-xs text-center cursor-pointer hover:bg-neutral-200/50 dark:hover:bg-neutral-700/50 transition-colors whitespace-nowrap`}
                                         onClick={() => handleSort("decimals")}
                                     >
                                         <div className="flex items-center justify-start gap-0.5 md:gap-1">
-                                            Decimals
+                                            {t('createCoin.myCoins.table.decimals')}
                                             {renderSortIcon("decimals")}
                                         </div>
                                     </TableHead>
-                                    <TableHead className="text-neutral-600 dark:text-neutral-300 font-normal text-[10px] md:text-xs text-center whitespace-nowrap">Actions</TableHead>
+                                    <TableHead className="text-neutral-600 dark:text-neutral-300 font-normal text-[10px] md:text-xs text-center whitespace-nowrap">
+                                        {t('createCoin.myCoins.table.actions')}
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -286,7 +291,7 @@ export default function MyCoinsTable() {
                                         <TableCell className="text-neutral-700 dark:text-neutral-200 text-[10px] md:text-xs font-normal text-left">{coin.decimals}</TableCell>
                                         <TableCell className="text-center">
                                             <button className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors">
-                                                <Image src={convertIcon} alt="convert" width={16} height={16} className="md:w-[21px] md:h-[20px]" />
+                                                <ArrowUpDown className="h-4 w-4 md:h-5 md:w-5" />
                                             </button>
                                         </TableCell>
                                     </TableRow>
@@ -296,6 +301,7 @@ export default function MyCoinsTable() {
                     </div>
                 </CardContent>
             </Card>
+            
         </div>
     )
 }

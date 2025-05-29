@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -6,8 +7,10 @@ import { toast } from 'react-hot-toast';
 import React from "react";
 import { truncateString } from "@/utils/format";
 import { createTransaction } from "@/services/api/HistoryTransactionWallet";
+import { useLang } from "@/lang/useLang";
 
 export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
+  const { t } = useLang();
   const [amount, setAmount] = useState<string>("0")
   const [recipientWallet, setRecipientWallet] = useState<string>("")
   const [isSending, setIsSending] = useState<boolean>(false)
@@ -31,17 +34,6 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
     };
   }, [amount, walletInfor, isSending, error]);
 
-  // Add detailed logging
-  useEffect(() => {
-    console.log("WithdrawWallet - walletInfor details:", {
-      hasData: !!walletInfor,
-      type: typeof walletInfor,
-      value: walletInfor,
-      solanaAddress: walletInfor?.solana_address,
-      solanaBalance: walletInfor?.solana_balance
-    });
-  }, [walletInfor]);
-
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isDisabled.input) return; // Không cho phép thay đổi khi đang sending
 
@@ -62,11 +54,11 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
       const balance = parseFloat(walletInfor?.solana_balance || "0");
 
       if (numValue > balance) {
-        setError(`Amount cannot exceed your balance of ${balance} SOL`);
+        setError(`${t('universal_account.amount_cannot_exceed_balance', { balance })}`);
       } else if (numValue < 0.001 && value !== "") {
-        setError("Minimum withdrawal amount is 0.001 SOL");
+        setError(`${t('universal_account.minimum_withdrawal_amount', { amount: 0.001 })}`);
       } else if (numValue > 1) {
-        setError("Maximum withdrawal amount is 1 SOL");
+        setError(`${t('universal_account.maximum_withdrawal_amount', { amount: 1 })}`);
       } else {
         setError("");
       }
@@ -109,7 +101,7 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
           <div className="w-full">
             <div className="text-center mb-1">
               <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
-                {isDisabled.input ? 'Transaction in progress...' : 'Enter send amount'}
+                {isDisabled.input ? t('universal_account.transaction_progress') : t('universal_account.enter_amount')}
               </p>
             </div>
             <div className="text-center mb-2 relative">
@@ -126,7 +118,7 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
                 } ${isDisabled.input ? 'opacity-50' : ''}`}>SOL</span>
             </div>
             <div className="text-center text-xs text-gray-500 mb-1 group-hover:text-gray-400 transition-colors duration-300">
-              Available: {walletInfor?.solana_balance} SOL
+              {t('universal_account.available', { amount: walletInfor?.solana_balance })}
             </div>
             {error && (
               <div className="text-center text-xs text-red-500 mt-1">
@@ -140,19 +132,20 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
       {/* Recipient Address */}
       <div className="w-full max-w-[600px] ">
         <label htmlFor="name" className={"block  md:text-sm lg:text-base font-normal text-neutral-100 mb-1 text-xs"}>
-          Recipient Address <span className="text-theme-red-200">*</span>
+          {t('universal_account.recipient_address')} <span className="text-theme-red-200">*</span>
         </label>
         <div className={`p-[1px] rounded-xl bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end w-full group hover:from-theme-purple-200 hover:to-theme-gradient-linear-end transition-all duration-300`}>
         <div className="bg-theme-black-200 border border-theme-gradient-linear-start rounded-xl group-hover:border-theme-purple-200 transition-all duration-300">
           <input 
             type="text" 
+            value={recipientWallet}
             onChange={(e) => setRecipientWallet(e.target.value)} 
             onPaste={(e) => {
               const pastedText = e.clipboardData.getData('text');
               setRecipientWallet(pastedText);
             }}
             className="w-full bg-transparent h-10 rounded-xl pl-3 text-sm font-normal focus:outline-none transition-colors duration-300" 
-            placeholder="Recipient address..." 
+            placeholder={t('universal_account.recipient_placeholder')} 
           />
         </div>
 
@@ -163,7 +156,7 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
       {/* Send Button */}
       <button
         onClick={handleSend}
-        disabled={isDisabled.send}
+        disabled={isDisabled.send || recipientWallet.length === 0}
         className={`lg:max-w-auto min-w-[160px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-6 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto cursor-pointer`}
       >
         {isSending ? (
@@ -172,10 +165,10 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            Sending...
+            {t('universal_account.sending')}
           </span>
         ) : (
-          "SEND"
+          t('universal_account.send')
         )}
       </button>
     </div>

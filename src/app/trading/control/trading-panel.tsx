@@ -66,6 +66,7 @@ export default function TradingPanel({
     const [isDirectAmountInput, setIsDirectAmountInput] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
     const [windowHeight, setWindowHeight] = useState(800)
+    const [amountError, setAmountError] = useState<string>("")
 
     // Use custom hook for localStorage
     const [percentageValues, setPercentageValues] = useLocalStorage<number[]>(
@@ -85,6 +86,12 @@ export default function TradingPanel({
     // Memoize exchange rate
     const exchangeRate = useMemo(() => solPrice?.priceUSD || 0, [solPrice?.priceUSD])
 
+    // Add isButtonDisabled state
+    const isButtonDisabled = useMemo(() => {
+        const numericAmount = Number(amount)
+        return amountError !== "" || numericAmount <= 0 || !isConnected
+    }, [amount, amountError, isConnected])
+
     useEffect(() => {
         setIsMounted(true)
         setWindowHeight(window.innerHeight)
@@ -100,7 +107,20 @@ export default function TradingPanel({
     // Use default height during SSR
     const height = isMounted ? windowHeight : 800
 
-    // Memoize handlers
+    const validateAmount = useCallback((value: number): boolean => {
+        const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
+        if (value > balance) {
+            setAmountError(t('trading.panel.insufficient_balance'))
+            return false
+        }
+        if (value <= 0) {
+            setAmountError(t('trading.panel.invalid_amount'))
+            return false
+        }
+        setAmountError("")
+        return true
+    }, [mode, tradeAmount, t])
+
     const handleAmountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const newAmount = e.target.value
         setAmount(newAmount)
@@ -108,27 +128,34 @@ export default function TradingPanel({
         setPercentage(0)
 
         const numericAmount = Number.parseFloat(newAmount) || 0
+        validateAmount(numericAmount)
         setAmountUSD((numericAmount * exchangeRate).toFixed(2))
-    }, [exchangeRate])
+    }, [exchangeRate, validateAmount])
 
     const handleSetAmount = useCallback((value: number) => {
         setAmount(value.toString())
         setIsDirectAmountInput(true)
         setPercentage(0)
+        validateAmount(value)
         setAmountUSD((value * exchangeRate).toFixed(2))
-    }, [exchangeRate])
+    }, [exchangeRate, validateAmount])
 
     const handlePercentageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const newPercentage = Number.parseInt(e.target.value)
+        console.log("newPercentage", newPercentage)
         setPercentage(newPercentage)
         setIsDirectAmountInput(false)
-
-        if (isConnected) {
-            const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
-            const newAmount = ((balance * newPercentage) / 100).toFixed(6)
-            setAmount(newAmount)
+        console.log("isConnected", isConnected)
+        const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
+        const newAmount = ((balance * newPercentage) / 100).toFixed(6)
+        setAmount(newAmount)
+        // Calculate amountUSD using the newAmount we just calculated
+        if (mode === "buy") {
+            const numericAmount = Number(newAmount)
+            console.log("numericAmount", numericAmount)
+            setAmountUSD((numericAmount * exchangeRate).toFixed(2))
         }
-    }, [isConnected, mode, tradeAmount])
+    }, [isConnected, mode, tradeAmount, exchangeRate])
 
     const handleSetPercentage = useCallback((percent: number) => {
         setPercentage(percent)
@@ -138,8 +165,13 @@ export default function TradingPanel({
             const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
             const newAmount = ((balance * percent) / 100).toFixed(6)
             setAmount(newAmount)
+            // Calculate amountUSD using the newAmount we just calculated
+            if (mode === "buy") {
+                const numericAmount = Number(newAmount)
+                setAmountUSD((numericAmount * exchangeRate).toFixed(2))
+            }
         }
-    }, [isConnected, mode, tradeAmount])
+    }, [isConnected, mode, tradeAmount, exchangeRate])
 
     const handleEditClick = useCallback((index: number) => {
         setEditingIndex(index)
@@ -190,6 +222,15 @@ export default function TradingPanel({
     }, [handleAmountEditSave])
 
     const handleSubmit = useCallback(async () => {
+        const numericAmount = Number(amount)
+        if (!validateAmount(numericAmount)) {
+            notify({
+                message: amountError,
+                type: 'error'
+            })
+            return
+        }
+
         try {
             const response = await createTrading({
                 order_trade_type: mode,
@@ -234,7 +275,7 @@ export default function TradingPanel({
                 type: 'error'
             })
         }
-    }, [mode, amount, tokenAmount, solPrice, selectedConnections, setSelectedGroups, queryClient, refetchTokenAmount, t])
+    }, [mode, amount, tokenAmount, solPrice, selectedConnections, setSelectedGroups, queryClient, refetchTokenAmount, t, validateAmount, amountError])
 
     // Reset amount and percentage when mode changes
     useEffect(() => {
@@ -257,7 +298,7 @@ export default function TradingPanel({
             <div className="rounded-lg flex flex-col 2xl:justify-between gap-3 h-full overflow-y-auto">
                {/* Amount Input */}
                 <div className="relative mt-2">
-                    <div className={`bg-gray-50 dark:bg-neutral-900 rounded-full border border-blue-200 dark:border-blue-500 px-3 py-2 flex justify-between items-center ${height > 700 ? 'py-2' : 'h-[30px]'}`}>
+                    <div className={`bg-gray-50 dark:bg-neutral-900 rounded-full border ${amountError ? 'border-red-500' : 'border-blue-200 dark:border-blue-500'} px-3 py-2 flex justify-between items-center ${height > 700 ? 'py-2' : 'h-[30px]'}`}>
                         <input
                             type="number"
                             value={amount}
@@ -270,9 +311,14 @@ export default function TradingPanel({
                             </span>
                         )}
                     </div>
+                    {amountError && (
+                        <div className="text-red-500 text-sm mt-1">
+                            {amountError}
+                        </div>
+                    )}
 
                     {/* USD Value and Balance */}
-                    <div className="flex justify-between text-sm mb-3 mt-2">
+                    <div className="flex flex-wrap justify-between text-sm mb-3 mt-2">
                         {mode === "buy" ? (
                             <div className={STYLE_TEXT_BASE}>~ ${amountUSD}</div>
                         ) : (
@@ -345,10 +391,14 @@ export default function TradingPanel({
                 <div className="mt-3">
                     <button
                         onClick={handleSubmit}
-                        className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${mode === "buy"
-                                ? "bg-green-500 hover:bg-green-600 dark:bg-theme-green-200 dark:hover:bg-theme-green-200/90"
-                                : "bg-red-500 hover:bg-red-600 dark:bg-theme-red-100 dark:hover:bg-theme-red-100/90"
-                            }`}
+                        disabled={isButtonDisabled}
+                        className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${
+                            isButtonDisabled 
+                                ? "bg-gray-400 cursor-not-allowed dark:bg-gray-600"
+                                : mode === "buy"
+                                    ? "bg-green-500 hover:bg-green-600 dark:bg-theme-green-200 dark:hover:bg-theme-green-200/90"
+                                    : "bg-red-500 hover:bg-red-600 dark:bg-theme-red-100 dark:hover:bg-theme-red-100/90"
+                        }`}
                     >
                         {mode === "buy" ? t('trading.panel.buy') : t('trading.panel.sell')}
                     </button>

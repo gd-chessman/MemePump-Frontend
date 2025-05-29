@@ -65,10 +65,8 @@ const TradingPage = () => {
 
   // Use default height during SSR
   const height = isMounted ? windowHeight : 800;
-
-  console.log("height", height)
   return (
-    <div className={`h-[92vh] flex flex-col gap-4 container-trading py-4 relative z-10 ${
+    <div className={`h-[93vh] flex flex-col gap-4 container-trading py-4 relative z-10 ${
       isMobile ? 'px-2' : 'px-[40px]'
     }`}>
       {!isMobile && <Interface />}
@@ -89,7 +87,7 @@ const TradingPage = () => {
         } overflow-hidden relative`}>
           <div 
             style={{ height: isMobile ? '350px' : `${chartHeight}%` }} 
-            className='bg-neutral-800 rounded-xl p-2 md:p-4 overflow-auto lg:min-h-[20rem] transition-all duration-100 relative'
+            className='dark:bg-theme-neutral-1000 shadow-inset bg-white rounded-xl p-2 md:p-4 overflow-auto lg:min-h-[20rem] transition-all duration-100 relative'
           >
             <TradingViewChart className='h-full' />
             {isDragging && (
@@ -101,14 +99,14 @@ const TradingPage = () => {
           </div>
           
           <div 
-            className='h-1 m-1 md:m-2 bg-neutral-700 cursor-row-resize hover:bg-neutral-600 transition-colors relative z-50'
+            className='h-1 m-1 md:m-2 bg-theme-neutral-800 cursor-row-resize hover:bg-neutral-600 transition-colors relative z-50'
             onMouseDown={handleDragStart}
             style={{ touchAction: 'none' }}
           />
           
           <div 
             style={{ height: !isMobile ? `${100 - chartHeight}%` : 'auto' }} 
-            className='transition-all duration-100 overflow-hidden flex'
+            className='transition-all duration-100 overflow-hidden rounded-xl flex'
           >
             <div className='flex flex-1 w-full'>
               <TransactionHistory />

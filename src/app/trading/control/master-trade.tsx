@@ -39,6 +39,9 @@ export default function MasterTradeChat({
     const [mounted, setMounted] = useState(false);
     const [initialized, setInitialized] = useState(false);
 
+    // Get translations
+    const t = useLang().t;
+
     // Handle initial mount
     useEffect(() => {
         setMounted(true);
@@ -149,6 +152,7 @@ export default function MasterTradeChat({
             {/* {isLoading && (
                 <div className="absolute inset-0 bg-neutral-1000/50 backdrop-blur-xl z-10 flex items-center justify-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-theme-primary-400"></div>
+                    <span className="ml-2">{t("masterTrade.loading")}</span>
                 </div>
             )} */}
             {/* Tabs */}
@@ -160,7 +164,7 @@ export default function MasterTradeChat({
                         onClick={() => handleTabChange("trade")}
                         data-active-tab={activeTab}
                     >
-                        TRADE
+                        {t("masterTrade.tabs.member")}
                     </button>
                 )}
                 <button
@@ -169,7 +173,7 @@ export default function MasterTradeChat({
                     onClick={() => handleTabChange("chat")}
                     data-active-tab={activeTab}
                 >
-                    CHAT
+                    {t("masterTrade.tabs.chat")}
                     {unreadCount > 0 && activeTab !== "chat" && (
                         <div className="absolute right-1 top-0">
                             <div className="bg-theme-primary-400 text-neutral-100 text-[10px] rounded-full p-[2px]">{unreadCount}</div>

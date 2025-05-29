@@ -40,6 +40,7 @@ const config: Config = {
           'blue': {
             '100': '#00C0FF',
             '200': '#0071BC',
+            '300': '#E0FCFF',
           },
           'neutral': {
             '100': '#eeeeee',
@@ -51,30 +52,34 @@ const config: Config = {
             '2000': '#112D60',
           },
           'green': {
-              '100': '#bbf7d01a',
-              '200': '#1FC16B',
-            },
+            '100': '#bbf7d01a',
+            '200': '#1FC16B',
+          },
           'red': {
-              '100': '#FB3748',
-              '200': '#D00416',
-              '300': '#fb37481a',
-            },
+            '100': '#FB3748',
+            '200': '#D00416',
+            '300': '#fb37481a',
+          },
           'yellow': {
-              '100': '#fdfce5',
-              '200': '#DFB400',
-              '300': '#FFDB43',
-            },
-            'black': {
-              '100': '#000000',
-              '200': '#161616',
-              '1/3': '#0E0E0ECC',
-              '1/2': 'rgba(0, 0, 0, 0.50)',
-              '9/10': 'rgba(0, 0, 0, 0.90)',
-            },
-            'purple': {
-              '100': '#5558FF',
-              '200': '#720881',
-            },
+            '100': '#fdfce5',
+            '200': '#DFB400',
+            '300': '#FFDB43',
+          },
+          'brown': {
+            '100': '#6E6E6E',
+          },
+          'black': {
+            '100': '#000000',
+            '200': '#161616',
+            '300': '#0E0E0ECC',
+            '1/3': '#0E0E0ECC',
+            '1/2': 'rgba(0, 0, 0, 0.50)',
+            '9/10': 'rgba(0, 0, 0, 0.90)',
+          },
+          'purple': {
+            '100': '#5558FF',
+            '200': '#720881',
+          },
           'gradient': {
             'start': '#15DFFD',
             'end': '#761BB3',
@@ -190,6 +195,7 @@ const config: Config = {
       },
       boxShadow: {
         'custom': '0px 0px 4px 0px rgba(232, 232, 232, 0.50)',
+        'inset': 'inset -1px -1px 4px #1e1b1ba8',
       },
     },
   },
@@ -224,6 +230,9 @@ const config: Config = {
         },
         '.shadow-custom': {
           boxShadow: theme('boxShadow.custom'),
+        },
+        '.shadow-inset': {
+          boxShadow: theme('boxShadow.inset'),
         },
         '.glow-blue': {
           background: theme('colors.theme.gradient.glow.blue'),
@@ -315,6 +324,9 @@ const config: Config = {
         },
         '.bg-gradient-purple-transparent': {
           background: 'linear-gradient(93deg, rgba(17, 45, 96, 0.50) 2.14%, rgba(136, 51, 238, 0.50) 98.03%)',
+        },
+        '.bg-linear-200': {
+          background: 'var(--Linear-200, linear-gradient(0deg, #5558FF 0%, #00C0FF 100%))',
         },
         '.gradient-overlay-custom': {
           background: 'linear-gradient(93deg, rgba(17, 45, 96, 0.50) 2.14%, rgba(136, 51, 238, 0.50) 98.03%)',

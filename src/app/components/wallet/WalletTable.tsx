@@ -31,6 +31,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/ui/dialog";
+import { useLang } from "@/lang";
 
 interface WalletData extends Wallet {
     wallet_nick_name: string;
@@ -64,7 +65,7 @@ const mobileStyles = {
 
 export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTableProps) {
     const { toast } = useToast();
-    const { t } = useTranslation();
+    const {t} = useLang();
     const { isAuthenticated, logout, updateToken } = useAuth();
     const [editingWalletId, setEditingWalletId] = useState<string | null>(null);
     const [editingField, setEditingField] = useState<'name' | 'nickname' | 'country' | null>(null);
@@ -78,7 +79,6 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
         queryKey: ["wallet-infor"],
         queryFn: getInforWallet,
     });
-    console.log("walletInfor", walletInfor)
     const handleCopyAddress = (address: string, e: React.MouseEvent) => {
         e.stopPropagation();
         navigator.clipboard.writeText(address);
@@ -393,14 +393,14 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                         <Table>
                             <TableHeader className="border-b-1 border-b-solid border-b-neutral-400">
                                 <TableRow className="bg-muted/50">
-                                    <TableHead className={`${textTitle} w-[15%] px-4`}>Wallet Name</TableHead>
-                                    <TableHead className={`${textTitle} w-[12%] px-4`}>Nickname</TableHead>
-                                    <TableHead className={`${textTitle} w-[8%] px-4`}>Country</TableHead>
-                                    <TableHead className={`${textTitle} w-[20%] px-4`}>Solana Address</TableHead>
-                                    <TableHead className={`${textTitle} w-[20%] px-4`}>ETH Address</TableHead>
-                                    <TableHead className={`${textTitle} w-[8%] px-4`}>Type</TableHead>
-                                    <TableHead className={`${textTitle} w-[8%] px-4`}>Wallet Key</TableHead>
-                                    <TableHead className={`${textTitle} w-[9%] px-4`}>Actions</TableHead>
+                                    <TableHead className={`${textTitle} w-[15%] px-4`}>{t('wallet.walletName')}</TableHead>
+                                    <TableHead className={`${textTitle} w-[12%] px-4`}>{t('wallet.nickname')}</TableHead>
+                                    <TableHead className={`${textTitle} w-[8%] px-4`}>{t('wallet.country')}</TableHead>
+                                    <TableHead className={`${textTitle} w-[20%] px-4`}>{t('wallet.solanaAddress')}</TableHead>
+                                    <TableHead className={`${textTitle} w-[20%] px-4`}>{t('wallet.ethAddress')}</TableHead>
+                                    <TableHead className={`${textTitle} w-[8%] px-4`}>{t('wallet.type')}</TableHead>
+                                    <TableHead className={`${textTitle} w-[8%] px-4`}>{t('wallet.walletLevel')}</TableHead>
+                                    <TableHead className={`${textTitle} w-[9%] px-4`}>{t('common.actions')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -465,7 +465,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                                         : "bg-gray-700 border-gray-600 text-gray-300"
                                                     } px-2 py-1 whitespace-nowrap`}
                                             >
-                                                {wallet.wallet_type.charAt(0).toUpperCase() + wallet.wallet_type.slice(1)}
+                                                {t(`listWalletss.walletType.${wallet.wallet_type}`)}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className={`px-4 ${textContent}`}>
@@ -475,7 +475,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                                     : "bg-gray-700 border-gray-600 text-gray-300"
                                                     } px-2 py-1 whitespace-nowrap`}
                                             >
-                                                {wallet.wallet_auth.charAt(0).toUpperCase() + wallet.wallet_auth.slice(1)}
+                                                {t(`listWalletss.walletType.${wallet.wallet_auth}`)}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className={`px-4 ${textContent}`}>
