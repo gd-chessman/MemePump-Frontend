@@ -421,12 +421,12 @@ export default function CreateCoinForm() {
         {/* Main Form */}
         <div className="border-create-coin w-full md:w-2/3 bg-transparent flex-1 bg-opacity-30 rounded-lg md:rounded-xl p-3 md:p-5 lg:p-[30px] shadow-lg flex flex-col">
           <div className="w-full h-full flex flex-col">
-            <h2 className="text-center text-lg md:text-xl lg:text-2xl font-bold text-neutral-100 mb-4 md:mb-5 lg:mb-6 flex items-center justify-center gap-1.5 md:gap-2">
+            <div className="text-center text-lg md:text-xl lg:text-2xl font-bold text-neutral-100 mb-0 md:mb-2 lg:mb-0 flex items-center justify-center gap-1.5 md:gap-2">
               {ethereumIcon(14, 14)}
               {t('createCoin.title')}
               {ethereumIcon(14, 14)}
-            </h2>
-
+            </div>
+            <div className="text-center text-xs md:text-sm lg:text-base font-normal text-neutral-100 mb-4 md:mb-5 lg:mb-6"> Pumpfun에서 새로운 코인 만들기</div>
             <form
               onSubmit={handleSubmit}
               className="flex-1 flex flex-col justify-between min-h-0"

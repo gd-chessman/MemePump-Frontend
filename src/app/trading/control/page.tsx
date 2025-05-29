@@ -218,7 +218,7 @@ const Control = () => {
   return (
     <div className='flex flex-col h-full gap-4'>
       <div className={classLayout + " p-3 flex-none"}>
-        <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+        <Suspense fallback={<div className="flex items-center min-h-[500px] justify-center h-full">Loading...</div>}>
           <TradingPanel 
             defaultMode={activeTab as TradingMode}
             currency={currencies} 

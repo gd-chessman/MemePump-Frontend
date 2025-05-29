@@ -182,7 +182,7 @@ export default function MasterTradeChat({
                 </button>
             </div>
 
-{activeTab === "trade" ? (
+            {activeTab === "trade" ? (
                 <div className="flex-1 min-h-0 flex flex-col">
                     <div className="flex-none">
                         <SearchBar

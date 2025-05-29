@@ -26,14 +26,6 @@ import MobileWalletSelector from './mobile-wallet-selector';
 import { useWallets } from '@/hooks/useWallets';
 import { LangToggle } from './LanguageSelect';
 
-interface ListWalletProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSelectWallet: (wallet: Wallet) => void;
-    selectedWalletId?: string;
-    isMobile?: boolean;
-}
-
 const Header = () => {
     const { t } = useLang();
     const router = useRouter();
@@ -101,7 +93,7 @@ const Header = () => {
                 });
             }
         }
-    }, [walletInfor, router, logout, isWalletDialogOpen, t]);
+    }, [walletInfor, router, logout, isWalletDialogOpen]);
 
     useEffect(() => {
         const checkMobile = () => {
@@ -275,7 +267,7 @@ const Header = () => {
                             <Search className="absolute left-3 top-2 h-4 w-4 text-gray-500 dark:text-muted-foreground" />
                         </div>
 
-                        <Display />
+                        {isAuthenticated && <Display />}
 
                         {mounted ? (
                             <>

@@ -295,6 +295,30 @@ export default function TradingPanel({
 
     return (
         <div>
+            {/* Mode Tabs */}
+            <div className="flex mb-4 border-b border-gray-200 dark:border-neutral-700">
+                <button
+                    onClick={() => setMode("buy")}
+                    className={`flex-1 py-2 text-center font-medium text-sm transition-colors ${
+                        mode === "buy"
+                            ? "text-green-500 border-b-2 border-green-500 dark:text-theme-green-200 dark:border-theme-green-200"
+                            : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    }`}
+                >
+                    {t('trading.panel.buy')}
+                </button>
+                <button
+                    onClick={() => setMode("sell")}
+                    className={`flex-1 py-2 text-center font-medium text-sm transition-colors ${
+                        mode === "sell"
+                            ? "text-red-500 border-b-2 border-red-500 dark:text-theme-red-100 dark:border-theme-red-100"
+                            : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    }`}
+                >
+                    {t('trading.panel.sell')}
+                </button>
+            </div>
+
             <div className="rounded-lg flex flex-col 2xl:justify-between gap-3 h-full overflow-y-auto">
                {/* Amount Input */}
                 <div className="relative mt-2">
