@@ -541,5 +541,35 @@
       "transaction_failed": "Giao dịch thất bại. Vui lòng thử lại.",
       "transaction_success": "Gửi giao dịch thành công!"
     }
+  },
+  "searchModal": {
+    "title": "TÌM KIẾM",
+    "placeholder": "Tìm kiếm token...",
+    "columns": {
+      "token": "Token",
+      "marketCap": "Vốn hóa",
+      "volume1h": "KL 1h",
+      "volume24h": "KL 24h",
+      "price": "Giá",
+      "holders": "Người nắm giữ"
+    },
+    "badges": {
+      "verified": "Đã xác minh",
+      "new": "Mới"
+    },
+    "noResults": "Không tìm thấy token nào phù hợp với tiêu chí tìm kiếm của bạn"
+  },
+  "connectMasterModal": {
+    "title": "KẾT NỐI VỚI MASTER",
+    "maximumCopyAmount": "Số lượng Copy tối đa (SOL)",
+    "copyAddress": {
+      "copy": "Sao chép địa chỉ",
+      "copied": "Đã sao chép!"
+    },
+    "buttons": {
+      "cancel": "Hủy",
+      "connect": "Kết nối",
+      "connecting": "Đang kết nối..."
+    }
   }
 }

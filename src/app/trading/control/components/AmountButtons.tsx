@@ -23,7 +23,7 @@ export const AmountButtons: React.FC<AmountButtonsProps> = ({
     onEditKeyPress,
 }) => {
     return (
-        <>
+        <div className="flex flex-col gap-1">
             <span className="text-gray-600 dark:text-neutral-200 text-sm font-normal">SOL</span>
             <div className="flex items-center justify-between gap-3">
                 {amountValues.map((value, index) => (
@@ -67,6 +67,6 @@ export const AmountButtons: React.FC<AmountButtonsProps> = ({
                     </div>
                 ))}
             </div>
-        </>
+        </div>
     )
 } 

@@ -156,7 +156,7 @@ export default function MasterTradeChat({
                 </div>
             )} */}
             {/* Tabs */}
-            <div className="flex-none flex h-[30px] bg-neutral-1000 my-3 mx-3 rounded-xl relative">
+            <div className="flex-none flex h-[30px] bg-neutral-1000 my-3 mx-3 rounded-xl relative dark:bg-theme-neutral-800">
                 {walletInfor?.role === "master" && (
                     <button
                         className={`flex-1 rounded-xl text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "trade" ? "linear-gradient-connect" : "text-neutral-400"

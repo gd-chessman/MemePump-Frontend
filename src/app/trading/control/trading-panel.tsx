@@ -294,33 +294,25 @@ export default function TradingPanel({
     }, [tradeAmount, mode, percentage, isDirectAmountInput])
 
     return (
-        <div>
+        <div className="h-full flex flex-col">
             {/* Mode Tabs */}
-            <div className="flex mb-4 border-b border-gray-200 dark:border-neutral-700">
+            <div className="flex group bg-gray-100 dark:bg-theme-neutral-1000 rounded-xl h-[30px] mb-1">
                 <button
+                    className={`flex-1 rounded-3xl text-sm cursor-pointer uppercase text-center ${mode === "buy" ? "border-green-500 text-green-600 dark:text-theme-green-200 border-1 bg-green-50 dark:bg-theme-green-100 font-semibold" : "text-gray-500 dark:text-neutral-400"}`}
                     onClick={() => setMode("buy")}
-                    className={`flex-1 py-2 text-center font-medium text-sm transition-colors ${
-                        mode === "buy"
-                            ? "text-green-500 border-b-2 border-green-500 dark:text-theme-green-200 dark:border-theme-green-200"
-                            : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                    }`}
                 >
                     {t('trading.panel.buy')}
                 </button>
                 <button
+                    className={`flex-1 rounded-3xl cursor-pointer text-sm uppercase text-center ${mode === "sell" ? "border-red-500 text-red-600 dark:text-theme-red-100 border-1 bg-red-50 dark:bg-theme-red-300 font-semibold" : "text-gray-500 dark:text-neutral-400"}`}
                     onClick={() => setMode("sell")}
-                    className={`flex-1 py-2 text-center font-medium text-sm transition-colors ${
-                        mode === "sell"
-                            ? "text-red-500 border-b-2 border-red-500 dark:text-theme-red-100 dark:border-theme-red-100"
-                            : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                    }`}
                 >
                     {t('trading.panel.sell')}
                 </button>
             </div>
 
-            <div className="rounded-lg flex flex-col 2xl:justify-between gap-3 h-full overflow-y-auto">
-               {/* Amount Input */}
+            <div className="rounded-lg flex flex-col 2xl:justify-between gap-2 lg:gap-3 h-full overflow-y-auto">
+                {/* Amount Input */}
                 <div className="relative mt-2">
                     <div className={`bg-gray-50 dark:bg-neutral-900 rounded-full border ${amountError ? 'border-red-500' : 'border-blue-200 dark:border-blue-500'} px-3 py-2 flex justify-between items-center ${height > 700 ? 'py-2' : 'h-[30px]'}`}>
                         <input
@@ -336,13 +328,13 @@ export default function TradingPanel({
                         )}
                     </div>
                     {amountError && (
-                        <div className="text-red-500 text-sm mt-1">
+                        <div className="text-red-500 text-sm mt-2">
                             {amountError}
                         </div>
                     )}
 
                     {/* USD Value and Balance */}
-                    <div className="flex flex-wrap justify-between text-sm mb-3 mt-2">
+                    <div className="flex flex-wrap justify-between text-sm mt-2">
                         {mode === "buy" ? (
                             <div className={STYLE_TEXT_BASE}>~ ${amountUSD}</div>
                         ) : (
@@ -416,13 +408,12 @@ export default function TradingPanel({
                     <button
                         onClick={handleSubmit}
                         disabled={isButtonDisabled}
-                        className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${
-                            isButtonDisabled 
+                        className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${isButtonDisabled
                                 ? "bg-gray-400 cursor-not-allowed dark:bg-gray-600"
                                 : mode === "buy"
                                     ? "bg-green-500 hover:bg-green-600 dark:bg-theme-green-200 dark:hover:bg-theme-green-200/90"
                                     : "bg-red-500 hover:bg-red-600 dark:bg-theme-red-100 dark:hover:bg-theme-red-100/90"
-                        }`}
+                            }`}
                     >
                         {mode === "buy" ? t('trading.panel.buy') : t('trading.panel.sell')}
                     </button>

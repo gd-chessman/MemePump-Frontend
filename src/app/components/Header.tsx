@@ -58,6 +58,8 @@ const Header = () => {
                 message: t('header.notifications.switchWalletSuccess'),
                 type: 'success'
             });
+            // Reload the page after successful wallet switch
+            window.location.reload();
         } catch (error) {
             console.error('Error changing wallet:', error);
             notify({

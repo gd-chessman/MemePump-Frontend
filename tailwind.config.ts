@@ -54,6 +54,8 @@ const config: Config = {
           'green': {
             '100': '#bbf7d01a',
             '200': '#1FC16B',
+            '300': '#C3FFE8',
+            '400': '#F0FFF4',
           },
           'red': {
             '100': '#FB3748',
@@ -336,6 +338,34 @@ const config: Config = {
         },
         '.text-fill-transparent': {
           WebkitTextFillColor: 'transparent',
+        },
+        '.border-create-coin': {
+          borderRadius: '12px',
+          borderTop: '5px solid #6a259c',
+          borderRight: '1px solid #6a259c',
+          borderBottom: '1px solid #6a259c',
+          borderLeft: '1px solid #6a259c',
+          boxShadow: '0px 0px 4px 0px rgba(232, 232, 232, 0.50)',
+          backdropFilter: 'blur(6px)',
+        },
+        '.border-create-coin-light': {
+          borderRadius: '12px',
+          borderTop: '5px solid #00C0FF',
+          borderRight: '1px solid #00C0FF',
+          borderBottom: '1px solid #00C0FF',
+          borderLeft: '1px solid #00C0FF',
+          boxShadow: '0px 0px 6px 0px rgba(0, 0, 0, 0.20)',
+          backdropFilter: 'blur(6px)',
+        },
+        '.border-my-coin': {
+          borderRadius: '12px',
+          borderTop: '5px solid #883bbf',
+          borderRight: '1px solid #883bbf',
+          borderBottom: '1px solid #883bbf',
+          borderLeft: '1px solid #883bbf',
+        },
+        '.bg-gradient-guide': {
+          background: 'linear-gradient(0deg, rgba(136, 51, 238, 0.60) 1.84%, rgba(0, 0, 0, 0.50) 43.34%)',
         },
       })
     }),

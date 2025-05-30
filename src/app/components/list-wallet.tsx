@@ -151,7 +151,7 @@ export default function WalletSelectorModal({
               <div
                 key={wallet.wallet_id}
                 className="flex items-center justify-between p-3 hover:dark:bg-theme-black-100 hover:bg-theme-blue-300 cursor-pointer border-b border-purple-500/10 last:border-b-0"
-                onClick={() => onSelectWallet(wallet)}
+                onClick={selectedWalletId === wallet.solana_address ? () => {} : () => onSelectWallet(wallet)}
               >
                 <div className="flex items-center">
                   <span

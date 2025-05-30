@@ -7,7 +7,7 @@ import {
   type FormEvent,
   useEffect,
 } from "react";
-import { Upload, X, Undo2, Copy } from "lucide-react";
+import { Upload, X, Undo2, Copy, ArrowRight, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import {
   Select,
@@ -160,6 +160,7 @@ export default function CreateCoinForm() {
   });
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // Filter categories based on search query
   const filteredCategories = React.useMemo(() => {
@@ -224,7 +225,7 @@ export default function CreateCoinForm() {
         case "last8days":
           return coinDate >= eightDaysAgo && coinDate < today;
         case "lastmonth":
-          return coinDate ;
+          return coinDate;
         default:
           return true;
       }
@@ -333,7 +334,12 @@ export default function CreateCoinForm() {
       return;
     }
 
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmSubmit = async () => {
     setIsSubmitting(true);
+    setShowConfirmModal(false);
 
     try {
       // Create FormData object to handle file upload
@@ -402,12 +408,12 @@ export default function CreateCoinForm() {
   };
 
   const classInput =
-    "w-full h-9 md:h-10 lg:h-11 px-3 md:px-4 lg:px-5 bg-transparent bg-opacity-60 border rounded-lg md:rounded-xl p-2 md:p-3 lg:p-4 text-neutral-200 focus:outline-none placeholder:text-xs md:placeholder:text-sm lg:placeholder:text-base placeholder:text-neutral-200 placeholder:font-normal " +
+    "w-full h-9 md:h-10 lg:h-11 px-3 md:px-4 lg:px-5 dark:bg-transparent bg-white bg-opacity-60 border rounded-lg md:rounded-xl p-2 md:p-3 lg:p-4 text-neutral-200 focus:outline-none placeholder:text-xs md:placeholder:text-sm lg:placeholder:text-base dark:placeholder:text-neutral-200 placeholder:text-theme-neutral-1000 text-theme-neutral-1000 dark:text-theme-neutral-100 placeholder:font-normal " +
     (errors.name
       ? "border-red-500"
       : "border-t-theme-primary-300 border-l-theme-primary-300 border-b-theme-gradient-linear-start border-r-theme-gradient-linear-start") +
     " text-xs md:text-sm lg:text-base";
-  const classLabel = "block text-xs md:text-sm lg:text-base font-normal text-neutral-100 mb-1 md:mb-1.5 lg:mb-2";
+  const classLabel = "block text-xs md:text-sm lg:text-base font-normal dark:text-theme-neutral-100 text-theme-neutral-900 mb-1 md:mb-1.5 lg:mb-2";
 
   const ethereumIcon = (width: number, height: number) => {
     return (
@@ -417,16 +423,46 @@ export default function CreateCoinForm() {
   return (
     <>
       <NotifyProvider />
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="dark:border-create-coin border-create-coin-light bg-white dark:bg-theme-black-1/3 rounded-xl p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-center mb-4">
+              <AlertCircle className="h-12 w-12 text-theme-primary-300" />
+            </div>
+            <h3 className="text-lg font-semibold text-center mb-2 dark:text-theme-neutral-100 text-theme-neutral-900">
+              Confirmation
+            </h3>
+            <p className="text-center mb-6 dark:text-theme-neutral-100 text-theme-neutral-900">
+              Bạn cần bỏ ra <span className="font-bold">0.0025 SOL</span> để tạo đồng
+            </p>
+            <div className="flex w-full gap-4 justify-center px-2">
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors dark:text-theme-neutral-100 text-theme-neutral-900"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmSubmit}
+                className="px-4 py-2 rounded-full bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 text-theme-neutral-100 hover:from-theme-blue-100 hover:to-theme-blue-200 transition-all duration-500"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="container-body px-3 md:px-6 lg:px-[40px] flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8 py-4 md:py-6 lg:py-[30px] relative mx-auto z-10">
         {/* Main Form */}
-        <div className="border-create-coin w-full md:w-2/3 bg-transparent flex-1 bg-opacity-30 rounded-lg md:rounded-xl p-3 md:p-5 lg:p-[30px] shadow-lg flex flex-col">
+        <div className="dark:border-create-coin border-create-coin-light bg-white dark:bg-inherit z-10  w-full md:w-2/3 bg-transparent flex-1 bg-opacity-30 rounded-lg md:rounded-xl p-3 md:p-5 lg:p-[30px] shadow-lg flex flex-col">
           <div className="w-full h-full flex flex-col">
-            <div className="text-center text-lg md:text-xl lg:text-2xl font-bold text-neutral-100 mb-0 md:mb-2 lg:mb-0 flex items-center justify-center gap-1.5 md:gap-2">
+            <div className="text-center text-lg md:text-xl lg:text-2xl font-bold dark:text-theme-neutral-100 text-theme-neutral-900 mb-0 md:mb-2 lg:mb-0 flex items-center justify-center gap-1.5 md:gap-2">
               {ethereumIcon(14, 14)}
               {t('createCoin.title')}
               {ethereumIcon(14, 14)}
             </div>
-            <div className="text-center text-xs md:text-sm lg:text-base font-normal text-neutral-100 mb-4 md:mb-5 lg:mb-6"> Pumpfun에서 새로운 코인 만들기</div>
+            <div className="text-center text-xs md:text-sm lg:text-base font-normal dark:text-theme-neutral-100 text-theme-neutral-900 mb-4 md:mb-5 lg:mb-6"> Pumpfun에서 새로운 코인 만들기</div>
             <form
               onSubmit={handleSubmit}
               className="flex-1 flex flex-col justify-between min-h-0"
@@ -638,13 +674,13 @@ export default function CreateCoinForm() {
                             }}
                             className="absolute top-0 right-0 bg-red-500 rounded-full p-1 m-1"
                           >
-                            <X className="h-4 w-4 text-neutral-100" />
+                            <X className="h-4 w-4 dark:text-theme-neutral-100 text-theme-neutral-900" />
                           </button>
                         </div>
                       ) : (
                         <div className="text-center">
-                          <Upload className="h-8 w-8 text-neutral-100 mx-auto mb-2" />
-                          <p className="text-xs text-neutral-100 font-normal">
+                          <Upload className="h-8 w-8 dark:text-theme-neutral-100 text-theme-neutral-900 mx-auto mb-2" />
+                          <p className="text-xs dark:text-theme-neutral-100 text-theme-neutral-900 font-normal">
                             {t('createCoin.form.logo.upload')}
                           </p>
                         </div>
@@ -663,9 +699,9 @@ export default function CreateCoinForm() {
                   {/* Preview */}
                   <div className="w-full md:w-1/2 mt-3 md:mt-0">
                     <label className={classLabel}>{t('createCoin.form.preview.label')}</label>
-                    <div className="bg-black bg-opacity-60 border border-blue-500/50 rounded-lg p-3 md:p-4 lg:p-6 relative h-[160px] md:h-[180px] lg:h-[200px] flex flex-col justify-center items-center">
+                    <div className="dark:bg-black bg-opacity-60 border border-blue-500/50 rounded-lg p-3 md:p-4 lg:p-6 relative h-[160px] md:h-[180px] lg:h-[200px] flex flex-col justify-center items-center">
                       <div className="flex flex-col items-center gap-1.5 md:gap-2">
-                        <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-white rounded-full overflow-hidden mb-1.5 md:mb-2 flex items-center justify-center">
+                        <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 dark:bg-white bg-theme-green-300 rounded-full overflow-hidden mb-1.5 md:mb-2 flex items-center justify-center">
                           {formData.logoPreview ? (
                             <img
                               src={formData.logoPreview}
@@ -683,19 +719,19 @@ export default function CreateCoinForm() {
                             />
                           )}
                         </div>
-                        <h3 className="text-neutral-100 font-semibold text-xs md:text-sm lg:text-base">
+                        <h3 className="dark:text-theme-neutral-100 text-theme-neutral-900 font-semibold text-xs md:text-sm lg:text-base">
                           {formData.name || t('createCoin.form.preview.name')}
                         </h3>
-                        <p className="text-neutral-100 text-[10px] md:text-xs lg:text-sm font-normal my-1 md:my-1.5 lg:my-2">
+                        <p className="dark:text-theme-neutral-100 text-theme-neutral-900 text-[10px] md:text-xs lg:text-sm font-normal my-1 md:my-1.5 lg:my-2">
                           {formData.symbol || t('createCoin.form.preview.symbol')}
                         </p>
-                        <p className="text-neutral-100 text-[10px] md:text-xs lg:text-sm font-normal text-center">
+                        <p className="dark:text-theme-neutral-100 text-theme-neutral-900 text-[10px] md:text-xs lg:text-sm font-normal text-center">
                           {formData.description || t('createCoin.form.preview.description')}
                         </p>
                       </div>
                       <button
                         type="button"
-                        className="absolute top-2 right-2 text-neutral-100 hover:text-theme-primary-300 flex items-center gap-2"
+                        className="absolute top-2 right-2 dark:text-theme-neutral-100 text-theme-neutral-900 hover:text-theme-primary-300 flex items-center gap-2"
                       >
                         <Undo2 className="h-4 w-4" /> {t('createCoin.form.preview.undo')}
                       </button>
@@ -768,13 +804,14 @@ export default function CreateCoinForm() {
               </div>
 
               {/* Submit Button */}
-              <div className="mt-4 md:mt-6 lg:mt-8 pt-3 md:pt-4 lg:pt-0">
+              <div className="mt-4 md:mt-6 lg:mt-8 pt-3 md:pt-4 lg:pt-0 text-center">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full max-w-[120px] md:max-w-[150px] lg:max-w-[400px] create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed mx-auto block text-xs md:text-sm lg:text-base"
+                  className="lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto"
                 >
-                  {isSubmitting ? t('createCoin.form.submit.creating') : t('createCoin.form.submit.create')}
+                  <span className="relative z-10 text-theme-neutral-100">{isSubmitting ? t('createCoin.form.submit.creating') : t('createCoin.form.submit.create')}</span>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
                 </button>
               </div>
             </form>
@@ -784,9 +821,9 @@ export default function CreateCoinForm() {
         {/* Sidebar */}
         <div className="w-full md:w-1/3 space-y-3 md:space-y-4 lg:space-y-6 flex flex-col gap-2 mt-3 md:mt-0">
           {/* My Coins */}
-          <div className="rounded-lg md:rounded-xl border p-3 md:p-4 lg:p-6 shadow-lg border-my-coin flex-1 flex flex-col justify-between z-10">
+          <div className="rounded-lg md:rounded-xl border-create-coin-light bg-white dark:bg-inherit shadow-inset dark:border p-3 md:p-4 lg:p-6 shadow-lg dark:border-my-coin flex-1 flex flex-col justify-between z-10">
             <div>
-              <h2 className="text-center text-sm md:text-base lg:text-lg font-bold text-neutral-100 mb-3 md:mb-4 lg:mb-6 flex items-center justify-center gap-1.5 md:gap-2">
+              <h2 className="text-center text-sm md:text-base lg:text-lg font-bold dark:text-theme-neutral-100 text-theme-neutral-900 mb-3 md:mb-4 lg:mb-6 flex items-center justify-center gap-1.5 md:gap-2">
                 {ethereumIcon(14, 14)}
                 {t('createCoin.myCoins.title')}
                 {ethereumIcon(14, 14)}
@@ -795,27 +832,27 @@ export default function CreateCoinForm() {
               <div className="flex justify-evenly mb-3 md:mb-4 lg:mb-6">
                 <button
                   onClick={() => setActiveTab("today")}
-                  className={`text-sm ${activeTab === "today"
-                      ? "text-theme-gradient-linear-start"
-                      : "text-gray-400"
+                  className={`dark:text-theme-neutral-100 text-sm hover:text-gray-300 ${activeTab === "today"
+                    ? "text-theme-primary-300 dark:text-theme-gradient-linear-start"
+                    : "dark:text-theme-neutral-100 text-sm hover:text-gray-300"
                     }`}
                 >
                   {t('createCoin.tabs.today')}
                 </button>
                 <button
                   onClick={() => setActiveTab("last8days")}
-                  className={`text-gray-400 text-sm hover:text-gray-300 ${activeTab === "last8days"
-                      ? "text-theme-gradient-linear-start"
-                      : "text-gray-400"
+                  className={` text-sm hover:text-gray-300 ${activeTab === "last8days"
+                    ? "text-theme-primary-300 dark:text-theme-gradient-linear-start"
+                    : "dark:text-theme-neutral-100 text-sm hover:text-gray-300"
                     }`}
                 >
                   {t('createCoin.tabs.last8days')}
                 </button>
                 <button
                   onClick={() => setActiveTab("lastmonth")}
-                  className={`text-gray-400 text-sm hover:text-gray-300 ${activeTab === "lastmonth"
-                      ? "text-theme-gradient-linear-start"
-                      : "text-gray-400"
+                  className={` text-sm hover:text-gray-300 ${activeTab === "lastmonth"
+                    ? "text-theme-primary-300 dark:text-theme-gradient-linear-start"
+                    : "dark:text-theme-neutral-100 text-sm hover:text-gray-300"
                     }`}
                 >
                   {t('createCoin.tabs.lastMonth')}
@@ -824,7 +861,7 @@ export default function CreateCoinForm() {
               {filteredMemeCoins.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-4 md:py-6 lg:py-8">
                   <img src={"/no-list-token.png"} alt="no-coin-icon" width={100} height={100} className="md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px]" />
-                  <p className="text-neutral-100 mt-2 md:mt-3 font-medium text-xs md:text-sm lg:text-base">
+                  <p className="dark:text-theme-neutral-100 text-theme-neutral-900 mt-2 md:mt-3 font-medium text-xs md:text-sm lg:text-base">
                     {t('createCoin.tabs.noCoins')}
                   </p>
                 </div>
@@ -855,7 +892,7 @@ export default function CreateCoinForm() {
                               {truncateString(coin.address, 6)}
                             </div>
                           </div>
-                          <button 
+                          <button
                             className="text-them-neutral-100 flex-shrink-0"
                             onClick={() => {
                               navigator.clipboard.writeText(coin.address);
@@ -870,11 +907,11 @@ export default function CreateCoinForm() {
                         </div>
 
                         <div className="flex items-center gap-1.5 md:gap-2 lg:gap-3 ml-1.5 md:ml-2">
-                          <button 
+                          <button
                             onClick={() => router.push(`/trading?address=${coin.address}`)}
                             className="linear-gradient-light dark:linear-gradient-connect hover:border py-1 px-2 md:py-1.5 md:px-3 lg:py-2 lg:px-5 border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 rounded-full text-[10px] md:text-xs whitespace-nowrap"
                           >
-                            {t('createCoin.tabs.trade')} 
+                            {t('createCoin.tabs.trade')}
                           </button>
                         </div>
                       </div>
@@ -885,21 +922,21 @@ export default function CreateCoinForm() {
             </div>
 
             <div className="mt-3 md:mt-4 lg:mt-6 text-center">
-              <button className="text-neutral-100 flex gap-1.5 md:gap-2 items-center justify-center mx-auto hover:text-blue-400 transition-colors">
+              <button className="dark:text-theme-neutral-100 cursor-pointer  dark:hover:text-theme-gradient-linear-start text-theme-neutral-900 flex gap-1.5 md:gap-2 items-center justify-center mx-auto  transition-colors">
                 <Link
                   href="/my-coin"
-                  className="text-neutral-100 font-medium text-[10px] md:text-xs lg:text-sm"
+                  className="dark:text-theme-neutral-100 text-theme-neutral-900 font-medium text-[10px] md:text-xs lg:text-xl "
                 >
                   {t('createCoin.tabs.seeAll')}
                 </Link>
-                <img src={"/arrow.png"} alt="arrow-icon" width={10} height={10} className="md:w-[12px] md:h-[12px] lg:w-[15px] lg:h-[14px]" />
+                <ArrowRight className="w-[20px] h-[10px] md:w-[12px] md:h-[12px] lg:w-[15px] lg:h-[20px] text-xl dark:hidden " />
               </button>
             </div>
           </div>
 
           {/* Guide */}
-          <div className="bg-gradient-guide rounded-lg md:rounded-xl border p-3 md:p-4 lg:p-6 shadow-lg border-my-coin">
-            <h2 className="text-center text-sm md:text-base lg:text-lg font-bold text-neutral-100 mb-3 md:mb-4 lg:mb-6 flex items-center justify-center gap-1.5 md:gap-2">
+          <div className="dark:bg-gradient-guide bg-gradient-to-t from-theme-green-300 to-theme-green-400 rounded-lg md:rounded-xl border p-3 md:p-4 lg:p-6 shadow-lg dark:border-my-coin border-create-coin-light">
+            <h2 className="text-center text-sm md:text-base lg:text-lg font-bold dark:text-theme-neutral-100 text-theme-neutral-900 mb-3 md:mb-4 lg:mb-6 flex items-center justify-center gap-1.5 md:gap-2">
               {ethereumIcon(14, 14)}
               {t('createCoin.guide.title')}
               {ethereumIcon(14, 14)}
@@ -907,7 +944,7 @@ export default function CreateCoinForm() {
 
             <ul className="space-y-2 md:space-y-3 lg:space-y-4">
               {tArray('createCoin.guide.rules').map((rule: string, index: number) => (
-                <li key={index} className="text-neutral-100 font-medium text-[10px] md:text-xs lg:text-sm flex justify-center text-center">
+                <li key={index} className="dark:text-theme-neutral-100 text-theme-neutral-900 font-medium text-[10px] md:text-xs lg:text-sm flex justify-center text-center">
                   {rule}
                 </li>
               ))}
