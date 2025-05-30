@@ -281,13 +281,13 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
       <div className="relative w-full max-w-4xl max-h-[80vh] mx-4 sm:mx-auto">
         {/* Gradient border wrapper */}
         <div className="p-[1px] sm:p-[2px] rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#5558FF] to-[#00C0FF] animate-fadeIn">
-          <div className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl overflow-hidden">
+          <div className="dark:bg-[#1a1a1a] bg-white rounded-xl sm:rounded-2xl overflow-hidden">
             {/* Header */}
             <div className="flex justify-between items-center p-4 sm:p-6 pb-2 sm:pb-4">
               <h2 className="text-[16px] sm:text-[18px] font-bold linear-200-bg">{t('searchModal.title')}</h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-white transition-colors hover:rotate-90 transform duration-300"
+                className="hover:dark:text-white text-theme-neutral-800 transition-colors hover:rotate-90 transform duration-300"
               >
                 <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
@@ -306,7 +306,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     }}
                     onPaste={handlePaste}
                     placeholder={t('searchModal.placeholder')}
-                    className="w-full bg-transparent py-1.5 sm:py-1 pl-10 sm:pl-12 pr-4 text-sm sm:text-base text-white placeholder-gray-400 focus:outline-none"
+                    className="w-full dark:bg-transparent py-1.5 sm:py-1 pl-10 sm:pl-12 pr-4 text-sm sm:text-base rounded-full dark:dark:text-white text-theme-neutral-800 text-theme-neutral-800 placeholder-gray-400 focus:outline-none"
                   />
                   {isLoading && (
                     <div className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2">
@@ -322,7 +322,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
               <div className="grid grid-cols-12 gap-2 sm:gap-6 text-[10px] sm:text-xs text-gray-400 font-medium border-b border-gray-800 pb-2 px-4">
                 <div className="col-span-3 lg:col-span-2 min-w-[100px] sm:min-w-[150px] text-left">{t('searchModal.columns.token')}</div>
                 <div
-                  className="hidden sm:flex col-span-2 min-w-[90px] cursor-pointer hover:text-white items-center justify-end"
+                  className="hidden sm:flex col-span-2 min-w-[90px] cursor-pointer hover:dark:text-white text-theme-neutral-800 items-center justify-end"
                   onClick={() => handleSort("marketCap")}
                 >
                   <span className="flex items-center">
@@ -333,7 +333,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                   </span>
                 </div>
                 <div
-                  className="hidden sm:flex col-span-2 min-w-[60px] cursor-pointer hover:text-white items-center justify-end"
+                  className="hidden sm:flex col-span-2 min-w-[60px] cursor-pointer hover:dark:text-white text-theme-neutral-800 items-center justify-end"
                   onClick={() => handleSort("volume1h")}
                 >
                   <span className="flex items-center">
@@ -344,7 +344,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                   </span>
                 </div>
                 <div
-                  className="col-span-5 lg:col-span-2 min-w-[60px] sm:min-w-[80px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="col-span-4 lg:col-span-2 min-w-[60px] sm:min-w-[80px] cursor-pointer hover:dark:text-white text-theme-neutral-800 flex items-center justify-end"
                   onClick={() => handleSort("volume24h")}
                 >
                   <span className="flex items-center">
@@ -355,7 +355,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                   </span>
                 </div>
                 <div
-                  className="col-span-5 lg:col-span-2 mr-2 min-w-[80px] sm:min-w-[100px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="col-span-4 lg:col-span-2 mr-2 min-w-[80px] sm:min-w-[100px] cursor-pointer hover:dark:text-white text-theme-neutral-800 flex items-center justify-end"
                   onClick={() => handleSort("price")}
                 >
                   <span className="flex items-center">
@@ -366,7 +366,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                   </span>
                 </div>
                 <div
-                  className="col-span-2 min-w-[60px] sm:min-w-[80px] cursor-pointer lg:mr-3 hidden sm:flex hover:text-white items-center justify-end"
+                  className="col-span-2 min-w-[60px] sm:min-w-[80px] cursor-pointer lg:mr-3 hidden sm:flex hover:dark:text-white text-theme-neutral-800 items-center justify-end"
                   onClick={() => handleSort("holders")}
                 >
                   <span className="flex items-center">
@@ -386,7 +386,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                   <div
                     key={token.address}
                     onClick={() => router.push(`/trading?address=${token.address}`)}
-                    className="grid grid-cols-12 gap-2 sm:gap-6 items-center py-2.5 sm:py-3 px-2 sm:px-3 rounded-lg hover:bg-[#2a2a2a] transition-colors cursor-pointer group border border-transparent hover:border-gray-800"
+                    className="grid grid-cols-12 gap-2 sm:gap-6 items-center py-2.5 sm:py-3 px-2 sm:px-3 rounded-lg dark:hover:bg-[#2a2a2a] hover:bg-theme-green-300 transition-colors cursor-pointer group border border-transparent hover:border-gray-800"
                   >
                     {/* Token Info */}
                     <div className="col-span-3 lg:col-span-2 min-w-[100px] sm:min-w-[150px] flex items-center space-x-2 sm:space-x-3">
@@ -409,7 +409,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1">
-                          <div className="text-white font-medium text-xs sm:text-sm truncate">
+                          <div className="dark:text-white text-theme-neutral-800 font-medium text-xs sm:text-sm truncate">
                             {truncateTokenName(token.name, 8)}
                           </div>
                         </div>
@@ -418,7 +418,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     </div>
 
                     {/* Market Cap - Hidden on mobile */}
-                    <div className="hidden sm:flex col-span-2 min-w-[90px] text-white text-sm text-right items-center justify-end">
+                    <div className="hidden sm:flex col-span-2 min-w-[90px] dark:text-white text-theme-neutral-800 text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
                         <span className="text-gray-400 text-[10px]">Market Cap</span>
                         <span>{truncateNumber(token.marketCapUsd, 10)}</span>
@@ -426,7 +426,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     </div>
 
                     {/* 1h Volume - Hidden on mobile */}
-                    <div className="hidden sm:flex col-span-2 min-w-[60px] text-white text-sm text-right items-center justify-end">
+                    <div className="hidden sm:flex col-span-2 min-w-[60px] dark:text-white text-theme-neutral-800 text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
                         <span className="text-gray-400 text-[10px]">1h Vol</span>
                         <span>{truncateNumber(token.volume_1h, 10)}</span>
@@ -434,7 +434,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     </div>
 
                     {/* 24h Volume */}
-                    <div className="col-span-5 lg:col-span-2 min-w-[60px] sm:min-w-[80px] text-white text-xs sm:text-sm text-right items-center justify-end">
+                    <div className="col-span-4 lg:col-span-2 min-w-[60px] sm:min-w-[80px] dark:text-white text-theme-neutral-800 text-xs sm:text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
                         
                         <span className="font-medium">{truncateNumber(token.volume_24h)}</span>
@@ -442,7 +442,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     </div>
 
                     {/* Price */}
-                    <div className="col-span-5 lg:col-span-2 min-w-[80px] sm:min-w-[120px] text-white text-xs sm:text-sm text-right items-center justify-end">
+                    <div className="col-span-4 lg:col-span-2 min-w-[80px] sm:min-w-[120px] dark:text-white text-theme-neutral-800 text-xs sm:text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
                         <span className="text-gray-400 text-[10px]">Price</span>
                         <span className="font-medium text-[#5558FF]">${formatNumberWithSuffix3(token.priceUsd)}</span>
@@ -450,7 +450,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     </div>
 
                     {/* Holders */}
-                    <div className="hidden sm:flex col-span-2 min-w-[60px] sm:min-w-[80px] text-white text-xs sm:text-sm text-right items-center justify-end">
+                    <div className="hidden sm:flex col-span-2 min-w-[60px] sm:min-w-[80px] dark:text-white text-theme-neutral-800 text-xs sm:text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
                         <span className="text-gray-400 text-[10px]">Holders</span>
                         <span className="font-medium">{truncateNumber(token.holders)}</span>
