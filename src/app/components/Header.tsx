@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link';
-import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon } from 'lucide-react';
+import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun } from 'lucide-react';
 import { useLang } from '@/lang/useLang';
 import Display from '@/app/components/Display';
 import {
@@ -25,6 +25,8 @@ import SearchModal from './search-modal';
 import MobileWalletSelector from './mobile-wallet-selector';
 import { useWallets } from '@/hooks/useWallets';
 import { LangToggle } from './LanguageSelect';
+import PumpFun from './pump-fun';
+import { useTheme } from 'next-themes';
 
 const Header = () => {
     const { t } = useLang();
@@ -37,6 +39,11 @@ const Header = () => {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const { theme, setTheme } = useTheme();
+    const [isDark, setIsDark] = useState(theme);
+    useEffect(() => {
+        setIsDark(theme);
+    }, [theme]);
 
     // Add wallets query
     const { wallets: myWallets } = useWallets();
@@ -129,22 +136,26 @@ const Header = () => {
         {
             name: t('over view'),
             href: '/dashboard',
-            icon: LayoutDashboard
+            icon: LayoutDashboard,
+            logoPump: false,
         },
         {
             name: t('create coin'),
             href: '/create-coin',
-            icon: Coins
+            icon: Coins,
+            logoPump: true,
         },
         {
             name: t('overview.masterTrade.title'),
             href: '/master-trade',
-            icon: LineChart
+            icon: LineChart,
+            logoPump: false,
         },
         {
             name: t("wallet manager"),
             href: '/wallet',
-            icon: WalletIcon
+            icon: WalletIcon,
+            logoPump: false,
         },
     ]
     return (
@@ -276,7 +287,7 @@ const Header = () => {
                                 {!isAuthenticated ? (
                                     <button
                                         onClick={() => window.open(process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL, "_blank")}
-                                        className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-4 md:px-6 py-[6px] rounded-full transition-colors whitespace-nowrap"
+                                        className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap flex items-center gap-1"
                                     >
                                         {t('connect')}
                                     </button>
@@ -330,6 +341,7 @@ const Header = () => {
                                     <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                                         <img src={"/logo.png"} alt="logo" className="h-6 md:h-8" />
                                     </Link>
+
                                     <button
                                         className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800"
                                         onClick={() => setIsMobileMenuOpen(false)}
@@ -351,14 +363,28 @@ const Header = () => {
                                             >
                                                 <Icon className="h-5 w-5" />
                                                 {item.name}
+                                                {item.logoPump && <PumpFun />}
                                             </Link>
                                         );
                                     })}
                                 </nav>
                                 <LangToggle className='!bg-transparent border-none !pl-5' showArrow={true} />
+                               
 
                                 {/* Mobile Actions */}
                                 <div className="mt-auto p-4 space-y-4 border-t dark:border-neutral-800">
+                                <div className='flex items-center justify-evenly gap-4 mt-1'>
+                                    <Moon 
+                                        className="cursor-pointer transition-colors " 
+                                        onClick={() => isDark === "light" && setTheme("dark")} 
+                                        style={isDark === "dark" ? { color: "#fff" } : { color: "#6b7280" }}
+                                    />
+                                    <Sun 
+                                        className="cursor-pointer transition-colors" 
+                                        onClick={() => isDark === "dark" && setTheme("light")} 
+                                        style={isDark === "light" ? { color: "#f59e0b" } : { color: "#6b7280" }}
+                                    />
+                                </div>
                                     {isAuthenticated && walletInfor && (
                                         <div className="flex flex-col space-y-2">
                                             <button className='bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap'>
