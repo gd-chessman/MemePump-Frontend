@@ -129,6 +129,12 @@
         "Tradable if eligible",
         "Each coin has a unique wallet and token - store securely"
       ]
+    },
+    "confirmation": {
+      "title": "Confirmation",
+      "description": "You need to spend <span class=\"font-bold\">0.0025 SOL</span> to create this token",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
     }
   },
   "masterTrade": {
@@ -319,6 +325,17 @@
     "walletKey": "Wallet Key",
     "type": "Type",
     "actions": "Actions",
+    "updateSuccess": "Wallet updated successfully",
+    "updateFailed": "Failed to update wallet",
+    "switchSuccess": "Wallet switched successfully",
+    "passwordMustContainAtLeastOneLowercaseLetter": "Password must contain at least one lowercase letter",
+    "passwordMustContainAtLeastOneUppercaseLetter": "Password must contain at least one uppercase letter",
+    "passwordMustContainAtLeastOneNumber": "Password must contain at least one number",
+    "passwordMustContainAtLeastOneSpecialCharacter": "Password must contain at least one special character",
+    "passwordMustBeAtLeast8CharactersLong": "Password must be at least 8 characters long",
+    "switchFailed": "Failed to switch wallet",
+    "deleteSuccess": "Wallet deleted successfully",
+    "deleteFailed": "Failed to delete wallet",
     "walletLevel": "Wallet Level",
     "active": "Active",
     "switch": "Switch",

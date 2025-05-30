@@ -747,16 +747,16 @@ export default function MasterTradeInterface() {
                       placeholder={t('masterTrade.manage.connectionManagement.searchGroup')}
                       value={groupSearchQuery}
                       onChange={(e) => setGroupSearchQuery(e.target.value)}
-                      className={styles.input}
+                      className={`${styles.input} w-full pl-10`}
                     />
                   </div>
 
-                  <div className="max-h-48 overflow-y-auto">
+                  <div className="max-h-48 overflow-y-auto flex flex-col justify-start gap-1">
                     {filteredGroupsForDropdown.map((group) => (
                       <button
                         key={group.mg_id}
                         onClick={() => handleGroupSelect(group)}
-                        className={styles.selectItem}
+                        className={`${styles.selectItem} w-full p-1 text-left`}
                       >
                         {group.mg_name}
                       </button>

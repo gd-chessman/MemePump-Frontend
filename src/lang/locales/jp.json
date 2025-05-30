@@ -132,6 +132,12 @@
         "条件を満たせば取引可能です",
         "各コインには固有のウォレットとトークンがあります - 安全に保管してください"
       ]
+    },
+    "confirmation": {
+      "title": "確認",
+      "description": "このトークンを作成するには<span class=\"font-bold\">0.0025 SOL</span>が必要です",
+      "cancel": "キャンセル",
+      "confirm": "確認"
     }
   },
   "masterTrade": {
@@ -298,6 +304,19 @@
     "address": "アドレス",
     "walletName": "ウォレット名",
     "nickname": "ニックネーム",
+    "updateSuccess": "ウォレットの更新に成功しました",
+    "updateFailed": "ウォレットの更新に失敗しました",
+    "switchSuccess": "ウォレットの切り替えに成功しました",
+    "passwordValidationError": "パスワードの検証エラー",
+    "passwordMustContainAtLeastOneUppercaseLetter": "パスワードは少なくとも1つの大文字を含む必要があります",
+    "passwordMustContainAtLeastOneLowercaseLetter": "パスワードは少なくとも1つの小文字を含む必要があります",
+    "passwordMustContainAtLeastOneNumber": "パスワードは少なくとも1つの数字を含む必要があります",
+    "passwordMustContainAtLeastOneSpecialCharacter": "パスワードは少なくとも1つの特殊文字を含む必要があります",
+    "passwordMustBeAtLeast8CharactersLong": "パスワードは少なくとも8文字である必要があります",
+    "passwordsDoNotMatch": "パスワードが一致しません",
+    "switchFailed": "ウォレットの切り替えに失敗しました",
+    "deleteSuccess": "ウォレットの削除に成功しました",
+    "deleteFailed": "ウォレットの削除に失敗しました",
     "network": "ネットワーク",
     "privateKeys": "秘密鍵",
     "solanaPrivateKey": "ソラナ秘密鍵",

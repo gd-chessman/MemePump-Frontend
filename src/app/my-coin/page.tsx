@@ -290,7 +290,7 @@ export default function MyCoinsTable() {
                                         </TableCell>
                                         <TableCell className="text-neutral-700 dark:text-neutral-200 text-[10px] md:text-xs font-normal text-left">{coin.decimals}</TableCell>
                                         <TableCell className="text-center">
-                                            <button className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors">
+                                            <button className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors" onClick={() => router.push(`/trading?address=${coin.address}`)}>
                                                 <ArrowUpDown className="h-4 w-4 md:h-5 md:w-5" />
                                             </button>
                                         </TableCell>

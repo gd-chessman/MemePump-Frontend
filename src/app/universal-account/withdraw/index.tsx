@@ -191,10 +191,10 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
               type="text"
               value={recipientWallet}
               onChange={(e) => setRecipientWallet(e.target.value)}
-              onPaste={(e) => {
-                const pastedText = e.clipboardData.getData('text');
-                setRecipientWallet(pastedText);
-              }}
+              // onPaste={(e) => {
+              //   const pastedText = e.clipboardData.getData('text');
+              //   setRecipientWallet(pastedText);
+              // }}
               className="w-full bg-transparent h-10 rounded-xl pl-3 text-sm font-normal focus:outline-none transition-colors duration-300"
               placeholder={t('universal_account.recipient_placeholder')}
             />

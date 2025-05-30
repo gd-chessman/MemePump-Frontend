@@ -67,6 +67,7 @@ export default function TradingPanel({
     const [isMounted, setIsMounted] = useState(false)
     const [windowHeight, setWindowHeight] = useState(800)
     const [amountError, setAmountError] = useState<string>("")
+    const [isLoading, setIsLoading] = useState(false)
 
     // Use custom hook for localStorage
     const [percentageValues, setPercentageValues] = useLocalStorage<number[]>(
@@ -231,6 +232,7 @@ export default function TradingPanel({
             return
         }
 
+        setIsLoading(true)
         try {
             const response = await createTrading({
                 order_trade_type: mode,
@@ -257,12 +259,14 @@ export default function TradingPanel({
                 refetchTokenAmount()
 
                 notify({
-                    message: response.message || t('trading.panel.success'),
+                    message: t('trading.panel.success'),
                     type: 'success'
                 })
             } else {
-                const errorMessage = response?.message || 'Trading failed'
-                throw new Error(errorMessage)
+                notify({
+                    message: response?.message || t('trading.panel.error'),
+                    type: 'error'
+                })
             }
         } catch (error) {
             setAmount("0.00")
@@ -274,6 +278,8 @@ export default function TradingPanel({
                 message: error instanceof Error ? error.message : t('trading.panel.error'),
                 type: 'error'
             })
+        } finally {
+            setIsLoading(false)
         }
     }, [mode, amount, tokenAmount, solPrice, selectedConnections, setSelectedGroups, queryClient, refetchTokenAmount, t, validateAmount, amountError])
 
@@ -407,15 +413,22 @@ export default function TradingPanel({
                 <div className="mt-3">
                     <button
                         onClick={handleSubmit}
-                        disabled={isButtonDisabled}
-                        className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors ${isButtonDisabled
-                                ? "bg-gray-400 cursor-not-allowed dark:bg-gray-600"
-                                : mode === "buy"
-                                    ? "bg-green-500 hover:bg-green-600 dark:bg-theme-green-200 dark:hover:bg-theme-green-200/90"
-                                    : "bg-red-500 hover:bg-red-600 dark:bg-theme-red-100 dark:hover:bg-theme-red-100/90"
+                        disabled={isButtonDisabled || isLoading}
+                        className={`w-full py-2 rounded-full text-white font-semibold text-sm transition-colors relative ${isButtonDisabled || isLoading
+                            ? "bg-gray-400 cursor-not-allowed dark:bg-gray-600"
+                            : mode === "buy"
+                                ? "bg-green-500 hover:bg-green-600 dark:bg-theme-green-200 dark:hover:bg-theme-green-200/90"
+                                : "bg-red-500 hover:bg-red-600 dark:bg-theme-red-100 dark:hover:bg-theme-red-100/90"
                             }`}
                     >
-                        {mode === "buy" ? t('trading.panel.buy') : t('trading.panel.sell')}
+                        {isLoading ? (
+                            <div className="flex items-center justify-center">
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                                {t('trading.panel.processing')}
+                            </div>
+                        ) : (
+                            mode === "buy" ? t('trading.panel.buy') : t('trading.panel.sell')
+                        )}
                     </button>
                 </div>
             </div>

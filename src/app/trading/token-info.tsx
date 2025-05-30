@@ -23,6 +23,7 @@ import TokenInfoMobile from "./token-info-mobile"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import BgGradientBox from "../components/bg-gradient-box"
 import { useTokenInfoStore } from "@/hooks/useTokenInfoStore"
+import PumpFun from "../components/pump-fun"
 
 type TimeFrame = '5m' | '1h' | '4h' | '24h'
 
@@ -195,10 +196,13 @@ export default function TokenInfo() {
                 <img src={tokenInfor?.logoUrl || '/placeholder.png'} width={40} height={40} alt="Token logo" className="rounded-full" />
               </div>
               <div>
-                <h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="text-neutral-300 text-sm font-normal">{tokenInfor?.symbol}</span></h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="text-neutral-300 text-sm font-normal">{tokenInfor?.symbol}</span> </h2>
+                  {tokenInfor?.program?.includes("pumpfun") && <PumpFun />}
+                </div>
                 <div className="text-xs text-neutral-400 flex items-center">
                   {truncateString(tokenInfor?.address, 12)}
-                  <button 
+                  <button
                     onClick={handleCopyAddress}
                     className="ml-1 text-neutral-500 hover:text-neutral-300 relative group"
                     title="Copy address"
@@ -217,7 +221,7 @@ export default function TokenInfo() {
                       </svg>
                     )}
                     <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-neutral-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      {isCopied ? t('common.copy.copied') : t('common.copy.copyAddress')} 
+                      {isCopied ? t('common.copy.copied') : t('common.copy.copyAddress')}
                     </span>
                   </button>
                 </div>

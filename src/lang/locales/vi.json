@@ -132,6 +132,12 @@
         "Có thể giao dịch nếu đủ điều kiện",
         "Mỗi coin có ví và token riêng - lưu trữ an toàn"
       ]
+    },
+    "confirmation": {
+      "title": "Xác nhận",
+      "description": "Bạn cần bỏ ra <span class=\"font-bold\">0.0025 SOL</span> để tạo đồng token này",
+      "cancel": "Hủy",
+      "confirm": "Xác nhận"
     }
   },
   "masterTrade": {
@@ -304,6 +310,20 @@
     "network": "Mạng",
     "privateKeys": "Khóa Riêng Tư",
     "solanaPrivateKey": "Khóa Riêng Tư Solana",
+    "deleteSuccess": "Xóa ví thành công",
+    "deleteFailed": "Xóa ví thất bại",
+    "switchSuccess": "Chuyển đổi ví thành công",
+    "updateSuccess": "Cập nhật ví thành công",
+    "updateFailed": "Cập nhật ví thất bại",
+    "switchFailed": "Chuyển đổi ví thất bại",
+    "passwordValidationError": "Lỗi xác thực mật khẩu",
+    "passwordMustContainAtLeastOneUppercaseLetter": "Mật khẩu phải chứa ít nhất một chữ cái viết hoa",
+    "passwordMustContainAtLeastOneLowercaseLetter": "Mật khẩu phải chứa ít nhất một chữ cái viết thường",
+    "passwordMustContainAtLeastOneNumber": "Mật khẩu phải chứa ít nhất một số",
+    "passwordMustContainAtLeastOneSpecialCharacter": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
+    "passwordMustBeAtLeast8CharactersLong": "Mật khẩu phải có ít nhất 8 ký tự",
+    "passwordsDoNotMatch": "Mật khẩu không khớp",
+    "passwordCreatedSuccessfully": "Mật khẩu đã được tạo thành công",
     "ethereumPrivateKey": "Khóa Riêng Tư Ethereum",
     "bnbPrivateKey": "Khóa Riêng Tư BNB",
     "createPassword": "Tạo Mật Khẩu",

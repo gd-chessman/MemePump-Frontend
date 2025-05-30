@@ -9,7 +9,7 @@ import {
     TableRow,
 } from "@/ui/table";
 import { Button } from "@/ui/button";
-import { Copy, Edit, Check, X, Trash2 } from "lucide-react";
+import { Copy, Edit, Check, X, Trash2, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/ui/card";
 import { Badge } from "@/ui/badge";
 import { truncateString } from "@/utils/format";
@@ -32,6 +32,7 @@ import {
     DialogTitle,
 } from "@/ui/dialog";
 import { useLang } from "@/lang";
+import { WalletLanguageSelect } from "./WalletLanguageSelect";
 
 interface WalletData extends Wallet {
     wallet_nick_name: string;
@@ -74,6 +75,8 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [walletToDelete, setWalletToDelete] = useState<WalletData | null>(null);
+    const [loadingWalletId, setLoadingWalletId] = useState<string | null>(null);
+    const [loadingField, setLoadingField] = useState<'name' | 'nickname' | 'country' | null>(null);
 
     const { data: walletInfor, refetch } = useQuery({
         queryKey: ["wallet-infor"],
@@ -112,7 +115,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
             const res = await useWallet({ wallet_id: wallet.wallet_id });
             updateToken(res.token);
             notify({
-                message: 'Chuyển đổi ví thành công!',
+                message: t("wallet.switchSuccess"),
                 type: 'success'
             });
             setTimeout(() => {
@@ -121,7 +124,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
         } catch (error) {
             console.error('Error changing wallet:', error);
             notify({
-                message: 'Chuyển đổi ví thất bại!',
+                message: t("wallet.switchFailed"),
                 type: 'error'
             });
         }
@@ -146,14 +149,14 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
         try {
             // TODO: Implement delete wallet API call
             notify({
-                message: 'Xóa ví thành công!',
+                message: t("wallet.deleteSuccess"),
                 type: 'success'
             });
             onUpdateWallet?.();
         } catch (error) {
             console.error('Error deleting wallet:', error);
             notify({
-                message: 'Xóa ví thất bại!',
+                message: t("wallet.deleteFailed"),
                 type: 'error'
             });
         } finally {
@@ -176,29 +179,33 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                     w => w.wallet_id !== editingWalletId && w.wallet_nick_name === editingValue
                 );
                 if (isDuplicate) {
-                    toast({
-                        title: t("wallet.nicknameDuplicate"),
-                        variant: "destructive",
+                    notify({
+                        message: t("wallet.nicknameDuplicate"),
+                        type: 'error'
                     });
                     return;
                 }
             }
 
-            await TelegramWalletService.changeName({
+            const response = await TelegramWalletService.changeName({
                 wallet_id: editingWalletId,
                 name: editingField === 'name' ? editingValue : currentWallet.wallet_name,
                 nick_name: editingField === 'nickname' ? editingValue : currentWallet.wallet_nick_name,
                 country: editingField === 'country' ? editingValue : currentWallet.wallet_country,
             });
 
-            toast({
-                title: t("wallet.updateSuccess"),
-            });
-            onUpdateWallet?.();
+            if (response) {
+                notify({
+                    message: t("wallet.updateSuccess"),
+                    type: 'success'
+                });
+                onUpdateWallet?.();
+            }
         } catch (error) {
-            toast({
-                title: t("wallet.updateFailed"),
-                variant: "destructive",
+            console.error('Error updating wallet:', error);
+            notify({
+                message: t("wallet.updateFailed"),
+                type: 'error'
             });
         } finally {
             setIsSubmitting(false);
@@ -333,12 +340,68 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
     );
 
     const renderEditableCell = (wallet: WalletData, field: 'name' | 'nickname' | 'country') => {
+        console.log("wallet", wallet);
         const isEditing = editingWalletId === wallet.wallet_id && editingField === field;
+        const isLoading = loadingWalletId === wallet.wallet_id && loadingField === field;
         const value = field === 'name' ? wallet.wallet_name :
             field === 'nickname' ? wallet.wallet_nick_name :
-                wallet.wallet_country;
+                wallet.wallet_country.toLowerCase();
 
         if (isEditing) {
+            if (field === 'country') {
+                return (
+                    <div className="flex items-center gap-2">
+                        <WalletLanguageSelect
+                            value={editingValue.toLowerCase()}
+                            onChange={async (newValue) => {
+                                const lowerNewValue = newValue.toLowerCase();
+                                setEditingValue(lowerNewValue);
+                                setEditingWalletId(wallet.wallet_id);
+                                setEditingField('country');
+                                setLoadingWalletId(wallet.wallet_id);
+                                setLoadingField('country');
+                                try {
+                                    const response = await TelegramWalletService.changeName({
+                                        wallet_id: wallet.wallet_id,
+                                        name: wallet.wallet_name,
+                                        nick_name: wallet.wallet_nick_name,
+                                        country: lowerNewValue,
+                                    });
+
+                                    if (response) {
+                                        notify({
+                                            message: t("wallet.updateSuccess"),
+                                            type: 'success'
+                                        });
+                                        onUpdateWallet?.();
+                                    }
+                                } catch (error) {
+                                    console.error('Error updating country:', error);
+                                    notify({
+                                        message: t("wallet.updateFailed"),
+                                        type: 'error'
+                                    });
+                                } finally {
+                                    setLoadingWalletId(null);
+                                    setLoadingField(null);
+                                    handleCancelEdit();
+                                }
+                            }}
+                            className="h-7 w-[140px]"
+                        />
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 p-0 hover:bg-red-700/50"
+                            onClick={handleCancelEdit}
+                            disabled={isLoading}
+                        >
+                            <X className="h-4 w-4 text-red-500" />
+                        </Button>
+                    </div>
+                );
+            }
+
             return (
                 <div className="flex items-center gap-2">
                     <Input
@@ -369,16 +432,62 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
             );
         }
 
+        if (field === 'country') {
+            return (
+                <div className="flex items-center gap-3">
+                    <WalletLanguageSelect
+                        value={value}
+                        onChange={async (newValue) => {
+                            const lowerNewValue = newValue.toLowerCase();
+                            setEditingWalletId(wallet.wallet_id);
+                            setEditingField('country');
+                            setEditingValue(lowerNewValue);
+                            setLoadingWalletId(wallet.wallet_id);
+                            setLoadingField('country');
+                            try {
+                                const response = await TelegramWalletService.changeName({
+                                    wallet_id: wallet.wallet_id,
+                                    name: wallet.wallet_name,
+                                    nick_name: wallet.wallet_nick_name,
+                                    country: lowerNewValue,
+                                });
+
+                                if (response) {
+                                    notify({
+                                        message: t("wallet.updateSuccess"),
+                                        type: 'success'
+                                    });
+                                    onUpdateWallet?.();
+                                }
+                            } catch (error) {
+                                console.error('Error updating country:', error);
+                                notify({
+                                    message: t("wallet.updateFailed"),
+                                    type: 'error'
+                                });
+                            } finally {
+                                setLoadingWalletId(null);
+                                setLoadingField(null);
+                                handleCancelEdit();
+                            }
+                        }}
+                        className="h-7 w-[140px]"
+                    />
+                </div>
+            );
+        }
+
         return (
             <div className="flex items-center gap-3">
-                <span className={field === 'country' ? 'uppercase' : ''}>{value}</span>
+                <span>{value}</span>
                 <Button
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6 p-0 hover:bg-neutral-700/50"
                     onClick={() => handleStartEdit(wallet.wallet_id, field, value)}
+                    disabled={isLoading}
                 >
-                    <Edit className="h-4 w-4" />
+                   
                 </Button>
             </div>
         );

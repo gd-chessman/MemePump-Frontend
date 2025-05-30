@@ -159,11 +159,11 @@ export default function WalletPage() {
                     setSelectedNetwork(walletInfo.wallet_country || 'EN');
                 }
             } else {
-                setPrivateKeyError("Invalid private key length");
+                setPrivateKeyError(t("wallet.invalidPrivateKeyLength"));
             }
         } catch (error) {
             console.log('Invalid private key format');
-            setPrivateKeyError("Invalid private key format");
+            setPrivateKeyError(t("wallet.invalidPrivateKeyFormat"));
         } finally {
             setIsLoadingWalletInfo(false);
         }
@@ -187,6 +187,10 @@ export default function WalletPage() {
         queryFn: getListBuyToken,
         enabled: isAuthenticated,
     });
+
+    // Filter tokens with price >= 0.000001
+    const filteredTokens = tokenList?.tokens?.filter((token: Token) => token.token_price_usd >= 0.000001) || [];
+
     const { data: walletInfor, refetch } = useQuery({
         queryKey: ["wallet-infor"],
         queryFn: getInforWallet,
@@ -201,17 +205,10 @@ export default function WalletPage() {
             setWallets(walletList);
         } catch (error) {
             console.error("Error fetching wallets:", error);
-            setToastMessage("Failed to fetch wallets");
+            setToastMessage(t('wallet.failedToFetchWallets'));
             setShowToast(true);
         }
     };
-    useEffect(() => {
-        const alo = async () => {
-            const walletInfo2 = await TelegramWalletService.getWalletInfoByPrivateKey("3q9Mck1DYsWracqakBzJExNeAHr83vZs3tWNaJpEaEMtgEcrMiBi1MBfJ4TbrjQXTFi7uPjkeuvhT8M6g7LzQmy");
-            console.log("walletInfo2", walletInfo2)
-        }
-        alo();
-    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -280,19 +277,19 @@ export default function WalletPage() {
 
     const validatePassword = (password: string) => {
         if (password.length < 8) {
-            return "Password must be at least 8 characters long";
+            return t("wallet.passwordMustBeAtLeast8CharactersLong");
         }
         if (!/[A-Z]/.test(password)) {
-            return "Password must contain at least one uppercase letter";
+            return t("wallet.passwordMustContainAtLeastOneUppercaseLetter");
         }
         if (!/[a-z]/.test(password)) {
-            return "Password must contain at least one lowercase letter";
+            return t("wallet.passwordMustContainAtLeastOneLowercaseLetter");
         }
         if (!/[0-9]/.test(password)) {
-            return "Password must contain at least one number";
+            return t("wallet.passwordMustContainAtLeastOneNumber");
         }
         if (!/[!@#$%^&*]/.test(password)) {
-            return "Password must contain at least one special character (!@#$%^&*)";
+            return t("wallet.passwordMustContainAtLeastOneSpecialCharacter");
         }
         return "";
     };
@@ -301,13 +298,13 @@ export default function WalletPage() {
         const value = e.target.value;
         setNewPassword(value);
         const error = validatePassword(value);
-        setPasswordError(error);
+        setPasswordError(t("wallet.passwordValidationError"));
 
         // Clear confirm password error if passwords match
         if (value === confirmPassword) {
             setConfirmPasswordError("");
         } else if (confirmPassword) {
-            setConfirmPasswordError("Passwords do not match");
+            setConfirmPasswordError(t("wallet.passwordsDoNotMatch"));
         }
     };
 
@@ -315,7 +312,7 @@ export default function WalletPage() {
         const value = e.target.value;
         setConfirmPassword(value);
         if (value !== newPassword) {
-            setConfirmPasswordError("Passwords do not match");
+            setConfirmPasswordError(t("wallet.passwordsDoNotMatch"));
         } else {
             setConfirmPasswordError("");
         }
@@ -325,12 +322,12 @@ export default function WalletPage() {
         // Validate both passwords
         const passwordValidationError = validatePassword(newPassword);
         if (passwordValidationError) {
-            setPasswordError(passwordValidationError);
+            setPasswordError(t("wallet.passwordValidationError"));
             return;
         }
 
         if (newPassword !== confirmPassword) {
-            setConfirmPasswordError("Passwords do not match");
+            setConfirmPasswordError(t("wallet.passwordsDoNotMatch"));
             return;
         }
         console.log("Creating password with:", newPassword);
@@ -342,8 +339,8 @@ export default function WalletPage() {
             const res = await TelegramWalletService.getPrivate(newPassword);
             setPrivateKeys(res);
             toast({
-                title: "Success",
-                description: "Password created successfully",
+                title: t('wallet.success'),
+                description: t('wallet.passwordCreatedSuccessfully'),
                 duration: 2000,
             });
 
@@ -351,8 +348,8 @@ export default function WalletPage() {
             setShowPrivateKeys(true);
         } catch (error) {
             toast({
-                title: "Error",
-                description: "Failed to create password. Please try again.",
+                title: t('wallet.error'),
+                description: t('wallet.failedToCreatePassword'),
                 duration: 2000,
             });
         } finally {
@@ -379,14 +376,14 @@ export default function WalletPage() {
             setShowAddWallet(false);
 
             // Show success message
-            setToastMessage("Wallet added successfully");
+            setToastMessage(t('wallet.success'));
             setShowToast(true);
 
             // Refresh wallet list
             await fetchWallets();
         } catch (error) {
             console.error("Error adding wallet:", error);
-            setToastMessage("Failed to add wallet. Please try again.");
+            setToastMessage(t('wallet.failedToAddWallet'));
             setShowToast(true);
         } finally {
             setIsLoading(false);
@@ -413,7 +410,7 @@ export default function WalletPage() {
             setShowAddWallet(false);
 
             // Show success message
-            setToastMessage("Wallet added successfully");
+            setToastMessage(t('wallet.success'));
             setShowToast(true);
 
             // Refresh wallet list
@@ -421,7 +418,7 @@ export default function WalletPage() {
         } catch (error) {
             console.error("Error adding wallet:", error);
             await fetchWallets();
-            setToastMessage("Failed to add wallet. Please try again.");
+            setToastMessage(t('wallet.failedToAddWallet'));
             setShowToast(true);
         } finally {
             setIsLoading(false);
@@ -433,8 +430,8 @@ export default function WalletPage() {
         navigator.clipboard.writeText(address);
         setCopyStates(prev => ({ ...prev, [address]: true }));
         toast({
-            title: "Address copied",
-            description: "Wallet address has been copied to clipboard",
+            title: t('wallet.success'),
+            description: t('wallet.copyAddress'),
             duration: 2000,
         });
         
@@ -459,9 +456,7 @@ export default function WalletPage() {
 
         try {
             setIsLoading(true);
-            console.log("Calling getPrivate with input password:", inputPassword);
             const res = await TelegramWalletService.getPrivate(inputPassword);
-            console.log("getPrivate response:", res);
             setPrivateKeys(res);
             setPrivateKeyDefault({
                 sol_private_key: res.sol_private_key || "",
@@ -472,7 +467,7 @@ export default function WalletPage() {
             setShowPrivateKeys(true);
         } catch (error) {
             console.error("Error getting private keys:", error);
-            setInputPasswordError("Invalid password. Please try again.");
+            setInputPasswordError(t("wallet.invalidPassword"));
         } finally {
             setIsLoading(false);
         }
@@ -703,7 +698,7 @@ export default function WalletPage() {
                     <div className="">
                         {/* Desktop Table View */}
                         <div className="hidden sm:block overflow-hidden rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881]">
-                            {!tokenList?.tokens || tokenList.tokens.length === 0 ? (
+                            {!filteredTokens || filteredTokens.length === 0 ? (
                                 <div className="flex justify-center items-center py-8 text-neutral-600 dark:text-gray-400">
                                     {t('wallet.noTokens')}
                                 </div>
@@ -720,8 +715,8 @@ export default function WalletPage() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {tokenList?.tokens?.map((token: Token, index: number) => (
-                                                <tr key={index} className="border-t border-gray-700">
+                                            {filteredTokens.map((token: Token, index: number) => (
+                                                <tr key={index} className="border-t border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => router.push(`/trading?address=${token.token_address}`)}>
                                                     <td className={tableCellStyles}>
                                                         <div className="flex items-center gap-2">
                                                             {token.token_logo_url && (
@@ -774,12 +769,12 @@ export default function WalletPage() {
 
                         {/* Mobile Card View */}
                         <div className="sm:hidden space-y-3">
-                            {!tokenList?.tokens || tokenList.tokens.length === 0 ? (
+                            {!filteredTokens || filteredTokens.length === 0 ? (
                                 <div className="flex justify-center items-center py-6 text-neutral-600 dark:text-gray-400">
                                     {t('wallet.noTokens')}
                                 </div>
                             ) : (
-                                tokenList.tokens.map((token: Token, index: number) => (
+                                filteredTokens.map((token: Token, index: number) => (
                                     <div key={index} className={assetCardStyles}>
                                         {/* Token Info Header */}
                                         <div className={`w-fit ${assetHeaderStyles} flex-col `}>
