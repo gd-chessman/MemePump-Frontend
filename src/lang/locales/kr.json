@@ -24,8 +24,8 @@
         "send": "보내기"
       },
       "masterTrade": {
-        "name": "마스터 트레이드",
-        "title": "마스터 트레이드",
+        "name": "카피트레이딩",
+        "title": "카피트레이딩",
         "description": "최고 트레이더의 거래를 한 번의 클릭으로 복사",
         "explore": "탐색"
       }
@@ -87,7 +87,7 @@
           "undo": "실행 취소"
         },
         "otherOptions": {
-          "title": "기타 옵션",
+          "title": "기타옵션(클릭)",
           "telegram": {
             "label": "텔레그램",
             "placeholder": "텔레그램 그룹 링크 입력"
@@ -182,7 +182,7 @@
           "disconnect": "연결 해제"
         },
         "status": {
-          "notConnected": "미연결",
+          "not connected": "아직 연결되지 않음",
           "connect": "연결됨",
           "disconnect": "연결 해제",
           "pause": "일시 중지",
@@ -327,7 +327,7 @@
       "enterNickname": "별명 입력",
       "enterSolanaPrivateKey": "솔라나 개인 키 입력",
       "enterWalletNickname": "지갑 별명 입력",
-      "walletLevel": "네 알겠습니다"
+      "walletLevel": "지갑 등급"
     },
     "searchPlaceholder": "토큰 이름/주소",
     "languages": {
@@ -346,7 +346,7 @@
       "volume1h": "1시간 거래량",
       "volume1hChange": "1시간 거래량",
       "volume24h": "24시간 거래량",
-      "volume24hChange": "24시간 거래량",
+      "volume24hChange": "24시간 거래량 변동",
       "noTokens": "토큰을 찾을 수 없습니다",
       "trade": "거래",
       "panel": {
@@ -362,7 +362,8 @@
         "addressCopied": "복사됨",
         "noConnections": "연결이 없습니다",
         "selectConnection": "연결 선택",
-        "noGroupsAvailable": "사용 가능한 그룹이 없습니다"
+        "noGroupsAvailable": "사용 가능한 그룹이 없습니다",
+        "insufficient_balance": "잔액이 부족합니다"
       },
       "interface": {
         "loading": "토큰 정보를 불러오는 중...",
@@ -593,7 +594,41 @@
         "min_withdrawal": "최소 출금 금액은 0.001 SOL입니다",
         "insufficient_balance": "잔액 {balance} SOL을 초과할 수 없습니다",
         "transaction_failed": "거래 실패. 다시 시도해 주세요.",
-        "transaction_success": "거래가 성공적으로 전송되었습니다!"
+        "transaction_success": "거래가 성공적으로 전송되었습니다!",
+        "network_error": "네트워크 오류. 연결을 확인해 주세요.",
+        "unauthorized": "인증되지 않음. 다시 로그인해 주세요.",
+        "recipient_required": "수신자 주소가 필요합니다",
+        "invalid_recipient": "유효하지 않은 수신자 주소입니다"
+      }
+    },
+    "searchModal": {
+      "title": "검색",
+      "placeholder": "토큰 검색...",
+      "columns": {
+        "token": "토큰",
+        "marketCap": "시가총액",
+        "volume1h": "1시간 거래량",
+        "volume24h": "24시간 거래량",
+        "price": "가격",
+        "holders": "보유자"
+      },
+      "badges": {
+        "verified": "인증됨",
+        "new": "신규"
+      },
+      "noResults": "검색 조건과 일치하는 토큰을 찾을 수 없습니다"
+    },
+    "connectMasterModal": {
+      "title": "마스터 연결",
+      "maximumCopyAmount": "최대 (SOL) 복사 트레이딩 (거래 1건)",
+      "copyAddress": {
+        "copy": "주소 복사",
+        "copied": "복사됨!"
+      },
+      "buttons": {
+        "cancel": "취소",
+        "connect": "연결",
+        "connecting": "연결 중..."
       }
     }
   }

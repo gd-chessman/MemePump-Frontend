@@ -58,6 +58,8 @@ const Header = () => {
                 message: t('header.notifications.switchWalletSuccess'),
                 type: 'success'
             });
+            // Reload the page after successful wallet switch
+            window.location.reload();
         } catch (error) {
             console.error('Error changing wallet:', error);
             notify({
@@ -267,7 +269,7 @@ const Header = () => {
                             <Search className="absolute left-3 top-2 h-4 w-4 text-gray-500 dark:text-muted-foreground" />
                         </div>
 
-                        {isAuthenticated && <Display />}
+                        <Display />
 
                         {mounted ? (
                             <>

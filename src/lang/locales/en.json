@@ -520,10 +520,43 @@
       "min_withdrawal": "Minimum withdrawal amount is 0.001 SOL",
       "insufficient_balance": "Amount cannot exceed your balance of {balance} SOL",
       "transaction_failed": "Transaction failed. Please try again.",
-      "transaction_success": "Transaction sent successfully!"
+      "transaction_success": "Transaction sent successfully!",
+      "network_error": "Network error. Please check your connection.",
+      "unauthorized": "Unauthorized. Please login again.",
+      "recipient_required": "Recipient address is required"
     }
   },
   "chat": {
     "communityChatroom": "Community Chatroom"
+  },
+  "searchModal": {
+    "title": "SEARCH",
+    "placeholder": "Search tokens...",
+    "columns": {
+      "token": "Token",
+      "marketCap": "Market Cap",
+      "volume1h": "1h Vol",
+      "volume24h": "24h Vol",
+      "price": "Price",
+      "holders": "Holders"
+    },
+    "badges": {
+      "verified": "Verified",
+      "new": "New"
+    },
+    "noResults": "No tokens found matching your search criteria"
+  },
+  "connectMasterModal": {
+    "title": "CONNECT TO MASTER",
+    "maximumCopyAmount": "Maximum Copy Amount (SOL)",
+    "copyAddress": {
+      "copy": "Copy address",
+      "copied": "Copied!"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "connect": "Connect",
+      "connecting": "Connecting..."
+    }
   }
 }

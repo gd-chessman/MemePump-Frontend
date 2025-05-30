@@ -228,27 +228,7 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-/* hard code */
-.border-create-coin {
-  border-radius: 12px;
-  border-top: 5px solid var(--Linear-300, #63EAFE);
-  border-right: 1px solid var(--Linear-300, #6a259c);
-  border-bottom: 1px solid var(--Linear-300, #6a259c);
-  border-left: 1px solid var(--Linear-300, #63EAFE);
-  background: rgba(0, 0, 0, 0.50);
-  box-shadow: 0px 0px 4px 0px rgba(232, 232, 232, 0.50);
-  backdrop-filter: blur(6px);
-}
-
-.border-my-coin {
-  border-radius: 12px;
-  border-top: 5px solid var(--Linear-Tm, #883bbf);
-  border-right: 1px solid var(--Linear-Tm, #883bbf);
-  border-bottom: 1px solid var(--Linear-Tm, #883bbf);
-  border-left: 1px solid var(--Linear-Tm, #883bbf);
-  background: rgba(0, 0, 0, 0.50);
-}
-
+/* Remove hardcoded styles since they are now Tailwind utilities */
 
 .module-border-wrap {
   position: relative;
@@ -263,9 +243,7 @@ input[type=number] {
   padding: 2rem;
   border-radius: 12px;
 }
-.bg-gradient-guide {
-  background: linear-gradient(0deg, rgba(136, 51, 238, 0.60) 1.84%, rgba(0, 0, 0, 0.50) 43.34%);
 
-}
+/* Remove hardcoded bg-gradient-guide style since it is now a Tailwind utility */
 
   

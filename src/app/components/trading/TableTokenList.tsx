@@ -274,7 +274,7 @@ export function TableTokenList({
                         <button
                           className="lg:max-w-auto max-w-[120px] relative border-1 border-t-theme-secondary-400 border-r-theme-primary-400 border-l-theme-secondary-400 border-b-theme-primary-400 bg-transparent md:py-1 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 group-hover:from-theme-blue-100 group-hover:to-theme-blue-200 group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto group-hover:border-none"
                         >
-                          <span className="relative z-10 group-hover:text-neutral-100 text-theme-secondary-400">{t("trading.trade")}</span>
+                          <span className="relative z-10 group-hover:text-neutral-100 text-theme-secondary-400 dark:text-neutral-100">{t("trading.trade")}</span>
                           <div className="absolute inset-0 rounded-full bg-gradient-to-t from-theme-linear-start to-theme-linear-end opacity-0 group-hover:opacity-100 transition-opacity duration-500 " />
                         </button>
                       </div>

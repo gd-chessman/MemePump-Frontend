@@ -86,10 +86,12 @@ export const getOrdersMyWallet = async (walletAddress: string, page: number = 1)
 
 export const getSearchTokenInfor = async (query: string) => {
   try {
+    console.log("Calling API with query:", query);
     const temp = await axiosClient.get(`/on-chain/search?query=${query}`);
+    console.log("API Response:", temp.data);
     return temp.data.data.data;
   } catch (error) {
-    console.log(error);
+    console.error("API Error:", error);
     return [];
   }
 }

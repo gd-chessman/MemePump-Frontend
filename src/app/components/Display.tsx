@@ -33,7 +33,7 @@ export default function Display() {
                     align="end" 
                     style={{ width: '200px' }}
                 >
-                    <LangToggle className='hover:bg-theme-blue-300 dark:hover:bg-theme-blue-100' />
+                    <LangToggle className='hover:bg-theme-blue-300 dark:hover:bg-theme-blue-100 bg-theme-neutral-300' />
                     <div className='flex items-center justify-evenly gap-4 mt-3'>
                         <Moon 
                             className="cursor-pointer transition-colors " 

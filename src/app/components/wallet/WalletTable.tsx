@@ -45,16 +45,16 @@ interface WalletTableProps {
     onUpdateWallet?: () => void;
 }
 
-const textTitle = 'text-neutral-200 font-normal text-xs py-3'
-const textContent = 'text-neutral-100 text-xs font-normal py-3'
+const textTitle = 'text-neutral-800 dark:text-neutral-200 font-normal text-xs py-3'
+const textContent = 'text-neutral-900 dark:text-neutral-100 text-xs font-normal py-3'
 
 // Add new styles for mobile wallet cards only
 const mobileStyles = {
-    card: "sm:hidden bg-theme-black-200/50 rounded-xl p-3 border border-solid border-y-theme-primary-100 border-x-theme-purple-200",
+    card: "sm:hidden dark:bg-theme-black-200/50 bg-white rounded-xl p-3 border border-solid border-y-theme-primary-100 border-x-theme-purple-200",
     header: "flex items-start justify-between gap-2 mb-2",
     nameContainer: "flex flex-col gap-1 min-w-0",
-    label: "text-[10px] text-gray-400",
-    value: "text-xs font-medium text-neutral-100",
+    label: "text-[10px] dark:text-gray-400 text-black",
+    value: "text-xs font-medium dark:text-neutral-100 text-black",
     badge: "text-[10px] px-1.5 py-0.5 rounded-full",
     actionBar: "flex items-center gap-2 mt-2 pt-2 border-t border-gray-700",
     addressContainer: "space-y-2 mt-2",
@@ -240,18 +240,18 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                     <div className="flex items-center gap-2">
                         <Badge
                             className={`${wallet.wallet_type === "main"
-                                ? "bg-green-900 border-green-600 text-green-300"
+                                ? "dark:bg-green-900 bg-green-50 border-green-600 text-green-300"
                                 : wallet.wallet_type === "import"
-                                    ? "bg-blue-900 border-blue-600 text-blue-300"
-                                    : "bg-gray-700 border-gray-600 text-gray-300"
+                                    ? "dark:bg-blue-900 bg-blue-50 border-blue-600 text-blue-300"
+                                    : "dark:bg-gray-700 bg-gray-50 border-gray-600 text-gray-300"
                                 } ${mobileStyles.badge}`}
                         >
                             {wallet.wallet_type.charAt(0).toUpperCase() + wallet.wallet_type.slice(1)}
                         </Badge>
                         <Badge
                             className={`${wallet.wallet_auth === "master"
-                                ? "bg-purple-900 border-purple-600 text-purple-300"
-                                : "bg-gray-700 border-gray-600 text-gray-300"
+                                ? "dark:bg-purple-900 bg-purple-50 border-purple-600 text-purple-300"
+                                : "dark:bg-gray-700 bg-gray-50 border-[#15DFFD] text-[#15DFFD]"
                                 } ${mobileStyles.badge}`}
                         >
                             {wallet.wallet_auth.charAt(0).toUpperCase() + wallet.wallet_auth.slice(1)}
@@ -459,10 +459,10 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                         <TableCell className={`px-4 ${textContent}`}>
                                             <Badge
                                                 className={`${wallet.wallet_type === "main"
-                                                    ? "bg-green-900 border-green-600 text-green-300"
+                                                    ? "bg-green-50 dark:bg-green-900 border-green-600 text-green-300"
                                                     : wallet.wallet_type === "import"
-                                                        ? "bg-blue-900 border-blue-600 text-blue-300"
-                                                        : "bg-gray-700 border-gray-600 text-gray-300"
+                                                        ? " dark:bg-blue-900 border-blue-600 text-blue-300"
+                                                        : "dark:bg-gray-700 border-gray-600 dark:text-theme-neutral-100 text-theme-neutral-900"
                                                     } px-2 py-1 whitespace-nowrap`}
                                             >
                                                 {t(`listWalletss.walletType.${wallet.wallet_type}`)}
@@ -471,8 +471,8 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                         <TableCell className={`px-4 ${textContent}`}>
                                             <Badge
                                                 className={`${wallet.wallet_auth === "master"
-                                                    ? "bg-purple-900 border-purple-600 text-purple-300"
-                                                    : "bg-gray-700 border-gray-600 text-gray-300"
+                                                    ? "dark:bg-yellow-800 border-yellow-600 text-yellow-300"
+                                                    : "dark:bg-gray-700 border-[#15DFFD] text-[#15DFFD]"
                                                     } px-2 py-1 whitespace-nowrap`}
                                             >
                                                 {t(`listWalletss.walletType.${wallet.wallet_auth}`)}

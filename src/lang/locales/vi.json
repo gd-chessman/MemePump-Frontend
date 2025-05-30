@@ -539,7 +539,40 @@
       "min_withdrawal": "Số tiền rút tối thiểu là 0.001 SOL",
       "insufficient_balance": "Số tiền không được vượt quá số dư {balance} SOL",
       "transaction_failed": "Giao dịch thất bại. Vui lòng thử lại.",
-      "transaction_success": "Gửi giao dịch thành công!"
+      "transaction_success": "Gửi giao dịch thành công!",
+      "network_error": "Lỗi kết nối. Vui lòng kiểm tra kết nối của bạn.",
+      "unauthorized": "Không được phép. Vui lòng đăng nhập lại.",
+      "recipient_required": "Vui lòng nhập địa chỉ người nhận"
+    }
+  },
+  "searchModal": {
+    "title": "TÌM KIẾM",
+    "placeholder": "Tìm kiếm token...",
+    "columns": {
+      "token": "Token",
+      "marketCap": "Vốn hóa",
+      "volume1h": "KL 1h",
+      "volume24h": "KL 24h",
+      "price": "Giá",
+      "holders": "Người nắm giữ"
+    },
+    "badges": {
+      "verified": "Đã xác minh",
+      "new": "Mới"
+    },
+    "noResults": "Không tìm thấy token nào phù hợp với tiêu chí tìm kiếm của bạn"
+  },
+  "connectMasterModal": {
+    "title": "KẾT NỐI VỚI MASTER",
+    "maximumCopyAmount": "Số lượng Copy tối đa (SOL)",
+    "copyAddress": {
+      "copy": "Sao chép địa chỉ",
+      "copied": "Đã sao chép!"
+    },
+    "buttons": {
+      "cancel": "Hủy",
+      "connect": "Kết nối",
+      "connecting": "Đang kết nối..."
     }
   }
 }

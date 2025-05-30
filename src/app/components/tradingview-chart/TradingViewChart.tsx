@@ -5,6 +5,8 @@ import { getTokenInforByAddress } from '@/services/api/SolonaTokenService';
 import { useQuery } from '@tanstack/react-query';
 import { useLang } from '@/lang';
 import { useThemeToggle } from '@/hooks/use-theme-toggle';
+import { useTokenInfoStore } from '@/hooks/useTokenInfoStore';
+import { formatNumberWithSuffix } from '@/utils/format';
 
 type ResolutionString = '1s' | '5s' | '15s' | '1' | '5' | '1h' | '4h' | '1D' | '1W' | '1MN';
 
@@ -46,12 +48,15 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const { data: tokenInfor, refetch } = useQuery({
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
+    refetchOnWindowFocus: false,
   });
-  const { lang } = useLang();
+  const { lang, t } = useLang();
   const { theme } = useThemeToggle();
+  const { dataInfo } = useTokenInfoStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const widgetRef = useRef<any>(null);
+  const [statsButtons, setStatsButtons] = useState<any[]>([]);
 
   useEffect(() => {
     // Load TradingView script
@@ -74,7 +79,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     });
   };
 
-  console.log("tokenInfor", tokenInfor);
 
   useEffect(() => {
     if (!isScriptLoaded || !containerRef.current || !tokenInfor ) return;
@@ -135,21 +139,42 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     widgetRef.current = widget;
 
     widget.headerReady().then(() => {
+      // Add Price/MCap toggle button
       const button = widget.createButton();
-    
       button.innerHTML = `
-        <span style="color: ${showMarketCap ? (theme === 'dark' ? '#FFFFFF' : '#000000') : (theme === 'dark' ? '#42A5F5' : '#1976D2')};">Price</span> / 
-        <span style="color: ${showMarketCap ? (theme === 'dark' ? '#42A5F5' : '#1976D2') : (theme === 'dark' ? '#FFFFFF' : '#000000')};">MCap</span>
+        <span style="color: ${showMarketCap ? (theme === 'dark' ? '#FFFFFF' : '#000000') : (theme === 'dark' ? '#42A5F5' : '#1976D2')};">${t('trading.tokenInfo.price')}</span> / 
+        <span style="color: ${showMarketCap ? (theme === 'dark' ? '#42A5F5' : '#1976D2') : (theme === 'dark' ? '#FFFFFF' : '#000000')};">${t('trading.tokenInfo.marketCap')}</span>
       `;
-    
       button.setAttribute('title', 'Toggle Price / MCap');
       button.style.padding = '4px 8px';
       button.style.fontSize = '13px';
       button.style.borderRadius = '4px';
       button.style.cursor = 'pointer';
       button.style.marginLeft = '8px';
-    
       button.addEventListener('click', handleMarketCapToggle);
+
+      // Create initial stats buttons
+      const buttons = [
+        { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}` },
+        { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}` },
+        { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}` },
+        { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0) }
+      ].map(stat => {
+        const statButton = widget.createButton();
+        statButton.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
+            <span style="font-size: 10px; color: ${theme === 'dark' ? '#9CA3AF' : '#6B7280'};">${stat.label}</span>
+            <span style="font-size: 11px; font-weight: 500; color: ${theme === 'dark' ? '#FFFFFF' : '#000000'};">${stat.value}</span>
+          </div>
+        `;
+        statButton.style.padding = '3px 6px';
+        statButton.style.marginLeft = '6px';
+        statButton.style.borderRadius = '4px';
+        statButton.style.cursor = 'default';
+        return { button: statButton, label: stat.label };
+      });
+
+      setStatsButtons(buttons);
 
       // Subscribe to interval changes
       // @ts-expect-error: Suppress type error because MockDatafeed is compatible at runtime
@@ -163,8 +188,33 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
       if (widgetRef.current) {
         widgetRef.current.remove();
       }
+      setStatsButtons([]);
     };
-  }, [isScriptLoaded, containerId, lang, theme, showMarketCap, tokenInfor, address ]);
+  }, [isScriptLoaded, containerId, lang, theme, showMarketCap, tokenInfor, address]);
+
+  // Update stats values when dataInfo changes
+  useEffect(() => {
+    if (!widgetRef.current || statsButtons.length === 0) return;
+
+    const stats = [
+      { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}` },
+      { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}` },
+      { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}` },
+      { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0) }
+    ];
+
+    statsButtons.forEach(({ button, label }) => {
+      const stat = stats.find(s => s.label === label);
+      if (stat) {
+        button.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
+            <span style="font-size: 10px; color: ${theme === 'dark' ? '#9CA3AF' : '#6B7280'};">${stat.label}</span>
+            <span style="font-size: 11px; font-weight: 500; color: ${theme === 'dark' ? '#FFFFFF' : '#000000'};">${stat.value}</span>
+          </div>
+        `;
+      }
+    });
+  }, [dataInfo, theme, statsButtons]);
 
   return (
     <div 
@@ -175,4 +225,4 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   );
 };
 
-export default TradingViewChart; 
+export default TradingViewChart;

@@ -6,6 +6,7 @@ import { getOrderMyHistories, getSearchTokenInfor } from "@/services/api/OnChain
 import { useQuery } from "@tanstack/react-query"
 import { formatNumberWithSuffix3 } from "@/utils/format"
 import { useRouter } from "next/navigation"
+import { useLang } from "@/lang/useLang"
 
 interface TokenData {
   address: string
@@ -53,6 +54,7 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuery = "" }: SearchModalProps) {
+  const { t } = useLang()
   const [searchInput, setSearchInput] = useState(searchQuery)
   const [activeTab, setActiveTab] = useState<FilterTab>("all")
   const [sortField, setSortField] = useState<SortField>("marketCap")
@@ -60,8 +62,15 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
 
-  // Add debounced search input with shorter delay
-  const debouncedSearchInput = useDebounce(searchInput, 300)
+  // Add debounced search input with consistent delay
+  const debouncedSearchInput = useDebounce(searchInput, 500)
+
+  // Add paste handler
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault(); // Prevent default paste behavior
+    const pastedText = e.clipboardData.getData('text').trim();
+    setSearchInput(pastedText);
+  };
 
   // Update search input when searchQuery prop changes
   useEffect(() => {
@@ -90,7 +99,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
     if (!listToken || !Array.isArray(listToken)) return []
 
     // Transform tokens
-    const transformedTokens = listToken.map((token: any) => ({
+    const transformedTokens = listToken?.map((token: any) => ({
       address: token.mint as string,
       name: token.name as string,
       symbol: token.symbol as string,
@@ -106,7 +115,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
       category: "all" as FilterTab,
       isNew: token.createdAt ? Date.now() - token.createdAt < 24 * 60 * 60 * 1000 : false // New if created within 24h
     }))
-
+ 
     let filtered = transformedTokens
 
     // Filter by search query
@@ -180,6 +189,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
 
     return filtered
   }, [debouncedSearchInput, activeTab, sortField, sortDirection, listToken])
+  console.log("filteredAndSortedTokens", filteredAndSortedTokens)
   // Handle sort
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -267,13 +277,13 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl max-h-[80vh] mx-4 sm:mx-auto">
+      <div className="relative w-full max-w-4xl max-h-[80vh] mx-4 sm:mx-auto">
         {/* Gradient border wrapper */}
         <div className="p-[1px] sm:p-[2px] rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#5558FF] to-[#00C0FF] animate-fadeIn">
           <div className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl overflow-hidden">
             {/* Header */}
             <div className="flex justify-between items-center p-4 sm:p-6 pb-2 sm:pb-4">
-              <h2 className="text-[16px] sm:text-[18px] font-bold linear-200-bg">SEARCH</h2>
+              <h2 className="text-[16px] sm:text-[18px] font-bold linear-200-bg">{t('searchModal.title')}</h2>
               <button
                 onClick={onClose}
                 className="text-gray-400 hover:text-white transition-colors hover:rotate-90 transform duration-300"
@@ -293,11 +303,8 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     onChange={(e) => {
                       setSearchInput(e.target.value)
                     }}
-                    onPaste={(e) => {
-                      const pastedText = e.clipboardData.getData('text');
-                      setSearchInput(pastedText);
-                    }}
-                    placeholder="Search tokens..."
+                    onPaste={handlePaste}
+                    placeholder={t('searchModal.placeholder')}
                     className="w-full bg-transparent py-1.5 sm:py-1 pl-10 sm:pl-12 pr-4 text-sm sm:text-base text-white placeholder-gray-400 focus:outline-none"
                   />
                   {isLoading && (
@@ -311,58 +318,58 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
 
             {/* Table Header - Hide some columns on mobile */}
             <div className="px-4 sm:px-6 pb-2">
-              <div className="grid grid-cols-12 gap-2 sm:gap-6 text-[10px] sm:text-xs text-gray-400 font-medium border-b border-gray-800 pb-2">
-                <div className="col-span-4 sm:col-span-2 min-w-[100px] sm:min-w-[150px] text-left">Token</div>
+              <div className="grid grid-cols-12 gap-2 sm:gap-6 text-[10px] sm:text-xs text-gray-400 font-medium border-b border-gray-800 pb-2 px-4">
+                <div className="col-span-3 lg:col-span-2 min-w-[100px] sm:min-w-[150px] text-left">{t('searchModal.columns.token')}</div>
                 <div
                   className="hidden sm:flex col-span-2 min-w-[90px] cursor-pointer hover:text-white items-center justify-end"
                   onClick={() => handleSort("marketCap")}
                 >
                   <span className="flex items-center">
-                    Market Cap
+                    {t('searchModal.columns.marketCap')}
                     {sortField === "marketCap" && (
                       <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
                     )}
                   </span>
                 </div>
                 <div
-                  className="hidden sm:flex col-span-1 min-w-[60px] cursor-pointer hover:text-white items-center justify-end"
+                  className="hidden sm:flex col-span-2 min-w-[60px] cursor-pointer hover:text-white items-center justify-end"
                   onClick={() => handleSort("volume1h")}
                 >
                   <span className="flex items-center">
-                    1h Vol
+                    {t('searchModal.columns.volume1h')}
                     {sortField === "volume1h" && (
                       <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
                     )}
                   </span>
                 </div>
                 <div
-                  className="col-span-3 sm:col-span-1 min-w-[60px] sm:min-w-[80px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="col-span-5 lg:col-span-2 min-w-[60px] sm:min-w-[80px] cursor-pointer hover:text-white flex items-center justify-end"
                   onClick={() => handleSort("volume24h")}
                 >
                   <span className="flex items-center">
-                    24h Vol
+                    {t('searchModal.columns.volume24h')}
                     {sortField === "volume24h" && (
                       <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
                     )}
                   </span>
                 </div>
                 <div
-                  className="col-span-3 sm:col-span-4 min-w-[80px] sm:min-w-[100px] cursor-pointer hover:text-white flex items-center justify-end"
+                  className="col-span-5 lg:col-span-2 mr-2 min-w-[80px] sm:min-w-[100px] cursor-pointer hover:text-white flex items-center justify-end"
                   onClick={() => handleSort("price")}
                 >
                   <span className="flex items-center">
-                    Price
+                    {t('searchModal.columns.price')}
                     {sortField === "price" && (
                       <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
                     )}
                   </span>
                 </div>
                 <div
-                  className="col-span-2 min-w-[60px] sm:min-w-[80px] cursor-pointer hidden sm:flex hover:text-white items-center justify-end"
+                  className="col-span-2 min-w-[60px] sm:min-w-[80px] cursor-pointer lg:mr-3 hidden sm:flex hover:text-white items-center justify-end"
                   onClick={() => handleSort("holders")}
                 >
                   <span className="flex items-center">
-                    Holders
+                    {t('searchModal.columns.holders')}
                     {sortField === "holders" && (
                       <span className="ml-1 text-[#5558FF]">{sortDirection === "desc" ? "↓" : "↑"}</span>
                     )}
@@ -381,7 +388,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     className="grid grid-cols-12 gap-2 sm:gap-6 items-center py-2.5 sm:py-3 px-2 sm:px-3 rounded-lg hover:bg-[#2a2a2a] transition-colors cursor-pointer group border border-transparent hover:border-gray-800"
                   >
                     {/* Token Info */}
-                    <div className="col-span-4 sm:col-span-2 min-w-[100px] sm:min-w-[150px] flex items-center space-x-2 sm:space-x-3">
+                    <div className="col-span-3 lg:col-span-2 min-w-[100px] sm:min-w-[150px] flex items-center space-x-2 sm:space-x-3">
                       <div className="relative flex-shrink-0">
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-gray-800 flex items-center justify-center">
                           <img
@@ -404,12 +411,6 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                           <div className="text-white font-medium text-xs sm:text-sm truncate">
                             {truncateTokenName(token.name, 8)}
                           </div>
-                          {token.verified && (
-                            <span className="text-[8px] sm:text-[10px] px-1 py-0.5 bg-blue-500/20 text-blue-400 rounded">Verified</span>
-                          )}
-                          {token.isNew && (
-                            <span className="text-[8px] sm:text-[10px] px-1 py-0.5 bg-green-500/20 text-green-400 rounded">New</span>
-                          )}
                         </div>
                         <div className="text-gray-400 text-[10px] sm:text-xs truncate">{token.symbol}</div>
                       </div>
@@ -419,28 +420,28 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     <div className="hidden sm:flex col-span-2 min-w-[90px] text-white text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
                         <span className="text-gray-400 text-[10px]">Market Cap</span>
-                        <span>{truncateNumber(token.marketCapUsd)}</span>
+                        <span>{truncateNumber(token.marketCapUsd, 10)}</span>
                       </div>
                     </div>
 
                     {/* 1h Volume - Hidden on mobile */}
-                    <div className="hidden sm:flex col-span-1 min-w-[60px] text-white text-sm text-right items-center justify-end">
+                    <div className="hidden sm:flex col-span-2 min-w-[60px] text-white text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
                         <span className="text-gray-400 text-[10px]">1h Vol</span>
-                        <span>{truncateNumber(token.volume_1h)}</span>
+                        <span>{truncateNumber(token.volume_1h, 10)}</span>
                       </div>
                     </div>
 
                     {/* 24h Volume */}
-                    <div className="col-span-3 sm:col-span-1 min-w-[60px] sm:min-w-[80px] text-white text-xs sm:text-sm text-right items-center justify-end">
+                    <div className="col-span-5 lg:col-span-2 min-w-[60px] sm:min-w-[80px] text-white text-xs sm:text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
-                        <span className="text-gray-400 text-[10px]">24h Vol</span>
+                        
                         <span className="font-medium">{truncateNumber(token.volume_24h)}</span>
                       </div>
                     </div>
 
                     {/* Price */}
-                    <div className="col-span-3 sm:col-span-4 min-w-[80px] sm:min-w-[120px] text-white text-xs sm:text-sm text-right items-center justify-end">
+                    <div className="col-span-5 lg:col-span-2 min-w-[80px] sm:min-w-[120px] text-white text-xs sm:text-sm text-right items-center justify-end">
                       <div className="flex flex-col items-end">
                         <span className="text-gray-400 text-[10px]">Price</span>
                         <span className="font-medium text-[#5558FF]">${formatNumberWithSuffix3(token.priceUsd)}</span>
@@ -463,7 +464,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                   <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-gray-800 flex items-center justify-center">
                     <Search className="h-6 w-6 sm:h-8 sm:w-8 opacity-50" />
                   </div>
-                  <p className="text-sm sm:text-base">No tokens found matching your search criteria</p>
+                  <p className="text-sm sm:text-base">{t('searchModal.noResults')}</p>
                 </div>
               )}
             </div>

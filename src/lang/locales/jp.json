@@ -547,7 +547,40 @@
       "min_withdrawal": "最小出金額は0.001 SOLです",
       "insufficient_balance": "残高{balance} SOLを超えることはできません",
       "transaction_failed": "取引に失敗しました。もう一度お試しください。",
-      "transaction_success": "取引が正常に送信されました！"
+      "transaction_success": "取引が正常に送信されました！",
+      "network_error": "ネットワークエラー。接続を確認してください。",
+      "unauthorized": "認証されていません。再度ログインしてください。",
+      "recipient_required": "受取人アドレスが必要です"
+    }
+  },
+  "searchModal": {
+    "title": "検索",
+    "placeholder": "トークンを検索...",
+    "columns": {
+      "token": "トークン",
+      "marketCap": "時価総額",
+      "volume1h": "1時間取引量",
+      "volume24h": "24時間取引量",
+      "price": "価格",
+      "holders": "保有者数"
+    },
+    "badges": {
+      "verified": "認証済み",
+      "new": "新規"
+    },
+    "noResults": "検索条件に一致するトークンが見つかりません"
+  },
+  "connectMasterModal": {
+    "title": "マスターに接続",
+    "maximumCopyAmount": "最大コピー量 (SOL)",
+    "copyAddress": {
+      "copy": "アドレスをコピー",
+      "copied": "コピーしました！"
+    },
+    "buttons": {
+      "cancel": "キャンセル",
+      "connect": "接続",
+      "connecting": "接続中..."
     }
   }
 }

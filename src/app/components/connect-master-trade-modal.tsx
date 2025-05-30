@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Copy, X, ChevronUp, ChevronDown } from "lucide-react"
 import { truncateString } from "@/utils/format"
 import { MasterTradingService } from "@/services/api"
+import { useLang } from "@/lang"
 
 interface ConnectToMasterModalProps {
   onClose: () => void
@@ -22,7 +23,8 @@ export default function ConnectToMasterModal({
   onConnect,
   refetchMasterTraders,
 }: ConnectToMasterModalProps) {
-  const [copyAmount, setCopyAmount] = useState("0,1")
+  const { t } = useLang()
+  const [copyAmount, setCopyAmount] = useState("0")
   const [showDropdown, setShowDropdown] = useState(false)
   const [copiedAddress, setCopiedAddress] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -43,10 +45,10 @@ export default function ConnectToMasterModal({
       const data = {
         master_wallet_address: masterAddress,
         option_limit: "price",
-        price_limit: copyAmount.replace(',', '.'),
+        price_limit: copyAmount === "0" ? "0,01" : copyAmount.replace(',', '.'),
       };
       await MasterTradingService.connectMaster(data);
-      setCopyAmount("0,1");
+      setCopyAmount("0,01");
       await refetchMasterTraders();
       onConnect(copyAmount);
       onClose();
@@ -105,7 +107,7 @@ export default function ConnectToMasterModal({
       <div className="relative w-full max-w-md mx-4 bg-[#1a1a1a] rounded-xl border-2 border-cyan-500 shadow-lg">
         {/* Header */}
         <div className="flex justify-between items-center py-4 px-6 pb-4">
-          <h2 className="text-[18px] font-semibold text-cyan-400 mt-2">CONNECT TO MASTER</h2>
+          <h2 className="text-[18px] font-semibold text-cyan-400 mt-2">{t('connectMasterModal.title')}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-neutral-100 transition-colors">
             <X className="h-6 w-6" />
           </button>
@@ -121,7 +123,7 @@ export default function ConnectToMasterModal({
                 <button
                   onClick={handleCopyAddress}
                   className="text-gray-400 hover:text-neutral-100 transition-colors"
-                  title={copiedAddress ? "Copied!" : "Copy address"}
+                  title={copiedAddress ? t('connectMasterModal.copyAddress.copied') : t('connectMasterModal.copyAddress.copy')}
                 >
                   <Copy className={`h-4 w-4 ${copiedAddress ? "text-green-500" : ""}`} />
                 </button>
@@ -136,7 +138,7 @@ export default function ConnectToMasterModal({
 
           {/* Maximum Copy Amount */}
           <div>
-            <label className="block text-neutral-100 font-normal text-sm mb-3">Maximum Copy Amount (SOL)</label>
+            <label className="block text-neutral-100 font-normal text-sm mb-3">{t('connectMasterModal.maximumCopyAmount')}</label>
             <div className="relative flex items-center">
               <input
                 type="text"
@@ -151,7 +153,7 @@ export default function ConnectToMasterModal({
                     if (value === '' || numValue >= 0.1) {
                       setCopyAmount(value);
                     } else {
-                      setCopyAmount('0,1');
+                      setCopyAmount('0,01');
                     }
                   }
                 }}
@@ -160,7 +162,7 @@ export default function ConnectToMasterModal({
                     e.preventDefault();
                   }
                 }}
-                min="0,1"
+                min="0"
               />
               <div className="absolute right-2 flex flex-col gap-1">
                 <button
@@ -189,14 +191,15 @@ export default function ConnectToMasterModal({
               className="py-1 px-4 border-2 border-cyan-500 text-cyan-400 rounded-full hover:bg-cyan-500/10 transition-colors font-medium"
               disabled={isLoading}
             >
-              Cancel
+              {t('connectMasterModal.buttons.cancel')}
             </button>
             <button
               onClick={handleConnect}
               disabled={isLoading}
-              className="create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-sm"
+              className="lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto"
             >
-              {isLoading ? 'Connecting...' : 'Connect'}
+              <span className="relative z-10">{isLoading ? t('connectMasterModal.buttons.connecting') : t('connectMasterModal.buttons.connect')}</span>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
             </button>
           </div>
         </div>
