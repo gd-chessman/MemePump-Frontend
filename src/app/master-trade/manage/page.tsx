@@ -103,7 +103,7 @@ const styles = {
   tableContainer: "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 dark:bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm",
   table: "w-full dark:text-theme-neutral-100 text-theme-neutral-1000 text-[10px] sm:text-xs md:text-sm",
   button: "h-min rounded-full px-2 md:px-3 py-1 hover:bg-theme-primary-300/70 hover:text-theme-neutral-100 text-[10px] sm:text-xs md:text-sm font-medium text-theme-primary-300 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer",
-  input: "w-full py-1 px-3 dark:bg-theme-neutral-1000 bg-theme-neutral-200 rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-[10px] sm:placeholder:text-xs placeholder:dark:text-theme-neutral-100 text-theme-neutral-1000 text-[10px] sm:text-xs md:text-sm",
+  input: "w-full py-1 px-3 dark:bg-theme-neutral-800 bg-theme-neutral-200 rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-[10px] sm:placeholder:text-xs placeholder:dark:text-theme-neutral-100 text-theme-neutral-1000 text-[10px] sm:text-xs md:text-sm",
   chatContainer: "dark:bg-black bg-white bg-opacity-30 backdrop-blur-sm w-full rounded-xl border border-y-theme-primary-100 border-x-theme-purple-200 overflow-hidden shadow-lg flex flex-col h-[300px] md:h-[600px]",
   chatHeader: "p-2 md:p-4 border-b border-cyan-500/30",
   chatTitle: "text-center text-[14px] md:text-[16px] font-semibold dark:text-theme-neutral-100 text-theme-neutral-1000 mb-2 md:mb-4 flex items-center justify-center",
@@ -264,8 +264,9 @@ export default function MasterTradeInterface() {
 
   // Xử lý bật/tắt nhóm
   const handleToggleGroup = async (id: number, currentStatus: string) => {
+    console.log("currentStatus", currentStatus);
     try {
-      const newStatus = currentStatus === "ON" ? "on" : "off";
+      const newStatus = currentStatus === "on" ? "off" : "on";
       await MasterTradingService.changeStatusGroup(id, newStatus);
       await refetchMyGroups();
     } catch (error) {
@@ -740,7 +741,7 @@ export default function MasterTradeInterface() {
             {showGroupDropdown && (
               <div className="absolute top-10 right-0 mt-2 w-64 bg-theme-neutral-1000 bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-30">
                 <div className="p-2">
-                  <div className="relative mb-2">
+                  <div className="relative mb-2 dark:bg-theme-neutral-1000 bg-theme-neutral-100">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <input
                       type="text"
@@ -756,7 +757,7 @@ export default function MasterTradeInterface() {
                       <button
                         key={group.mg_id}
                         onClick={() => handleGroupSelect(group)}
-                        className={`${styles.selectItem} w-full p-1 text-left`}
+                        className={`${styles.selectItem} w-full p-1 text-left rounded-xl`}
                       >
                         {group.mg_name}
                       </button>
