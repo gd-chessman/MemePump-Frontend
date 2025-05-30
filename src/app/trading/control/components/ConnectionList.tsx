@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Copy, Check } from 'lucide-react'
-import { truncateString } from '@/utils/format'
+import { formatNumberWithSuffix3, truncateString } from '@/utils/format'
+import { useLang } from '@/lang/useLang'
+import { getWalletBalanceByAddress } from '@/services/api/TelegramWalletService'
 
 interface ConnectionListProps {
     connections: any[]
@@ -10,6 +12,11 @@ interface ConnectionListProps {
     onCopyAddress: (address: string) => void
 }
 
+interface BalanceData {
+    sol_balance: number;
+    sol_balance_usd: number;
+}
+
 export const ConnectionList: React.FC<ConnectionListProps> = ({
     connections,
     selectedConnections,
@@ -17,10 +24,47 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
     copiedAddress,
     onCopyAddress,
 }) => {
+
+    const { t } = useLang();
+    const [balances, setBalances] = useState<Record<string, BalanceData>>({});
+
+    const getBalance = async (address: string) => {
+        const balance = await getWalletBalanceByAddress(address)
+        return balance
+    }
+
+    useEffect(() => {
+        const fetchAllBalances = async () => {
+            const newBalances: Record<string, BalanceData> = {};
+            const filteredConnections = connections.filter((connection) => connection.status === "connect");
+            for (const connection of filteredConnections) {
+                try {
+                    const balance = await getBalance(connection.member_address);
+                    newBalances[connection.member_id] = {
+                        sol_balance: balance?.sol_balance || 0,
+                        sol_balance_usd: balance?.sol_balance_usd || 0
+                    };
+                } catch (error) {
+                    console.error(`Error fetching balance for ${connection.member_address}:`, error);
+                    newBalances[connection.member_id] = {
+                        sol_balance: 0,
+                        sol_balance_usd: 0
+                    };
+                }
+            }
+            
+            setBalances(newBalances);
+        };
+
+        if (connections.length > 0) {
+            fetchAllBalances();
+        }
+    }, [connections]);
+
     return (
         <div className="h-full overflow-y-auto">
             <div className="px-4">
-                {connections.map((item) => (
+                {connections.filter(conn => conn.status === "connect").map((item) => (
                     <div
                         key={item.member_id}
                         onClick={() => onSelectConnection(item.member_id.toString())}
@@ -50,6 +94,10 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
                                         <Copy className="h-3.5 w-3.5" />
                                     )}
                                 </button>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div>{formatNumberWithSuffix3(balances[item.member_id]?.sol_balance || 0)} SOL</div>
+                                <div>${formatNumberWithSuffix3(balances[item.member_id]?.sol_balance_usd || 0)}</div>
                             </div>
                         </div>
                         <button

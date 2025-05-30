@@ -1,5 +1,6 @@
 import React from 'react'
 import { Search } from 'lucide-react'
+import { useLang } from '@/lang/useLang'
 
 interface SearchBarProps {
     searchQuery: string
@@ -10,6 +11,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     searchQuery,
     onSearchChange,
 }) => {
+    const { t } = useLang();
     return (
         <div className="px-4 pb-2">
             <div className="relative">
@@ -18,7 +20,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 </div>
                 <input
                     type="text"
-                    placeholder="Master trade"
+                    placeholder={t('trading.control.searchBar.placeholder')}
                     value={searchQuery}
                     onChange={(e) => onSearchChange(e.target.value)}
                     className="w-full py-2 pl-10 max-h-6 text-xs pr-4 bg-[#1a1a1a] rounded-full focus:outline-none border-1 border-t-theme-primary-300 border-l-theme-primary-300 border-b-theme-secondary-400 border-r-theme-secondary-400 text-neutral-200 font-normal"

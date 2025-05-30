@@ -134,6 +134,12 @@
           "조건을 충족하면 거래 가능합니다",
           "각 코인은 고유한 지갑과 토큰을 가집니다 - 안전하게 보관하세요"
         ]
+      },
+      "confirmation": {
+        "title": "확인",
+        "description": "이 토큰을 생성하려면 <span class=\"font-bold\">0.0025 SOL</span>이 필요합니다",
+        "cancel": "취소",
+        "confirm": "확인"
       }
     },
     "masterTrade": {
@@ -332,8 +338,27 @@
       "enterNickname": "별명 입력",
       "enterSolanaPrivateKey": "솔라나 개인 키 입력",
       "enterWalletNickname": "지갑 별명 입력",
+      "copyAddress": "지갑 주소가 클립보드에 복사되었습니다",
       "walletLevel": "지갑 등급",
+      "failedToAddWallet": "지갑 추가에 실패했습니다. 다시 시도해 주세요.",
+      "failedToFetchWallets": "지갑 목록을 가져오는데 실패했습니다. 다시 시도해 주세요.",
+      "failedToCreatePassword": "비밀번호 생성에 실패했습니다. 다시 시도해 주세요.",
+      "passwordsDoNotMatch": "비밀번호가 일치하지 않습니다. 다시 시도해 주세요.",
+      "passwordValidationError": "비밀번호 유효성 검사 오류",
+      "switchSuccess": "지갑 전환 성공",
+      "switchFailed": "지갑 전환 실패",
+      "deleteSuccess": "지갑 삭제 성공",
+      "deleteFailed": "지갑 삭제 실패",
+      "updateSuccess": "지갑 업데이트 성공",
+      "updateFailed": "지갑 업데이트 실패",
+      "passwordMustContainAtLeastOneUppercaseLetter": "비밀번호는 최소 하나의 대문자를 포함해야 합니다.",
+      "passwordMustContainAtLeastOneLowercaseLetter": "비밀번호는 최소 하나의 소문자를 포함해야 합니다.",
+      "passwordMustContainAtLeastOneNumber": "비밀번호는 최소 하나의 숫자를 포함해야 합니다.",
+      "passwordMustContainAtLeastOneSpecialCharacter": "비밀번호는 최소 하나의 특수 문자를 포함해야 합니다.",
+      "passwordMustBeAtLeast8CharactersLong": "비밀번호는 최소 8자 이상이어야 합니다.",
+      "passwordCreatedSuccessfully": "비밀번호가 성공적으로 생성되었습니다",
       "active": "활성",
+      "success": "성공",
       "switch": "전환",
       "noTokens": "토큰 없음",
       "deleteConfirm": {
@@ -498,6 +523,11 @@
       "volume24hChange": "24시간 거래량 변동",
       "noTokens": "토큰을 찾을 수 없습니다",
       "trade": "거래",
+      "control": {
+        "searchBar": {
+          "placeholder": "회원 주소"
+        }
+      },
       "panel": {
         "buy": "구매",
         "sell": "판매",
@@ -512,7 +542,10 @@
         "noConnections": "연결이 없습니다",
         "selectConnection": "연결 선택",
         "noGroupsAvailable": "사용 가능한 그룹이 없습니다",
-        "insufficient_balance": "잔액이 부족합니다"
+        "insufficient_balance": "잔액이 부족합니다",
+        "success": "거래 성공",
+        "error": "거래 실패",
+        "processing": "거래 처리 중..."
       },
       "interface": {
         "loading": "토큰 정보를 불러오는 중...",

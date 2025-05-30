@@ -433,23 +433,22 @@ export default function CreateCoinForm() {
               <AlertCircle className="h-12 w-12 text-theme-primary-300" />
             </div>
             <h3 className="text-lg font-semibold text-center mb-2 dark:text-theme-neutral-100 text-theme-neutral-900">
-              Confirmation
+              {t('createCoin.confirmation.title')}
             </h3>
-            <p className="text-center mb-6 dark:text-theme-neutral-100 text-theme-neutral-900">
-              Bạn cần bỏ ra <span className="font-bold">0.0025 SOL</span> để tạo đồng
+            <p className="text-center mb-6 dark:text-theme-neutral-100 text-theme-neutral-900" dangerouslySetInnerHTML={{ __html: t('createCoin.confirmation.description') }}>
             </p>
             <div className="flex w-full gap-4 justify-center px-2">
               <button
                 onClick={() => setShowConfirmModal(false)}
                 className="px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors dark:text-theme-neutral-100 text-theme-neutral-900"
               >
-                Cancel
+                {t('createCoin.confirmation.cancel')}
               </button>
               <button
                 onClick={handleConfirmSubmit}
                 className="px-4 py-2 rounded-full bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 text-theme-neutral-100 hover:from-theme-blue-100 hover:to-theme-blue-200 transition-all duration-500"
               >
-                Confirm
+                {t('createCoin.confirmation.confirm')}
               </button>
             </div>
           </div>
