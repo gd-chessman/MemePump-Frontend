@@ -52,7 +52,7 @@ const textContent = 'text-neutral-900 dark:text-neutral-100 text-xs font-normal 
 const mobileStyles = {
     card: "sm:hidden dark:bg-theme-black-200/50 bg-white rounded-xl p-3 border border-solid border-y-theme-primary-100 border-x-theme-purple-200",
     header: "flex items-start justify-between gap-2 mb-2",
-    nameContainer: "flex flex-col gap-1 min-w-0",
+    nameContainer: "flex lg:flex-col gap-1 min-w-0",
     label: "text-[10px] dark:text-gray-400 text-black",
     value: "text-xs font-medium dark:text-neutral-100 text-black",
     badge: "text-[10px] px-1.5 py-0.5 rounded-full",

@@ -1,8 +1,17 @@
 {
   "connect": "接続",
   "over view": "概要",
+  "wallet manager": "ウォレット管理",
   "my wallet": "マイウォレット",
-  "wallet manager": "ウォレットマネージャー",
+  "listWalletss": {
+    "walletType": {
+      "main": "メインウォレット",
+      "import": "インポート済み",
+      "other": "その他",
+      "master": "マスター",
+      "member": "メンバー"
+    }
+  },
   "overview": {
     "launchToken": {
       "title": "独自のトークンを発行",
@@ -15,7 +24,8 @@
       "send": "送信"
     },
     "masterTrade": {
-      "title": "マスタートレード",
+      "name": "コピートレード",
+      "title": "コピートレード",
       "description": "トップトレーダーの取引をワンクリックでコピー",
       "explore": "探索"
     }
@@ -24,6 +34,7 @@
   "create coin": "コイン作成",
   "createCoin": {
     "title": "新規コイン作成",
+    "subtitle": "Pumpfunで新しいコインを作成",
     "form": {
       "name": {
         "label": "名前",
@@ -87,6 +98,14 @@
         "creating": "作成中..."
       }
     },
+    "tabs": {
+      "today": "今日",
+      "last8days": "過去8日間",
+      "lastMonth": "先月",
+      "noCoins": "最近作成したコインはありません",
+      "seeAll": "すべてのマイコインを表示",
+      "trade": "取引"
+    },
     "myCoins": {
       "title": "マイコイン",
       "createCoin": "コイン作成",
@@ -103,15 +122,7 @@
         "copy": "アドレスをコピー",
         "copied": "クリップボードにアドレスをコピーしました",
         "convert": "変換"
-      },
-      "tabs": {
-        "today": "今日",
-        "last8days": "過去8日間",
-        "lastMonth": "先月"
-      },
-      "noCoins": "最近作成したコインはありません",
-      "seeAll": "すべてのマイコインを表示",
-      "trade": "取引"
+      }
     },
     "guide": {
       "title": "ガイド",
@@ -138,7 +149,10 @@
         "connected": "接続済み",
         "disconnected": "切断済み",
         "paused": "一時停止",
-        "pending": "保留中"
+        "pending": "保留中",
+        "1d": "1日",
+        "7d": "7日",
+        "30d": "30日"
       },
       "search": {
         "placeholder": "ウォレットアドレスで検索..."
@@ -146,17 +160,18 @@
       "manageMaster": "マスター管理",
       "table": {
         "address": "アドレス",
-        "pnl7d": "7日間の損益",
-        "pnl30d": "30日間の損益",
-        "winRate7d": "7日間の勝率",
-        "transactions7d": "7日間の取引",
-        "lastTime": "最終更新",
+        "pnl7d": "7日間損益",
+        "pnl30d": "30日間損益",
+        "winRate7d": "7日間勝率",
+        "transactions7d": "7日間取引",
+        "lastTime": "最終取引",
         "type": "タイプ",
         "status": "ステータス",
         "action": "アクション",
         "noData": "データなし",
         "copyAddress": "アドレスをコピー",
-        "copySuccess": "アドレスをコピーしました: {address}"
+        "copySuccess": "アドレスをコピーしました: {address}",
+        "details": "詳細"
       },
       "traderType": {
         "vip": "VIP",
@@ -170,7 +185,7 @@
         "disconnect": "切断"
       },
       "status": {
-        "notConnected": "未接続",
+        "not connected": "未接続",
         "connect": "接続済み",
         "disconnect": "切断済み",
         "pause": "一時停止",
@@ -213,7 +228,14 @@
         "error": "エラーが発生しました",
         "confirmJoin": "選択した{count}つのウォレットをグループ「{groupName}」に参加させますか？",
         "cancel": "キャンセル",
-        "confirm": "確認"
+        "confirm": "確認",
+        "all": "すべて",
+        "notConnected": "未接続",
+        "connect": "接続済み",
+        "disconnect": "切断済み",
+        "pause": "一時停止",
+        "pending": "保留中",
+        "block": "ブロック済み"
       },
       "groupManagement": {
         "createGroup": "グループ作成",
@@ -251,7 +273,8 @@
         "connectWithMaster": "他のマスターと接続",
         "send": "送信",
         "noMessages": "メッセージはまだありません",
-        "communityChatroom": "コミュニティチャットルーム"
+        "communityChatroom": "コミュニティチャットルーム",
+        "type_a_message": "メッセージを入力..."
       }
     }
   },
@@ -284,13 +307,9 @@
     "newPassword": "新しいパスワード",
     "confirmPassword": "パスワードを確認",
     "passwordRequirements": "(i) パスワードは8文字以上で、大文字、小文字、数字、特殊文字を含める必要があります。\nこのパスワードは将来秘密鍵を表示する際に必要になります。",
-    "creating": "作成中...",
     "enterPassword": "パスワードを入力",
     "password": "パスワード",
-    "enterPasswordToView": "(i) 秘密鍵を表示するにはパスワードを入力してください",
-    "verifying": "確認中...",
     "submit": "送信",
-    "adding": "追加中...",
     "privateKeySecurity": "秘密鍵は暗号化されて安全に保存されます",
     "walletNickname": "ウォレットニックネーム",
     "country": "国",
@@ -299,7 +318,33 @@
     "walletKey": "ウォレットキー",
     "type": "タイプ",
     "actions": "アクション",
-    "walletLevel": "ウォレットレベル"
+    "walletLevel": "ウォレットレベル",
+    "active": "アクティブ",
+    "switch": "切り替え",
+    "deleteConfirm": {
+      "title": "ウォレットの削除を確認",
+      "description": "ウォレット {name} を削除してもよろしいですか？この操作は元に戻せません。",
+      "cancel": "キャンセル",
+      "delete": "削除"
+    },
+    "addNewWallet": "新しいウォレットを追加",
+    "enterWalletName": "ウォレット名を入力",
+    "enterNickname": "ニックネームを入力",
+    "enterSolanaPrivateKey": "ソラナ秘密鍵を入力",
+    "enterWalletNickname": "ウォレットニックネームを入力",
+    "walletAddedSuccess": "ウォレットが正常に追加されました",
+    "walletAddFailed": "ウォレットの追加に失敗しました。もう一度お試しください。",
+    "passwordCreatedSuccess": "パスワードが正常に作成されました",
+    "passwordCreateFailed": "パスワードの作成に失敗しました。もう一度お試しください。",
+    "invalidPrivateKey": "無効な秘密鍵形式です",
+    "invalidPrivateKeyLength": "無効な秘密鍵の長さです",
+    "addressCopied": "ウォレットアドレスがクリップボードにコピーされました",
+    "enterPasswordToView": "(i) 秘密鍵を表示するにはパスワードを入力してください",
+    "passwordRequired": "パスワードを入力してください",
+    "invalidPassword": "無効なパスワードです。もう一度お試しください。",
+    "verifying": "確認中...",
+    "creating": "作成中...",
+    "adding": "追加中..."
   },
   "searchPlaceholder": "トークン名/アドレス",
   "languages": {
@@ -307,6 +352,132 @@
     "english": "英語",
     "vietnamese": "ベトナム語",
     "japan": "日本語"
+  },
+  "categories": {
+    "Rug Pull": "ラグプル",
+    "Scam": "詐欺",
+    "Low Cap": "低時価総額",
+    "High Cap": "高時価総額",
+    "Community": "コミュニティ",
+    "Whale": "クジラ",
+    "Bot": "ボット",
+    "Manual": "手動",
+    "Auto": "自動",
+    "VIP": "VIP",
+    "Hack": "ハック",
+    "Exploit": "エクスプロイト",
+    "Bug": "バグ",
+    "Error": "エラー",
+    "Crash": "クラッシュ",
+    "Drop": "下落",
+    "Fall": "下落",
+    "Rise": "上昇",
+    "Jump": "急騰",
+    "Climb": "上昇",
+    "Sink": "下落",
+    "Float": "浮動",
+    "Swing": "変動",
+    "Bounce": "反発",
+    "Rebound": "回復",
+    "Recovery": "回復",
+    "Correction": "調整",
+    "Consolidation": "横ばい",
+    "Breakout": "ブレイクアウト",
+    "Breakdown": "崩壊",
+    "Support": "サポート",
+    "Resistance": "レジスタンス",
+    "Trend": "トレンド",
+    "Pattern": "パターン",
+    "Signal": "シグナル",
+    "Alert": "アラート",
+    "Warning": "警告",
+    "Danger": "危険",
+    "Risk": "リスク",
+    "Reward": "報酬",
+    "Profit": "利益",
+    "Loss": "損失",
+    "Gain": "利益",
+    "Win": "勝利",
+    "Lose": "敗北",
+    "Dog": "犬",
+    "Cat": "猫",
+    "IDO": "IDO",
+    "Presale": "プレセール",
+    "Airdrop": "エアドロップ",
+    "Pump": "急騰",
+    "Dump": "急落",
+    "New": "新規",
+    "Hot": "人気",
+    "Trending": "トレンド",
+    "Moon": "月",
+    "Rocket": "ロケット",
+    "Diamond": "ダイヤモンド",
+    "Gem": "ジェム",
+    "Secure": "安全",
+    "Elon": "イーロン",
+    "Musk": "マスク",
+    "Pepe": "ペペ",
+    "Doge": "ドージ",
+    "Shiba": "シバ",
+    "Frog": "カエル",
+    "Duck": "アヒル",
+    "Penguin": "ペンギン",
+    "Bear": "クマ",
+    "Bull": "ブル",
+    "Lion": "ライオン",
+    "Tiger": "トラ",
+    "Dragon": "ドラゴン",
+    "Phoenix": "フェニックス",
+    "Unicorn": "ユニコーン",
+    "Ninja": "忍者",
+    "Samurai": "侍",
+    "Knight": "騎士",
+    "Wizard": "魔法使い",
+    "Dwarf": "ドワーフ",
+    "Elf": "エルフ",
+    "Orc": "オーク",
+    "Goblin": "ゴブリン",
+    "Troll": "トロール",
+    "Ghost": "幽霊",
+    "Zombie": "ゾンビ",
+    "Vampire": "吸血鬼",
+    "Werewolf": "狼男",
+    "Mummy": "ミイラ",
+    "Skeleton": "スケルトン",
+    "Alien": "エイリアン",
+    "Robot": "ロボット",
+    "Cyborg": "サイボーグ",
+    "Android": "アンドロイド",
+    "AI": "AI",
+    "NFT": "NFT",
+    "Metaverse": "メタバース",
+    "GameFi": "GameFi",
+    "DeFi": "DeFi",
+    "Web3": "Web3",
+    "DAO": "DAO",
+    "Exchange": "取引所",
+    "Yield": "利回り",
+    "Mining": "マイニング",
+    "Trading": "取引",
+    "Casino": "カジノ",
+    "Lottery": "宝くじ",
+    "Prediction": "予測",
+    "Insurance": "保険",
+    "Lending": "貸付",
+    "Borrowing": "借入",
+    "APY": "APY",
+    "APR": "APR",
+    "TVL": "TVL",
+    "MCAP": "時価総額",
+    "Volume": "取引量",
+    "Liquidity": "流動性",
+    "Burn": "バーン",
+    "Mint": "ミント",
+    "Lock": "ロック",
+    "Vest": "ベスティング",
+    "Launch": "ローンチ",
+    "List": "上場",
+    "Delist": "上場廃止"
   },
   "trading": {
     "token": "トークン",
@@ -444,18 +615,16 @@
     "marketCap": "時価総額",
     "volume24h": "24時間取引量",
     "liquidity": "流動性",
-    "holders": "保有者数",
+    "holders": "保有者",
+    "vol": "取引量",
+    "buy": "買い",
+    "sells": "売り",
+    "netBuy": "純買い",
     "timeFrames": {
       "5m": "5分",
       "1h": "1時間",
       "4h": "4時間",
       "24h": "24時間"
-    },
-    "stats": {
-      "vol": "取引量",
-      "buy": "買い",
-      "sells": "売り",
-      "netBuy": "純買い"
     },
     "loading": "トークン情報を読み込み中...",
     "error": {
@@ -509,7 +678,12 @@
     "search": "検索",
     "noResults": "結果が見つかりません",
     "required": "必須",
-    "optional": "任意"
+    "optional": "任意",
+    "actions": "アクション",
+    "copy": {
+      "copyAddress": "アドレスをコピー",
+      "copied": "コピーしました！"
+    }
   },
   "universal_account": {
     "deposit": "入金",
@@ -551,7 +725,10 @@
       "network_error": "ネットワークエラー。接続を確認してください。",
       "unauthorized": "認証されていません。再度ログインしてください。",
       "recipient_required": "受取人アドレスが必要です"
-    }
+    },
+    "minimum_withdrawal_amount": "最小出金額は{amount} SOLです",
+    "maximum_withdrawal_amount": "最大出金額は{amount} SOLです",
+    "amount_cannot_exceed_balance": "残高{balance} SOLを超えることはできません"
   },
   "searchModal": {
     "title": "検索",

@@ -76,7 +76,7 @@ const ChatTradingContent = () => {
         },
         text: chat.ch_content,
         timestamp: new Date(chat.createdAt),
-        country: chat.ch_lang
+        country: chat.country
       }));
       setMessages(convertedMessages);
     }
@@ -143,8 +143,8 @@ const ChatTradingContent = () => {
   };
 
   return (
-    <div className="flex flex-col h-full  dark:bg-theme-neutral-1000">
-      <div className={`${height > 700 ? 'flex-1' : 'h-[300px]'} overflow-y-auto p-4`}>
+    <div className="flex flex-col h-full px-4  dark:bg-theme-neutral-1000">
+      <div className={`${height > 700 ? 'flex-1' : 'h-[300px]'} overflow-y-auto px-1 rounded-xl bg-theme-neutral-100 dark:bg-inherit`}>
         {messages.map((message) => (
           <ChatMessage key={message.id} message={message} />
         ))}

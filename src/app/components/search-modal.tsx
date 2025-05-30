@@ -63,7 +63,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
   const router = useRouter();
 
   // Add debounced search input with consistent delay
-  const debouncedSearchInput = useDebounce(searchInput, 500)
+  const debouncedSearchInput = useDebounce(searchInput, 1000)
 
   // Add paste handler
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -96,10 +96,11 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
 
   // Transform tokens directly in useMemo
   const filteredAndSortedTokens = useMemo(() => {
-    if (!listToken || !Array.isArray(listToken)) return []
-
+    // Return empty array if still loading or no data
+    if (isQueryLoading || !listToken || !Array.isArray(listToken)) return []
+    
     // Transform tokens
-    const transformedTokens = listToken?.map((token: any) => ({
+    const transformedTokens = listToken.map((token: any) => ({
       address: token.mint as string,
       name: token.name as string,
       symbol: token.symbol as string,

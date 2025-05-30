@@ -118,7 +118,7 @@ export default function TokenInfoMobile({
                         <div className="bg-neutral-1000 lg:box-shadow-info rounded-xl p-4">
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="border-linear-200 rounded-lg p-2 flex flex-col items-center justify-center">
-                                    <div className="text-xs text-neutral-100 font-semibold mb-1.5">Market Cap</div>
+                                    <div className="text-xs text-neutral-100 font-semibold mb-1.5">{t('market_cap')}</div>
                                     <div className="font-medium text-sm text-neutral-100 flex items-center">
                                         ${formatNumberWithSuffix(dataToken.cap || 0)}
                                         {wsTokenInfo?.marketCap?.usd && (
@@ -127,13 +127,13 @@ export default function TokenInfoMobile({
                                     </div>
                                 </div>
                                 <div className="border-linear-200 rounded-lg p-2 flex flex-col items-center justify-center">
-                                    <div className="text-xs text-neutral-100 font-semibold mb-1.5">24h Volume</div>
+                                    <div className="text-xs text-neutral-100 font-semibold mb-1.5">{t('volume_24h')}</div>
                                     <div className="font-medium text-sm text-neutral-100 flex items-center">
                                         ${formatNumberWithSuffix(Math.abs(dataToken.aDayVolume || 0))}
                                     </div>
                                 </div>
                                 <div className="border-linear-200 rounded-lg p-2 flex flex-col items-center justify-center">
-                                    <div className="text-xs text-neutral-100 font-semibold mb-1.5">Liquidity</div>
+                                    <div className="text-xs text-neutral-100 font-semibold mb-1.5">{t('liquidity')}</div>
                                     <div className="font-medium text-sm text-neutral-100 flex items-center">
                                         ${formatNumberWithSuffix(dataToken.liquidity || 0)}
                                         {wsTokenInfo?.liquidity?.usd && (
@@ -142,7 +142,7 @@ export default function TokenInfoMobile({
                                     </div>
                                 </div>
                                 <div className="border-linear-200 rounded-lg p-2 flex flex-col items-center justify-center">
-                                    <div className="text-xs text-neutral-100 font-semibold mb-1.5">Holders</div>
+                                    <div className="text-xs text-neutral-100 font-semibold mb-1.5">{t('holders')}</div>
                                     <div className="font-medium text-sm text-neutral-100 flex items-center">
                                         {formatNumberWithSuffix(dataToken.holders || 0)}
                                         {wsTokenInfo?.holders && (
@@ -176,25 +176,25 @@ export default function TokenInfoMobile({
 
                             <div className="flex justify-between mt-2 px-3">
                                 <div className="flex flex-col items-center gap-1.5">
-                                    <div className="text-xs text-neutral-100 font-medium">Vol</div>
+                                    <div className="text-xs text-neutral-100 font-medium">{t('vol')}</div>
                                     <div className="font-medium text-xs text-red-400">
                                         {formatNumberWithSuffix(dataToken[timeFrame]?.vol || 0)}
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-center gap-1.5">
-                                    <div className="text-xs text-neutral-100 font-medium">Buy</div>
+                                    <div className="text-xs text-neutral-100 font-medium">{t('buy')}</div>
                                     <div className="text-green-400 font-medium text-xs">
                                         {formatNumberWithSuffix(dataToken[timeFrame]?.buy || 0)}
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-center gap-1.5">
-                                    <div className="text-xs text-neutral-100 font-medium">Sells</div>
+                                    <div className="text-xs text-neutral-100 font-medium">{t('sells')}</div>
                                     <div className="text-red-400 font-medium text-xs">
                                         {formatNumberWithSuffix(dataToken[timeFrame]?.sell || 0)}
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-center gap-1.5">
-                                    <div className="text-xs text-neutral-100 font-medium">Net Buy</div>
+                                    <div className="text-xs text-neutral-100 font-medium">{t('net_buy')}</div>
                                     <div className="text-green-400 font-medium text-xs">
                                         {formatNumberWithSuffix(dataToken[timeFrame]?.netBuy || 0)}
                                     </div>
