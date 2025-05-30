@@ -44,23 +44,23 @@ const wrapGradientStyle = "bg-gradient-to-t from-theme-purple-100 to-theme-gradi
 // Add responsive styles
 const containerStyles = "lg:container-glow w-full px-4 sm:px-[40px] flex flex-col gap-4 sm:gap-6 pt-4 sm:pt-[30px] relative mx-auto z-10"
 const walletGridStyles = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full"
-const walletCardStyles = "px-4 sm:px-6 py-4 border border-solid border-theme-secondary-500 rounded-xl flex flex-col justify-start items-center gap-3 sm:gap-4 min-w-0 bg-gradient-overlay"
+const walletCardStyles = "px-4 sm:px-6 py-4 border border-solid border-theme-secondary-500 justify-evenly rounded-xl flex flex-col  items-center sm:gap-4 min-w-0 dark:bg-gradient-overlay"
 const walletTitleStyles = "text-Colors-Neutral-100 text-sm sm:text-base font-semibold uppercase leading-tight"
 const walletAddressStyles = "text-Colors-Neutral-200 text-xs sm:text-sm font-normal leading-tight truncate"
 const sectionTitleStyles = "text-Colors-Neutral-100 text-base sm:text-lg font-bold leading-relaxed"
 const tableContainerStyles = "overflow-x-auto -mx-4 sm:mx-0"
 const tableStyles = "min-w-[800px] w-full"
-const tableHeaderStyles = "px-3 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-300"
-const tableCellStyles = "px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-300"
+const tableHeaderStyles = "px-3 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-neutral-800 dark:text-gray-300"
+const tableCellStyles = "px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-neutral-900 dark:text-gray-300"
 
 // Add new styles for mobile assets
-const assetCardStyles = "bg-theme-black-200/50 rounded-xl p-4 border border-solid border-y-[#15DFFD] border-x-[#720881]"
+const assetCardStyles = "dark:bg-theme-black-200/50 bg-white rounded-xl p-4 border border-solid border-y-[#15DFFD] border-x-[#720881]"
 const assetHeaderStyles = "flex items-start gap-2 mb-3"
 const assetTokenStyles = "flex items-center gap-2 flex-1 min-w-0"
 const assetValueStyles = "text-right"
-const assetLabelStyles = "text-xs text-gray-400 mb-1"
-const assetAmountStyles = "text-sm sm:text-base font-medium text-neutral-100"
-const assetPriceStyles = "text-xs sm:text-sm text-theme-primary-300"
+const assetLabelStyles = "text-xs dark:text-gray-400 text-black mb-1"
+const assetAmountStyles = "text-sm sm:text-base font-medium dark:text-theme-neutral-100 text-black"
+const assetPriceStyles = "text-xs sm:text-sm dark:text-theme-primary-300 text-black"
 
 export default function WalletPage() {
     const { t } = useLang();
@@ -432,7 +432,7 @@ export default function WalletPage() {
                         </div>
 
                         {/* ETH Wallet Card */}
-                        <div className={`${walletCardStyles} bg-gradient-blue-transparent border-theme-primary-100`}>
+                        <div className={`${walletCardStyles} dark:bg-gradient-blue-transparent border-theme-primary-100`}>
                             <div className="inline-flex justify-start items-center gap-2 w-full">
                                 <div className="w-8 h-8 bg-theme-primary-500 rounded-full flex justify-center items-center relative overflow-hidden flex-shrink-0">
                                     <img src="/ethereum.png" alt="Ethereum" className="w-4 h-4 object-cover" />
@@ -454,7 +454,7 @@ export default function WalletPage() {
                               
                             </div>
                         </div>
-                        <div className={`${walletCardStyles} bg-gradient-yellow-transparent border-theme-yellow-300`}>
+                        <div className={`${walletCardStyles} dark:bg-gradient-yellow-transparent border-theme-yellow-300`}>
                             <div className="inline-flex justify-start items-center gap-2 w-full">
                                 <div className="w-8 h-8 relative overflow-hidden flex-shrink-0">
                                     <img src="/bnb.png" alt="BNB" className="w-full h-full object-cover" />
@@ -476,7 +476,7 @@ export default function WalletPage() {
                              
                             </div>
                         </div>
-                        <div className={`${walletCardStyles} bg-gradient-purple-transparent border-theme-primary-300`}>
+                        <div className={`${walletCardStyles} dark:bg-gradient-purple-transparent border-theme-primary-300`}>
                             <div className="inline-flex justify-start items-center gap-2.5 w-full">
                                 <img src="/ethereum.png" alt="Ethereum" className="w-4 h-4 object-cover" />
                                 <div className="justify-start text-Colors-Neutral-100 text-base font-semibold uppercase leading-normal truncate">
@@ -535,7 +535,7 @@ export default function WalletPage() {
                     <div className="flex justify-center items-center mt-1">
                         <button
                             onClick={handleGetPrivateKeys}
-                            className="px-3 sm:px-4 py-1 sm:py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-3xl shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-blue-950 inline-flex justify-center items-center gap-2 sm:gap-2.5"
+                            className="px-3 sm:px-4 py-1 sm:py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-3xl shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-blue-950 inline-flex justify-center items-center gap-2 sm:gap-2.5 text-white"
                         >
                             <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 relative overflow-hidden">
                                 <KeyIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
@@ -556,7 +556,7 @@ export default function WalletPage() {
                         <div className="flex flex-wrap justify-start items-center gap-3 sm:gap-6">
                             <button
                                 onClick={() => setShowAddWallet(true)}
-                                className="px-2 sm:px-3 pr-3 sm:pr-4 py-1 sm:py-1.5 bg-gradient-to-t from-blue-950 to-purple-600 rounded-3xl shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-blue-950 flex justify-center items-center gap-2 sm:gap-2.5"
+                                className="px-2 sm:px-3 pr-3 sm:pr-4 py-1 sm:py-1.5 bg-gradient-to-t from-blue-950 to-purple-600 rounded-3xl shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-blue-950 flex justify-center items-center gap-2 sm:gap-2.5 text-white"
                             >
                                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 relative overflow-hidden">
                                     <PlusIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
@@ -567,10 +567,10 @@ export default function WalletPage() {
                             </button>
                             <button
                                 onClick={() => setShowImportWallet(true)}
-                                className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-3xl shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-indigo-500 flex justify-center items-center gap-1.5"
+                                className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-3xl text-indigo-500 dark:text-white shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-indigo-500 flex justify-center items-center gap-1.5 bg-white dark:bg-inherit"
                             >
                                 <ArrowDownToLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                <div className="text-xs sm:text-sm font-medium leading-tight text-Colors-Neutral-100">
+                                <div className="text-xs sm:text-sm font-medium leading-tight text-indigo-500 dark:text-white">
                                     {t('wallet.importWallet')}
                                 </div>
                             </button>
@@ -599,7 +599,7 @@ export default function WalletPage() {
                         <div className="hidden sm:block overflow-hidden rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881]">
                             <div className={tableContainerStyles}>
                                 <table className={tableStyles}>
-                                    <thead className="bg-gray-900">
+                                    <thead className="dark:bg-gray-900">
                                         <tr>
                                             <th className={tableHeaderStyles}>{t('wallet.token')} ▼</th>
                                             <th className={tableHeaderStyles}>{t('wallet.balance')}</th>
@@ -624,8 +624,8 @@ export default function WalletPage() {
                                                             />
                                                         )}
                                                         <div>
-                                                            <div className="font-medium text-neutral-100 text-xs sm:text-sm">{token.token_name}</div>
-                                                            <div className="text-[10px] sm:text-xs text-gray-400">{token.token_symbol}</div>
+                                                            <div className="font-medium text-neutral-900 dark:text-theme-neutral-100 text-xs sm:text-sm">{token.token_name}</div>
+                                                            <div className="text-[10px] sm:text-xs text-neutral-600 dark:text-gray-400">{token.token_symbol}</div>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -643,7 +643,7 @@ export default function WalletPage() {
                                                         <span className="truncate max-w-[100px] sm:max-w-[120px]">{truncateString(token.token_address, 12)}</span>
                                                         <button
                                                             onClick={(e) => handleCopyAddress(token.token_address, e)}
-                                                            className="text-gray-400 hover:text-gray-200"
+                                                            className="text-neutral-600 hover:text-neutral-900 dark:text-gray-400 dark:hover:text-gray-200"
                                                         >
                                                             <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                                         </button>
@@ -674,13 +674,13 @@ export default function WalletPage() {
                                                 />
                                             )}
                                             <div className="min-w-0 flex gap-2">
-                                                <div className="font-medium text-neutral-100 text-sm truncate">{token.token_name}</div>
-                                                <div className="text-xs text-gray-400">{token.token_symbol}</div>
+                                                <div className="font-medium dark:text-theme-neutral-100 text-black text-sm truncate">{token.token_name}</div>
+                                                <div className="text-xs dark:text-gray-400 text-black">{token.token_symbol}</div>
                                             </div>
                                         </div>
                                         {/* Token Address */}
                                         <div className="flex items-center gap-2">
-                                            <span className="text-xs text-neutral-200 truncate flex-1">
+                                            <span className="text-xs dark:text-neutral-200 text-black truncate flex-1">
                                                 {truncateString(token.token_address, 12)}
                                             </span>
                                             <button
@@ -719,41 +719,41 @@ export default function WalletPage() {
             {showAddWallet && (
                 <div className="fixed inset-0 bg-theme-black-1/3 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
                     <div className="p-[1px] rounded-xl bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end w-full max-w-[400px]">
-                        <div ref={addWalletRef} className="bg-theme-black-200 border border-theme-gradient-linear-start p-4 sm:p-6 rounded-xl">
+                        <div ref={addWalletRef} className="bg-white dark:bg-theme-black-200 border border-theme-gradient-linear-start p-4 sm:p-6 rounded-xl">
                             <h2 className="text-lg sm:text-xl font-semibold text-indigo-500 backdrop-blur-sm boxShadow linear-200-bg mb-4 text-fill-transparent bg-clip-text">{t('wallet.addNewWallet')}</h2>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-200 mb-1">{t('wallet.walletName')}</label>
+                                    <label className="block text-sm font-medium dark:text-gray-200 text-black mb-1">{t('wallet.walletName')}</label>
                                     <div className={wrapGradientStyle}>
                                         <input
                                             type="text"
                                             value={walletName}
                                             onChange={(e) => setWalletName(e.target.value)}
-                                            className="w-full px-3 py-2 bg-theme-black-200  rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500"
+                                            className="w-full px-3 py-2 dark:bg-theme-black-200  rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500"
                                             placeholder={t('wallet.enterWalletName')}
                                         />
                                     </div>
 
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-200 mb-1">{t('wallet.nickname')}</label>
+                                    <label className="block text-sm font-medium dark:text-gray-200 text-black mb-1">{t('wallet.nickname')}</label>
                                     <div className={wrapGradientStyle}>
                                         <input
                                             type="text"
                                             value={walletNickname}
                                             onChange={(e) => setWalletNickname(e.target.value)}
-                                            className="w-full px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500"
+                                            className="w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500"
                                             placeholder={t('wallet.enterNickname')}
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-200 mb-1">{t('wallet.network')}</label>
+                                    <label className="block text-sm font-medium dark:text-gray-200 text-black mb-1">{t('wallet.network')}</label>
                                     <div className={wrapGradientStyle}>
                                         <select
                                             value={selectedNetwork}
                                             onChange={(e) => setSelectedNetwork(e.target.value)}
-                                            className="w-full px-3 py-2 bg-theme-black-200 border-none rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500"
+                                            className="w-full px-3 py-2 bg-white dark:bg-theme-black-200 border-none rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500"
                                         >
                                             {langConfig.listLangs.map((language) => (
                                                 <option key={language.id} value={language.code}>{t(language.translationKey)}</option>
@@ -764,7 +764,7 @@ export default function WalletPage() {
                                 <div className="flex justify-end gap-3 mt-6">
                                     <button
                                         onClick={handleCloseAddWallet}
-                                        className="px-4 py-2 text-sm font-medium text-gray-200 hover:text-neutral-100"
+                                        className="px-4 py-2 text-sm font-medium dark:text-gray-200 text-black hover:text-neutral-100"
                                     >
                                         {t('common.cancel')}
                                     </button>
@@ -784,7 +784,7 @@ export default function WalletPage() {
 
             {showPrivateKeys && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
-                    <div ref={privateKeysRef} className="p-6 bg-neutral-900 rounded-lg shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
+                    <div ref={privateKeysRef} className="p-6 bg-white dark:bg-neutral-900 rounded-lg shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
                         <div className="w-96 inline-flex flex-col justify-start items-start gap-6">
                             <div className="self-stretch flex flex-col justify-start items-start gap-4">
                                 <div className="self-stretch inline-flex justify-between items-center">
@@ -799,7 +799,7 @@ export default function WalletPage() {
 
                                 <div className="w-96 inline-flex justify-start items-center gap-6">
                                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                        <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.solanaPrivateKey')}</div>
+                                        <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.solanaPrivateKey')}</div>
                                         <div className={wrapGradientStyle}>
                                             <div className="relative w-full">
                                                 <input
@@ -807,7 +807,7 @@ export default function WalletPage() {
                                                     value={privateKeyDefault.sol_private_key}
                                                     readOnly
                                                     placeholder="Enter Solana private key"
-                                                    className="w-full text-xs placeholder:text-neutral-100 placeholder:text-xs px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500 pr-10 cursor-default"
+                                                    className="w-full text-xs placeholder:text-neutral-100 placeholder:text-xs px-3 py-2 dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 cursor-default"
                                                 />
                                                 <button
                                                     type="button"
@@ -825,7 +825,7 @@ export default function WalletPage() {
                                     </div>
                                 </div>
                                 <div className="self-stretch flex flex-col justify-start items-start gap-1">
-                                    <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.ethereumPrivateKey')}</div>
+                                    <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.ethereumPrivateKey')}</div>
                                     <div className={wrapGradientStyle}>
                                         <div className="relative w-full">
                                             <input
@@ -833,7 +833,7 @@ export default function WalletPage() {
                                                 value={privateKeyDefault.eth_private_key}
                                                 readOnly
                                                 placeholder="Enter Ethereum private key"
-                                                className="w-full text-xs placeholder:text-neutral-100 placeholder:text-xs px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500 pr-10 cursor-default"
+                                                className="w-full text-xs placeholder:text-neutral-100 placeholder:text-xs px-3 py-2 dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 cursor-default"
                                             />
                                             <button
                                                 type="button"
@@ -850,7 +850,7 @@ export default function WalletPage() {
                                     </div>
                                 </div>
                                 <div className="self-stretch flex flex-col justify-start items-start gap-1">
-                                    <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.bnbPrivateKey')}</div>
+                                    <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.bnbPrivateKey')}</div>
                                     <div className={wrapGradientStyle}>
                                         <div className="relative w-full">
                                             <input
@@ -858,7 +858,7 @@ export default function WalletPage() {
                                                 value={privateKeyDefault.bnb_private_key}
                                                 readOnly
                                                 placeholder="Enter BNB private key"
-                                                className="w-full text-xs placeholder:text-neutral-100 placeholder:text-xs px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500 pr-10 cursor-default"
+                                                className="w-full text-xs placeholder:text-neutral-100 placeholder:text-xs px-3 py-2 dark:bg-theme-black-200 text-black rounded-xl dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 cursor-default"
                                             />
                                             <button
                                                 type="button"
@@ -891,7 +891,7 @@ export default function WalletPage() {
             {showImportWallet && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
                     <div className="p-[1px] rounded-xl bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end">
-                        <div ref={importWalletRef} className="p-6 bg-theme-black-200 rounded-xl  shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
+                        <div ref={importWalletRef} className="p-6 bg-white dark:bg-theme-black-200 rounded-xl  shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
                             <div className="w-96 inline-flex flex-col justify-start items-start gap-6">
                                 <div className="self-stretch flex flex-col justify-start items-start gap-4">
                                     <div className="self-stretch inline-flex justify-between items-center">
@@ -905,21 +905,21 @@ export default function WalletPage() {
                                     </div>
                                     <div className="w-96 inline-flex justify-start items-center gap-6">
                                         <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                            <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.walletName')}</div>
+                                            <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.walletName')}</div>
                                             <div className={wrapGradientStyle}>
                                                 <input
                                                     type="text"
                                                     value={walletName}
                                                     onChange={(e) => setWalletName(e.target.value)}
                                                     placeholder={t('wallet.enterWalletName')}
-                                                    className="w-full px-3 py-2 bg-theme-black-200  rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500"
+                                                    className="w-full px-3 py-2 bg-white dark:bg-theme-black-200  rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500"
                                                 />
                                             </div>
                                         </div>
                                     </div>
                                     <div className="w-96 inline-flex justify-start items-center gap-6">
                                         <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                            <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.solanaPrivateKey')}</div>
+                                            <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.solanaPrivateKey')}</div>
                                             <div className={wrapGradientStyle}>
                                                 <div className="relative w-full">
                                                     <input
@@ -927,7 +927,7 @@ export default function WalletPage() {
                                                         value={privateKey}
                                                         onChange={(e) => setPrivateKey(e.target.value)}
                                                         placeholder={t('wallet.enterSolanaPrivateKey')}
-                                                        className="w-full px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500 pr-10"
+                                                        className="w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10"
                                                     />
                                                     <button
                                                         type="button"
@@ -949,25 +949,25 @@ export default function WalletPage() {
                                     </div>
                                     <div className="w-96 inline-flex justify-start items-center gap-6">
                                         <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                            <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.walletNickname')}</div>
+                                            <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.walletNickname')}</div>
                                             <div className={wrapGradientStyle}>
                                                 <input
                                                     type="text"
                                                     value={walletNickname}
                                                     onChange={(e) => setWalletNickname(e.target.value)}
                                                     placeholder={t('wallet.enterWalletNickname')}
-                                                    className="w-full px-3 py-2 bg-theme-black-200  rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500"
+                                                    className="w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500"
                                                 />
                                             </div>
                                         </div>
                                     </div>
                                     <div className="w-full">
-                                        <label className="block text-sm font-medium text-gray-200 mb-1">{t('wallet.network')}</label>
+                                        <label className="block text-sm font-medium dark:text-gray-200 text-black mb-1">{t('wallet.network')}</label>
                                         <div className={wrapGradientStyle}>
                                             <select
                                                 value={selectedNetwork}
                                                 onChange={(e) => setSelectedNetwork(e.target.value)}
-                                                className="w-full px-3 py-2 bg-theme-black-200 border-none rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500"
+                                                className="w-full px-3 py-2 dark:bg-theme-black-200 border-none rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500"
                                             >
                                                 {langConfig.listLangs.map((language) => (
                                                     <option key={language.id} value={language.code}>{t(language.translationKey)}</option>
@@ -1000,7 +1000,7 @@ export default function WalletPage() {
             {showCreatePassword && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
                     <div className="p-[1px] rounded-xl bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end">
-                        <div className="p-6 bg-theme-black-200 rounded-xl shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
+                        <div className="p-6 bg-white dark:bg-theme-black-200 rounded-xl shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
                             <div className="w-96 inline-flex flex-col justify-start items-start gap-6">
                                 <div className="self-stretch flex flex-col justify-start items-start gap-4">
                                     <div className="self-stretch inline-flex justify-between items-center">
@@ -1015,7 +1015,7 @@ export default function WalletPage() {
 
                                     <div className="w-96 inline-flex justify-start items-center gap-6">
                                         <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                            <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.newPassword')}</div>
+                                            <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.newPassword')}</div>
                                             <div className={wrapGradientStyle}>
                                                 <div className="relative w-full">
                                                     <input
@@ -1023,7 +1023,7 @@ export default function WalletPage() {
                                                         value={newPassword}
                                                         onChange={handlePasswordChange}
                                                         placeholder="Enter new password"
-                                                        className={`w-full px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${passwordError ? 'border-red-500' : ''}`}
+                                                        className={`w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${passwordError ? 'border-red-500' : ''}`}
                                                     />
                                                     <button
                                                         type="button"
@@ -1046,7 +1046,7 @@ export default function WalletPage() {
 
                                     <div className="w-96 inline-flex justify-start items-center gap-6">
                                         <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                            <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.confirmPassword')}</div>
+                                            <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.confirmPassword')}</div>
                                             <div className={wrapGradientStyle}>
                                                 <div className="relative w-full">
                                                     <input
@@ -1054,7 +1054,7 @@ export default function WalletPage() {
                                                         value={confirmPassword}
                                                         onChange={handleConfirmPasswordChange}
                                                         placeholder="Confirm your password"
-                                                        className={`w-full px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${confirmPasswordError ? 'border-red-500' : ''}`}
+                                                        className={`w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${confirmPasswordError ? 'border-red-500' : ''}`}
                                                     />
                                                     <button
                                                         type="button"
@@ -1085,14 +1085,14 @@ export default function WalletPage() {
                                         onClick={handleCloseCreatePassword}
                                         className="w-30 h-[30px] self-stretch px-4 py-1 rounded-[30px] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-sm flex justify-center items-center gap-3"
                                     >
-                                        <div className="justify-start text-Colors-Neutral-100 text-sm font-medium leading-none">{t('common.cancel')}</div>
+                                        <div className="justify-start text-white dark:text-Colors-Neutral-100 text-sm font-medium leading-none">{t('common.cancel')}</div>
                                     </button>
                                     <button
                                         onClick={handleCreatePassword}
                                         disabled={isLoading || !newPassword || !confirmPassword}
                                         className="w-30 h-[30px] px-4 py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-[30px] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-sm flex justify-center items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        <div className="justify-start text-Colors-Neutral-100 text-sm font-medium leading-none">
+                                        <div className="justify-start text-white text-sm font-medium leading-none">
                                             {isLoading ? "Creating..." : "Create Password"}
                                         </div>
                                     </button>
@@ -1106,7 +1106,7 @@ export default function WalletPage() {
             {showPasswordInput && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
                     <div className="p-[1px] rounded-xl bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end">
-                        <div className="p-6 bg-theme-black-200 rounded-xl shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
+                        <div className="p-6 bg-white dark:bg-theme-black-200 rounded-xl shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
                             <div className="w-96 inline-flex flex-col justify-start items-start gap-6">
                                 <div className="self-stretch flex flex-col justify-start items-start gap-4">
                                     <div className="self-stretch inline-flex justify-between items-center">
@@ -1121,7 +1121,7 @@ export default function WalletPage() {
 
                                     <div className="w-96 inline-flex justify-start items-center gap-6">
                                         <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                                            <div className="self-stretch justify-center text-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.password')}</div>
+                                            <div className="self-stretch justify-center text-black dark:text-theme-neutral-100 text-sm font-normal leading-tight mb-1">{t('wallet.password')}</div>
                                             <div className={wrapGradientStyle}>
                                                 <div className="relative w-full">
                                                     <input
@@ -1132,7 +1132,7 @@ export default function WalletPage() {
                                                             setInputPasswordError("");
                                                         }}
                                                         placeholder="Enter your password"
-                                                        className={`w-full px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${inputPasswordError ? 'border-red-500' : ''}`}
+                                                        className={`w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${inputPasswordError ? 'border-red-500' : ''}`}
                                                     />
                                                     <button
                                                         type="button"
@@ -1163,14 +1163,14 @@ export default function WalletPage() {
                                         onClick={handleClosePasswordInput}
                                         className="w-30 h-[30px] self-stretch px-4 py-1 rounded-[30px] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-sm flex justify-center items-center gap-3"
                                     >
-                                        <div className="justify-start text-Colors-Neutral-100 text-sm font-medium leading-none">{t('common.cancel')}</div>
+                                        <div className="justify-start text-black dark:text-white text-sm font-medium leading-none">{t('common.cancel')}</div>
                                     </button>
                                     <button
                                         onClick={handleSubmitPassword}
                                         disabled={isLoading || !inputPassword}
                                         className="w-30 h-[30px] px-4 py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-[30px] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-sm flex justify-center items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        <div className="justify-start text-Colors-Neutral-100 text-sm font-medium leading-none">
+                                        <div className="justify-start text-white text-sm font-medium leading-none">
                                             {isLoading ? "Verifying..." : "Submit"}
                                         </div>
                                     </button>

@@ -520,7 +520,10 @@
       "min_withdrawal": "Minimum withdrawal amount is 0.001 SOL",
       "insufficient_balance": "Amount cannot exceed your balance of {balance} SOL",
       "transaction_failed": "Transaction failed. Please try again.",
-      "transaction_success": "Transaction sent successfully!"
+      "transaction_success": "Transaction sent successfully!",
+      "network_error": "Network error. Please check your connection.",
+      "unauthorized": "Unauthorized. Please login again.",
+      "recipient_required": "Recipient address is required"
     }
   },
   "chat": {

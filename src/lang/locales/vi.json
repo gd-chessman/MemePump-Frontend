@@ -539,7 +539,10 @@
       "min_withdrawal": "Số tiền rút tối thiểu là 0.001 SOL",
       "insufficient_balance": "Số tiền không được vượt quá số dư {balance} SOL",
       "transaction_failed": "Giao dịch thất bại. Vui lòng thử lại.",
-      "transaction_success": "Gửi giao dịch thành công!"
+      "transaction_success": "Gửi giao dịch thành công!",
+      "network_error": "Lỗi kết nối. Vui lòng kiểm tra kết nối của bạn.",
+      "unauthorized": "Không được phép. Vui lòng đăng nhập lại.",
+      "recipient_required": "Vui lòng nhập địa chỉ người nhận"
     }
   },
   "searchModal": {

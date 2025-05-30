@@ -22,6 +22,7 @@ import { getStatsToken } from "@/services/api/OnChainService"
 import TokenInfoMobile from "./token-info-mobile"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import BgGradientBox from "../components/bg-gradient-box"
+import { useTokenInfoStore } from "@/hooks/useTokenInfoStore"
 
 type TimeFrame = '5m' | '1h' | '4h' | '24h'
 
@@ -30,6 +31,7 @@ export default function TokenInfo() {
   const address = searchParams?.get("address");
   const { t } = useLang();
   const isMobile = useMediaQuery('(max-width: 768px)')
+  const { setDataInfo } = useTokenInfoStore();
   const { data: tokenInfor, refetch } = useQuery({
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
@@ -139,6 +141,16 @@ export default function TokenInfo() {
       netBuy: (statsToken?.['24h']?.volume?.buys - statsToken?.['24h']?.volume?.sells)?.toFixed(2) || "updating",
     }
   }
+
+  useEffect(() => {
+    // Update store with token data whenever these values change
+    setDataInfo({
+      marketCap: dataToken.cap || 0,
+      volume24h: dataToken.aDayVolume || 0,
+      liquidity: dataToken.liquidity || 0,
+      holders: dataToken.holders || 0
+    });
+  }, [dataToken.cap, dataToken.aDayVolume, dataToken.liquidity, dataToken.holders, setDataInfo]);
 
   const handleToggleWishlist = (data: { token_address: string; status: string }) => {
     SolonaTokenService.toggleWishlist(data).then(() => {

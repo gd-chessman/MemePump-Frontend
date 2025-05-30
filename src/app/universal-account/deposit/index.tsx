@@ -22,7 +22,7 @@ const DepositWallet: React.FC<DepositWalletProps> = ({ walletAddress }) => {
     return (
         <div>
             <div className="gap-5 flex flex-col justify-center items-center">
-                <h3 className="text-sm font-bold text-center text-theme-neutral-100 mt-1">{t('universal_account.deposit_wallet.title')}</h3>
+                <h3 className="text-sm font-bold text-center dark:text-theme-neutral-100 text-black mt-1">{t('universal_account.deposit_wallet.title')}</h3>
 
                 {/* QR Code */}
                 <div className="bg-white p-4 rounded-lg">
@@ -39,7 +39,7 @@ const DepositWallet: React.FC<DepositWalletProps> = ({ walletAddress }) => {
 
                 {/* Address */}
                 <div className="relative flex">
-                    <div className="text-center rounded-lg p-3 text-sm text-gray-300 break-all">
+                    <div className="text-center rounded-lg p-3 text-sm dark:text-gray-300 text-black break-all">
                         {walletAddress}
                     </div>
                     <button
@@ -56,8 +56,8 @@ const DepositWallet: React.FC<DepositWalletProps> = ({ walletAddress }) => {
                     <div className="flex justify-center mb-3">
                         <div className="w-6 h-6 rounded-full flex items-center justify-center text-2xl">⚠️</div>
                     </div>
-                    <p className="text-sm text-theme-neutral-100">{t('universal_account.deposit_wallet.warning.title')}</p>
-                    <p className="text-sm text-theme-neutral-100 mt-1">
+                    <p className="text-sm dark:text-theme-neutral-100 text-theme-brown-100">{t('universal_account.deposit_wallet.warning.title')}</p>
+                    <p className="text-sm dark:text-theme-neutral-100 text-theme-brown-100 mt-1">
                         {t('universal_account.deposit_wallet.warning.description')}
                     </p>
                 </div>

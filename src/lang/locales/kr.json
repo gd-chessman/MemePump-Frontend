@@ -594,7 +594,11 @@
         "min_withdrawal": "최소 출금 금액은 0.001 SOL입니다",
         "insufficient_balance": "잔액 {balance} SOL을 초과할 수 없습니다",
         "transaction_failed": "거래 실패. 다시 시도해 주세요.",
-        "transaction_success": "거래가 성공적으로 전송되었습니다!"
+        "transaction_success": "거래가 성공적으로 전송되었습니다!",
+        "network_error": "네트워크 오류. 연결을 확인해 주세요.",
+        "unauthorized": "인증되지 않음. 다시 로그인해 주세요.",
+        "recipient_required": "수신자 주소가 필요합니다",
+        "invalid_recipient": "유효하지 않은 수신자 주소입니다"
       }
     },
     "searchModal": {

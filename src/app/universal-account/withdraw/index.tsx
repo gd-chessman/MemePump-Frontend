@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -15,12 +14,34 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
   const [recipientWallet, setRecipientWallet] = useState<string>("")
   const [isSending, setIsSending] = useState<boolean>(false)
   const [error, setError] = useState<string>("")
+  const [recipientError, setRecipientError] = useState<string>("")
   const [copied, setCopied] = useState(false);
 
   // Kiểm tra điều kiện disable
   const isDisabled = React.useMemo(() => {
     const numAmount = Number.parseFloat(amount);
     const balance = parseFloat(walletInfor?.solana_balance || "0");
+
+    const disabledConditions = {
+      isSending,
+      noWalletAddress: !walletInfor?.solana_address,
+      amountTooSmall: numAmount < 0.001,
+      amountTooLarge: numAmount > 1,
+      exceedsBalance: numAmount > balance,
+      hasError: !!error
+    };
+
+    console.log('Button disabled conditions:', {
+      ...disabledConditions,
+      recipientWalletEmpty: recipientWallet.length === 0,
+      finalDisabled: isSending ||
+        !walletInfor?.solana_address ||
+        numAmount < 0.001 ||
+        numAmount > 1 ||
+        numAmount > balance ||
+        !!error ||
+        recipientWallet.length === 0
+    });
 
     return {
       send: isSending ||
@@ -32,7 +53,7 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
       input: isSending,
       copy: isSending || !walletInfor?.solana_address
     };
-  }, [amount, walletInfor, isSending, error]);
+  }, [amount, walletInfor, isSending, error, recipientWallet]);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isDisabled.input) return; // Không cho phép thay đổi khi đang sending
@@ -79,14 +100,44 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
   const handleSend = async () => {
     if (isDisabled.send) return; // Không cho phép gửi khi đang disable
 
+    // Validate recipient wallet
+    if (!recipientWallet.trim()) {
+      setRecipientError(t('universal_account.recipient_address_required'));
+      return;
+    }
+    setRecipientError("");
+
     setIsSending(true);
     try {
-      await createTransaction({ type: "withdraw", amount: Number(amount), wallet_address_to: recipientWallet });
-      setAmount("0");
-      setRecipientWallet("");
-      toast.success("Transaction sent successfully!");
-    } catch (error) {
-      toast.error("Transaction failed. Please try again.");
+      const response = await createTransaction({ 
+        type: "withdraw", 
+        amount: Number(amount), 
+        wallet_address_to: recipientWallet 
+      });
+
+      if (response?.status === 'success') {
+        setAmount("0");
+        setRecipientWallet("");
+        toast.success(t('universal_account.errors.transaction_success'));
+      } else {
+        // Handle specific error messages from API
+        const errorMessage = response?.message || t('universal_account.errors.transaction_failed');
+        toast.error(errorMessage);
+      }
+    } catch (error: any) {
+      // Handle different types of errors
+      if (error.code === 'ERR_NETWORK') {
+        toast.error(t('universal_account.errors.network_error'));
+      } else if (error.response?.status === 401) {
+        toast.error(t('universal_account.errors.unauthorized'));
+      } else if (error.response?.data?.message) {
+        // Show specific error message from API
+        toast.error(error.response.data.message);
+      } else {
+        // Generic error message
+        toast.error(t('universal_account.errors.transaction_failed'));
+      }
+      console.error('Transaction error:', error);
     } finally {
       setIsSending(false);
     }
@@ -97,10 +148,10 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
       {/* Amount Input */}
       <div className={`p-[1px] rounded-xl bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end w-full max-w-[600px] group hover:from-theme-purple-200 hover:to-theme-gradient-linear-end transition-all duration-300 ${isDisabled.input ? 'opacity-50 cursor-not-allowed' : ''
         }`}>
-        <div className="bg-theme-black-200 border border-theme-gradient-linear-start p-4 sm:p-6 rounded-xl group-hover:border-theme-purple-200 transition-all duration-300">
+        <div className="bg-white dark:bg-theme-black-200 border border-theme-gradient-linear-start p-4 sm:p-6 rounded-xl group-hover:border-theme-purple-200 transition-all duration-300 ">
           <div className="w-full">
             <div className="text-center mb-1">
-              <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+              <p className="text-sm dark:text-gray-400 text-black group-hover:text-black dark:group-hover:text-white transition-colors duration-300">
                 {isDisabled.input ? t('universal_account.transaction_progress') : t('universal_account.enter_amount')}
               </p>
             </div>
@@ -111,7 +162,7 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
                 value={amount}
                 onChange={handleAmountChange}
                 disabled={isDisabled.input}
-                className={`bg-transparent text-center text-3xl max-w-[200px] font-bold w-full focus:outline-none transition-colors duration-300 ${error ? 'text-red-500' : 'group-hover:text-white'
+                className={`bg-transparent text-center text-3xl max-w-[200px] font-bold w-full focus:outline-none transition-colors duration-300 ${error ? 'text-red-500' : 'group-hover:text-black dark:group-hover:text-white'
                   } ${isDisabled.input ? 'cursor-not-allowed opacity-50' : ''}`}
               />
               <span className={`absolute inset-y-0 right-0 flex items-center pr-3 transition-colors duration-300 ${error ? 'text-red-500' : 'text-gray-500 group-hover:text-gray-300'
@@ -131,33 +182,37 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
 
       {/* Recipient Address */}
       <div className="w-full max-w-[600px] ">
-        <label htmlFor="name" className={"block  md:text-sm lg:text-base font-normal text-neutral-100 mb-1 text-xs"}>
+        <label htmlFor="name" className={"block md:text-sm lg:text-base font-normal dark:text-neutral-100 text-black mb-1 text-xs"}>
           {t('universal_account.recipient_address')} <span className="text-theme-red-200">*</span>
         </label>
         <div className={`p-[1px] rounded-xl bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end w-full group hover:from-theme-purple-200 hover:to-theme-gradient-linear-end transition-all duration-300`}>
-        <div className="bg-theme-black-200 border border-theme-gradient-linear-start rounded-xl group-hover:border-theme-purple-200 transition-all duration-300">
-          <input 
-            type="text" 
-            value={recipientWallet}
-            onChange={(e) => setRecipientWallet(e.target.value)} 
-            onPaste={(e) => {
-              const pastedText = e.clipboardData.getData('text');
-              setRecipientWallet(pastedText);
-            }}
-            className="w-full bg-transparent h-10 rounded-xl pl-3 text-sm font-normal focus:outline-none transition-colors duration-300" 
-            placeholder={t('universal_account.recipient_placeholder')} 
-          />
+          <div className="bg-white dark:bg-theme-black-200 border border-theme-gradient-linear-start rounded-xl group-hover:border-theme-purple-200 transition-all duration-300">
+            <input
+              type="text"
+              value={recipientWallet}
+              onChange={(e) => setRecipientWallet(e.target.value)}
+              onPaste={(e) => {
+                const pastedText = e.clipboardData.getData('text');
+                setRecipientWallet(pastedText);
+              }}
+              className="w-full bg-transparent h-10 rounded-xl pl-3 text-sm font-normal focus:outline-none transition-colors duration-300"
+              placeholder={t('universal_account.recipient_placeholder')}
+            />
+          </div>
+          {recipientError && (
+            <div className="text-xs text-red-500 mt-1 pl-3">
+              {recipientError}
+            </div>
+          )}
         </div>
+      </div>
 
-      </div>
-      </div>
-      
 
       {/* Send Button */}
       <button
         onClick={handleSend}
         disabled={isDisabled.send || recipientWallet.length === 0}
-        className={`lg:max-w-auto min-w-[160px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-6 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto cursor-pointer`}
+        className={`lg:max-w-auto min-w-[160px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-6 rounded-full text-[11px] md:text-sm text-theme-neutral-100 transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto ${(isDisabled.send || recipientWallet.length === 0) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
       >
         {isSending ? (
           <span className="flex items-center gap-2">
