@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { Star } from "lucide-react"
+import { Star, Check } from "lucide-react"
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import token from '@/assets/svgs/token.svg'
@@ -52,6 +52,7 @@ export default function TokenInfo() {
   const [wsTokenInfo, setWsTokenInfo] = useState<any>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [marketCap, setMarketCap] = useState<number>(0);
+  const [isCopied, setIsCopied] = useState(false);
 
   // Only listen for marketCap updates from chart
   useEffect(() => {
@@ -158,6 +159,16 @@ export default function TokenInfo() {
     })
   }
 
+  const handleCopyAddress = async () => {
+    try {
+      await navigator.clipboard.writeText(tokenInfor?.address || '');
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
   // If mobile, render mobile component
   if (isMobile) {
     return (
@@ -178,7 +189,7 @@ export default function TokenInfo() {
     <>
       <div className="flex flex-col gap-4 w-full">
         <div className="dark:bg-theme-neutral-1000 bg-white shadow-inset shadow-md rounded-xl p-3 h-full flex flex-col ">
-          <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
                 <img src={tokenInfor?.logoUrl || '/placeholder.png'} width={40} height={40} alt="Token logo" className="rounded-full" />
@@ -187,16 +198,27 @@ export default function TokenInfo() {
                 <h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="text-neutral-300 text-sm font-normal">{tokenInfor?.symbol}</span></h2>
                 <div className="text-xs text-neutral-400 flex items-center">
                   {truncateString(tokenInfor?.address, 12)}
-                  <button className="ml-1 text-neutral-500 hover:text-neutral-300">
-                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                  <button 
+                    onClick={handleCopyAddress}
+                    className="ml-1 text-neutral-500 hover:text-neutral-300 relative group"
+                    title="Copy address"
+                  >
+                    {isCopied ? (
+                      <Check className="w-3 h-3 text-theme-green-200" />
+                    ) : (
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-neutral-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      {isCopied ? t('common.copy.copied') : t('common.copy.copyAddress')} 
+                    </span>
                   </button>
                 </div>
               </div>
@@ -225,7 +247,7 @@ export default function TokenInfo() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          {/* <div className="grid grid-cols-2 gap-2">
             <BgGradientBox>
               <div className="dark:bg-theme-neutral-1000 bg-white border-linear-200 rounded-xl p-[10px] flex flex-col items-center justify-center">
                 <div className="text-xs dark:text-neutral-100 text-theme-neutral-800 font-semibold mb-1">{t('trading.tokenInfo.marketCap')}</div>
@@ -267,32 +289,32 @@ export default function TokenInfo() {
                 </div>
               </div>
             </BgGradientBox>
-          </div>
+          </div> */}
 
         </div >
         <>
           <div className="dark:bg-theme-neutral-1000 bg-white shadow-inset shadow-md rounded-xl p-3 h-full flex gap-3 flex-col ">
             <div className="grid grid-cols-4 gap-2 ">
               <button onClick={() => setTimeFrame("5m")} className={`flex bg-theme-neutral-200 dark:bg-transparent dark:border-1 flex-col gap-1 cursor-pointer rounded-lg p-2 text-center  ${timeFrame === "5m" ? "border-green-400 border-1" : "dark:shadow-custom border-none "}`}>
-                <div className="text-xs">5분</div>
+                <div className="text-xs">{t('trading.tokenInfo.timeFrames.5m')}</div>
                 <div className={`font-normal text-xs ${Number(statsToken?.['5m']?.priceChangePercentage) >= 0 ? "text-theme-green-200 font-medium" : "text-red-400"}`}>
                   {statsToken?.['5m']?.priceChangePercentage?.toFixed(2)}%
                 </div>
               </button>
               <button onClick={() => setTimeFrame("1h")} className={`flex bg-theme-neutral-200 dark:bg-transparent dark:border-1 flex-col gap-1 cursor-pointer rounded-lg p-2 text-center  ${timeFrame === "1h" ? "border-green-400 border-1" : "dark:shadow-custom border-none"}`}>
-                <div className="text-xs">1시</div>
+                <div className="text-xs">{t('trading.tokenInfo.timeFrames.1h')}</div>
                 <div className={`font-normal text-xs ${Number(statsToken?.['1h']?.priceChangePercentage) >= 0 ? "text-theme-green-200 font-medium" : "text-red-400"}`}>
                   {statsToken?.['1h']?.priceChangePercentage?.toFixed(2)}%
                 </div>
               </button>
               <button onClick={() => setTimeFrame("4h")} className={`flex bg-theme-neutral-200 dark:bg-transparent dark:border-1 flex-col gap-1 cursor-pointer rounded-lg p-2 text-center  ${timeFrame === "4h" ? "border-green-400 border-1" : "dark:shadow-custom border-none"}`}>
-                <div className="text-xs">4시</div>
+                <div className="text-xs">{t('trading.tokenInfo.timeFrames.4h')}</div>
                 <div className={`font-normal text-xs ${Number(statsToken?.['4h']?.priceChangePercentage) >= 0 ? "text-theme-green-200 font-medium" : "text-red-400"}`}>
                   {statsToken?.['4h']?.priceChangePercentage?.toFixed(2)}%
                 </div>
               </button>
               <button onClick={() => setTimeFrame("24h")} className={`flex bg-theme-neutral-200 dark:bg-transparent dark:border-1 flex-col gap-1 cursor-pointer rounded-lg p-2 text-center  ${timeFrame === "24h" ? "border-green-400 border-1" : "dark:shadow-custom border-none"}`}>
-                <div className="text-xs">24시</div>
+                <div className="text-xs">{t('trading.tokenInfo.timeFrames.24h')}</div>
                 <div className={`font-normal text-xs ${Number(statsToken?.['24h']?.priceChangePercentage) >= 0 ? "text-theme-green-200 font-medium" : "text-red-400"}`}>
                   {statsToken?.['24h']?.priceChangePercentage?.toFixed(2)}%
                 </div>

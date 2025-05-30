@@ -209,7 +209,7 @@ const Header = () => {
                                 ) : walletInfor && (
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <button className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-2 py-1 rounded-full flex items-center text-xs">
+                                            <button className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap flex items-center">
                                                 <Wallet2 className="h-3 w-3 mr-1" />
                                                 <span>{truncateString(walletInfor.solana_address, 12)}</span>
                                             </button>
@@ -246,7 +246,7 @@ const Header = () => {
 
                     <div className='hidden lg:flex items-center gap-4 xl:gap-6'>
                         {isAuthenticated && walletInfor && (
-                            <button className='linear-gradient-light dark:linear-gradient-connect text-sm text-black dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap'>
+                            <button className='bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap'>
                                 {walletInfor.solana_balance} SOL &ensp; {'$' + formatNumberWithSuffix3(walletInfor.solana_balance_usd)}
                             </button>
                         )}
@@ -283,7 +283,7 @@ const Header = () => {
                                 ) : walletInfor && walletInfor.solana_address ? (
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <button className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium pr-2 pl-3 md:pl-4 py-[6px] rounded-full flex items-center transition-colors">
+                                            <button className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap flex items-center gap-1">
                                                 <Wallet2 className="h-4 w-4 mr-1" />
                                                 <span className="text-sm hidden md:inline">{truncateString(walletInfor.solana_address, 12)}</span>
                                                 <ChevronDown size={16} className="ml-1" />
@@ -324,8 +324,8 @@ const Header = () => {
                 {/* Mobile Menu */}
                 {isMobileMenuOpen && (
                     <div className="lg:hidden fixed inset-0 z-50 bg-white dark:bg-black">
-                        <div className=" h-full bg-gradient-to-r from-theme-primary-500 to-theme-secondary-400 backdrop-blur-md">
-                            <div className='bg-theme-black-1/2 flex flex-col h-full'>
+                        <div className=" h-full bg-gradient-to-r dark:from-theme-primary-500 dark:to-theme-secondary-400 backdrop-blur-md bg-theme-blue-300">
+                            <div className='dark:bg-theme-black-1/2 flex flex-col h-full'>
                                 <div className="flex items-center justify-between p-4 border-b dark:border-neutral-800">
                                     <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                                         <img src={"/logo.png"} alt="logo" className="h-6 md:h-8" />
@@ -347,7 +347,7 @@ const Header = () => {
                                                 href={item.href}
                                                 key={index}
                                                 onClick={() => setIsMobileMenuOpen(false)}
-                                                className={`hover:gradient-hover text-theme-neutral-800 dark:text-theme-neutral-100 md:dark:text-theme-neutral-300 capitalize transition-colors text-lg py-2 flex items-center gap-3 ${pathname === item.href ? 'gradient-hover font-semibold' : ''}`}
+                                                className={`hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-lg py-2 flex items-center gap-3 ${pathname === item.href ? 'gradient-hover font-semibold' : ''}`}
                                             >
                                                 <Icon className="h-5 w-5" />
                                                 {item.name}
@@ -361,7 +361,7 @@ const Header = () => {
                                 <div className="mt-auto p-4 space-y-4 border-t dark:border-neutral-800">
                                     {isAuthenticated && walletInfor && (
                                         <div className="flex flex-col space-y-2">
-                                            <button className='linear-gradient-light dark:linear-gradient-connect text-sm text-black dark:text-neutral-100 font-medium px-4 py-3 rounded-full transition-colors w-full'>
+                                            <button className='bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap'>
                                                 {walletInfor.solana_balance} SOL &ensp; {'$' + formatNumberWithSuffix3(walletInfor.solana_balance_usd)}
                                             </button>
                                         </div>
@@ -388,7 +388,7 @@ const Header = () => {
                                                             setIsMobileMenuOpen(false);
                                                             refetch();
                                                         }}
-                                                        className="linear-gradient-light dark:linear-gradient-connect text-red-600 dark:text-red-400 font-medium px-6 py-3 rounded-full transition-colors"
+                                                        className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap"
                                                     >
                                                         {t('header.wallet.logout')}
                                                     </button>

@@ -127,7 +127,7 @@ export default function Trading() {
     navigator.clipboard.writeText(address);
     notify({ message: t('tableDashboard.toast.addressCopied'), type: 'success' });
   };
-
+  console.log("displayTokens", displayTokens)
   const handleStarClick = (token: Token) => {
     const data = {
       token_address: token.address,
@@ -173,7 +173,7 @@ export default function Trading() {
             >
               <span className={`${activeTab === '1' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.trending')}</span>
             </button>
-            <button 
+            <button
               className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '2' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
               onClick={() => setActiveTab('2')}
             >
@@ -222,7 +222,7 @@ export default function Trading() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => router.push(`/trading?address=${token.address}`)}
-                            className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-3 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
+                            className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap"
                           >
                             Trade
                           </button>

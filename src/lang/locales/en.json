@@ -20,8 +20,18 @@
   },
   "trade": "Trade",
   "create coin": "Create Coin",
+  "listWalletss": {
+      "walletType": {
+        "main": "Main",
+        "import": "Imported",
+        "other": "Other",
+        "master": "Master",
+        "member": "Member"
+      }
+    },
   "createCoin": {
     "title": "CREATE NEW COIN",
+    "subtitle": "Create a new coin on Pumpfun",
     "form": {
       "name": {
         "label": "Name",
@@ -85,6 +95,14 @@
         "creating": "CREATING..."
       }
     },
+    "tabs": {
+        "today": "Today",
+        "last8days": "Last 8 Days",
+        "lastMonth": "Last Month",
+        "noCoins": "No coins created recently",
+        "seeAll": "See all my coins",
+        "trade": "Trade"
+      },
     "myCoins": {
       "title": "MY COINS",
       "createCoin": "CREATE COIN",
@@ -101,7 +119,7 @@
         "copy": "Copy address",
         "copied": "Address copied to clipboard",
         "convert": "Convert"
-      }
+      }   
     },
     "guide": {
       "title": "GUIDE",
@@ -124,11 +142,14 @@
     "page": {
       "filters": {
         "all": "All",
-        "notConnected": "Not connected",
+        "notConnected": "No Connect",
         "connected": "Connected",
         "disconnected": "Disconnected",
         "paused": "Paused",
-        "pending": "Pending"
+        "pending": "Pending",
+        "1d": "1D",
+        "7d": "7D",
+        "30d": "30D"
       },
       "search": {
         "placeholder": "Search by wallet address..."
@@ -139,14 +160,15 @@
         "pnl7d": "7D PnL",
         "pnl30d": "30D PnL",
         "winRate7d": "7D Win Rate",
-        "transactions7d": "7D TXs",
+        "transactions7d": "7D Transactions",
         "lastTime": "Last Time",
         "type": "Type",
         "status": "Status",
         "action": "Action",
         "noData": "No data available",
         "copyAddress": "Copy address",
-        "copySuccess": "Copied address: {address}"
+        "copySuccess": "Copied address: {address}",
+        "details": "Details"
       },
       "traderType": {
         "vip": "VIP",
@@ -160,7 +182,7 @@
         "disconnect": "Disconnect"
       },
       "status": {
-        "notConnected": "Not Connected",
+        "not connected": "No Connected",
         "connect": "Connected",
         "disconnect": "Disconnected",
         "pause": "Paused",
@@ -203,7 +225,14 @@
         "error": "An error occurred",
         "confirmJoin": "Confirm joining {count} selected wallets to group \"{groupName}\"",
         "cancel": "Cancel",
-        "confirm": "Confirm"
+        "confirm": "Confirm",
+        "all": "All",
+        "notConnected": "notConnected",
+        "connect": "Connected",
+        "disconnect": "Disconnected",
+        "pause": "Paused",
+        "pending": "Pending",
+        "block": "Blocked"
       },
       "groupManagement": {
         "createGroup": "CREATE GROUP",
@@ -240,7 +269,9 @@
         "typeMessage": "Type a message...",
         "connectWithMaster": "Connect with other Master",
         "send": "Send",
-        "noMessages": "No messages yet"
+        "noMessages": "No messages yet",
+        "communityChatroom": "Community Chatroom",
+        "type_a_message": "Type a message..."
       }
     }
   },
@@ -288,7 +319,29 @@
     "walletKey": "Wallet Key",
     "type": "Type",
     "actions": "Actions",
-    "walletLevel": "Wallet Level"
+    "walletLevel": "Wallet Level",
+    "active": "Active",
+    "switch": "Switch",
+    "deleteConfirm": {
+      "title": "Confirm Delete Wallet",
+      "description": "Are you sure you want to delete wallet {name}? This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "addNewWallet": "Add New Wallet",
+    "enterWalletName": "Enter Wallet Name",
+    "enterNickname": "Enter Nickname",
+    "enterSolanaPrivateKey": "Enter Solana Private Key",
+    "enterWalletNickname": "Enter Wallet Nickname",
+    "walletAddedSuccess": "Wallet added successfully",
+    "walletAddFailed": "Failed to add wallet. Please try again.",
+    "passwordCreatedSuccess": "Password created successfully",
+    "passwordCreateFailed": "Failed to create password. Please try again.",
+    "invalidPrivateKey": "Invalid private key format",
+    "invalidPrivateKeyLength": "Invalid private key length",
+    "addressCopied": "Wallet address has been copied to clipboard",
+    "passwordRequired": "Please enter your password",
+    "invalidPassword": "Invalid password. Please try again."
   },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {
@@ -296,6 +349,132 @@
     "english": "English",
     "vietnamese": "Vietnamese",
     "japan": "Japan"
+  },
+  "categories": {
+    "Rug Pull": "Rug Pull",
+    "Scam": "Scam",
+    "Low Cap": "Low Cap",
+    "High Cap": "High Cap",
+    "Community": "Community",
+    "Whale": "Whale",
+    "Bot": "Bot",
+    "Manual": "Manual",
+    "Auto": "Auto",
+    "VIP": "VIP",
+    "Hack": "Hack",
+    "Exploit": "Exploit",
+    "Bug": "Bug",
+    "Error": "Error",
+    "Crash": "Crash",
+    "Drop": "Drop",
+    "Fall": "Fall",
+    "Rise": "Rise",
+    "Jump": "Jump",
+    "Climb": "Climb",
+    "Sink": "Sink",
+    "Float": "Float",
+    "Swing": "Swing",
+    "Bounce": "Bounce",
+    "Rebound": "Rebound",
+    "Recovery": "Recovery",
+    "Correction": "Correction",
+    "Consolidation": "Consolidation",
+    "Breakout": "Breakout",
+    "Breakdown": "Breakdown",
+    "Support": "Support",
+    "Resistance": "Resistance",
+    "Trend": "Trend",
+    "Pattern": "Pattern",
+    "Signal": "Signal",
+    "Alert": "Alert",
+    "Warning": "Warning",
+    "Danger": "Danger",
+    "Risk": "Risk",
+    "Reward": "Reward",
+    "Profit": "Profit",
+    "Loss": "Loss",
+    "Gain": "Gain",
+    "Win": "Win",
+    "Lose": "Lose",
+    "Dog": "Dog",
+    "Cat": "Cat",
+    "IDO": "IDO",
+    "Presale": "Presale",
+    "Airdrop": "Airdrop",
+    "Pump": "Pump",
+    "Dump": "Dump",
+    "New": "New",
+    "Hot": "Hot",
+    "Trending": "Trending",
+    "Moon": "Moon",
+    "Rocket": "Rocket",
+    "Diamond": "Diamond",
+    "Gem": "Gem",
+    "Secure": "Secure",
+    "Elon": "Elon",
+    "Musk": "Musk",
+    "Pepe": "Pepe",
+    "Doge": "Doge",
+    "Shiba": "Shiba",
+    "Frog": "Frog",
+    "Duck": "Duck",
+    "Penguin": "Penguin",
+    "Bear": "Bear",
+    "Bull": "Bull",
+    "Lion": "Lion",
+    "Tiger": "Tiger",
+    "Dragon": "Dragon",
+    "Phoenix": "Phoenix",
+    "Unicorn": "Unicorn",
+    "Ninja": "Ninja",
+    "Samurai": "Samurai",
+    "Knight": "Knight",
+    "Wizard": "Wizard",
+    "Dwarf": "Dwarf",
+    "Elf": "Elf",
+    "Orc": "Orc",
+    "Goblin": "Goblin",
+    "Troll": "Troll",
+    "Ghost": "Ghost",
+    "Zombie": "Zombie",
+    "Vampire": "Vampire",
+    "Werewolf": "Werewolf",
+    "Mummy": "Mummy",
+    "Skeleton": "Skeleton",
+    "Alien": "Alien",
+    "Robot": "Robot",
+    "Cyborg": "Cyborg",
+    "Android": "Android",
+    "AI": "AI",
+    "NFT": "NFT",
+    "Metaverse": "Metaverse",
+    "GameFi": "GameFi",
+    "DeFi": "DeFi",
+    "Web3": "Web3",
+    "DAO": "DAO",
+    "Exchange": "Exchange",
+    "Yield": "Yield",
+    "Mining": "Mining",
+    "Trading": "Trading",
+    "Casino": "Casino",
+    "Lottery": "Lottery",
+    "Prediction": "Prediction",
+    "Insurance": "Insurance",
+    "Lending": "Lending",
+    "Borrowing": "Borrowing",
+    "APY": "APY",
+    "APR": "APR",
+    "TVL": "TVL",
+    "MCAP": "MCAP",
+    "Volume": "Volume",
+    "Liquidity": "Liquidity",
+    "Burn": "Burn",
+    "Mint": "Mint",
+    "Lock": "Lock",
+    "Vest": "Vest",
+    "Launch": "Launch",
+    "List": "List",
+    "Delist": "Delist"
   },
   "trading": {
     "token": "Token",
@@ -350,16 +529,20 @@
       "meme": "Meme"
     },
     "tokenInfo": {
-      "price": "Price",
-      "change": "Change",
       "marketCap": "Market Cap",
       "volume24h": "24h Volume",
-      "holders": "Holders",
       "liquidity": "Liquidity",
+      "holders": "Holders",
       "vol": "Vol",
       "buy": "Buy",
       "sells": "Sells",
-      "netBuy": "Net Buy"
+      "netBuy": "Net Buy",
+      "timeFrames": {
+        "5m": "5m",
+        "1h": "1h",
+        "4h": "4h",
+        "24h": "24h"
+      }
     }
   },
   "auth": {
@@ -482,7 +665,11 @@
     "search": "Search",
     "noResults": "No results found",
     "required": "Required",
-    "optional": "Optional"
+    "optional": "Optional",
+    "copy": {
+      "copyAddress": "Copy address",
+      "copied": "Copied!"
+    }
   },
   "universal_account": {
     "deposit": "Deposit",
@@ -524,7 +711,10 @@
       "network_error": "Network error. Please check your connection.",
       "unauthorized": "Unauthorized. Please login again.",
       "recipient_required": "Recipient address is required"
-    }
+    },
+    "minimum_withdrawal_amount": "Minimum withdrawal amount is {amount} SOL",
+    "maximum_withdrawal_amount": "Maximum withdrawal amount is {amount} SOL",
+    "amount_cannot_exceed_balance": "Amount cannot exceed your balance of {balance} SOL"
   },
   "chat": {
     "communityChatroom": "Community Chatroom"

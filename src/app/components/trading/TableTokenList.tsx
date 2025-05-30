@@ -18,6 +18,7 @@ import { Card, CardContent } from "@/ui/card";
 import { getMyWishlist } from "@/services/api/SolonaTokenService";
 import { useQuery } from "@tanstack/react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PumpFun from "../pump-fun";
 
 const textTitle = 'dark:text-neutral-200 text-black-300 font-normal text-xs max-h-[38px]'
 const textContent = 'dark:text-neutral-100 text-black-300 text-xs font-normal font-medium'
@@ -232,12 +233,8 @@ export function TableTokenList({
                         <div className="flex gap-2">
                           <span className="line-clamp-2 text-xs font-semibold dark:text-neutral-100 text-black-300">{token.name}</span>
                           <span className="text-xs uppercase dark:text-neutral-300 text-theme-brown-100">{token.symbol}</span>
-                          {token.program === "pumpfun" && (
-                            <img
-                              src="/pump.webp"
-                              alt="pump"
-                              className="h-4 w-4"
-                            />
+                          {token.program === "pumpfun-amm" && (
+                            <PumpFun />
                           )}
                         </div>
                       </div>

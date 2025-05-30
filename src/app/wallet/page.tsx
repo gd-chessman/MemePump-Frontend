@@ -3,13 +3,14 @@ import { TelegramWalletService } from "@/services/api";
 import { getInforWallet, getListBuyToken, getMyWallets, getPrivate } from "@/services/api/TelegramWalletService";
 import { formatNumberWithSuffix3, truncateString } from "@/utils/format";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowDownToLine, ArrowUpFromLine, Badge, Copy, Edit, Eye, EyeOff, KeyIcon, PlusIcon } from "lucide-react";
-import React, { useState, useRef, useEffect } from "react";
+import { ArrowDownToLine, ArrowUpFromLine, Badge, Copy, Edit, Eye, EyeOff, KeyIcon, PlusIcon, Check, Loader2 } from "lucide-react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { WalletTable } from "@/app/components/wallet/WalletTable";
 import { useToast } from "@/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { langConfig, useLang } from "@/lang";
 import { useRouter } from "next/navigation";
+import bs58 from 'bs58';
 
 interface Token {
     token_address: string;
@@ -39,6 +40,15 @@ interface TokenListResponse {
     };
 }
 
+interface WalletInfoResponse {
+    role: string;
+    solana_address: string;
+    wallet_country: string;
+    wallet_id: number;
+    wallet_name: string;
+    wallet_nick_name: string;
+}
+
 const wrapGradientStyle = "bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end p-[1px] relative w-full rounded-xl"
 
 // Add responsive styles
@@ -61,6 +71,29 @@ const assetValueStyles = "text-right"
 const assetLabelStyles = "text-xs dark:text-gray-400 text-black mb-1"
 const assetAmountStyles = "text-sm sm:text-base font-medium dark:text-theme-neutral-100 text-black"
 const assetPriceStyles = "text-xs sm:text-sm dark:text-theme-primary-300 text-black"
+
+// Custom debounce hook
+function useDebounce<T extends (...args: any[]) => any>(callback: T, delay: number) {
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
+
+    return useCallback((...args: Parameters<T>) => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        timeoutRef.current = setTimeout(() => {
+            callback(...args);
+        }, delay);
+    }, [callback, delay]);
+}
 
 export default function WalletPage() {
     const { t } = useLang();
@@ -99,6 +132,9 @@ export default function WalletPage() {
     const [inputPassword, setInputPassword] = useState("");
     const [inputPasswordError, setInputPasswordError] = useState("");
     const [showInputPassword, setShowInputPassword] = useState(false);
+    const [copyStates, setCopyStates] = useState<{ [key: string]: boolean }>({});
+    const [isLoadingWalletInfo, setIsLoadingWalletInfo] = useState(false);
+    const [privateKeyError, setPrivateKeyError] = useState("");
 
     const privateKeysRef = useRef<HTMLDivElement>(null);
     const addWalletRef = useRef<HTMLDivElement>(null);
@@ -109,8 +145,35 @@ export default function WalletPage() {
         eth_private_key: "",
         bnb_private_key: ""
     });
+
+    const fetchWalletInfo = useCallback(async (key: string) => {
+        try {
+            setIsLoadingWalletInfo(true);
+            setPrivateKeyError("");
+            const decodedKey = bs58.decode(key);
+            if (decodedKey.length === 64) {
+                const walletInfo = await TelegramWalletService.getWalletInfoByPrivateKey(key);
+                if (walletInfo) {
+                    setWalletName(walletInfo.wallet_name || '');
+                    setWalletNickname(walletInfo.wallet_nick_name || '');
+                    setSelectedNetwork(walletInfo.wallet_country || 'EN');
+                }
+            } else {
+                setPrivateKeyError("Invalid private key length");
+            }
+        } catch (error) {
+            console.log('Invalid private key format');
+            setPrivateKeyError("Invalid private key format");
+        } finally {
+            setIsLoadingWalletInfo(false);
+        }
+    }, []);
+
+    const debouncedFetchWalletInfo = useDebounce(fetchWalletInfo, 500);
+
     useEffect(() => {
         fetchWallets();
+        
     }, []);
 
     const { data: myWallets, refetch: refetchInforWallets } = useQuery({
@@ -142,6 +205,13 @@ export default function WalletPage() {
             setShowToast(true);
         }
     };
+    useEffect(() => {
+        const alo = async () => {
+            const walletInfo2 = await TelegramWalletService.getWalletInfoByPrivateKey("3q9Mck1DYsWracqakBzJExNeAHr83vZs3tWNaJpEaEMtgEcrMiBi1MBfJ4TbrjQXTFi7uPjkeuvhT8M6g7LzQmy");
+            console.log("walletInfo2", walletInfo2)
+        }
+        alo();
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -350,6 +420,7 @@ export default function WalletPage() {
             await fetchWallets();
         } catch (error) {
             console.error("Error adding wallet:", error);
+            await fetchWallets();
             setToastMessage("Failed to add wallet. Please try again.");
             setShowToast(true);
         } finally {
@@ -360,12 +431,17 @@ export default function WalletPage() {
     const handleCopyAddress = (address: string, e: React.MouseEvent) => {
         e.stopPropagation();
         navigator.clipboard.writeText(address);
-        setCopyNotification({ show: true, address });
+        setCopyStates(prev => ({ ...prev, [address]: true }));
         toast({
             title: "Address copied",
             description: "Wallet address has been copied to clipboard",
             duration: 2000,
         });
+        
+        // Reset copy state after 2 seconds
+        setTimeout(() => {
+            setCopyStates(prev => ({ ...prev, [address]: false }));
+        }, 2000);
     };
 
     const handleClosePasswordInput = () => {
@@ -377,7 +453,7 @@ export default function WalletPage() {
 
     const handleSubmitPassword = async () => {
         if (!inputPassword) {
-            setInputPasswordError("Please enter your password");
+            setInputPasswordError(t("wallet.passwordRequired"));
             return;
         }
 
@@ -426,6 +502,16 @@ export default function WalletPage() {
                                     <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0">
                                         <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-Colors-Neutral-100" />
                                     </div>
+                                    <button 
+                                        onClick={(e) => handleCopyAddress(walletInfor?.solana_address || '', e)}
+                                        className="text-gray-400 hover:text-gray-200 transition-colors"
+                                    >
+                                        {copyStates[walletInfor?.solana_address || ''] ? (
+                                            <Check className="w-4 h-4 text-green-500" />
+                                        ) : (
+                                            <Copy className="w-4 h-4" />
+                                        )}
+                                    </button>
                                 </div>
                                
                             </div>
@@ -435,7 +521,7 @@ export default function WalletPage() {
                         <div className={`${walletCardStyles} dark:bg-gradient-blue-transparent border-theme-primary-100`}>
                             <div className="inline-flex justify-start items-center gap-2 w-full">
                                 <div className="w-8 h-8 bg-theme-primary-500 rounded-full flex justify-center items-center relative overflow-hidden flex-shrink-0">
-                                    <img src="/ethereum.png" alt="Ethereum" className="w-4 h-4 object-cover" />
+                                    <img src="/ethereum.png" alt="Ethereum" className="w-6 h-6 object-cover" />
                                 </div>
                                 <div className="justify-start truncate">
                                     <span className={walletTitleStyles}>{t('wallet.eth')}</span>
@@ -450,6 +536,16 @@ export default function WalletPage() {
                                     <div className="w-3.5 h-3.5 flex-shrink-0">
                                         <div className="w-3 h-3 bg-Colors-Neutral-100" />
                                     </div>
+                                    <button 
+                                        onClick={(e) => handleCopyAddress(listWallets?.[0]?.eth_address || '', e)}
+                                        className="text-gray-400 hover:text-gray-200 transition-colors"
+                                    >
+                                        {copyStates[listWallets?.[0]?.eth_address || ''] ? (
+                                            <Check className="w-4 h-4 text-green-500" />
+                                        ) : (
+                                            <Copy className="w-4 h-4" />
+                                        )}
+                                    </button>
                                 </div>
                               
                             </div>
@@ -472,17 +568,27 @@ export default function WalletPage() {
                                     <div className="w-3.5 h-3.5 flex-shrink-0">
                                         <div className="w-3 h-3 bg-Colors-Neutral-100" />
                                     </div>
+                                    <button 
+                                        onClick={(e) => handleCopyAddress(listWallets?.[0]?.eth_address || '', e)}
+                                        className="text-gray-400 hover:text-gray-200 transition-colors"
+                                    >
+                                        {copyStates[listWallets?.[0]?.eth_address || ''] ? (
+                                            <Check className="w-4 h-4 text-green-500" />
+                                        ) : (
+                                            <Copy className="w-4 h-4" />
+                                        )}
+                                    </button>
                                 </div>
                              
                             </div>
                         </div>
                         <div className={`${walletCardStyles} dark:bg-gradient-purple-transparent border-theme-primary-300`}>
                             <div className="inline-flex justify-start items-center gap-2.5 w-full">
-                                <img src="/ethereum.png" alt="Ethereum" className="w-4 h-4 object-cover" />
+                                <img src="/ethereum.png" alt="Ethereum" className="w-5 h-5 object-cover" />
                                 <div className="justify-start text-Colors-Neutral-100 text-base font-semibold uppercase leading-normal truncate">
                                     {t('wallet.universalAccount')}
                                 </div>
-                                <img src="/ethereum.png" alt="Ethereum" className="w-4 h-4 object-cover" />
+                                <img src="/ethereum.png" alt="Ethereum" className="w-5 h-5 object-cover" />
                             </div>
                             <div className="flex justify-between lg:justify-start lg:items-end gap-4 w-full">
                                 <div className="flex flex-col justify-start items-start gap-3 min-w-0">
@@ -535,7 +641,7 @@ export default function WalletPage() {
                     <div className="flex justify-center items-center mt-1">
                         <button
                             onClick={handleGetPrivateKeys}
-                            className="px-3 sm:px-4 py-1 sm:py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-3xl shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-blue-950 inline-flex justify-center items-center gap-2 sm:gap-2.5 text-white"
+                            className="lg:max-w-auto  group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto flex items-center justify-center gap-1"
                         >
                             <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 relative overflow-hidden">
                                 <KeyIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
@@ -556,7 +662,7 @@ export default function WalletPage() {
                         <div className="flex flex-wrap justify-start items-center gap-3 sm:gap-6">
                             <button
                                 onClick={() => setShowAddWallet(true)}
-                                className="px-2 sm:px-3 pr-3 sm:pr-4 py-1 sm:py-1.5 bg-gradient-to-t from-blue-950 to-purple-600 rounded-3xl shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-blue-950 flex justify-center items-center gap-2 sm:gap-2.5 text-white"
+                                className="lg:max-w-auto  group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto flex items-center justify-center gap-1"
                             >
                                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 relative overflow-hidden">
                                     <PlusIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
@@ -567,7 +673,7 @@ export default function WalletPage() {
                             </button>
                             <button
                                 onClick={() => setShowImportWallet(true)}
-                                className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-3xl text-indigo-500 dark:text-white shadow-[0px_0px_4px_0px_rgba(178,176,176,0.25)] outline outline-1 outline-offset-[-1px] outline-indigo-500 flex justify-center items-center gap-1.5 bg-white dark:bg-inherit"
+                                className="lg:max-w-auto  group relative bg-transparent border py-1.5  px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:bg-gradient-to-t hover:border-transparent hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto flex items-center justify-center gap-1"
                             >
                                 <ArrowDownToLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 <div className="text-xs sm:text-sm font-medium leading-tight text-indigo-500 dark:text-white">
@@ -597,119 +703,139 @@ export default function WalletPage() {
                     <div className="">
                         {/* Desktop Table View */}
                         <div className="hidden sm:block overflow-hidden rounded-xl border-1 z-10 border-solid border-y-[#15DFFD] border-x-[#720881]">
-                            <div className={tableContainerStyles}>
-                                <table className={tableStyles}>
-                                    <thead className="dark:bg-gray-900">
-                                        <tr>
-                                            <th className={tableHeaderStyles}>{t('wallet.token')} ▼</th>
-                                            <th className={tableHeaderStyles}>{t('wallet.balance')}</th>
-                                            <th className={tableHeaderStyles}>{t('wallet.price')}</th>
-                                            <th className={tableHeaderStyles}>{t('wallet.value')}</th>
-                                            <th className={tableHeaderStyles}>{t('wallet.address')}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {tokenList?.tokens?.map((token: Token, index: number) => (
-                                            <tr key={index} className="border-t border-gray-700">
-                                                <td className={tableCellStyles}>
-                                                    <div className="flex items-center gap-2">
-                                                        {token.token_logo_url && (
-                                                            <img
-                                                                src={token.token_logo_url}
-                                                                alt={token.token_name}
-                                                                className="w-5 h-5 sm:w-6 sm:h-6 rounded-full"
-                                                                onError={(e) => {
-                                                                    e.currentTarget.src = '/placeholder.png';
-                                                                }}
-                                                            />
-                                                        )}
-                                                        <div>
-                                                            <div className="font-medium text-neutral-900 dark:text-theme-neutral-100 text-xs sm:text-sm">{token.token_name}</div>
-                                                            <div className="text-[10px] sm:text-xs text-neutral-600 dark:text-gray-400">{token.token_symbol}</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className={tableCellStyles}>
-                                                    {token.token_balance.toFixed(token.token_decimals)}
-                                                </td>
-                                                <td className={tableCellStyles}>
-                                                    ${token.token_price_usd.toFixed(6)}
-                                                </td>
-                                                <td className={tableCellStyles}>
-                                                    ${token.token_balance_usd.toFixed(6)}
-                                                </td>
-                                                <td className={tableCellStyles}>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="truncate max-w-[100px] sm:max-w-[120px]">{truncateString(token.token_address, 12)}</span>
-                                                        <button
-                                                            onClick={(e) => handleCopyAddress(token.token_address, e)}
-                                                            className="text-neutral-600 hover:text-neutral-900 dark:text-gray-400 dark:hover:text-gray-200"
-                                                        >
-                                                            <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                                        </button>
-                                                    </div>
-                                                </td>
+                            {!tokenList?.tokens || tokenList.tokens.length === 0 ? (
+                                <div className="flex justify-center items-center py-8 text-neutral-600 dark:text-gray-400">
+                                    {t('wallet.noTokens')}
+                                </div>
+                            ) : (
+                                <div className={tableContainerStyles}>
+                                    <table className={tableStyles}>
+                                        <thead className="dark:bg-gray-900">
+                                            <tr>
+                                                <th className={tableHeaderStyles}>{t('wallet.token')} ▼</th>
+                                                <th className={tableHeaderStyles}>{t('wallet.balance')}</th>
+                                                <th className={tableHeaderStyles}>{t('wallet.price')}</th>
+                                                <th className={tableHeaderStyles}>{t('wallet.value')}</th>
+                                                <th className={tableHeaderStyles}>{t('wallet.address')}</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            {tokenList?.tokens?.map((token: Token, index: number) => (
+                                                <tr key={index} className="border-t border-gray-700">
+                                                    <td className={tableCellStyles}>
+                                                        <div className="flex items-center gap-2">
+                                                            {token.token_logo_url && (
+                                                                <img
+                                                                    src={token.token_logo_url}
+                                                                    alt={token.token_name}
+                                                                    className="w-5 h-5 sm:w-6 sm:h-6 rounded-full"
+                                                                    onError={(e) => {
+                                                                        e.currentTarget.src = '/placeholder.png';
+                                                                    }}
+                                                                />
+                                                            )}
+                                                            <div>
+                                                                <div className="font-medium text-neutral-900 dark:text-theme-neutral-100 text-xs sm:text-sm">{token.token_name}</div>
+                                                                <div className="text-[10px] sm:text-xs text-neutral-600 dark:text-gray-400">{token.token_symbol}</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td className={tableCellStyles}>
+                                                        {token.token_balance.toFixed(token.token_decimals)}
+                                                    </td>
+                                                    <td className={tableCellStyles}>
+                                                        ${token.token_price_usd.toFixed(6)}
+                                                    </td>
+                                                    <td className={tableCellStyles}>
+                                                        ${token.token_balance_usd.toFixed(6)}
+                                                    </td>
+                                                    <td className={tableCellStyles}>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="truncate max-w-[100px] sm:max-w-[120px]">{truncateString(token.token_address, 12)}</span>
+                                                            <button
+                                                                onClick={(e) => handleCopyAddress(token.token_address, e)}
+                                                                className="text-neutral-600 hover:text-neutral-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                                                            >
+                                                                {copyStates[token.token_address] ? (
+                                                                    <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" />
+                                                                ) : (
+                                                                    <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                                                )}
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
                         </div>
 
                         {/* Mobile Card View */}
                         <div className="sm:hidden space-y-3">
-                            {tokenList?.tokens?.map((token: Token, index: number) => (
-                                <div key={index} className={assetCardStyles}>
-                                    {/* Token Info Header */}
-                                    <div className={`w-fit ${assetHeaderStyles} flex-col `}>
-                                        <div className={assetTokenStyles}>
-                                            {token.token_logo_url && (
-                                                <img
-                                                    src={token.token_logo_url}
-                                                    alt={token.token_name}
-                                                    className="w-8 h-8 rounded-full"
-                                                    onError={(e) => {
-                                                        e.currentTarget.src = '/placeholder.png';
-                                                    }}
-                                                />
-                                            )}
-                                            <div className="min-w-0 flex gap-2">
-                                                <div className="font-medium dark:text-theme-neutral-100 text-black text-sm truncate">{token.token_name}</div>
-                                                <div className="text-xs dark:text-gray-400 text-black">{token.token_symbol}</div>
+                            {!tokenList?.tokens || tokenList.tokens.length === 0 ? (
+                                <div className="flex justify-center items-center py-6 text-neutral-600 dark:text-gray-400">
+                                    {t('wallet.noTokens')}
+                                </div>
+                            ) : (
+                                tokenList.tokens.map((token: Token, index: number) => (
+                                    <div key={index} className={assetCardStyles}>
+                                        {/* Token Info Header */}
+                                        <div className={`w-fit ${assetHeaderStyles} flex-col `}>
+                                            <div className={assetTokenStyles}>
+                                                {token.token_logo_url && (
+                                                    <img
+                                                        src={token.token_logo_url}
+                                                        alt={token.token_name}
+                                                        className="w-8 h-8 rounded-full"
+                                                        onError={(e) => {
+                                                            e.currentTarget.src = '/placeholder.png';
+                                                        }}
+                                                    />
+                                                )}
+                                                <div className="min-w-0 flex gap-2">
+                                                    <div className="font-medium dark:text-theme-neutral-100 text-black text-sm truncate">{token.token_name}</div>
+                                                    <div className="text-xs dark:text-gray-400 text-black">{token.token_symbol}</div>
+                                                </div>
+                                            </div>
+                                            {/* Token Address */}
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs dark:text-neutral-200 text-black truncate flex-1">
+                                                    {truncateString(token.token_address, 12)}
+                                                </span>
+                                                <button
+                                                    onClick={(e) => handleCopyAddress(token.token_address, e)}
+                                                    className="text-gray-400 hover:text-gray-200 p-1 transition-colors"
+                                                >
+                                                    {copyStates[token.token_address] ? (
+                                                        <Check className="w-4 h-4 text-green-500" />
+                                                    ) : (
+                                                        <Copy className="w-4 h-4" />
+                                                    )}
+                                                </button>
                                             </div>
                                         </div>
-                                        {/* Token Address */}
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs dark:text-neutral-200 text-black truncate flex-1">
-                                                {truncateString(token.token_address, 12)}
-                                            </span>
-                                            <button
-                                                onClick={(e) => handleCopyAddress(token.token_address, e)}
-                                                className="text-gray-400 hover:text-gray-200 p-1"
-                                            >
-                                                <Copy className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </div>
 
-                                    {/* Token Details */}
-                                    <div className="flex justify-between gap-3 mt-1 lg:mt-3 lg:pt-3 pt-1 border-t border-gray-700">
-                                        <div>
-                                            <div className={assetLabelStyles}>{t('wallet.balance')}</div>
-                                            <div className={assetAmountStyles}>{token.token_balance.toFixed(token.token_decimals)}</div>
+                                        {/* Token Details */}
+                                        <div className="flex justify-between gap-3 mt-1 lg:mt-3 lg:pt-3 pt-1 border-t border-gray-700">
+                                            <div>
+                                                <div className={assetLabelStyles}>{t('wallet.balance')}</div>
+                                                <div className={assetAmountStyles}>{token.token_balance.toFixed(token.token_decimals)}</div>
+                                            </div>
+                                            <div>
+                                                <div className={assetLabelStyles}>{t('wallet.price')}</div>
+                                                <div className={assetPriceStyles}>${token.token_price_usd.toFixed(6)}</div>
+                                            </div>
+                                            <div className={assetValueStyles}>
+                                                <div className={assetLabelStyles}>{t('wallet.value')}</div>
+                                                <div className={assetAmountStyles}>${token.token_balance_usd.toFixed(2)}</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div className={assetLabelStyles}>{t('wallet.price')}</div>
-                                            <div className={assetPriceStyles}>${token.token_price_usd.toFixed(6)}</div>
-                                        </div>
-                                        <div className={assetValueStyles}>
-                                            <div className={assetLabelStyles}>{t('wallet.value')}</div>
-                                            <div className={assetAmountStyles}>${token.token_balance_usd.toFixed(2)}</div>
-                                        </div>
-                                    </div>
 
-                                </div>
-                            ))}
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>
@@ -804,23 +930,42 @@ export default function WalletPage() {
                                             <div className="relative w-full">
                                                 <input
                                                     type={showPassword.sol ? "text" : "password"}
-                                                    value={privateKeyDefault.sol_private_key}
-                                                    readOnly
-                                                    placeholder="Enter Solana private key"
-                                                    className="w-full text-xs placeholder:text-neutral-100 placeholder:text-xs px-3 py-2 dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 cursor-default"
+                                                    value={privateKey}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setPrivateKey(value);
+                                                        if (value) {
+                                                            debouncedFetchWalletInfo(value);
+                                                        } else {
+                                                            setPrivateKeyError("");
+                                                        }
+                                                    }}
+                                                    placeholder={t('wallet.enterSolanaPrivateKey')}
+                                                    className={`w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-20 ${privateKeyError ? 'border-red-500' : ''}`}
                                                 />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowPassword(prev => ({ ...prev, sol: !prev.sol }))}
-                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
-                                                >
-                                                    {showPassword.sol ? (
-                                                        <EyeOff className="w-4 h-4" />
-                                                    ) : (
-                                                        <Eye className="w-4 h-4" />
+                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                                    {isLoadingWalletInfo && (
+                                                        <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
                                                     )}
-                                                </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowPassword(prev => ({ ...prev, sol: !prev.sol }))}
+                                                        className="text-gray-400 hover:text-gray-200"
+                                                    >
+                                                        {showPassword.sol ? (
+                                                            <EyeOff className="w-4 h-4" />
+                                                        ) : (
+                                                            <Eye className="w-4 h-4" />
+                                                        )}
+                                                    </button>
+                                                </div>
                                             </div>
+                                        </div>
+                                        {privateKeyError && (
+                                            <div className="text-red-500 text-xs mt-1">{privateKeyError}</div>
+                                        )}
+                                        <div className="self-stretch justify-center text-Colors-Neutral-200 text-[10px] font-normal leading-none mt-1 text-theme-primary-300">
+                                           {t('wallet.privateKeySecurity')}
                                         </div>
                                     </div>
                                 </div>
@@ -925,23 +1070,39 @@ export default function WalletPage() {
                                                     <input
                                                         type={showPassword.sol ? "text" : "password"}
                                                         value={privateKey}
-                                                        onChange={(e) => setPrivateKey(e.target.value)}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            setPrivateKey(value);
+                                                            if (value) {
+                                                                debouncedFetchWalletInfo(value);
+                                                            } else {
+                                                                setPrivateKeyError("");
+                                                            }
+                                                        }}
                                                         placeholder={t('wallet.enterSolanaPrivateKey')}
-                                                        className="w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10"
+                                                        className={`w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-20 ${privateKeyError ? 'border-red-500' : ''}`}
                                                     />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => setShowPassword(prev => ({ ...prev, sol: !prev.sol }))}
-                                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
-                                                    >
-                                                        {showPassword.sol ? (
-                                                            <EyeOff className="w-4 h-4" />
-                                                        ) : (
-                                                            <Eye className="w-4 h-4" />
+                                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                                        {isLoadingWalletInfo && (
+                                                            <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
                                                         )}
-                                                    </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setShowPassword(prev => ({ ...prev, sol: !prev.sol }))}
+                                                            className="text-gray-400 hover:text-gray-200"
+                                                        >
+                                                            {showPassword.sol ? (
+                                                                <EyeOff className="w-4 h-4" />
+                                                            ) : (
+                                                                <Eye className="w-4 h-4" />
+                                                            )}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            {privateKeyError && (
+                                                <div className="text-red-500 text-xs mt-1">{privateKeyError}</div>
+                                            )}
                                             <div className="self-stretch justify-center text-Colors-Neutral-200 text-[10px] font-normal leading-none mt-1 text-theme-primary-300">
                                                {t('wallet.privateKeySecurity')}
                                             </div>
@@ -1131,7 +1292,7 @@ export default function WalletPage() {
                                                             setInputPassword(e.target.value);
                                                             setInputPasswordError("");
                                                         }}
-                                                        placeholder="Enter your password"
+                                                        placeholder={t("wallet.passwordRequired")}
                                                         className={`w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${inputPasswordError ? 'border-red-500' : ''}`}
                                                     />
                                                     <button

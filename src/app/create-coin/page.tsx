@@ -169,6 +169,8 @@ export default function CreateCoinForm() {
       category.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [categories, searchQuery]);
+  
+  console.log("filteredCategories", filteredCategories.map((category: any) => category.name));
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -462,7 +464,9 @@ export default function CreateCoinForm() {
               {t('createCoin.title')}
               {ethereumIcon(14, 14)}
             </div>
-            <div className="text-center text-xs md:text-sm lg:text-base font-normal dark:text-theme-neutral-100 text-theme-neutral-900 mb-4 md:mb-5 lg:mb-6"> Pumpfun에서 새로운 코인 만들기</div>
+            <div className="text-center text-xs md:text-sm lg:text-base font-normal dark:text-theme-primary-300 text-theme-neutral-900 mb-4 md:mb-5 lg:mb-6">
+              {t('createCoin.subtitle')}
+            </div>
             <form
               onSubmit={handleSubmit}
               className="flex-1 flex flex-col justify-between min-h-0"
@@ -607,7 +611,7 @@ export default function CreateCoinForm() {
                                     {formData.category_list.includes(category.id) && (
                                       <span className="text-blue-500">✓</span>
                                     )}
-                                    {category.name}
+                                    {t(`categories.${category.name}`)}
                                   </div>
                                 </SelectItem>
                               ))

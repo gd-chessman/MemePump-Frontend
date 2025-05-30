@@ -287,7 +287,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-neutral-100 flex items-center">
             <span className="text-cyan-400 mr-2">✦</span>
-            DETAIL MASTER
+            {t("masterTrade.page.manageMaster")}
             <span className="text-cyan-400 ml-2">✦</span>
           </h2>
           <button
@@ -301,12 +301,12 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
         {/* Scrollable Content */}
         <div className="flex gap-4 flex-col flex-1 overflow-y-auto mt-4">
           {/* Address */}
-          <div className=" flex items-center">
+          <div className="flex items-center gap-2">
             <span className="text-neutral-100">{truncateString(info?.address || "", 12)}</span>
             <button
               onClick={handleCopyAddress}
-              className=" text-gray-400 hover:text-neutral-100 transition-colors"
-              title={copiedAddress ? "Copied!" : "Copy address"}
+              className="text-gray-400 hover:text-neutral-100 transition-colors"
+              title={copiedAddress ? t("common.copy.copied") : t("common.copy.copyAddress")}
             >
               <Copy className={`h-4 w-4 ${copiedAddress ? "text-green-500" : ""}`} />
             </button>
@@ -317,11 +317,11 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <span className="text-gray-400 mr-2">Realized PnL</span>
+                  <span className="text-gray-400 mr-2">{t("trading.panel.balance")}</span>
                   <div className="bg-gray-800 rounded-full px-2 py-0.5 text-xs text-gray-400 flex items-center">USD</div>
                 </div>
                 <div className="text-right">
-                  <span className="text-gray-400">Win Rate</span>
+                  <span className="text-gray-400">{t("masterTrade.page.table.winRate7d")}</span>
                 </div>
               </div>
 
@@ -330,7 +330,6 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                   <span
                     className={`text-2xl font-bold ${stats.realizedPnL.isPositive ? "text-green-500" : "text-red-500"}`}
                   >
-
                     {stats.realizedPnL.percentage}%
                   </span>
                   <span className={`ml-2 text-sm ${stats.realizedPnL.isPositive ? "text-green-500" : "text-red-500"}`}>
@@ -343,7 +342,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">Total PnL</span>
+                <span className="text-gray-400">{t("masterTrade.page.table.pnl7d")}</span>
                 <div className="flex items-center">
                   <span className={`text-lg font-bold ${stats.totalPnL.isPositive ? "text-green-500" : "text-red-500"}`}>
                     {stats.totalPnL.isPositive ? "+" : "-"}${stats.totalPnL.value}M
@@ -354,7 +353,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                 </div>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">Unrealized Profits</span>
+                <span className="text-gray-400">{t("trading.panel.balance")}</span>
                 <span className={`${stats.unrealizedProfits.isPositive ? "text-green-500" : "text-red-500"}`}>
                   {stats.unrealizedProfits.isPositive ? "+" : "-"}${stats.unrealizedProfits.value}k
                 </span>
@@ -368,25 +367,25 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                     onClick={() => setTimeFilter("1d")}
                     className={`px-2 py-1 text-xs ${timeFilter === "1d" ? "bg-gray-700 text-neutral-100" : "text-gray-400"}`}
                   >
-                    1d
+                    {t("masterTrade.page.filters.1d")}
                   </button>
                   <button
                     onClick={() => setTimeFilter("7d")}
                     className={`px-2 py-1 text-xs ${timeFilter === "7d" ? "bg-gray-700 text-neutral-100" : "text-gray-400"}`}
                   >
-                    7d
+                    {t("masterTrade.page.filters.7d")}
                   </button>
                   <button
                     onClick={() => setTimeFilter("30d")}
                     className={`px-2 py-1 text-xs ${timeFilter === "30d" ? "bg-gray-700 text-neutral-100" : "text-gray-400"}`}
                   >
-                    30d
+                    {t("masterTrade.page.filters.30d")}
                   </button>
                   <button
                     onClick={() => setTimeFilter("All")}
                     className={`px-2 py-1 text-xs ${timeFilter === "All" ? "bg-gray-700 text-neutral-100" : "text-gray-400"}`}
                   >
-                    All
+                    {t("masterTrade.page.filters.all")}
                   </button>
                 </div>
               </div>
@@ -403,19 +402,18 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
 
           {/* Tab Navigation */}
           <div className="flex px-4 justify-end">
-
             <div className="flex rounded-full border-gray-200 dark:border-neutral-800 h-[35px] bg-gray-100 dark:bg-theme-neutral-1000">
               <button
-                className={`flex-1 rounded-full px-6 text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "DETAILS" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
+                className={`flex-1 rounded-full px-6 min-w-[150px] text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "DETAILS" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
                 onClick={() => setActiveTab("DETAILS")}
               >
-                DETAILS
+                {t("masterTrade.page.table.details")}
               </button>
               <button
-                className={`flex-1 rounded-full px-6 cursor-pointer text-sm font-medium uppercase text-center ${activeTab === "CHAT" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
+                className={`flex-1 rounded-full px-6 min-w-[150px]  cursor-pointer text-sm font-medium uppercase text-center ${activeTab === "CHAT" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
                 onClick={() => setActiveTab("CHAT")}
               >
-                CHAT
+                {t("masterTrade.tabs.chat")}
               </button>
             </div>
           </div>
@@ -430,22 +428,22 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                   </div>
                 ) : error ? (
                   <div className="flex items-center justify-center h-32 text-red-500">
-                    Failed to load transactions
+                    {t("common.error")}
                   </div>
                 ) : !ordersMyWallet?.data?.trades?.length ? (
                   <div className="flex items-center justify-center h-32 text-gray-400">
-                    No transactions found
+                    {t("transactionHistory.noTransactions")}
                   </div>
                 ) : (
                   <table className="w-full text-neutral-100">
                     <thead>
                       <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
-                        <th className="px-4 py-3 text-left">Token</th>
-                        <th className="px-4 py-3 text-left">Type</th>
-                        <th className="px-4 py-3 text-left">Total (USD)</th>
-                        <th className="px-4 py-3 text-left">Amount</th>
-                        <th className="px-4 py-3 text-left">Price (USD)</th>
-                        <th className="px-4 py-3 text-left">Age</th>
+                        <th className="px-4 py-3 text-left">{t("trading.token")}</th>
+                        <th className="px-4 py-3 text-left">{t("transactionHistory.type")}</th>
+                        <th className="px-4 py-3 text-left">{t("transactionHistory.total")}</th>
+                        <th className="px-4 py-3 text-left">{t("transactionHistory.amount")}</th>
+                        <th className="px-4 py-3 text-left">{t("trading.price")}</th>
+                        <th className="px-4 py-3 text-left">{t("transactionHistory.time")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -472,7 +470,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                                       navigator.clipboard.writeText(transaction.type === "buy" ? transaction.to.address : transaction.from.address)
                                     }}
                                     className="text-gray-400 hover:text-gray-600"
-                                    title="Copy token address"
+                                    title={t("common.copy.copyAddress")}
                                   >
                                     <Copy className="h-3 w-3" />
                                   </button>
@@ -481,7 +479,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                             </td>
                             <td className="py-2 px-4">
                               <span className={`px-2 py-1 rounded ${transaction.type === "buy" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-                                {transaction.type.toUpperCase()}
+                                {transaction.type === "buy" ? t("trading.panel.buy") : t("trading.panel.sell")}
                               </span>
                             </td>
                             <td className="py-2 px-4">
@@ -500,15 +498,15 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                                 const diffInSeconds = Math.floor((now - txTime) / 1000);
                                 
                                 if (diffInSeconds < 60) {
-                                  return `${diffInSeconds}s ago`;
+                                  return t("masterTrade.page.timeAgo.seconds", { count: diffInSeconds });
                                 } else if (diffInSeconds < 3600) {
-                                  return `${Math.floor(diffInSeconds / 60)}m ago`;
+                                  return t("masterTrade.page.timeAgo.minutes", { count: Math.floor(diffInSeconds / 60) });
                                 } else if (diffInSeconds < 86400) {
-                                  return `${Math.floor(diffInSeconds / 3600)}h ago`;
+                                  return t("masterTrade.page.timeAgo.hours", { count: Math.floor(diffInSeconds / 3600) });
                                 } else if (diffInSeconds < 2592000) {
-                                  return `${Math.floor(diffInSeconds / 86400)}d ago`;
+                                  return t("masterTrade.page.timeAgo.days", { count: Math.floor(diffInSeconds / 86400) });
                                 } else {
-                                  return `${Math.floor(diffInSeconds / 2592000)}mo ago`;
+                                  return t("masterTrade.page.timeAgo.months", { count: Math.floor(diffInSeconds / 2592000) });
                                 }
                               })()}
                             </td>
@@ -519,44 +517,11 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                   </table>
                 )}
               </div>
-
-              {/* Pagination */}
-              {/* {!isLoading && !error && ordersMyWallet?.data?.trades?.length > 0 && (
-                <div className="flex justify-between items-center mt-4 px-4">
-                  <div className="text-sm text-gray-400">
-                    Showing {((paginationInfo.currentPage - 1) * Number(paginationInfo.itemsPerPage)) + 1} to {Math.min(paginationInfo.currentPage * Number(paginationInfo.itemsPerPage), paginationInfo.totalItems)} of {paginationInfo.totalItems} entries
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handlePageChange(paginationInfo.currentPage - 1)}
-                      disabled={!paginationInfo.hasPreviousPage}
-                      className={`px-3 py-1 rounded-md text-sm ${
-                        paginationInfo.hasPreviousPage
-                          ? "bg-blue-500 text-white hover:bg-blue-600"
-                          : "bg-gray-700 text-gray-500 cursor-not-allowed"
-                      }`}
-                    >
-                      Previous
-                    </button>
-                    <button
-                      onClick={() => handlePageChange(paginationInfo.currentPage + 1)}
-                      disabled={!paginationInfo.hasNextPage}
-                      className={`px-3 py-1 rounded-md text-sm ${
-                        paginationInfo.hasNextPage
-                          ? "bg-blue-500 text-white hover:bg-blue-600"
-                          : "bg-gray-700 text-gray-500 cursor-not-allowed"
-                      }`}
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              )} */}
             </>
           )}
 
           {activeTab === "CHAT" && (
-            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm flex-1 flex flex-col  ">
+            <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm flex-1 flex flex-col">
               {/* Chat Messages */}
               {checkMasterData?.groupConnect && checkMasterData?.isConnect ? (
                 <>
@@ -591,7 +556,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                         value={inputMessage}
                         onChange={(e) => setInputMessage(e.target.value)}
                         onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                        placeholder="Type a message..."
+                        placeholder={t("masterTrade.manage.chat.type_a_message")}
                         className="flex-1 bg-theme-black-1/2 border border-blue-500/10 rounded-lg px-4 py-2 text-sm text-neutral-100 focus:outline-none focus:border-blue-500"
                       />
                       <button
@@ -607,9 +572,9 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
               ) : (
                 <div className="flex-1 flex items-center justify-center text-neutral-400">
                   {!checkMasterData?.groupConnect ? (
-                    <p>{t("Hiện tại bạn chưa kết nối với nhóm nào")}</p>
+                    <p>{t("masterTrade.manage.chat.noMessages")}</p>
                   ) : !checkMasterData?.isConnect ? (
-                    <p>{t("Hiện tại bạn chưa kết nối với nhóm nào")}</p>
+                    <p>{t("masterTrade.manage.chat.noMessages")}</p>
                   ) : null}
                 </div>
               )}

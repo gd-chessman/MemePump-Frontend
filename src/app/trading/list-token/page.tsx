@@ -11,6 +11,7 @@ import { formatNumberWithSuffix } from '@/utils/format'
 import { SolonaTokenService } from '@/services/api'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useLang } from '@/lang/useLang'
+import PumpFun from '@/app/components/pump-fun'
 
 const ListToken = () => {
     const { t } = useLang()
@@ -48,7 +49,7 @@ const ListToken = () => {
         // If search query exists, use listToken data
         setTokenList(listToken || []);
     }, [debouncedSearchQuery, listToken, topCoins]);
-
+    console.log("tokenList", tokenList)
     // Add paste handler
     const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
         e.preventDefault(); // Prevent default paste behavior
@@ -63,7 +64,7 @@ const ListToken = () => {
     }
 
     return (
-        <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 h-[69%] pt-3 overflow-hidden'>
+        <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-3 overflow-hidden'>
             <div className="relative mb-3 pr-3 px-3">
                 <div className="flex relative items-center dark:bg-neutral-800 bg-white rounded-full px-3 py-1 border-1 border-t-theme-primary-300 border-l-theme-primary-300 border-b-theme-secondary-400 border-r-theme-secondary-400">
                     <input
@@ -88,16 +89,16 @@ const ListToken = () => {
             </div>
 
            <div className='pr-1 h-full'>
-           <div className="flex gap-2 pr-1 bg-theme-neutral-200 dark:bg-theme-neutral-1000">
+           {/* <div className="flex gap-2 pr-1 bg-theme-neutral-200 dark:bg-theme-neutral-1000">
                 <button
                     className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "text-neutral-800"}`}
                     onClick={() => setActiveTab("new")}
                 >
                     {t('trading.listToken.newTrending')}
                 </button>
-            </div>
+            </div> */}
 
-            <div className="flex-grow h-[calc(100%-100px)] overflow-y-scroll">
+            <div className="flex-grow h-[calc(100%-20px)] overflow-y-scroll">
                 {tokenList?.map((item: any, i: number) => {
                     const address = searchQuery.length > 0 ? item.poolAddress : item.address;
                     console.log("item", item)
@@ -112,11 +113,12 @@ const ListToken = () => {
                                     {/* {i <= 2 ? <FontAwesomeIcon icon={['fas', 'star']} className='text-yellow-400'/> : <Star className="h-4 w-4" />} */}
                                     <Star className="h-4 w-4" />
                                 </button>
-                                <Image src={item.logo_uri || "/placeholder.png"} alt="axie" width={24} height={24} className='rounded-full' />
+                                <Image src={item.logo_uri || "/placeholder.png"} alt="" width={24} height={24} className='rounded-full' />
                                 <div className='flex gap-1 items-center'>
                                     <span className="text-xs font-semibold dark:text-theme-neutral-100 text-theme-neutral-800 capitalize">{item.name}</span>
                                     <span className='text-xs font-light text-neutral-300'>{item.symbol}</span>
                                 </div>
+                                {(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}
                             </div>
                             <div className="text-right">
                                 <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>

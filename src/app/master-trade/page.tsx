@@ -85,21 +85,18 @@ interface MasterDetail {
 
 // Định nghĩa các kiểu lọc
 type FilterType = "All" | "Not Connected" | "connect" | "disconnect" | "pause" | "pending"
-const styleTextRow = "px-4 py-2 rounded-md text-xs"
-const greenBg = "text-theme-green-200 border border-theme-green-200"
-const redBg = "text-theme-red-200 border border-theme-red-200"
-const yellowBg = "text-theme-yellow-200 border border-theme-yellow-200"
+const styleTextRow = "px-4 py-1 text-xs"
 const blueBg = "text-theme-blue-200 border border-theme-blue-200"
-const textHeaderTable = "text-xs font-normal text-neutral-200"
+const textHeaderTable = "text-xs font-normal dark:text-neutral-200 text-neutral-900"
 
 // Add these new style constants
 const mobileContainerClass = "px-4 md:px-[40px]" // Reduced padding on mobile
-const mobileFilterWrapperClass = "w-full md:w-auto overflow-x-auto md:overflow-visible"
+const mobileFilterWrapperClass = "w-full md:w-auto overflow-x-auto md:overflow-visible flex-none lg:flex-1"
 const mobileFilterButtonClass = "whitespace-nowrap rounded-sm text-xs md:text-sm font-medium text-neutral-400 px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer flex-shrink-0"
 const mobileSearchWrapperClass = "flex flex-col md:flex-row items-start md:items-center gap-4 w-full" // Stack search on mobile
-const mobileTableWrapperClass = "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative md:block hidden" // Hide table on mobile
+const mobileTableWrapperClass = "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 dark:bg-theme-black-1/2 bg-white bg-opacity-30 backdrop-blur-sm relative md:block hidden" // Hide table on mobile
 const mobileCardWrapperClass = "flex flex-col gap-4 md:hidden" // Show cards on mobile only
-const mobileCardClass = "rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm p-4" // Card style for mobile
+const mobileCardClass = "rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 dark:bg-theme-black-1/2 bg-white bg-opacity-30 backdrop-blur-sm p-4" // Card style for mobile
 
 // Add new wrapper class for the filter buttons container
 const filterButtonsWrapperClass = "flex gap-2 md:gap-6 md:flex-wrap min-w-max md:min-w-0 pb-2 md:pb-0"
@@ -181,12 +178,12 @@ export default function MasterTradeTable() {
             const details = await Promise.all(
                 masterTraders.map(async (trader: Trader) => {
                     const address = trader.solana_address || trader.eth_address;
-        
+
                     if (!address) return null;
                     try {
                         const data = await getMasterById(address);
                         const statusConnection = trader.connection_status === "connect" ? data : null;
-                        return { ...data.historic.summary, address, lastTime: data?.pnl_since, info: statusConnection};
+                        return { ...data.historic.summary, address, lastTime: data?.pnl_since, info: statusConnection };
                     } catch (error) {
                         console.error(`Error fetching details for ${address}:`, error);
                         return null;
@@ -197,14 +194,14 @@ export default function MasterTradeTable() {
         },
         enabled: masterTraders.length > 0,
     });
-   
+
     // Combine masterTraders and masterDetails data
     useEffect(() => {
         if (masterTraders.length > 0 && masterDetails.length > 0) {
             const combined = masterTraders.map((trader: Trader) => {
                 const traderAddress = trader.solana_address || trader.eth_address;
                 const details = masterDetails.find((detail: MasterDetail) => detail.address === traderAddress);
-                
+
                 if (details) {
                     return {
                         ...trader,
@@ -279,7 +276,7 @@ export default function MasterTradeTable() {
 
         return filtered;
     }, [tradeData, activeFilter, searchQuery]);
-
+    console.log("filteredData")
     // Xử lý sao chép địa chỉ
     const copyAddress = (address: string) => {
         navigator.clipboard.writeText(address)
@@ -307,7 +304,7 @@ export default function MasterTradeTable() {
         });
         refetchMasterTraders()
     }
-    const handleMemberConnectStatus= async (inforWallet?: any, status?: string) => {
+    const handleMemberConnectStatus = async (inforWallet?: any, status?: string) => {
         try {
             await MasterTradingService.memberSetConnect({
                 master_address: inforWallet.address,
@@ -365,19 +362,19 @@ export default function MasterTradeTable() {
     const getValueColor = (value: number | string): string => {
         if (typeof value === 'string') {
             // Handle "updating" case
-            if (value === "updating") return 'text-neutral-200';
+            if (value === "updating") return 'dark:text-neutral-200 text-neutral-900';
             // Convert string to number
             const numValue = Number(value);
-            if (isNaN(numValue)) return 'text-neutral-200';
+            if (isNaN(numValue)) return 'dark:text-neutral-200 text-neutral-900';
             // Use a small epsilon to handle floating point comparison
             if (numValue > 0.0001) return 'text-theme-green-200';
             if (numValue < -0.0001) return 'text-theme-red-200';
-            return 'text-neutral-200';
+            return 'dark:text-neutral-200 text-neutral-900';
         }
         // For number type
         if (value > 0.0001) return 'text-theme-green-200';
         if (value < -0.0001) return 'text-theme-red-200';
-        return 'text-neutral-200';
+        return 'dark:text-neutral-200 text-neutral-900';
     };
 
     return (
@@ -395,45 +392,45 @@ export default function MasterTradeTable() {
                     <div className={filterButtonsWrapperClass}>
                         <button
                             onClick={() => setActiveFilter("All")}
-                            className={`${mobileFilterButtonClass} ${activeFilter === "All" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "All" ? 'dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'All' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.all')} ({tradeData.length})</span>
+                            <span className={`text-theme-black-100 dark:text-theme-neutral-100`}>{t('masterTrade.page.filters.all')} ({tradeData.length})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("Not Connected")}
-                            className={`${mobileFilterButtonClass} ${activeFilter === "Not Connected" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "Not Connected" ? 'dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'Not Connected' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.notConnected')} ({notConnectedCount})</span>
+                            <span className={`text-theme-black-100 dark:text-theme-neutral-100`}>{t('masterTrade.page.filters.notConnected')} ({notConnectedCount})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("connect")}
-                            className={`${mobileFilterButtonClass} ${activeFilter === "connect" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "connect" ? 'dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'connect' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.connected')} ({connectedCount})</span>
+                            <span className={`text-theme-black-100 dark:text-theme-neutral-100`}>{t('masterTrade.page.filters.connected')} ({connectedCount})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("disconnect")}
-                            className={`${mobileFilterButtonClass} ${activeFilter === "disconnect" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "disconnect" ? 'dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'disconnect' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.disconnected')} ({disconnectedCount})</span>
+                            <span className={`text-theme-black-100 dark:text-theme-neutral-100`}>{t('masterTrade.page.filters.disconnected')} ({disconnectedCount})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("pause")}
-                            className={`${mobileFilterButtonClass} ${activeFilter === "pause" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "pause" ? 'dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'pause' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.paused')} ({pausedCount})</span>
+                            <span className={`text-theme-black-100 dark:text-theme-neutral-100`}>{t('masterTrade.page.filters.paused')} ({pausedCount})</span>
                         </button>
                         <button
                             onClick={() => setActiveFilter("pending")}
-                            className={`${mobileFilterButtonClass} ${activeFilter === "pending" ? 'bg-[#0F0F0F]' : 'border-transparent'}`}
+                            className={`${mobileFilterButtonClass} ${activeFilter === "pending" ? 'dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
                         >
-                            <span className={`${activeFilter === 'pending' ? 'gradient-hover' : ''}`}>{t('masterTrade.page.filters.pending')} ({pendingCount})</span>
+                            <span className={`text-theme-black-100 dark:text-theme-neutral-100`}>{t('masterTrade.page.filters.pending')} ({pendingCount})</span>
                         </button>
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
-                    <div className="relative w-full md:w-auto">
+                <div className="flex flex-rowitems-start md:items-center gap-4 w-full justify-between md:w-auto">
+                    <div className="relative flex-1 w-full md:w-auto">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                         <input
                             type="text"
@@ -453,24 +450,27 @@ export default function MasterTradeTable() {
                     </div>
 
                     {myWalletInfor?.role !== "member" && (
-                        <button className="w-full md:w-auto create-coin-bg hover:linear-200-bg hover-bg-delay dark:text-neutral-100 font-medium px-4 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed flex gap-2 text-xs justify-center" onClick={() => router.push("/master-trade/manage")}>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
-                            {t('masterTrade.page.manageMaster')}
+                        <button className="lg:max-w-auto max-w-[300px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 lg:w-full md:w-auto flex" onClick={() => router.push("/master-trade/manage")}>
+                            <span className="flex items-center gap-2 text-theme-neutral-100 z-10">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                                {t('masterTrade.page.manageMaster')}
+                            </span>
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
                         </button>
                     )}
                 </div>
@@ -478,8 +478,8 @@ export default function MasterTradeTable() {
 
             {/* Desktop Table */}
             <div className={mobileTableWrapperClass}>
-                <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
-                    <table className="w-full text-neutral-100">
+                <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 dark:bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative p-3">
+                    <table className="w-full dark:text-theme-neutral-100 text-theme-neutral-900">
                         <thead>
                             <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
                                 <th className={`${styleTextRow} text-left ${textHeaderTable} w-[15%]`}>{t('masterTrade.page.table.address')}</th>
@@ -503,7 +503,7 @@ export default function MasterTradeTable() {
                                 </th>
                                 <th className={`${styleTextRow} text-left w-[8%]`}>
                                     <div className={`flex items-center ${textHeaderTable}`}>
-                                        {t('masterTrade.page.table.txs7d')}
+                                        {t('masterTrade.page.table.transactions7d')}
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </div>
                                 </th>
@@ -540,13 +540,13 @@ export default function MasterTradeTable() {
                                     <tr key={item.id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
                                         <td className={`${styleTextRow}`}>
                                             <div className="flex items-center text-xs font-normal text-neutral-200">
-                                                <span className="text-neutral-100 text-xs font-medium">{truncateString(item.address, 12)}</span>
+                                                <span className="dark:text-theme-neutral-100 text-theme-neutral-900 text-xs font-medium">{truncateString(item.address, 12)}</span>
                                                 <button
                                                     onClick={() => copyAddress(item.address)}
-                                                    className="ml-2 text-neutral-100 transition-colors group relative"
+                                                    className="ml-2 dark:text-theme-neutral-100 text-theme-neutral-900 transition-colors group relative"
                                                 >
                                                     <Copy className="h-4 w-4" />
-                                                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-neutral-100 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 dark:text-theme-neutral-100 text-theme-neutral-900 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                                                         {t('masterTrade.page.actions.copy')}
                                                     </span>
                                                 </button>
@@ -601,7 +601,7 @@ export default function MasterTradeTable() {
                                                             handleConnect(item)
                                                             setInforWallet(getTraderDetails(item.address))
                                                         }}
-                                                        className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
+                                                        className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
                                                     >
                                                         {t('masterTrade.page.actions.connect')}
                                                     </button>
@@ -617,19 +617,29 @@ export default function MasterTradeTable() {
                                                         >
                                                             {t('masterTrade.page.actions.details')}
                                                         </button>
-                                                        <button
-                                                            onClick={() => {
-                                                                handleMemberConnectStatus(item, "pause")
-                                                            }}
-                                                            className={`px-3 py-1 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs`}
-                                                        >
-                                                            {t('masterTrade.page.actions.pause')}
-                                                        </button>
+                                                        {item.status === "connect" ? (
+                                                            <button
+                                                                onClick={() => handleMemberConnectStatus(item, "pause")}
+                                                                className="flex-1 px-3 py-1.5 text-theme-yellow-200 border border-theme-yellow-200 hover:dark:text-theme-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs text-center"
+                                                            >
+                                                                {t('masterTrade.page.actions.pause')}
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                onClick={() => {
+                                                                    handleConnect(item)
+                                                                    setInforWallet(getTraderDetails(item.address))
+                                                                }}
+                                                                className="flex-1 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
+                                                            >
+                                                                {t('masterTrade.page.actions.connect')}
+                                                            </button>
+                                                        )}
                                                         <button
                                                             onClick={() => {
                                                                 handleMemberConnectStatus(item, "disconnect")
                                                             }}
-                                                            className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
+                                                            className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:dark:text-theme-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
                                                         >
                                                             {t('masterTrade.page.actions.disconnect')}
                                                         </button>
@@ -640,7 +650,7 @@ export default function MasterTradeTable() {
                                                         onClick={() => {
                                                             handleMemberConnectStatus(item, "connect")
                                                         }}
-                                                        className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
+                                                        className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
                                                     >
                                                         {t('masterTrade.page.actions.reconnect')}
                                                     </button>
@@ -689,10 +699,10 @@ export default function MasterTradeTable() {
                             {/* Card Header */}
                             <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center">
-                                    <span className="text-neutral-100 text-sm font-medium">{truncateString(item.address, 12)}</span>
+                                    <span className="dark:text-theme-neutral-100 text-theme-neutral-900 text-sm font-medium">{truncateString(item.address, 12)}</span>
                                     <button
                                         onClick={() => copyAddress(item.address)}
-                                        className="ml-2 text-neutral-100"
+                                        className="ml-2 dark:text-theme-neutral-100 text-theme-neutral-900"
                                     >
                                         <Copy className="h-4 w-4" />
                                     </button>
@@ -708,9 +718,9 @@ export default function MasterTradeTable() {
                                             {t('masterTrade.page.traderType.normal')}
                                         </div>
                                     )}
-                                    <span className={`text-xs px-2 py-1 rounded-full ${item.status === 'connect' ? 'bg-theme-green-200/20 text-theme-green-200' : 
-                                        item.status === 'disconnect' ? 'bg-theme-red-200/20 text-theme-red-200' : 
-                                        'bg-theme-yellow-200/20 text-theme-yellow-200'}`}>
+                                    <span className={`text-xs px-2 py-1 rounded-full ${item.status === 'connect' ? 'bg-theme-green-200/20 text-theme-green-200' :
+                                        item.status === 'disconnect' ? 'bg-theme-red-200/20 text-theme-red-200' :
+                                            'bg-theme-yellow-200/20 text-theme-yellow-200'}`}>
                                         {t(`masterTrade.page.status.${item.status.toLowerCase()}`)}
                                     </span>
                                 </div>
@@ -750,7 +760,7 @@ export default function MasterTradeTable() {
                                                 handleConnect(item)
                                                 setInforWallet(getTraderDetails(item.address))
                                             }}
-                                            className="flex-1 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
+                                            className="flex-1 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
                                         >
                                             {t('masterTrade.page.actions.connect')}
                                         </button>
@@ -762,19 +772,31 @@ export default function MasterTradeTable() {
                                                     setShowDetailModal(true)
                                                     setInfoWallet(item)
                                                 }}
-                                                className="flex-1 px-3 py-1.5 text-theme-blue-200 border border-theme-blue-200 hover:text-neutral-100 hover:bg-theme-blue-200 rounded-full transition-colors text-xs text-center"
+                                                className="flex-1 px-3 py-1.5 text-theme-blue-200 border border-theme-blue-200 hover:dark:text-theme-neutral-100 hover:bg-theme-blue-200 rounded-full transition-colors text-xs text-center"
                                             >
                                                 {t('masterTrade.page.actions.details')}
                                             </button>
-                                            <button
-                                                onClick={() => handleMemberConnectStatus(item, "pause")}
-                                                className="flex-1 px-3 py-1.5 text-theme-yellow-200 border border-theme-yellow-200 hover:text-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs text-center"
-                                            >
-                                                {t('masterTrade.page.actions.pause')}
-                                            </button>
+                                            {item.status === "connect" ? (
+                                                <button
+                                                    onClick={() => handleMemberConnectStatus(item, "pause")}
+                                                    className="flex-1 px-3 py-1.5 text-theme-yellow-200 border border-theme-yellow-200 hover:dark:text-theme-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs text-center"
+                                                >
+                                                    {t('masterTrade.page.actions.pause')}
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    onClick={() => {
+                                                        handleConnect(item)
+                                                        setInforWallet(getTraderDetails(item.address))
+                                                    }}
+                                                    className="flex-1 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
+                                                >
+                                                    {t('masterTrade.page.actions.connect')}
+                                                </button>
+                                            )}
                                             <button
                                                 onClick={() => handleMemberConnectStatus(item, "disconnect")}
-                                                className="flex-1 px-3 py-1.5 text-theme-red-200 border border-theme-red-200 hover:text-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs text-center"
+                                                className="flex-1 px-3 py-1.5 text-theme-red-200 border border-theme-red-200 hover:dark:text-theme-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs text-center"
                                             >
                                                 {t('masterTrade.page.actions.disconnect')}
                                             </button>
@@ -783,7 +805,7 @@ export default function MasterTradeTable() {
                                     {item.status === "disconnect" && (
                                         <button
                                             onClick={() => handleMemberConnectStatus(item, "connect")}
-                                            className="lg:w-auto mx-auto lg:mx-0 w-36 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:text-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
+                                            className="lg:w-auto mx-auto lg:mx-0 w-36 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
                                         >
                                             {t('masterTrade.page.actions.reconnect')}
                                         </button>

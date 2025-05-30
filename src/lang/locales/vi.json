@@ -1,13 +1,22 @@
 {
   "connect": "Kết nối",
   "over view": "Tổng quan",
-  "my wallet": "Ví của tôi",
   "wallet manager": "Quản lý ví",
+  "my wallet": "Ví của tôi",
+  "listWalletss": {
+    "walletType": {
+      "main": "Ví chính",
+      "import": "Ví nhập khẩu",
+      "other": "Ví khác",
+      "master": "Master",
+      "member": "Thành viên"
+    }
+  },
   "overview": {
     "launchToken": {
       "title": "Phát hành token của riêng bạn",
-      "description": "Tùy chỉnh tên, ký hiệu, thuế và nguồn cung chỉ trong vài bước đơn giản",
-      "createNow": "Tạo Ngay"
+      "description": "Tùy chỉnh tên, biểu tượng, thuế và nguồn cung chỉ trong vài bước đơn giản",
+      "createNow": "Tạo ngay"
     },
     "universalAccount": {
       "title": "TÀI KHOẢN PHỔ THÔNG",
@@ -15,15 +24,17 @@
       "send": "Gửi"
     },
     "masterTrade": {
-      "title": "Giao dịch thông thái",
+      "name": "Giao dịch sao chép",
+      "title": "Giao dịch sao chép",
       "description": "Sao chép giao dịch từ các trader hàng đầu chỉ với một cú nhấp chuột",
-      "explore": "Khám Phá"
+      "explore": "Khám phá"
     }
   },
   "trade": "Giao dịch",
-  "create coin": "Tạo Coin",
+  "create coin": "Tạo coin",
   "createCoin": {
     "title": "TẠO COIN MỚI",
+    "subtitle": "Tạo coin mới trên Pumpfun",
     "form": {
       "name": {
         "label": "Tên",
@@ -87,6 +98,14 @@
         "creating": "ĐANG TẠO..."
       }
     },
+    "tabs": {
+      "today": "Hôm nay",
+      "last8days": "8 ngày qua",
+      "lastMonth": "Tháng trước",
+      "noCoins": "Chưa có coin nào được tạo gần đây",
+      "seeAll": "Xem tất cả coin của tôi",
+      "trade": "Giao dịch"
+    },
     "myCoins": {
       "title": "COIN CỦA TÔI",
       "createCoin": "TẠO COIN",
@@ -128,9 +147,12 @@
         "all": "Tất cả",
         "notConnected": "Chưa kết nối",
         "connected": "Đã kết nối",
-        "disconnected": "Đã ngắt kết nối",
+        "disconnected": "Ngắt kết nối",
         "paused": "Tạm dừng",
-        "pending": "Đang chờ"
+        "pending": "Đang chờ",
+        "1d": "1N",
+        "7d": "7N",
+        "30d": "30N"
       },
       "search": {
         "placeholder": "Tìm kiếm theo địa chỉ ví..."
@@ -148,7 +170,8 @@
         "action": "Hành động",
         "noData": "Không có dữ liệu",
         "copyAddress": "Sao chép địa chỉ",
-        "copySuccess": "Đã sao chép địa chỉ: {address}"
+        "copySuccess": "Đã sao chép địa chỉ: {address}",
+        "details": "Chi tiết"
       },
       "traderType": {
         "vip": "VIP",
@@ -162,7 +185,7 @@
         "disconnect": "Ngắt kết nối"
       },
       "status": {
-        "notConnected": "Chưa kết nối",
+        "not connected": "Chưa kết nối",
         "connect": "Đã kết nối",
         "disconnect": "Đã ngắt kết nối",
         "pause": "Đã tạm dừng",
@@ -205,7 +228,17 @@
         "error": "Đã xảy ra lỗi",
         "confirmJoin": "Xác nhận kết nối {count} ví đã chọn vào nhóm \"{groupName}\"",
         "cancel": "Hủy",
-        "confirm": "Xác nhận"
+        "confirm": "Xác nhận",
+        "connect": "Kết nối",
+        "pause": "Tạm dừng",
+        "pending": "Đang chờ",
+        "block": "Chặn",
+        "unblock": "Bỏ chặn",
+        "chooseGroup": "Chọn nhóm",
+        "searchGroup": "Tìm kiếm nhóm...",
+        "noGroup": "Không có nhóm",
+        "copyAddress": "Sao chép địa chỉ",
+        "addressCopied": "Đã sao chép địa chỉ"
       },
       "groupManagement": {
         "createGroup": "TẠO NHÓM",
@@ -243,7 +276,8 @@
         "connectWithMaster": "Kết nối với Master khác",
         "send": "Gửi",
         "noMessages": "Chưa có tin nhắn nào",
-        "communityChatroom": "Phòng Chat Cộng Đồng"
+        "communityChatroom": "Phòng Chat Cộng Đồng",
+        "type_a_message": "Nhập tin nhắn..."
       }
     }
   },
@@ -291,7 +325,29 @@
     "walletKey": "Khóa Ví",
     "type": "Loại",
     "actions": "Thao Tác",
-    "walletLevel": "Cấp Độ Ví"
+    "walletLevel": "Cấp Độ Ví",
+    "active": "Đang hoạt động",
+    "switch": "Chuyển đổi",
+    "deleteConfirm": {
+      "title": "Xác nhận xóa ví",
+      "description": "Bạn có chắc chắn muốn xóa ví {name}? Hành động này không thể hoàn tác.",
+      "cancel": "Hủy",
+      "delete": "Xóa"
+    },
+    "addNewWallet": "Thêm Ví Mới",
+    "enterWalletName": "Nhập Tên Ví",
+    "enterNickname": "Nhập Biệt Danh",
+    "enterSolanaPrivateKey": "Nhập Khóa Riêng Tư Solana",
+    "enterWalletNickname": "Nhập Biệt Danh Ví",
+    "walletAddedSuccess": "Thêm ví thành công",
+    "walletAddFailed": "Thêm ví thất bại. Vui lòng thử lại.",
+    "passwordCreatedSuccess": "Tạo mật khẩu thành công",
+    "passwordCreateFailed": "Tạo mật khẩu thất bại. Vui lòng thử lại.",
+    "invalidPrivateKey": "Định dạng khóa riêng tư không hợp lệ",
+    "invalidPrivateKeyLength": "Độ dài khóa riêng tư không hợp lệ",
+    "addressCopied": "Đã sao chép địa chỉ ví vào clipboard",
+    "passwordRequired": "Vui lòng nhập mật khẩu của bạn",
+    "invalidPassword": "Mật khẩu không hợp lệ. Vui lòng thử lại."
   },
   "searchPlaceholder": "Tên Token/ Địa chỉ",
   "languages": {
@@ -299,6 +355,132 @@
     "english": "Tiếng Anh",
     "vietnamese": "Tiếng Việt",
     "japan": "Nhật Bản"
+  },
+  "categories": {
+    "Rug Pull": "Rug Pull",
+    "Scam": "Lừa đảo",
+    "Low Cap": "Vốn hóa thấp",
+    "High Cap": "Vốn hóa cao",
+    "Community": "Cộng đồng",
+    "Whale": "Cá voi",
+    "Bot": "Bot",
+    "Manual": "Thủ công",
+    "Auto": "Tự động",
+    "VIP": "VIP",
+    "Hack": "Hack",
+    "Exploit": "Khai thác",
+    "Bug": "Lỗi",
+    "Error": "Lỗi",
+    "Crash": "Sập",
+    "Drop": "Giảm",
+    "Fall": "Rơi",
+    "Rise": "Tăng",
+    "Jump": "Nhảy",
+    "Climb": "Leo",
+    "Sink": "Chìm",
+    "Float": "Nổi",
+    "Swing": "Dao động",
+    "Bounce": "Nảy",
+    "Rebound": "Phục hồi",
+    "Recovery": "Phục hồi",
+    "Correction": "Điều chỉnh",
+    "Consolidation": "Củng cố",
+    "Breakout": "Bứt phá",
+    "Breakdown": "Sụp đổ",
+    "Support": "Hỗ trợ",
+    "Resistance": "Kháng cự",
+    "Trend": "Xu hướng",
+    "Pattern": "Mẫu hình",
+    "Signal": "Tín hiệu",
+    "Alert": "Cảnh báo",
+    "Warning": "Cảnh báo",
+    "Danger": "Nguy hiểm",
+    "Risk": "Rủi ro",
+    "Reward": "Phần thưởng",
+    "Profit": "Lợi nhuận",
+    "Loss": "Thua lỗ",
+    "Gain": "Lợi nhuận",
+    "Win": "Thắng",
+    "Lose": "Thua",
+    "Dog": "Chó",
+    "Cat": "Mèo",
+    "IDO": "IDO",
+    "Presale": "Bán trước",
+    "Airdrop": "Airdrop",
+    "Pump": "Bơm",
+    "Dump": "Bán tháo",
+    "New": "Mới",
+    "Hot": "Hot",
+    "Trending": "Thịnh hành",
+    "Moon": "Mặt trăng",
+    "Rocket": "Tên lửa",
+    "Diamond": "Kim cương",
+    "Gem": "Đá quý",
+    "Secure": "An toàn",
+    "Elon": "Elon",
+    "Musk": "Musk",
+    "Pepe": "Pepe",
+    "Doge": "Doge",
+    "Shiba": "Shiba",
+    "Frog": "Ếch",
+    "Duck": "Vịt",
+    "Penguin": "Chim cánh cụt",
+    "Bear": "Gấu",
+    "Bull": "Bò",
+    "Lion": "Sư tử",
+    "Tiger": "Hổ",
+    "Dragon": "Rồng",
+    "Phoenix": "Phượng hoàng",
+    "Unicorn": "Kỳ lân",
+    "Ninja": "Ninja",
+    "Samurai": "Samurai",
+    "Knight": "Hiệp sĩ",
+    "Wizard": "Phù thủy",
+    "Dwarf": "Người lùn",
+    "Elf": "Yêu tinh",
+    "Orc": "Orc",
+    "Goblin": "Yêu tinh",
+    "Troll": "Quỷ lùn",
+    "Ghost": "Ma",
+    "Zombie": "Xác sống",
+    "Vampire": "Ma cà rồng",
+    "Werewolf": "Người sói",
+    "Mummy": "Xác ướp",
+    "Skeleton": "Bộ xương",
+    "Alien": "Người ngoài hành tinh",
+    "Robot": "Robot",
+    "Cyborg": "Người máy",
+    "Android": "Android",
+    "AI": "AI",
+    "NFT": "NFT",
+    "Metaverse": "Vũ trụ ảo",
+    "GameFi": "GameFi",
+    "DeFi": "DeFi",
+    "Web3": "Web3",
+    "DAO": "DAO",
+    "Exchange": "Sàn giao dịch",
+    "Yield": "Lợi suất",
+    "Mining": "Đào",
+    "Trading": "Giao dịch",
+    "Casino": "Sòng bạc",
+    "Lottery": "Xổ số",
+    "Prediction": "Dự đoán",
+    "Insurance": "Bảo hiểm",
+    "Lending": "Cho vay",
+    "Borrowing": "Vay mượn",
+    "APY": "APY",
+    "APR": "APR",
+    "TVL": "TVL",
+    "MCAP": "Vốn hóa",
+    "Volume": "Khối lượng",
+    "Liquidity": "Thanh khoản",
+    "Burn": "Đốt",
+    "Mint": "Đúc",
+    "Lock": "Khóa",
+    "Vest": "Vesting",
+    "Launch": "Ra mắt",
+    "List": "Niêm yết",
+    "Delist": "Hủy niêm yết"
   },
   "trading": {
     "token": "Token",
@@ -437,6 +619,10 @@
     "volume24h": "Khối lượng 24h",
     "liquidity": "Thanh khoản",
     "holders": "Người nắm giữ",
+    "vol": "KL",
+    "buy": "Mua",
+    "sells": "Bán",
+    "netBuy": "Mua ròng",
     "timeFrames": {
       "5m": "5 phút",
       "1h": "1 giờ",
@@ -501,7 +687,11 @@
     "search": "Tìm kiếm",
     "noResults": "Không tìm thấy kết quả",
     "required": "Bắt buộc",
-    "optional": "Tùy chọn"
+    "optional": "Tùy chọn",
+    "copy": {
+      "copyAddress": "Sao chép địa chỉ",
+      "copied": "Đã sao chép!"
+    }
   },
   "universal_account": {
     "deposit": "Nạp tiền",
@@ -543,7 +733,10 @@
       "network_error": "Lỗi kết nối. Vui lòng kiểm tra kết nối của bạn.",
       "unauthorized": "Không được phép. Vui lòng đăng nhập lại.",
       "recipient_required": "Vui lòng nhập địa chỉ người nhận"
-    }
+    },
+    "minimum_withdrawal_amount": "Số tiền rút tối thiểu là {amount} SOL",
+    "maximum_withdrawal_amount": "Số tiền rút tối đa là {amount} SOL",
+    "amount_cannot_exceed_balance": "Số tiền không được vượt quá số dư {balance} SOL"
   },
   "searchModal": {
     "title": "TÌM KIẾM",
