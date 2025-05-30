@@ -345,16 +345,16 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
         const isLoading = loadingWalletId === wallet.wallet_id && loadingField === field;
         const value = field === 'name' ? wallet.wallet_name :
             field === 'nickname' ? wallet.wallet_nick_name :
-                wallet.wallet_country.toLowerCase();
+                wallet.wallet_country?.toLowerCase();
 
         if (isEditing) {
             if (field === 'country') {
                 return (
                     <div className="flex items-center gap-2">
                         <WalletLanguageSelect
-                            value={editingValue.toLowerCase()}
+                            value={editingValue?.toLowerCase()}
                             onChange={async (newValue) => {
-                                const lowerNewValue = newValue.toLowerCase();
+                                const lowerNewValue = newValue?.toLowerCase();
                                 setEditingValue(lowerNewValue);
                                 setEditingWalletId(wallet.wallet_id);
                                 setEditingField('country');
