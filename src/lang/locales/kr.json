@@ -765,8 +765,10 @@
       "actions": "작업",
       "copy": {
         "copyAddress": "주소 복사",
-        "copied": "복사됨!"
-      }
+        "copied": "복사됨!",
+        "copied_description": "주소가 클립보드에 복사되었습니다"
+      },
+      "redirecting": "리다이렉팅 중..."
     },
     "universal_account": {
       "deposit": "입금",

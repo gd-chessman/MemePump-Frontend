@@ -61,17 +61,16 @@ export default function MasterTradeChat({
         };
     }, [tokenAddress, token, lang, setTokenAddress, initializeWebSocket, disconnectWebSocket, mounted]);
 
-    const { data: myConnects = [], isLoading: isLoadingConnects } = useQuery({
+    const { data: myConnects = [], isLoading: isLoadingConnects, refetch: refetchMyConnects } = useQuery({
         queryKey: ["myConnects"],
         queryFn: getMyConnects,
         refetchOnWindowFocus: false
     })
+    console.log("myConnects", myConnects)
     const { data: walletInfor, isLoading: isLoadingWallet } = useQuery({
         queryKey: ["wallet-infor"],
         queryFn: getInforWallet,
     });
-
-    const isLoading = isLoadingConnects || isLoadingWallet;
 
     // Filter connections based on search query
     const filteredConnections = useMemo(() => {
@@ -156,7 +155,7 @@ export default function MasterTradeChat({
                 </div>
             )} */}
             {/* Tabs */}
-            <div className="flex-none flex h-[30px] bg-neutral-1000 my-3 mx-3 rounded-xl relative dark:bg-theme-neutral-800">
+            <div className="flex-none flex h-[30px] bg-gray-300 my-3 mx-3 rounded-xl relative dark:bg-theme-neutral-800">
                 {walletInfor?.role === "master" && (
                     <button
                         className={`flex-1 rounded-xl text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "trade" ? "linear-gradient-connect" : "text-neutral-400"

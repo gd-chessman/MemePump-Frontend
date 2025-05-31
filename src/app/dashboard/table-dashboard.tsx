@@ -223,7 +223,7 @@ export default function Trading() {
                             onClick={() => router.push(`/trading?address=${token.address}`)}
                             className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap"
                           >
-                            Trade
+                            {t('trading.trade')}
                           </button>
                           <button
                             onClick={(e) => {

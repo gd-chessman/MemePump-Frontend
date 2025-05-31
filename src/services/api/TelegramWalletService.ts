@@ -155,3 +155,13 @@ export const setPassword = async (password: string)=>{
         throw error;
     }
 }
+
+export const sendVerificationCode = async ()=>{
+    try {
+        const temp = await axiosClient.get("/telegram-wallets/send-code-reset-password")
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}

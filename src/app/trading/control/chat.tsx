@@ -172,7 +172,7 @@ const ChatTradingContent = () => {
             <div className="relative flex-1">
               <input
                 type="text"
-                placeholder="Type a message..."
+                placeholder={t('trading.control.searchBar.placeholder')}
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={(e) => {

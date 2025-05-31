@@ -7,6 +7,7 @@ import Control from './control/page'
 import Slider from './slider/page'
 import { useState, useEffect, Suspense, useRef } from 'react'
 import TradingViewChart from '@/app/components/tradingview-chart/TradingViewChart'
+import ChartMobile from '@/app/components/tradingview-chart/ChartMobile'
 
 const TradingPage = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -89,7 +90,7 @@ const TradingPage = () => {
             style={{ height: isMobile ? '350px' : `${chartHeight}%` }} 
             className='dark:bg-theme-neutral-1000 shadow-inset bg-white rounded-xl p-2 md:p-4 overflow-auto lg:min-h-[20rem] transition-all duration-100 relative'
           >
-            <TradingViewChart className='h-full' />
+            {isMobile ? <ChartMobile className='h-full'/> : <TradingViewChart className='h-full' />}
             {isDragging && (
               <div 
                 className='absolute inset-0 bg-transparent z-50 cursor-row-resize'

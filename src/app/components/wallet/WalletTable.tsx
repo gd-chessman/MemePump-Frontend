@@ -249,7 +249,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWal
                                     : "dark:bg-gray-700 bg-gray-50 border-gray-600 text-gray-300"
                                 } ${mobileStyles.badge}`}
                         >
-                            {wallet.wallet_type.charAt(0).toUpperCase() + wallet.wallet_type.slice(1)}
+                            {t(`listWalletss.walletType.${wallet.wallet_type}`)}
                         </Badge>
                         <Badge
                             className={`${wallet.wallet_auth === "master"
@@ -257,7 +257,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWal
                                 : "dark:bg-gray-700 bg-gray-50 border-[#15DFFD] text-[#15DFFD]"
                                 } ${mobileStyles.badge}`}
                         >
-                            {wallet.wallet_auth.charAt(0).toUpperCase() + wallet.wallet_auth.slice(1)}
+                            {t(`listWalletss.walletType.${wallet.wallet_auth}`)}
                         </Badge>
                     </div>
                 </div>
@@ -266,7 +266,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWal
             {/* Addresses */}
             <div className={mobileStyles.addressContainer}>
                 <div>
-                    <div className={mobileStyles.label}>Solana Address</div>
+                    <div className={mobileStyles.label}>{t('wallet.solanaAddress')}</div>
                     <div className="flex items-center gap-2">
                         <span className={`${mobileStyles.value} truncate flex-1`}>
                             {truncateString(wallet.solana_address, 12)}
@@ -286,7 +286,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWal
                     </div>
                 </div>
                 <div>
-                    <div className={mobileStyles.label}>ETH Address</div>
+                    <div className={mobileStyles.label}>{t('wallet.ethAddress')}</div>
                     <div className="flex items-center gap-2">
                         <span className={`${mobileStyles.value} truncate flex-1`}>
                             {truncateString(wallet.eth_address, 12)}
@@ -318,7 +318,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWal
                         onClick={() => walletInfor?.solana_address !== wallet.solana_address && handleChangeWallet(wallet)}
                     />
                     <span className={mobileStyles.value}>
-                        {walletInfor?.solana_address === wallet.solana_address ? 'Active' : 'Switch'}
+                        {walletInfor?.solana_address === wallet.solana_address ? t('wallet.active') : t('wallet.switch')}
                     </span>
                 </div>
                 {wallet.wallet_type !== 'main' && walletInfor?.solana_address !== wallet.solana_address && (
@@ -482,7 +482,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWal
                     onClick={() => handleStartEdit(wallet.wallet_id, field, value)}
                     disabled={isLoading}
                 >
-                   
+                    <Edit className="h-4 w-4 dark:text-theme-neutral-100" />
                 </Button>
             </div>
         );
@@ -511,7 +511,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWal
                                 {wallets?.map((wallet) => (
                                     <TableRow
                                         key={wallet.wallet_id}
-                                        className="hover:bg-neutral-800/30 transition-colors"
+                                        className="dark:hover:bg-neutral-800/30 hover:bg-theme-green-300 transition-colors"
                                     >
                                         <TableCell className={`px-4 ${textContent}`}>
                                             {renderEditableCell(wallet, 'name')}

@@ -204,7 +204,7 @@ const Control = () => {
             }`}>
               <div className="p-4">
                 {/* Drag handle */}
-                <div className="w-12 h-1 bg-neutral-600 rounded-full mx-auto mb-4" />
+                <div className="w-12 h-1 bg-neutral-600 rounded-full mx-auto lg:mb-4" />
                 
                 {/* Panel Content */}
                 {renderTabContent()}
