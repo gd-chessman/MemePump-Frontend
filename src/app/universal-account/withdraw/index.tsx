@@ -114,16 +114,10 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
         amount: Number(amount), 
         wallet_address_to: recipientWallet 
       });
-
-      if (response?.status === 'success') {
-        setAmount("0");
-        setRecipientWallet("");
-        toast.success(t('universal_account.errors.transaction_success'));
-      } else {
-        // Handle specific error messages from API
-        const errorMessage = response?.message || t('universal_account.errors.transaction_failed');
-        toast.error(errorMessage);
-      }
+      console.log("response", response)
+      setAmount("0");
+      setRecipientWallet("");
+      toast.success(t('universal_account.errors.transaction_success'));
     } catch (error: any) {
       // Handle different types of errors
       if (error.code === 'ERR_NETWORK') {

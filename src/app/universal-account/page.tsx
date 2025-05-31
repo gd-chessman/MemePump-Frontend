@@ -11,6 +11,7 @@ import { getTransactionHistory } from '@/services/api/HistoryTransactionWallet';
 import { toast } from '@/hooks/use-toast';
 import { truncateString } from '@/utils/format';
 import { useLang } from '@/lang';
+import { useSearchParams } from 'next/navigation';
 
 type Transaction = {
     id: number
@@ -33,8 +34,9 @@ const universal_accountPage = () => {
         queryFn: getInforWallet,
     });
 
-
-    const [tab, setTab] = useState<("deposit" | "withdraw")>("deposit");
+    const searchParams = useSearchParams()
+    const type = searchParams.get('type')
+    const [tab, setTab] = useState<"deposit" | "withdraw">(type === "withdraw" ? "withdraw" : "deposit");
 
     const { data: transactions } = useQuery({
         queryKey: ["transactions"],

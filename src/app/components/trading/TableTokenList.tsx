@@ -225,7 +225,7 @@ export function TableTokenList({
                           {isFavoritesTab || (myWishlist?.tokens?.some((item: any) => item.address === token.address)) ? <FontAwesomeIcon icon={['fas', 'star']} /> : <Star className="h-4 w-4" />}
                         </Button>
                         <img
-                          src={token.logo_uri || "/placeholder.png"}
+                          src={token.logoUrl || token.logo_uri || "/token-placeholder.png"}
                           alt="token logo"
                           width={30} height={30}
                           className="rounded-full h-[30px]"
