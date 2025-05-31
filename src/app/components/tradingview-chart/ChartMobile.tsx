@@ -397,7 +397,7 @@ export default function ChartMobile({ className }: { className?: string }) {
         </button>
       </div>
       <div className='h-[4px] dark:bg-[#1e1e1e] bg-theme-gray-100 my-1'></div>
-      <div ref={chartContainerRef} className="w-full [&>div:first-child]:hidden" />
+      <div ref={chartContainerRef} className="w-full" />
     </div>
   )
 }

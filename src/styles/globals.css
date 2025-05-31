@@ -246,4 +246,6 @@ input[type=number] {
 
 /* Remove hardcoded bg-gradient-guide style since it is now a Tailwind utility */
 
-  
+.tv-lightweight-charts:first-of-type:nth-last-of-type(n+2) {
+  display: none !important;
+}
