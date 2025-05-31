@@ -199,7 +199,7 @@ const Control = () => {
               onClick={handleClosePanel}
             />
             {/* Panel */}
-            <div className={`fixed bottom-0 left-0 right-0 bg-white rounded-t-xl z-50 transform transition-transform duration-300 ${
+            <div className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-theme-neutral-1000 rounded-t-xl z-50 transform transition-transform duration-300 ${
               isPanelOpen ? 'translate-y-0' : 'translate-y-full'
             }`}>
               <div className="p-4">

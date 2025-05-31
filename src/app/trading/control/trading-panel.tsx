@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useCallback, useMemo } from "react"
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getMyConnects, getMyGroups } from "@/services/api/MasterTradingService"
 import { createTrading, getTokenAmount, getTradeAmount } from "@/services/api/TradingService"
@@ -74,6 +74,7 @@ export default function  TradingPanel({
     const [windowHeight, setWindowHeight] = useState(800)
     const [amountError, setAmountError] = useState<string>("")
     const [isLoading, setIsLoading] = useState(false)
+    const timeoutIdRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
     // Use custom hook for localStorage
     const [percentageValues, setPercentageValues] = useLocalStorage<number[]>(
@@ -225,8 +226,30 @@ export default function  TradingPanel({
         }
     }, [handleAmountEditSave])
 
+    const timeoutHandle = useCallback(() => {
+        // Clear any existing timeout
+        if (timeoutIdRef.current) {
+            clearTimeout(timeoutIdRef.current)
+        }
+        // Set new timeout
+        timeoutIdRef.current = setTimeout(() => {
+            setIsLoading(false)
+        }, 2000)
+    }, [])
+
+    // Cleanup timeout when component unmounts
+    useEffect(() => {
+        return () => {
+            if (timeoutIdRef.current) {
+                clearTimeout(timeoutIdRef.current)
+            }
+        }
+    }, [])
+
     const handleSubmit = useCallback(async () => {
         const numericAmount = Number(amount)
+        setIsLoading(true)
+        timeoutHandle()
         if (!validateAmount(numericAmount)) {
             notify({
                 message: amountError,
@@ -235,7 +258,6 @@ export default function  TradingPanel({
             return
         }
 
-        setIsLoading(true)
         try {
             const response = await createTrading({
                 order_trade_type: mode,
@@ -282,7 +304,7 @@ export default function  TradingPanel({
                 type: 'error'
             })
         } finally {
-            setIsLoading(false)
+           
         }
     }, [mode, amount, tokenAmount, solPrice, selectedConnections, setSelectedGroups, queryClient, refetchTokenAmount, t, validateAmount, amountError, tokenInfor, refetchTradeAmount])
 

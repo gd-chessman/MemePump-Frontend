@@ -246,7 +246,7 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWal
                                 ? "dark:bg-green-900 bg-green-50 border-green-600 text-green-300"
                                 : wallet.wallet_type === "import"
                                     ? "dark:bg-blue-900 bg-blue-50 border-blue-600 text-blue-300"
-                                    : "dark:bg-gray-700 bg-gray-50 border-gray-600 text-gray-300"
+                                    : "dark:bg-gray-700 bg-gray-50 border-gray-600 dark:text-gray-300 text-neutral-900"
                                 } ${mobileStyles.badge}`}
                         >
                             {t(`listWalletss.walletType.${wallet.wallet_type}`)}

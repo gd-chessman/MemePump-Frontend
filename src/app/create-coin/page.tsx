@@ -877,9 +877,10 @@ export default function CreateCoinForm() {
                         <div className="flex items-center gap-1.5 md:gap-2 lg:gap-3 ml-1.5 md:ml-2">
                           <button
                             onClick={() => router.push(`/trading?address=${coin.address}`)}
-                            className="linear-gradient-light dark:linear-gradient-connect hover:border py-1 px-2 md:py-1.5 md:px-3 lg:py-2 lg:px-5 border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 rounded-full text-[10px] md:text-xs whitespace-nowrap"
+                            className="lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto"
                           >
-                            {t('createCoin.tabs.trade')}
+                            <span className="relative z-10 text-theme-neutral-100">{t('createCoin.tabs.trade')}</span>
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
                           </button>
                         </div>
                       </div>
