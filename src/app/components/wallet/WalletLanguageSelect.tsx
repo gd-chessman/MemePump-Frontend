@@ -14,7 +14,7 @@ interface WalletLanguageSelectProps {
 
 export function WalletLanguageSelect({ value, onChange, className }: WalletLanguageSelectProps) {
     const { t } = useLang();
-    const currentLang = langConfig.listLangs.find(l => l.code.toLowerCase() === value.toLowerCase());
+    const currentLang = langConfig.listLangs.find(l => l.code.toLowerCase() === value?.toLowerCase());
 
     return (
         <DropdownMenu>

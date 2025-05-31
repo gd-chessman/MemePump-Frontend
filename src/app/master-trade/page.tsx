@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect, useCallback } from "react"
+import { useState, useMemo, useEffect, useCallback, use } from "react"
 import { Search, Copy, ChevronDown, Crown, Loader2 } from "lucide-react"
 import { getMasterById, getMasters } from "@/services/api/MasterTradingService"
 import { useQuery } from "@tanstack/react-query"
@@ -185,7 +185,6 @@ export default function MasterTradeTable() {
                         const statusConnection = trader.connection_status === "connect" ? data : null;
                         return { ...data.historic.summary, address, lastTime: data?.pnl_since, info: statusConnection };
                     } catch (error) {
-                        console.error(`Error fetching details for ${address}:`, error);
                         return null;
                     }
                 })
@@ -667,7 +666,7 @@ export default function MasterTradeTable() {
                         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
                             <div className="flex flex-col items-center gap-2">
                                 <Loader2 className="h-8 w-8 animate-spin text-theme-primary-300" />
-                                <span className="text-sm text-neutral-200">Loading...</span>
+                                <span className="text-sm text-neutral-200">{t('common.loading')}</span>
                             </div>
                         </div>
                     )}
@@ -729,21 +728,21 @@ export default function MasterTradeTable() {
                             {/* Card Content */}
                             <div className="grid grid-cols-2 gap-3 text-xs">
                                 <div className="flex lg:block gap-1">
-                                    <div className="text-neutral-400 mb-1">7D PnL</div>
+                                    <div className="text-neutral-400 mb-1">{t('masterTrade.page.table.pnl7d')}</div>
                                     <div className={`${getValueColor(Number(item.pnlPercent7d))}`}>{item.pnlPercent7d}%</div>
                                     <div className={`${getValueColor(Number(item.pnl7d))}`}>${item.pnl7d}</div>
                                 </div>
                                 <div className="flex lg:block gap-1">
-                                    <div className="text-neutral-400 mb-1">30D PnL</div>
+                                    <div className="text-neutral-400 mb-1">{t('masterTrade.page.table.pnl30d')}</div>
                                     <div className={`${getValueColor(Number(item.pnlPercent30d))}`}>{item.pnlPercent30d}%</div>
                                     <div className={`${getValueColor(Number(item.pnl30d))}`}>${item.pnl30d}</div>
                                 </div>
                                 <div className="flex lg:block gap-1">
-                                    <div className="text-neutral-400 mb-1">Win Rate</div>
+                                    <div className="text-neutral-400 mb-1">{t('masterTrade.page.table.winRate7d')}</div>
                                     <div className={`${getValueColor(Number(item.winRate7d))}`}>{item.winRate7d}%</div>
                                 </div>
                                 <div className="flex lg:block gap-1">
-                                    <div className="text-neutral-400 mb-1">Transactions</div>
+                                    <div className="text-neutral-400 mb-1">{t('masterTrade.page.table.transactions7d')}</div>
                                     <div className="flex gap-2">
                                         <span className="text-theme-green-200">{item.transactions7d.wins}W</span>
                                         <span className="text-theme-red-200">{item.transactions7d.losses}L</span>

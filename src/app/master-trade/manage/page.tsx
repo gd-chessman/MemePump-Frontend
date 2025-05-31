@@ -102,14 +102,14 @@ const styles = {
   chatSection: "z-10 w-full md:w-1/4 flex flex-col gap-6 lg:items-end lg:pb-0 pb-6",
   tableContainer: "overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 dark:bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm",
   table: "w-full dark:text-theme-neutral-100 text-theme-neutral-1000 text-[10px] sm:text-xs md:text-sm",
-  button: "h-min rounded-full px-2 md:px-3 py-1 hover:bg-theme-primary-300/70 hover:text-theme-neutral-100 text-[10px] sm:text-xs md:text-sm font-medium text-theme-primary-300 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer",
-  input: "w-full py-1 px-3 dark:bg-theme-neutral-800 bg-theme-neutral-200 rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-[10px] sm:placeholder:text-xs placeholder:dark:text-theme-neutral-100 text-theme-neutral-1000 text-[10px] sm:text-xs md:text-sm",
-  chatContainer: "dark:bg-black bg-white bg-opacity-30 backdrop-blur-sm w-full rounded-xl border border-y-theme-primary-100 border-x-theme-purple-200 overflow-hidden shadow-lg flex flex-col h-[300px] md:h-[600px]",
+  button: "h-min rounded-full px-2 md:px-3 py-1 dark:bg-inherit bg-white hover:bg-theme-primary-300/70 hover:text-theme-neutral-100 text-[10px] sm:text-xs md:text-sm font-medium text-theme-primary-300 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer",
+  input: "w-full py-1 px-3 dark:bg-theme-neutral-800 bg-gray-100 rounded-full text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 pr-10 placeholder:text-[10px] sm:placeholder:text-xs placeholder:dark:text-theme-neutral-100 text-theme-neutral-1000 text-[10px] sm:text-xs md:text-sm",
+  chatContainer: "dark:bg-black bg-white dark:bg-opacity-30 backdrop-blur-sm w-full rounded-xl border border-y-theme-primary-100 border-x-theme-purple-200 overflow-hidden shadow-lg flex flex-col h-[300px] md:h-[600px]",
   chatHeader: "p-2 md:p-4 border-b border-cyan-500/30",
   chatTitle: "text-center text-[14px] md:text-[16px] font-semibold dark:text-theme-neutral-100 text-theme-neutral-1000 mb-2 md:mb-4 flex items-center justify-center",
   chatMessages: "flex-1 overflow-y-auto p-2 md:p-3 space-y-1 md:space-y-2",
   chatInput: "p-2 md:p-3",
-  groupCard: "dark:bg-black border-create-coin-light bg-opacity-30 backdrop-blur-sm rounded-xl border border-blue-500/30 p-[15px] md:p-[30px] shadow-lg",
+  groupCard: "dark:bg-black border-create-coin-light dark:bg-opacity-30 bg-white backdrop-blur-sm rounded-xl border border-blue-500/30 p-[15px] md:p-[30px] shadow-lg",
   groupTitle: "text-center text-[14px] md:text-lg font-bold dark:text-theme-neutral-100 text-theme-neutral-1000 mb-4 md:mb-6 flex items-center justify-center gap-2",
   groupInput: "rounded-full border border-theme-primary-300 py-1 px-2 md:px-4 w-full md:w-64 text-[10px] sm:text-xs md:text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[25px] md:max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-[10px]",
   groupButton: "lg:max-w-auto group cursor-pointer relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1 px-3 md:px-4 lg:px-6 text-sm rounded-full transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto",
@@ -118,7 +118,7 @@ const styles = {
   actionButtonConnect: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-green-200 hover:!text-theme-neutral-100 border border-theme-green-200  hover:bg-theme-green-200",
   actionButtonBlock: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-red-200 hover:text-theme-neutral-100  border border-theme-red-200  hover:bg-theme-red-200",
   actionButtonPause: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-yellow-200 border border-theme-yellow-200 hover:!text-theme-neutral-100 hover:bg-theme-yellow-200",
-  selectTrigger: "w-[150px] md:w-[200px] pl-3 md:pl-4 h-[25px] md:h-[30px] dark:bg-black/60 bg-theme-neutral-200 border-theme-primary-300/30 hover:border-theme-primary-300/50 dark:text-theme-neutral-100 text-[10px] sm:text-xs md:text-sm rounded-full",
+  selectTrigger: "w-[150px] md:w-[200px] pl-3 md:pl-4 h-[25px] md:h-[30px] dark:bg-black/60 bg-gray-100 border-theme-primary-300/30 hover:border-theme-primary-300/50 dark:text-theme-neutral-100 text-[10px] sm:text-xs md:text-sm rounded-full",
   selectContent: "dark:bg-black/90 bg-white border-theme-primary-300/30 text-[10px] sm:text-xs md:text-sm",
   selectItem: "dark:text-theme-neutral-100 text-theme-neutral-1000 hover:bg-theme-primary-300/20 focus:bg-theme-primary-300/10 cursor-pointer text-[10px] sm:text-xs md:text-sm",
   dialogContent: "dark:bg-black border border-blue-500/30 w-[90vw] md:w-[400px] max-w-[400px]",
@@ -546,15 +546,15 @@ export default function MasterTradeInterface() {
           <div className="flex gap-6 mb-4 ">
             <button
               onClick={() => setActiveGroupTab("On")}
-              className={` ${styles.button} ${activeGroupTab === "On" ? ' dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
+              className={` ${styles.button} ${activeGroupTab === "On" ? '!text-theme-black-100 dark:bg-[#0F0F0F] ' : 'border-transparent'}`}
             >
-              <span className={`${activeGroupTab === 'On' ? 'text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.groupManagement.on')} ({onGroupsCount})</span>
+              <span className={`${activeGroupTab === 'On' ? 'dark:text-theme-neutral-100 dark:gradient-hover z-10' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.groupManagement.on')} ({onGroupsCount})</span>
             </button>
             <button
               onClick={() => setActiveGroupTab("Off")}
-              className={` ${styles.button} ${activeGroupTab === "Off" ? ' dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
+              className={` ${styles.button} ${activeGroupTab === "Off" ? ' dark:bg-[#0F0F0F] ' : 'border-transparent'}`}
             >
-              <span className={`${activeGroupTab === 'Off' ? 'text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.groupManagement.off')} ({offGroupsCount})</span>
+              <span className={`${activeGroupTab === 'Off' ? 'dark:text-theme-neutral-100 dark:gradient-hover z-10' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.groupManagement.off')} ({offGroupsCount})</span>
             </button>
 
           </div>
@@ -576,7 +576,7 @@ export default function MasterTradeInterface() {
                 </thead>
                 <tbody>
                   {myGroups.filter(group => group.mg_status?.toUpperCase() === "ON").map((group) => (
-                    <tr key={group.mg_id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors">
+                    <tr key={group.mg_id} className="border-b border-blue-500/10 hover:bg-blue-900/10 transition-colors rounded-xl">
                       <td className="px-4 py-3">
                         <div className="flex items-center">
                           <span className={`${textBodyTable}`}>{group.mg_name}</span>
@@ -702,27 +702,27 @@ export default function MasterTradeInterface() {
         <div className="flex gap-6  ">
           <button
             onClick={() => setActiveTab("Connected")}
-            className={`${styles.button} ${activeTab === "Connected" ? ' dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
+            className={`${styles.button} ${activeTab === "Connected" ? ' dark:bg-[#0F0F0F] ' : 'border-transparent'}`}
           >
-            <span className={`${activeTab === 'Connected' ? 'text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.connectionManagement.connect')} ({connectedCount})</span>
+            <span className={`${activeTab === 'Connected' ? 'dark:text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.connectionManagement.connect')} ({connectedCount})</span>
           </button>
           <button
             onClick={() => setActiveTab("Paused")}
-            className={`${styles.button} ${activeTab === "Paused" ? ' dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
+            className={`${styles.button} ${activeTab === "Paused" ? ' dark:bg-[#0F0F0F] ' : 'border-transparent'}`}
           >
-            <span className={`${activeTab === 'Paused' ? 'text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.connectionManagement.pause')} ({pausedCount})</span>
+            <span className={`${activeTab === 'Paused' ? 'dark:text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.connectionManagement.pause')} ({pausedCount})</span>
           </button>
           <button
             onClick={() => setActiveTab("Pending")}
-            className={`${styles.button} ${activeTab === "Pending" ? ' dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
+            className={`${styles.button} ${activeTab === "Pending" ? ' dark:bg-[#0F0F0F] ' : 'border-transparent'}`}
           >
-            <span className={`${activeTab === 'Pending' ? 'text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.connectionManagement.pending')} ({pendingCount})</span>
+            <span className={`${activeTab === 'Pending' ? 'dark:text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.connectionManagement.pending')} ({pendingCount})</span>
           </button>
           <button
             onClick={() => setActiveTab("Block")}
-            className={`${styles.button} ${activeTab === "Block" ? ' dark:bg-[#0F0F0F] bg-theme-blue-100' : 'border-transparent'}`}
+            className={`${styles.button} ${activeTab === "Block" ? ' dark:bg-[#0F0F0F] ' : 'border-transparent'}`}
           >
-            <span className={`${activeTab === 'Block' ? 'text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.connectionManagement.block')} ({blockedCount})</span>
+            <span className={`${activeTab === 'Block' ? 'dark:text-theme-neutral-100 dark:gradient-hover' : ' text-theme-black-100 dark:text-theme-neutral-100'}`}>{t('masterTrade.manage.connectionManagement.block')} ({blockedCount})</span>
           </button>
           <div className="flex-1 flex items-center justify-end">
             {selectedItems.length > 0 && (
@@ -739,9 +739,9 @@ export default function MasterTradeInterface() {
           </div>
           <div className="relative">
             {showGroupDropdown && (
-              <div className="absolute top-10 right-0 mt-2 w-64 bg-theme-neutral-1000 bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-30">
+              <div className="absolute top-10 right-0 mt-2 w-64 dark:bg-theme-neutral-1000 bg-white bg-opacity-90 border border-blue-500/30 rounded-lg shadow-lg z-30">
                 <div className="p-2">
-                  <div className="relative mb-2 dark:bg-theme-neutral-1000 bg-theme-neutral-100">
+                  <div className="relative mb-2 dark:bg-theme-neutral-1000 bg-theme-neutral-100 rounded-xl">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <input
                       type="text"
@@ -980,7 +980,7 @@ export default function MasterTradeInterface() {
                     onClick={handleSendMessage}
                     disabled={!newMessage.trim()}
                     className={`p-1.5 rounded-full ${!newMessage.trim()
-                        ? "dark:bg-theme-neutral-1000 bg-theme-neutral-800 text-theme-neutral-100"
+                        ? "dark:bg-theme-neutral-1000 bg-theme-gradient-linear-start text-theme-neutral-100"
                         : "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
                       }`}
                   >

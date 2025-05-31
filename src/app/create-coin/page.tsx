@@ -65,45 +65,6 @@ type TokenData = {
   website: string;
 };
 
-const coins = [
-  {
-    name: "Axie Infinity",
-    image: "/token.png",
-    symbol: "AXS",
-    address: "9BB6NF....bgpump",
-  },
-  {
-    name: "Axie Infinity",
-    image: "/token.png",
-    symbol: "AXS",
-    address: "9BB6NF....bgpump",
-  },
-  {
-    name: "Axie Infinity",
-    image: "/token.png",
-    symbol: "AXS",
-    address: "9BB6NF....bgpump",
-  },
-  {
-    name: "Axie Infinity",
-    image: "/token.png",
-    symbol: "AXS",
-    address: "9BB6NF....bgpump",
-  },
-  {
-    name: "Axie Infinity",
-    image: "/token.png",
-    symbol: "AXS",
-    address: "9BB6NF....bgpump",
-  },
-  {
-    name: "Axie Infinity",
-    image: "/token.png",
-    symbol: "AXS",
-    address: "9BB6NF....bgpump",
-  },
-];
-
 const globalStyles = `
     select option {
         background-color: #000;
@@ -169,8 +130,6 @@ export default function CreateCoinForm() {
       category.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [categories, searchQuery]);
-  
-  console.log("filteredCategories", filteredCategories.map((category: any) => category.name));
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -257,7 +216,7 @@ export default function CreateCoinForm() {
 
     // Check file type
     if (!file.type.startsWith("image/")) {
-      setErrors((prev) => ({ ...prev, logo: "Please upload an image file" }));
+      setErrors((prev) => ({ ...prev, logo: t("createCoin.form.logo.invalidType") }));
       return;
     }
 
@@ -265,7 +224,7 @@ export default function CreateCoinForm() {
     if (file.size > 2 * 1024 * 1024) {
       setErrors((prev) => ({
         ...prev,
-        logo: "Image size should be less than 2MB",
+        logo: t("createCoin.form.logo.size"),
       }));
       return;
     }
@@ -300,29 +259,29 @@ export default function CreateCoinForm() {
     const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Coin name is required";
+      newErrors.name = t("createCoin.form.name.required");
     }
 
     if (!formData.symbol.trim()) {
-      newErrors.symbol = "Coin symbol is required";
+      newErrors.symbol = t("createCoin.form.symbol.required");
     } else if (formData.symbol.length > 10) {
-      newErrors.symbol = "Symbol should be 10 characters or less";
+      newErrors.symbol = t("createCoin.form.symbol.maxLength");
     }
 
     if (!formData.amount.trim()) {
-      newErrors.amount = "Initial liquidity amount is required";
+      newErrors.amount = t("createCoin.form.amount.required");
     } else if (isNaN(Number(formData.amount)) || Number(formData.amount) < 0) {
-      newErrors.amount = "Please enter a valid amount";
+      newErrors.amount = t("createCoin.form.amount.invalid");
     }
 
     if (!formData.logo) {
-      newErrors.logo = "Coin logo is required";
+      newErrors.logo = t("createCoin.form.logo.required");
     }
 
     // Optional fields validation
     if (formData.website && !formData.website.startsWith("http")) {
       newErrors.website =
-        "Please enter a valid URL starting with http:// or https://";
+        t("createCoin.form.website.invalid");
     }
 
     setErrors(newErrors);
@@ -371,7 +330,7 @@ export default function CreateCoinForm() {
       if (response) {
         // Show success notification
         notify({
-          message: "Coin created successfully!",
+          message: t("createCoin.success"),
           type: "success"
         });
 
@@ -392,16 +351,12 @@ export default function CreateCoinForm() {
           showName: false,
         });
 
-        // Redirect to my coins page after a short delay
-        setTimeout(() => {
-          router.push("/my-coin");
-        }, 1500);
       }
     } catch (error: any) {
       console.error("Error creating coin:", error);
       // Show error notification
       notify({
-        message: error.response?.data?.error || "Failed to create coin. Please try again.",
+        message: t("createCoin.error"),
         type: "error"
       });
     } finally {
@@ -900,7 +855,7 @@ export default function CreateCoinForm() {
                             onClick={() => {
                               navigator.clipboard.writeText(coin.address);
                               notify({
-                                message: "Address copied to clipboard!",
+                                message: t("createCoin.tabs.addressCopied"),
                                 type: "success"
                               });
                             }}

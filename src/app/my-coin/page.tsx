@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { getMyTokens } from "@/services/api/TelegramWalletService"
 import { useQuery } from "@tanstack/react-query"
 import { useLang } from "@/lang/useLang";
+import { truncateString } from "@/utils/format"
 
 type CoinData = {
     id: string
@@ -201,7 +202,7 @@ export default function MyCoinsTable() {
             </div>
 
             <Card className="border-none">
-                <CardContent className="px-1 md:px-2 relative">
+                <CardContent className="px-1 md:px-2 relative z-10">
                     <div className="overflow-x-auto md:overflow-hidden rounded-lg md:rounded-xl border-1 z-10 border-solid border-y-theme-primary-300 border-x-theme-secondary-400">
                         <Table>
                             <TableHeader className="border-b-1 border-b-solid border-b-theme-secondary-300/30">
@@ -279,7 +280,7 @@ export default function MyCoinsTable() {
                                         <TableCell className="text-neutral-700 dark:text-neutral-200 text-[10px] md:text-xs font-normal text-left uppercase">{coin.symbol}</TableCell>
                                         <TableCell className="h-[40px] md:h-[48px]">
                                             <div className="flex items-center justify-center gap-1 md:gap-2">
-                                                <span className="text-neutral-700 dark:text-neutral-200 text-[10px] md:text-xs font-normal truncate max-w-[60px] md:max-w-none">{coin.address}</span>
+                                                <span className="text-neutral-700 dark:text-neutral-200 text-[10px] md:text-xs font-normal truncate max-w-[60px] md:max-w-none">{truncateString(coin.address, 12 )}</span>
                                                 <button
                                                     onClick={(e) => copyToClipboard(coin.address, e)}
                                                     className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors p-0.5 md:p-1"
