@@ -99,7 +99,6 @@ function TransactionHistoryContent() {
       setRealTimeTransactions((prev) => [transaction, ...prev].slice(0, 50));
     });
 
-    console.log("realTimeTransactionsMy", realTimeTransactionsMy);
 
     socketInstance.on('subscribed', (data) => {
     });

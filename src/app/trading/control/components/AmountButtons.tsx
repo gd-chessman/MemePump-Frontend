@@ -54,7 +54,7 @@ export const AmountButtons: React.FC<AmountButtonsProps> = ({
                             >
                                 {value}
                                 <Pencil
-                                    className="w-4 h-4 cursor-pointer hover:opacity-80 text-gray-500 dark:text-neutral-400"
+                                    className="w-4 h-3 cursor-pointer hover:opacity-80 text-theme-neutral-1000 dark:text-neutral-400"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         onEditClick(index)
