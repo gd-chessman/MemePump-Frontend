@@ -35,7 +35,7 @@ export default function TradingPanel({
         queryFn: getMyGroups,
     })
 
-    const { data: tradeAmount } = useQuery({
+    const { data: tradeAmount, refetch: refetchTradeAmount } = useQuery({
         queryKey: ["tradeAmount", address],
         queryFn: () => getTradeAmount(address),
     })
@@ -254,9 +254,9 @@ export default function TradingPanel({
                 setSelectedGroups([])
                 setIsDirectAmountInput(false)
 
-                queryClient.invalidateQueries({ queryKey: ["tradeAmount"] })
                 queryClient.invalidateQueries({ queryKey: ["groups"] })
                 refetchTokenAmount()
+                refetchTradeAmount()
 
                 notify({
                     message: t('trading.panel.success'),
@@ -264,7 +264,7 @@ export default function TradingPanel({
                 })
             } else {
                 notify({
-                    message: response?.message || t('trading.panel.error'),
+                    message: t('trading.panel.error'),
                     type: 'error'
                 })
             }
@@ -275,13 +275,13 @@ export default function TradingPanel({
             setIsDirectAmountInput(false)
 
             notify({
-                message: error instanceof Error ? error.message : t('trading.panel.error'),
+                message: t('trading.panel.error'),
                 type: 'error'
             })
         } finally {
             setIsLoading(false)
         }
-    }, [mode, amount, tokenAmount, solPrice, selectedConnections, setSelectedGroups, queryClient, refetchTokenAmount, t, validateAmount, amountError])
+    }, [mode, amount, tokenAmount, solPrice, selectedConnections, setSelectedGroups, queryClient, refetchTokenAmount, t, validateAmount, amountError, tokenInfor, refetchTradeAmount])
 
     // Reset amount and percentage when mode changes
     useEffect(() => {
@@ -348,8 +348,8 @@ export default function TradingPanel({
                         )}
                         <div className={STYLE_TEXT_BASE}>
                             {t('trading.panel.balance')}: {mode === "buy"
-                                ? tradeAmount?.sol_balance.toFixed(6) + " " + currency.symbol
-                                : tradeAmount?.token_balance.toFixed(6) + " " + tradeAmount?.token_address?.substring(0, 3)}
+                                ? tradeAmount?.sol_balance.toFixed(6) + "  " + currency.symbol
+                                : tradeAmount?.token_balance.toFixed(6) + " " + tokenInfor?.symbol}
                         </div>
                     </div>
 

@@ -127,7 +127,6 @@ export default function Trading() {
     navigator.clipboard.writeText(address);
     notify({ message: t('tableDashboard.toast.addressCopied'), type: 'success' });
   };
-  console.log("displayTokens", displayTokens)
   const handleStarClick = (token: Token) => {
     const data = {
       token_address: token.address,

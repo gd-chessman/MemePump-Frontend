@@ -242,7 +242,7 @@ export function TableTokenList({
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <span className={`${textContent} truncate max-w-[200px]`}>
-                          {truncateString(token.address, 14)}
+                          {truncateString(token.address, 12)}
                         </span>
                         <Button
                           variant="ghost"

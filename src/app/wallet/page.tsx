@@ -189,7 +189,7 @@ export default function WalletPage() {
     });
 
     // Filter tokens with price >= 0.000001
-    const filteredTokens = tokenList?.tokens?.filter((token: Token) => token.token_price_usd >= 0.000001) || [];
+    const filteredTokens = tokenList?.tokens?.filter((token: Token) => token.token_price_usd >= 0.05) || [];
 
     const { data: walletInfor, refetch } = useQuery({
         queryKey: ["wallet-infor"],
@@ -1308,10 +1308,12 @@ export default function WalletPage() {
                                             )}
                                         </div>
                                     </div>
-
                                     <div className="self-stretch justify-center text-theme-primary-300 text-[10px] font-normal leading-3">
                                         {t('wallet.enterPasswordToView')}
                                     </div>
+                                    <span className="text-theme-primary-300 text-[10px] font-normal leading-3 underline cursor-pointer">
+                                        {t('wallet.forgotPassword')}
+                                    </span>
                                 </div>
 
                                 <div className="self-stretch inline-flex justify-center items-center gap-5">

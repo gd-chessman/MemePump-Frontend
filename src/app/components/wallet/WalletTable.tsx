@@ -340,7 +340,6 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
     );
 
     const renderEditableCell = (wallet: WalletData, field: 'name' | 'nickname' | 'country') => {
-        console.log("wallet", wallet);
         const isEditing = editingWalletId === wallet.wallet_id && editingField === field;
         const isLoading = loadingWalletId === wallet.wallet_id && loadingField === field;
         const value = field === 'name' ? wallet.wallet_name :

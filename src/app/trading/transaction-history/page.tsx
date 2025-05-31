@@ -36,6 +36,7 @@ function TransactionHistoryContent() {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [realTimeTransactions, setRealTimeTransactions] = useState<any[]>([]);
+  const [realTimeTransactionsMy, setRealTimeTransactionsMy] = useState<any[]>([]);
   
   const searchParams = useSearchParams();
   const address = searchParams?.get("address");
@@ -63,9 +64,13 @@ function TransactionHistoryContent() {
     });
 
     socketInstance.on('transaction', (transaction: any) => {
+      console.log("check", transaction?.wallet?.includes("K"));
+      if (transaction?.wallet === walletInfor?.solana_address) {
+        setRealTimeTransactionsMy((prev) => [transaction, ...prev].slice(0, 50));
+      }
       setRealTimeTransactions((prev) => [transaction, ...prev].slice(0, 50));
     });
-
+   
     socketInstance.on('subscribed', (data) => {
     });
 
@@ -78,7 +83,6 @@ function TransactionHistoryContent() {
       }
     };
   }, [address]);
-
   const { data: orderHistories, isLoading: isLoadingOrderHistories, refetch: refetchOrderHistories } = useQuery(
     {
       queryKey: ["orderHistories", address],
@@ -147,7 +151,7 @@ function TransactionHistoryContent() {
     
     // Combine sorted arrays
     const allTransactions = [...sortedNew, ...sortedExisting];
-    
+    console.log("allTransactions", allTransactions);
     // Remove duplicates based on transaction hash (tx)
     const uniqueTransactions = allTransactions.reduce((acc: any[], current: any) => {
       const exists = acc.find(item => item.tx === current.tx);
@@ -186,6 +190,11 @@ function TransactionHistoryContent() {
   const allTransactions = [
     ...(realTimeTransactions || []),
     ...(orderHistories || [])
+  ];
+
+  const allTransactionsMy = [
+    ...(realTimeTransactionsMy || []),
+    ...(orderMyHistories || [])
   ];
 
   const formatPrice = (price: number | undefined) => {
@@ -351,7 +360,7 @@ function TransactionHistoryContent() {
               </tr>
             </thead>
             <tbody>
-              {combinedMyTransactions?.map((order: any, index: number) => (
+              {allTransactionsMy?.map((order: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50">
                   <td className="px-4 py-2 truncate text-gray-600 dark:text-neutral-300">
                     {new Date(order.time).toLocaleString()}

@@ -172,10 +172,10 @@ const Header = () => {
                                     <Link
                                         href={item.href}
                                         key={index}
-                                        className={`hover:gradient-hover text-theme-neutral-800 dark:text-theme-neutral-300 capitalize transition-colors  ${pathname === item.href ? 'gradient-hover font-semibold' : ''}`}
+                                        className={`hover:gradient-hover text-theme-neutral-800 dark:text-theme-neutral-300 capitalize transition-colors flex items-center gap-2 ${pathname === item.href ? 'gradient-hover font-semibold' : ''}`}
                                     >
-                                        {/* <item.icon className="h-5 w-5 mr-2" /> */}
                                         {item.name}
+                                        {item.logoPump && <PumpFun />}
                                     </Link>
                                 ))}
                             </nav>
@@ -337,7 +337,7 @@ const Header = () => {
                     <div className="lg:hidden fixed inset-0 z-50 bg-white dark:bg-black">
                         <div className=" h-full bg-gradient-to-r dark:from-theme-primary-500 dark:to-theme-secondary-400 backdrop-blur-md bg-theme-blue-300">
                             <div className='dark:bg-theme-black-1/2 flex flex-col h-full'>
-                                <div className="flex items-center justify-between p-4 border-b dark:border-neutral-800">
+                                <div className="flex items-center justify-between p-4 ">
                                     <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                                         <img src={"/logo.png"} alt="logo" className="h-6 md:h-8" />
                                     </Link>
@@ -372,7 +372,7 @@ const Header = () => {
                                
 
                                 {/* Mobile Actions */}
-                                <div className="mt-auto p-4 space-y-4 border-t dark:border-neutral-800">
+                                <div className="mt-auto p-4 space-y-4">
                                 <div className='flex items-center justify-evenly gap-4 mt-1'>
                                     <Moon 
                                         className="cursor-pointer transition-colors " 

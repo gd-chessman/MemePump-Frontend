@@ -63,7 +63,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
   const router = useRouter();
 
   // Add debounced search input with consistent delay
-  const debouncedSearchInput = useDebounce(searchInput, 1000)
+  const debouncedSearchInput = useDebounce(searchInput, 300)
 
   // Add paste handler
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -82,11 +82,14 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
   // Use React Query for data fetching with updated conditions
   const { data: listToken, isLoading: isQueryLoading } = useQuery({
     queryKey: ["searchTokens", debouncedSearchInput],
-    queryFn: () => getSearchTokenInfor(debouncedSearchInput),
-    enabled: isOpen && debouncedSearchInput.length > 0, // Remove minimum length requirement
-    staleTime: 10000, // Reduce stale time to 10 seconds
+    queryFn: async () => {
+      const result = await getSearchTokenInfor(debouncedSearchInput)
+      return result
+    },
+    enabled: isOpen && debouncedSearchInput.length > 0,
+    staleTime: 10000,
     gcTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false, // Prevent refetch on window focus
+    refetchOnWindowFocus: false,
   })
 
   // Update loading state
@@ -190,7 +193,6 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
 
     return filtered
   }, [debouncedSearchInput, activeTab, sortField, sortDirection, listToken])
-  console.log("filteredAndSortedTokens", filteredAndSortedTokens)
   // Handle sort
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -306,7 +308,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                     }}
                     onPaste={handlePaste}
                     placeholder={t('searchModal.placeholder')}
-                    className="w-full dark:bg-transparent py-1.5 sm:py-1 pl-10 sm:pl-12 pr-4 text-sm sm:text-base rounded-full dark:dark:text-white text-theme-neutral-800 text-theme-neutral-800 placeholder-gray-400 focus:outline-none"
+                    className="w-full dark:bg-transparent py-1.5 sm:py-1 pl-10 sm:pl-12 pr-4 text-sm sm:text-base rounded-full dark:dark:text-white text-theme-neutral-800 placeholder-gray-400 focus:outline-none"
                   />
                   {isLoading && (
                     <div className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2">
@@ -385,7 +387,10 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                 {filteredAndSortedTokens.map((token) => (
                   <div
                     key={token.address}
-                    onClick={() => router.push(`/trading?address=${token.address}`)}
+                    onClick={() => {
+                      router.push(`/trading?address=${token.address}`)
+                      onClose()
+                    }}
                     className="grid grid-cols-12 gap-2 sm:gap-6 items-center py-2.5 sm:py-3 px-2 sm:px-3 rounded-lg dark:hover:bg-[#2a2a2a] hover:bg-theme-green-300 transition-colors cursor-pointer group border border-transparent hover:border-gray-800"
                   >
                     {/* Token Info */}

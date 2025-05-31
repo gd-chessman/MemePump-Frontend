@@ -33,6 +33,8 @@
     "trade": "거래",
     "create coin": "코인 생성",
     "createCoin": {
+      "success": "코인 생성 성공",
+      "error": "코인 생성 실패",
       "title": "새로운 코인 생성",
       "subtitle": "Pumpfun에서 새로운 코인 만들기",
       "tabs": {
@@ -43,7 +45,8 @@
         "lastMonth": "최근 한달",
         "noCoins": "코인이 없습니다",
         "trade": "거래",
-        "seeAll": "모두 보기"
+        "seeAll": "모두 보기",
+        "addressCopied": "주소가 클립보드에 복사되었습니다"
       },
       "form": {
         "name": {
@@ -78,7 +81,10 @@
           "required": "코인 로고는 필수입니다",
           "upload": "클릭하여 업로드",
           "invalidType": "이미지 파일을 업로드해주세요",
-          "maxSize": "이미지 크기는 2MB 미만이어야 합니다"
+          "maxSize": "이미지 크기는 2MB 미만이어야 합니다",
+          "invalid": "이미지 파일을 업로드해주세요",
+          "size": "이미지 크기는 2MB 미만이어야 합니다"
+
         },
         "preview": {
           "label": "미리보기",
@@ -294,6 +300,7 @@
       "eth": "ETH",
       "bnb": "BNB",
       "wallet": "지갑",
+      "forgotPassword": "비밀번호를 잊으셨나요?",
       "universalAccount": "유니버설 계정",
       "receive": "받기",
       "send": "보내기",
