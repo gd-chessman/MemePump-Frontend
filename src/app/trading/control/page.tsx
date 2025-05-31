@@ -5,6 +5,7 @@ import MasterTradeChat from './master-trade'
 import { useQuery } from '@tanstack/react-query'
 import { getInforWallet } from '@/services/api/TelegramWalletService'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { useLang } from '@/lang/useLang'
 
 // Icons
 const BuyIcon = () => (
@@ -41,6 +42,7 @@ interface CryptoCurrency {
 }
 
 const Control = () => {
+  const { t } = useLang();
   const [activeTab, setActiveTab] = useState<TabType>('buy')
   const [isConnected, setIsConnected] = useState(false)
   const [currencies, setCurrencies] = useState<CryptoCurrency>({
@@ -156,7 +158,7 @@ const Control = () => {
     return (
       <>
         {/* Bottom Navigation Bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-neutral-800 border-t border-neutral-700 z-50">
+        <div className="fixed bottom-0 left-0 right-0 dark:bg-theme-neutral-1000 bg-white dark:border-t dark:border-neutral-700 z-50">
           <div className="flex justify-around items-center h-16">
             <button
               onClick={() => handleTabClick('buy')}
@@ -165,7 +167,7 @@ const Control = () => {
               }`}
             >
               <BuyIcon />
-              <span className="text-xs">Buy</span>
+              <span className="text-xs">{t('trading.buy')}</span>
             </button>
             <button
               onClick={() => handleTabClick('sell')}
@@ -174,7 +176,7 @@ const Control = () => {
               }`}
             >
               <SellIcon />
-              <span className="text-xs">Sell</span>
+              <span className="text-xs">{t('trading.sell')}</span>
             </button>
             <button
               onClick={() => handleTabClick('chat')}
@@ -183,7 +185,7 @@ const Control = () => {
               }`}
             >
               <ChatIcon />
-              <span className="text-xs">Master & Chat</span>
+              <span className="text-xs">{walletInfor?.role === 'master' ? t('trading.master') : t('trading.chat')}</span>
             </button>
           </div>
         </div>
@@ -197,7 +199,7 @@ const Control = () => {
               onClick={handleClosePanel}
             />
             {/* Panel */}
-            <div className={`fixed bottom-0 left-0 right-0 bg-neutral-800 rounded-t-xl z-50 transform transition-transform duration-300 ${
+            <div className={`fixed bottom-0 left-0 right-0 bg-white rounded-t-xl z-50 transform transition-transform duration-300 ${
               isPanelOpen ? 'translate-y-0' : 'translate-y-full'
             }`}>
               <div className="p-4">

@@ -116,7 +116,7 @@ const TradingPage = () => {
 
         {/* Right Column */}
         <div className={`${
-          isMobile ? 'w-full h-[200px]' : 'w-1/6 h-full overflow-hidden'
+          isMobile ? 'w-full h-[70px]' : 'w-1/6 h-full overflow-hidden'
         } `}>
           <div className='h-full overflow-auto'>
             <Control/>

@@ -68,7 +68,7 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
                     <div
                         key={item.member_id}
                         onClick={() => onSelectConnection(item.member_id.toString())}
-                        className="flex items-center p-2 rounded-lg hover:bg-[#1a1a1a] cursor-pointer relative"
+                        className="flex items-center p-2 rounded-lg dark:hover:bg-[#1a1a1a] hover:bg-theme-green-300 cursor-pointer relative"
                     >
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center">

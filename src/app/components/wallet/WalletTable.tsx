@@ -44,6 +44,7 @@ interface WalletTableProps {
     wallets: WalletData[];
     onCopyAddress?: (address: string, e: React.MouseEvent) => void;
     onUpdateWallet?: () => void;
+    refetchWallets?: () => void;
 }
 
 const textTitle = 'text-neutral-800 dark:text-neutral-200 font-normal text-xs py-3'
@@ -64,7 +65,7 @@ const mobileStyles = {
     icon: "h-3 w-3"
 }
 
-export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTableProps) {
+export function WalletTable({ wallets, onCopyAddress, onUpdateWallet, refetchWallets }: WalletTableProps) {
     const { toast } = useToast();
     const {t} = useLang();
     const { isAuthenticated, logout, updateToken } = useAuth();
@@ -137,31 +138,26 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
     };
 
     const handleDeleteWallet = async (id: string) => {
-        const walletData = { wallet_id: id };
-        const res = await TelegramWalletService.deleteWallet(walletData);
-
-    };
-
-
-    const handleDeleteConfirm = async () => {
-        if (!walletToDelete) return;
-
         try {
-            // TODO: Implement delete wallet API call
-            notify({
-                message: t("wallet.deleteSuccess"),
-                type: 'success'
-            });
-            onUpdateWallet?.();
+            const walletData = { wallet_id: id };
+            const res = await TelegramWalletService.deleteWallet(walletData);
+            
+            if (res) {
+                notify({
+                    message: t("wallet.deleteSuccess"),
+                    type: 'success'
+                });
+                onUpdateWallet?.();
+                setDeleteModalOpen(false);
+                setWalletToDelete(null);
+                refetchWallets?.();
+            }
         } catch (error) {
             console.error('Error deleting wallet:', error);
             notify({
                 message: t("wallet.deleteFailed"),
                 type: 'error'
             });
-        } finally {
-            setDeleteModalOpen(false);
-            setWalletToDelete(null);
         }
     };
 
@@ -625,10 +621,12 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                     <div className="bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end p-[1px] relative w-full rounded-xl">
                         <div className="w-full px-3 py-2 bg-theme-black-200 rounded-xl text-neutral-100">
                             <DialogHeader className="p-2">
-                                <DialogTitle className="text-xl font-semibold text-indigo-500 backdrop-blur-sm boxShadow linear-200-bg mb-2 text-fill-transparent bg-clip-text">Xác nhận xóa ví</DialogTitle>
+                                <DialogTitle className="text-xl font-semibold text-indigo-500 backdrop-blur-sm boxShadow linear-200-bg mb-2 text-fill-transparent bg-clip-text">
+                                    {t('wallet.confirmDeleteWallet')}
+                                </DialogTitle>
                                 <DialogDescription className="text-neutral-100 text-sm">
-                                    Bạn có chắc chắn muốn xóa ví {walletToDelete?.wallet_nick_name || walletToDelete?.wallet_name}?
-                                    Hành động này không thể hoàn tác.
+                                    {t('wallet.confirmDeleteWallet')} {walletToDelete?.wallet_nick_name || walletToDelete?.wallet_name}?
+                                    {t('wallet.confirmDeleteWalletAction')}
                                 </DialogDescription>
                             </DialogHeader>
                             <DialogFooter className="flex justify-end gap-2 p-2">
@@ -637,14 +635,14 @@ export function WalletTable({ wallets, onCopyAddress, onUpdateWallet }: WalletTa
                                         className="bg-theme-black-200 h-[30px] text-neutral-100 px-5 rounded-full"
                                         onClick={() => setDeleteModalOpen(false)}
                                     >
-                                        Hủy
+                                        {t('wallet.cancel')}
                                     </button>
                                 </div>
                                 <button
                                     className="linear-gradient-light dark:linear-gradient-connect hover:border h-[32px] border px-5 border-transparent rounded-full text-sm"
                                     onClick={() => handleDeleteWallet(walletToDelete?.wallet_id || '')}
                                 >
-                                    Xóa
+                                    {t('wallet.delete')}
                                 </button>
                             </DialogFooter>
                         </div>

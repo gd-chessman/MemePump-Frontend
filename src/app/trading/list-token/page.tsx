@@ -106,7 +106,7 @@ const ListToken = () => {
                         <div
                             key={i}
                             onClick={() => handleChangeToken(address)}
-                            className="flex items-center justify-between py-2 border-b border-neutral-800 group hover:bg-neutral-800/50 px-2 rounded cursor-pointer"
+                            className="flex items-center justify-between py-2 border-b border-neutral-800 group dark:hover:bg-neutral-800/50 hover:bg-theme-green-300 px-2 rounded cursor-pointer"
                         >
                             <div className="flex items-center gap-2">
                                 <button className="text-neutral-500">

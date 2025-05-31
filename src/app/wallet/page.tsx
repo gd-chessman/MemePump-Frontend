@@ -367,23 +367,33 @@ export default function WalletPage() {
                 type: "other",
             };
 
-            await TelegramWalletService.addWallet(walletData);
+            const response = await TelegramWalletService.addWallet(walletData);
 
             // Reset form and close modal
             setWalletName("");
             setWalletNickname("");
             setSelectedNetwork("EN");
             setShowAddWallet(false);
+            refetchInforWallets();
 
-            // Show success message
-            setToastMessage(t('wallet.success'));
+            // Show success message based on response
+            if (response?.message) {
+                setToastMessage(response.message);
+            } else {
+                setToastMessage(t('wallet.success'));
+            }
             setShowToast(true);
 
             // Refresh wallet list
             await fetchWallets();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error adding wallet:", error);
-            setToastMessage(t('wallet.failedToAddWallet'));
+            // Show error message from API if available
+            if (error?.response?.data?.message) {
+                setToastMessage(error.response.data.message);
+            } else {
+                setToastMessage(t('wallet.failedToAddWallet'));
+            }
             setShowToast(true);
         } finally {
             setIsLoading(false);
@@ -684,6 +694,7 @@ export default function WalletPage() {
                             wallets={myWallets}
                             onCopyAddress={handleCopyAddress}
                             onUpdateWallet={refetchInforWallets}
+                            refetchWallets={refetchInforWallets}
                         />
                     </div>
 
@@ -1178,7 +1189,7 @@ export default function WalletPage() {
                                                         type={showNewPassword ? "text" : "password"}
                                                         value={newPassword}
                                                         onChange={handlePasswordChange}
-                                                        placeholder="Enter new password"
+                                                        placeholder={t('wallet.enterNewPassword')}
                                                         className={`w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${passwordError ? 'border-red-500' : ''}`}
                                                     />
                                                     <button
@@ -1209,7 +1220,7 @@ export default function WalletPage() {
                                                         type={showConfirmPassword ? "text" : "password"}
                                                         value={confirmPassword}
                                                         onChange={handleConfirmPasswordChange}
-                                                        placeholder="Confirm your password"
+                                                        placeholder={t('wallet.enterConfirmPassword')}
                                                         className={`w-full px-3 py-2 bg-white dark:bg-theme-black-200 rounded-xl text-black dark:text-theme-neutral-100 focus:outline-none focus:border-purple-500 pr-10 ${confirmPasswordError ? 'border-red-500' : ''}`}
                                                     />
                                                     <button
@@ -1249,7 +1260,7 @@ export default function WalletPage() {
                                         className="w-30 h-[30px] px-4 py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-[30px] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-sm flex justify-center items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <div className="justify-start text-white text-sm font-medium leading-none">
-                                            {isLoading ? "Creating..." : "Create Password"}
+                                            {isLoading ? t('wallet.creating') : t('wallet.createPassword')}
                                         </div>
                                     </button>
                                 </div>
@@ -1329,7 +1340,7 @@ export default function WalletPage() {
                                         className="w-30 h-[30px] px-4 py-1.5 bg-gradient-to-l from-blue-950 to-purple-600 rounded-[30px] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-sm flex justify-center items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <div className="justify-start text-white text-sm font-medium leading-none">
-                                            {isLoading ? "Verifying..." : "Submit"}
+                                            {isLoading ? t('wallet.verifying') : t('wallet.submit')}
                                         </div>
                                     </button>
                                 </div>
@@ -1340,11 +1351,11 @@ export default function WalletPage() {
             )}
 
             {/* Toast Notification */}
-            {showToast && (
+            {/* {showToast && (
                 <div className="fixed bottom-4 right-4 left-4 sm:left-auto bg-gradient-to-r from-purple-600 to-blue-600 text-neutral-100 px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow-lg z-[9999] text-sm sm:text-base">
                     {toastMessage}
                 </div>
-            )}
+            )} */}
         </>
     );
 }

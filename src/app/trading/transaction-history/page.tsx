@@ -205,7 +205,7 @@ function TransactionHistoryContent() {
   const renderTransactionCard = (order: any, index: number) => {
     const { t } = useLang();
     return (
-      <div key={index} className="p-3 border-b border-gray-100 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30">
+      <div key={index} className="p-3 border-b border-theme-neutral-800/40 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30">
         <div className="flex justify-between items-start mb-2">
           <div className="flex items-center gap-2">
             <span className={`text-xs font-medium px-2 py-1 rounded ${order.type === "buy" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"}`}>
