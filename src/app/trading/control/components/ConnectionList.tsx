@@ -62,23 +62,23 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
     }, [connections]);
 
     return (
-        <div className="h-full overflow-y-auto">
-            <div className="px-4">
+        <div className="h-full overflow-y-auto bg-gray-300/50 dark:bg-transparent rounded-xl">
+            <div className="">
                 {connections.filter(conn => conn.status === "connect").map((item) => (
                     <div
                         key={item.member_id}
                         onClick={() => onSelectConnection(item.member_id.toString())}
-                        className="flex items-center p-2 rounded-lg hover:bg-[#1a1a1a] cursor-pointer relative"
+                        className="flex items-center p-2 px-4 lg:rounded-lg dark:hover:bg-[#1a1a1a] hover:bg-theme-green-300 cursor-pointer relative dark:border-none border-b border-gray-400 dark:border-theme-neutral-700"
                     >
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center">
-                                <p className="text-sm font-medium text-white truncate">
+                                <p className="text-sm font-medium dark:text-white text-black truncate">
                                     {item.name}
                                 </p>
-                                <p className="ml-2 text-xs text-gray-400">{item.ticker}</p>
+                                <p className="ml-2 text-xs text-gray-400 dark:text-gray-500">{item.ticker}</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                <p className="text-xs text-gray-400 truncate">
+                                <p className="text-xs text-theme-neutral-800 dark:text-gray-500 truncate">
                                     {truncateString(item.member_address, 10)}
                                 </p>
                                 <button

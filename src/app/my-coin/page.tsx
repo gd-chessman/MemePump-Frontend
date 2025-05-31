@@ -57,6 +57,7 @@ export default function MyCoinsTable() {
     const { data: memeCoins = [] } = useQuery({
         queryKey: ["my-tokens"],
         queryFn: getMyTokens,
+        refetchOnMount: true,
     });
 
     // Transform API data into table format

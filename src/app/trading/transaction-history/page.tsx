@@ -5,7 +5,7 @@ import { getInforWallet } from "@/services/api/TelegramWalletService"
 import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
-import { useState, Suspense, useEffect } from "react"
+import { useState, Suspense, useEffect, useMemo } from "react"
 import { io as socketIO } from "socket.io-client"
 import { useLang } from "@/lang/useLang"
 
@@ -37,9 +37,38 @@ function TransactionHistoryContent() {
   const [error, setError] = useState<string | null>(null);
   const [realTimeTransactions, setRealTimeTransactions] = useState<any[]>([]);
   const [realTimeTransactionsMy, setRealTimeTransactionsMy] = useState<any[]>([]);
-  
+
   const searchParams = useSearchParams();
   const address = searchParams?.get("address");
+
+  const { data: orderHistories, isLoading: isLoadingOrderHistories, refetch: refetchOrderHistories } = useQuery(
+    {
+      queryKey: ["orderHistories", address],
+      queryFn: () =>
+        getOrderHistories({
+          address: address || "",
+          offset: 0,
+          limit: 100,
+          sort_by: "block_unix_time",
+          sort_type: "desc",
+          tx_type: "swap",
+        }),
+      enabled: !!address,
+    }
+  );
+  const { data: walletInfor, refetch } = useQuery({
+    queryKey: ["wallet-infor"],
+    queryFn: getInforWallet,
+  });
+
+
+
+  const { data: orderMyHistories, refetch: refetchOrderMyHistories } = useQuery({
+    queryKey: ["orderMyHistories", address],
+    queryFn: () => getOrderMyHistories(String(address), String(walletInfor?.solana_address)),
+    enabled: !!walletInfor,
+  });
+
   // WebSocket connection setup
   useEffect(() => {
     if (typeof window === 'undefined' || !address) return;
@@ -64,13 +93,14 @@ function TransactionHistoryContent() {
     });
 
     socketInstance.on('transaction', (transaction: any) => {
-      console.log("check", transaction?.wallet?.includes("K"));
       if (transaction?.wallet === walletInfor?.solana_address) {
         setRealTimeTransactionsMy((prev) => [transaction, ...prev].slice(0, 50));
       }
       setRealTimeTransactions((prev) => [transaction, ...prev].slice(0, 50));
     });
-   
+
+    console.log("realTimeTransactionsMy", realTimeTransactionsMy);
+
     socketInstance.on('subscribed', (data) => {
     });
 
@@ -83,38 +113,12 @@ function TransactionHistoryContent() {
       }
     };
   }, [address]);
-  const { data: orderHistories, isLoading: isLoadingOrderHistories, refetch: refetchOrderHistories } = useQuery(
-    {
-      queryKey: ["orderHistories", address],
-      queryFn: () =>
-        getOrderHistories({
-          address: address || "",
-          offset: 0,
-          limit: 100,
-          sort_by: "block_unix_time",
-          sort_type: "desc",
-          tx_type: "swap",
-        }),
-      enabled: !!address,
-    }
-  );
-  const { data: walletInfor, refetch } = useQuery({
-    queryKey: ["wallet-infor"],
-    queryFn: getInforWallet,
-});
-
-
-  const { data: orderMyHistories, refetch: refetchOrderMyHistories } = useQuery({
-    queryKey: ["orderMyHistories", address],
-    queryFn: () => getOrderMyHistories(String(address), String(walletInfor?.solana_address)),
-    enabled: !!walletInfor,
-  });
 
   // Add effect to handle address changes
   useEffect(() => {
     // Reset realtime transactions when address changes
     setRealTimeTransactions([]);
-    
+
     // Refetch both queries when address changes
     if (address) {
       refetchOrderHistories();
@@ -138,7 +142,7 @@ function TransactionHistoryContent() {
 
     // Combine with existing orderMyHistories and remove duplicates
     const existingTransactions = orderMyHistories || [];
-    
+
     // Sort both arrays by time before combining to ensure proper order
     const sortByTime = (a: any, b: any) => {
       const timeA = new Date(a.time).getTime();
@@ -148,7 +152,7 @@ function TransactionHistoryContent() {
 
     const sortedExisting = [...existingTransactions].sort(sortByTime);
     const sortedNew = [...newMyTransactions].sort(sortByTime);
-    
+
     // Combine sorted arrays
     const allTransactions = [...sortedNew, ...sortedExisting];
     console.log("allTransactions", allTransactions);
@@ -169,43 +173,79 @@ function TransactionHistoryContent() {
 
 
   // Get the first transaction price
-  const lastTransactionPrice = orderHistories && orderHistories.length > 0 
-    ? orderHistories[0]?.token?.from?.price?.usd 
+  const lastTransactionPrice = orderHistories && orderHistories.length > 0
+    ? orderHistories[0]?.token?.from?.price?.usd
     : undefined;
 
   // Dispatch event when lastTransactionPrice changes
   useEffect(() => {
     if (typeof window !== 'undefined' && lastTransactionPrice !== undefined) {
       const event = new CustomEvent('lastTransactionPriceUpdate', {
-        detail: { 
+        detail: {
           price: lastTransactionPrice,
-          tokenAddress: address 
+          tokenAddress: address
         }
       });
       window.dispatchEvent(event);
     }
   }, [lastTransactionPrice, address]);
 
-  // Combine historical and real-time transactions
-  const allTransactions = [
-    ...(realTimeTransactions || []),
-    ...(orderHistories || [])
-  ];
+  // Combine historical and real-time transactions with proper sorting and deduplication
+  const allTransactions = useMemo(() => {
+    const combined = [
+      ...(realTimeTransactions || []),
+      ...(orderHistories || [])
+    ];
 
-  const allTransactionsMy = [
-    ...(realTimeTransactionsMy || []),
-    ...(orderMyHistories || [])
-  ];
+    // Remove duplicates based on transaction hash (tx)
+    const uniqueTransactions = combined.reduce((acc: any[], current: any) => {
+      const exists = acc.find(item => item.tx === current.tx);
+      if (!exists) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
+
+    // Sort by time in descending order
+    return uniqueTransactions.sort((a, b) => {
+      const timeA = new Date(a.time).getTime();
+      const timeB = new Date(b.time).getTime();
+      return timeB - timeA;
+    });
+  }, [realTimeTransactions, orderHistories]);
+
+  const allTransactionsMy = useMemo(() => {
+    const combined = [
+      ...(realTimeTransactionsMy || []),
+      ...(orderMyHistories || [])
+    ];
+
+    // Remove duplicates based on transaction hash (tx)
+    const uniqueTransactions = combined.reduce((acc: any[], current: any) => {
+      const exists = acc.find(item => item.tx === current.tx);
+      if (!exists) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
+
+    // Sort by time in descending order
+    return uniqueTransactions.sort((a, b) => {
+      const timeA = new Date(a.time).getTime();
+      const timeB = new Date(b.time).getTime();
+      return timeB - timeA;
+    });
+  }, [realTimeTransactionsMy, orderMyHistories]);
 
   const formatPrice = (price: number | undefined) => {
     if (price === undefined) return '0.0';
     return price?.toFixed(6);
-};
+  };
 
   const renderTransactionCard = (order: any, index: number) => {
     const { t } = useLang();
     return (
-      <div key={index} className="p-3 border-b border-gray-100 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30">
+      <div key={index} className="p-3 border-b border-theme-neutral-800/40 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30">
         <div className="flex justify-between items-start mb-2">
           <div className="flex items-center gap-2">
             <span className={`text-xs font-medium px-2 py-1 rounded ${order.type === "buy" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"}`}>
@@ -219,7 +259,7 @@ function TransactionHistoryContent() {
             ${formatPrice(order.priceUsd)}
           </span>
         </div>
-        
+
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div>
             <span className="text-gray-500 dark:text-neutral-400">{t("transactionHistory.amount")}:</span>
@@ -408,7 +448,7 @@ function TransactionHistoryContent() {
 
         {/* Mobile view */}
         <div className="md:hidden">
-          {combinedMyTransactions?.map((order: any, index: number) => renderTransactionCard(order, index))}
+          {allTransactionsMy?.map((order: any, index: number) => renderTransactionCard(order, index))}
         </div>
       </>
     );
@@ -417,7 +457,7 @@ function TransactionHistoryContent() {
   return (
     <div className="shadow-inset dark:bg-theme-neutral-1000 rounded-xl p-2 sm:p-3 lg:overflow-hidden bg-white dark:bg-neutral-1000 flex flex-col h-full w-full">
       <div className="flex border-gray-200 dark:border-neutral-800 h-[30px] bg-gray-100 dark:bg-theme-neutral-1000 rounded-xl">
-        <button 
+        <button
           className={`flex-1 rounded-xl text-xs sm:text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "all" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
           onClick={() => setActiveTab("all")}
         >

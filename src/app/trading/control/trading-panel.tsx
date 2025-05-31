@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { getMyGroups } from "@/services/api/MasterTradingService"
+import { getMyConnects, getMyGroups } from "@/services/api/MasterTradingService"
 import { createTrading, getTokenAmount, getTradeAmount } from "@/services/api/TradingService"
 import { useSearchParams } from "next/navigation"
 import { useLang } from "@/lang/useLang"
@@ -16,7 +16,7 @@ import { AmountButtons } from "./components/AmountButtons"
 import { GroupSelect } from "./components/GroupSelect"
 import { getInforWallet } from "@/services/api/TelegramWalletService"
 
-export default function TradingPanel({
+export default function  TradingPanel({
     defaultMode = "buy",
     currency,
     isConnected,
@@ -57,6 +57,12 @@ export default function TradingPanel({
     const { data: tokenAmount, refetch: refetchTokenAmount } = useQuery({
         queryKey: ["tokenAmount", address],
         queryFn: () => getTokenAmount(address),
+    })
+
+    const {refetch: refetchMyConnects } = useQuery({
+        queryKey: ["myConnects"],
+        queryFn: getMyConnects,
+        refetchOnWindowFocus: false
     })
 
     const [mode, setMode] = useState<TradingMode>(defaultMode)
@@ -143,17 +149,14 @@ export default function TradingPanel({
 
     const handlePercentageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const newPercentage = Number.parseInt(e.target.value)
-        console.log("newPercentage", newPercentage)
         setPercentage(newPercentage)
         setIsDirectAmountInput(false)
-        console.log("isConnected", isConnected)
         const balance = mode === "buy" ? tradeAmount?.sol_balance || 0 : tradeAmount?.token_balance || 0
         const newAmount = ((balance * newPercentage) / 100).toFixed(6)
         setAmount(newAmount)
         // Calculate amountUSD using the newAmount we just calculated
         if (mode === "buy") {
             const numericAmount = Number(newAmount)
-            console.log("numericAmount", numericAmount)
             setAmountUSD((numericAmount * exchangeRate).toFixed(2))
         }
     }, [isConnected, mode, tradeAmount, exchangeRate])
@@ -257,7 +260,7 @@ export default function TradingPanel({
                 queryClient.invalidateQueries({ queryKey: ["groups"] })
                 refetchTokenAmount()
                 refetchTradeAmount()
-
+                refetchMyConnects
                 notify({
                     message: t('trading.panel.success'),
                     type: 'success'

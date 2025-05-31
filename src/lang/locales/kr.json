@@ -341,6 +341,12 @@
       "type": "유형",
       "actions": "작업",
       "addNewWallet": "새 지갑 추가",
+      "enterNewPassword": "새 비밀번호 입력",
+      "enterConfirmPassword": "비밀번호 확인",
+      "confirmDeleteWallet": "지갑을 삭제하시겠습니까?",
+      "confirmDeleteWalletAction": "이 작업은 취소할 수 없습니다.",
+      "cancel": "취소",
+      "delete": "삭제",
       "enterWalletName": "지갑 이름 입력",
       "enterNickname": "별명 입력",
       "enterSolanaPrivateKey": "솔라나 개인 키 입력",
@@ -522,6 +528,10 @@
       "address": "주소",
       "price": "가격",
       "marketCap": "시가총액",
+      "buy": "구매",
+      "master": "마스터 & 채팅",
+      "chat": "채팅",
+      "sell": "판매",
       "liquidity": "유동성",
       "holder": "보유자",
       "volume1h": "1시간 거래량",
@@ -755,8 +765,10 @@
       "actions": "작업",
       "copy": {
         "copyAddress": "주소 복사",
-        "copied": "복사됨!"
-      }
+        "copied": "복사됨!",
+        "copied_description": "주소가 클립보드에 복사되었습니다"
+      },
+      "redirecting": "리다이렉팅 중..."
     },
     "universal_account": {
       "deposit": "입금",

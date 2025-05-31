@@ -197,7 +197,7 @@ export default function TokenInfo() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="text-neutral-300 text-sm font-normal">{tokenInfor?.symbol}</span> </h2>
+                  <h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="dark:text-neutral-300 text-neutral-800 text-sm font-normal">{tokenInfor?.symbol}</span> </h2>
                   {tokenInfor?.program?.includes("pumpfun") && <PumpFun />}
                 </div>
                 <div className="text-xs text-neutral-400 flex items-center">

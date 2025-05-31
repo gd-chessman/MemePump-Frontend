@@ -6,6 +6,9 @@ import { useLang } from "@/lang";
 import { ChatService } from "@/services/api";
 import { useWsChatMessage } from "@/hooks/useWsChatMessage";
 import { useWidgetChatStore } from "@/store/widgetChatStore";
+import { Smile } from "lucide-react";
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 type Message = {
   id: string;
@@ -59,6 +62,8 @@ const ChatWidget = () => {
   const { messages, setMessages, addMessage } = useWidgetChatStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const dragStartPos = useRef({ x: 0, y: 0 });
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
 
   // Function to determine box position based on logo position
   const updateBoxPosition = (x: number, y: number) => {
@@ -110,15 +115,15 @@ const ChatWidget = () => {
 
     const newX = e.clientX - dragOffset.current.x;
     const newY = e.clientY - dragOffset.current.y;
-    
+
     // Calculate boundaries
     const maxX = window.innerWidth - containerRef.current.offsetWidth;
     const maxY = window.innerHeight - containerRef.current.offsetHeight;
-    
+
     // Update position with boundaries
     const boundedX = Math.max(0, Math.min(newX, maxX));
     const boundedY = Math.max(0, Math.min(newY, maxY));
-    
+
     setContainerPosition({
       x: boundedX,
       y: boundedY
@@ -157,6 +162,16 @@ const ChatWidget = () => {
       }
     }
   };
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
+        setShowEmojiPicker(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleTouchMove = (e: TouchEvent) => {
     if (!isDragging || !containerRef.current) return;
@@ -164,15 +179,15 @@ const ChatWidget = () => {
     const touch = e.touches[0];
     const newX = touch.clientX - dragOffset.current.x;
     const newY = touch.clientY - dragOffset.current.y;
-    
+
     // Calculate boundaries
     const maxX = window.innerWidth - containerRef.current.offsetWidth;
     const maxY = window.innerHeight - containerRef.current.offsetHeight;
-    
+
     // Update position with boundaries
     const boundedX = Math.max(0, Math.min(newX, maxX));
     const boundedY = Math.max(0, Math.min(newY, maxY));
-    
+
     setContainerPosition({
       x: boundedX,
       y: boundedY
@@ -291,7 +306,7 @@ const ChatWidget = () => {
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
-    
+
     try {
       await ChatService.sendAllMessage(inputMessage, lang);
       refetchChatAllHistories(); // Refetch chat history after sending
@@ -316,11 +331,16 @@ const ChatWidget = () => {
     }
   };
 
+  const onEmojiSelect = (emoji: any) => {
+    setInputMessage((prev) => prev + emoji.native);
+    setShowEmojiPicker(false);
+  };
+
   return (
-    <div 
+    <div
       ref={containerRef}
       className="fixed z-50"
-      style={{ 
+      style={{
         left: containerPosition.x,
         top: containerPosition.y,
         userSelect: "none",
@@ -329,7 +349,7 @@ const ChatWidget = () => {
     >
       <div className="relative">
         {/* Chat Logo */}
-        <div 
+        <div
           className="chat-logo cursor-pointer"
           onClick={(e) => {
             // Prevent click if it was a drag
@@ -346,11 +366,11 @@ const ChatWidget = () => {
             onTouchStart={handleTouchStart}
           />
         </div>
-        
+
         {/* Chat Box */}
         {open && (
-          <div 
-            className={`${getBoxPositionClasses()} shadow-lg rounded-lg  lg:w-96 h-[40vh] flex flex-col border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400`}
+          <div
+            className={`${getBoxPositionClasses()} w-[calc(100vw-100px)] shadow-lg rounded-lg  lg:w-96 h-[40vh] flex flex-col border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400`}
             onMouseDown={(e) => {
               e.stopPropagation();
             }}
@@ -360,10 +380,10 @@ const ChatWidget = () => {
               onMouseDown={handleMouseDown}
             >
               <img src={"/ethereum.png"} alt="ethereum-icon" width={15} height={15} />
-              <span className="text-white font-bold">{t("masterTrade.manage.chat.communityChatroom")}</span>
+              <span className="dark:text-white font-bold">{t("masterTrade.manage.chat.communityChatroom")}</span>
               <img src={"/ethereum.png"} alt="ethereum-icon" width={15} height={15} />
             </div>
-            <div className="flex-1 overflow-y-auto p-3 pb-1 bg-gray-50 dark:bg-neutral-900">
+            <div className="flex-1 overflow-y-auto p-3 pb-1 lg:mx-4 dark:mx-0 rounded-xl lg:bg-gray-300 bg-white  dark:bg-neutral-900">
               {messages.map((msg) => (
                 <ChatMessage key={msg.id} message={msg} />
               ))}
@@ -371,23 +391,56 @@ const ChatWidget = () => {
             </div>
             <div className="p-2 rounded-b-md bg-gray-50 dark:bg-neutral-900 ">
               <div className="flex gap-2 rounded-xl">
-                <input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey && inputMessage.trim()) {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                  placeholder={t("masterTrade.manage.chat.type_a_message")}
-                  className="flex-1 px-3 py-1 h-[30px] text-xs bg-gray-50 dark:bg-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-theme-primary-400/50"
-                />
+                <div className="relative items-center w-full">
+                  <input
+                    type="text"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey && inputMessage.trim()) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                    placeholder={t("masterTrade.manage.chat.type_a_message")}
+                    className="w-full bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-white rounded-full px-4 py-2 pr-10 
+                                         focus:outline-none focus:ring-2 focus:ring-theme-primary-400/50 
+                                         placeholder-gray-400 dark:placeholder-gray-500 text-xs
+                                         border border-gray-200 dark:border-neutral-700 h-[30px]
+                                         shadow-sm hover:border-theme-primary-400/30 transition-colors placeholder:text-xs"
+                  />
+                  <div className="absolute right-3 top-[18px] -translate-y-1/2 flex items-center gap-2">
+                    <div ref={emojiPickerRef} className="relative">
+                      <button
+                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                        className="text-gray-400 hover:text-theme-primary-500 dark:text-gray-400 
+                                         dark:hover:text-theme-primary-300 transition-colors"
+                      >
+                        <Smile className="h-4 w-4" />
+                      </button>
+                      {showEmojiPicker && (
+                        <div className="absolute bottom-full right-0 mb-2 z-50">
+                          <Picker
+                            data={data}
+                            onEmojiSelect={onEmojiSelect}
+                            theme="dark"
+                            previewPosition="none"
+                            skinTonePosition="none"
+                            set="native"
+                            locale="en"
+                            maxFrequentRows={4}
+                            navPosition="none"
+                            searchPosition="none"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
                 <button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim()}
-                  className={`px-2 lg:px-4 py-1 rounded-lg text-xs font-medium transition-colors
+                  className={`px-2 lg:px-4 py-1 min-w-[60px] rounded-lg text-xs font-medium transition-colors
                     ${inputMessage.trim()
                       ? 'bg-theme-primary-400 hover:bg-theme-primary-500 text-white'
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed'}`}
@@ -403,6 +456,6 @@ const ChatWidget = () => {
   );
 };
 
-export default ChatWidget; 
+export default ChatWidget;
 
 

@@ -7,7 +7,7 @@ import {
   type FormEvent,
   useEffect,
 } from "react";
-import { Upload, X, Undo2, Copy, ArrowRight, AlertCircle } from "lucide-react";
+import { Upload, X, Undo2, Copy, ArrowRight, AlertCircle, Plus, Minus } from "lucide-react";
 import Image from "next/image";
 import {
   Select,
@@ -114,6 +114,7 @@ export default function CreateCoinForm() {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showOtherOption, setShowOtherOption] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [disabledAmount, setDisabledAmount] = useState(true);
   const [activeTab, setActiveTab] = useState("today");
   const { data: categories = [] } = useQuery({
     queryKey: ["token-categories"],
@@ -164,11 +165,11 @@ export default function CreateCoinForm() {
     }
   };
 
-  const { data: memeCoins = [] } = useQuery({
+  const { data: memeCoins = [], refetch: refetchMemeCoins } = useQuery({
     queryKey: ["my-tokens"],
     queryFn: getMyTokens,
   });
-
+  console.log("memeCoins", memeCoins)
   // Filter memeCoins based on activeTab
   const filteredMemeCoins = React.useMemo(() => {
     const now = new Date();
@@ -184,9 +185,9 @@ export default function CreateCoinForm() {
         case "today":
           return coinDate >= today;
         case "last8days":
-          return coinDate >= eightDaysAgo && coinDate < today;
+          return coinDate >= eightDaysAgo;
         case "lastmonth":
-          return coinDate;
+          return coinDate >= lastMonth;
         default:
           return true;
       }
@@ -267,7 +268,7 @@ export default function CreateCoinForm() {
     } else if (formData.symbol.length > 10) {
       newErrors.symbol = t("createCoin.form.symbol.maxLength");
     }
-
+    console.log("formData.amount", formData.amount)
     if (!formData.amount.trim()) {
       newErrors.amount = t("createCoin.form.amount.required");
     } else if (isNaN(Number(formData.amount)) || Number(formData.amount) < 0) {
@@ -323,7 +324,6 @@ export default function CreateCoinForm() {
         formDataToSend.append("image", formData.logo);
       }
 
-      // Send data to API
       const response = await createToken(formDataToSend);
 
       // Handle success
@@ -333,7 +333,7 @@ export default function CreateCoinForm() {
           message: t("createCoin.success"),
           type: "success"
         });
-
+        refetchMemeCoins();
         // Reset form
         setFormData({
           name: "",
@@ -480,13 +480,14 @@ export default function CreateCoinForm() {
                         type="text"
                         id="amount"
                         name="amount"
-                        value={formData.amount || 0}
+                        value={formData.amount ?? 0}
+                        disabled={disabledAmount}
                         onChange={handleAmountChange}
                         placeholder={t('createCoin.form.amount.placeholder')}
-                        className={classInput}
+                        className={`${classInput} ${disabledAmount ? "bg-gray-200" : ""}`}
                       />
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <span className="text-neutral-200 text-sm">(SOL)</span>
+                        <span className="dark:text-neutral-200 text-theme-neutral-800 text-sm">(SOL)</span>
                       </div>
                       {formData.amount && (
                         <button
@@ -499,6 +500,15 @@ export default function CreateCoinForm() {
                           <X className="h-4 w-4" />
                         </button>
                       )}
+                      <button
+                          type="button"
+                          onClick={() =>
+                            setDisabledAmount(!disabledAmount)
+                          }
+                          className="absolute inset-y-0 right-16 flex items-center pr-3 text-theme-neutral-1000 text-xl dark:hover:text-gray-200"
+                        >
+                        {disabledAmount ? <Plus className="h-4 w-4" /> : <Minus className="h-4 w-4" />}
+                        </button>
                     </div>
                     {errors.amount && (
                       <p className="mt-1 text-xs text-red-500">
@@ -527,7 +537,7 @@ export default function CreateCoinForm() {
                                   const category = categories.find((c: any) => c.id === categoryId);
                                   return category ? (
                                     <span key={categoryId} className="text-sm">
-                                      {category.name}
+                                      {t(`categories.${category.name}`)}
                                       {formData.category_list.indexOf(categoryId) !== formData.category_list.length - 1 ? ", " : ""}
                                     </span>
                                   ) : null;
@@ -537,7 +547,7 @@ export default function CreateCoinForm() {
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent
-                          className="bg-white dark:bg-neutral-900 box-shadow-info rounded-xl z-10"
+                          className="bg-white dark:bg-neutral-900  rounded-xl z-10"
                         >
                           <div className="sticky top-0 p-2 bg-white dark:bg-neutral-900 border-b border-neutral-700">
                             <input
@@ -545,7 +555,7 @@ export default function CreateCoinForm() {
                               placeholder={t('createCoin.form.categories.search')}
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
-                              className="w-full h-10 px-4 bg-transparent bg-opacity-60 border rounded-xl p-3 text-neutral-200 focus:outline-none placeholder:text-sm placeholder:text-neutral-200 placeholder:font-normal"
+                              className="w-full h-10 px-4 bg-transparent bg-opacity-60 border rounded-xl p-3 dark:text-neutral-200 text-theme-neutral-800 focus:outline-none placeholder:text-sm dark:placeholder:text-neutral-200 placeholder:text-theme-neutral-800 placeholder:font-normal"
                             />
                           </div>
                           <div className="max-h-[200px] overflow-y-auto">
@@ -557,7 +567,7 @@ export default function CreateCoinForm() {
                               filteredCategories.map((category: any) => (
                                 <SelectItem
                                   key={category.id}
-                                  className={`text-gray-700 dark:text-neutral-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-neutral-800 dark:hover:text-theme-neutral-100 ${formData.category_list.includes(category.id) ? 'bg-blue-100 dark:bg-blue-900' : ''
+                                  className={`text-gray-700 dark:text-neutral-400 cursor-pointer  dark:hover:bg-neutral-800 dark:hover:text-theme-neutral-100 ${formData.category_list.includes(category.id) ? 'bg-blue-100 dark:bg-blue-900' : ''
                                     }`}
                                   value={category.id}
                                 >
@@ -829,7 +839,7 @@ export default function CreateCoinForm() {
                     {filteredMemeCoins.map((coin: TokenData, index: number) => (
                       <div
                         key={coin.token_id}
-                        className="flex items-center justify-between hover:bg-theme-neutral-900 p-1.5 md:p-2 rounded-lg transition-colors duration-200"
+                        className="flex items-center justify-between dark:hover:bg-transparent hover:bg-theme-green-300 p-1.5 md:p-2 rounded-lg transition-colors duration-200"
                       >
                         <div className="flex items-center gap-1.5 md:gap-2 lg:gap-4">
                           <div className="w-7 h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 bg-gray-300 rounded-full overflow-hidden">
@@ -880,10 +890,10 @@ export default function CreateCoinForm() {
             </div>
 
             <div className="mt-3 md:mt-4 lg:mt-6 text-center">
-              <button className="dark:text-theme-neutral-100 cursor-pointer  dark:hover:text-theme-gradient-linear-start text-theme-neutral-900 flex gap-1.5 md:gap-2 items-center justify-center mx-auto  transition-colors">
+              <button className="dark:text-theme-neutral-100 cursor-pointer  hover:text-theme-gradient-linear-start text-theme-neutral-900 flex gap-1.5 md:gap-2 items-center justify-center mx-auto  transition-colors">
                 <Link
                   href="/my-coin"
-                  className="dark:text-theme-neutral-100 text-theme-neutral-900 font-medium text-[10px] md:text-xs lg:text-xl "
+                  className="dark:text-theme-neutral-100 text-theme-neutral-900 hover:text-theme-gradient-linear-start font-medium text-[10px] md:text-xs lg:text-xl "
                 >
                   {t('createCoin.tabs.seeAll')}
                 </Link>

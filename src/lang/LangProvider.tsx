@@ -30,7 +30,7 @@ interface LangProviderProps {
 
 export const LangProvider: React.FC<LangProviderProps> = ({ 
   children, 
-  initialLang = 'en',
+  initialLang = 'kr',
   langConfig 
 }) => {
   const [mounted, setMounted] = useState(false);

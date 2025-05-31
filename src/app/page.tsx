@@ -2,10 +2,11 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLang } from '@/lang';
 
 export default function Home() {
   const router = useRouter();
-
+  const { t } = useLang();
   useEffect(() => {
    
     router.push('/dashboard');
@@ -13,7 +14,7 @@ export default function Home() {
 
   return (
     <div>
-      Redirecting...
+      {t('common.redirecting')}
     </div>
   );
 }
