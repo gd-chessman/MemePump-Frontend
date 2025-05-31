@@ -1,5 +1,5 @@
 import React from 'react'
-import { Check } from 'lucide-react'
+import { Check, Pencil } from 'lucide-react'
 
 interface PercentageButtonsProps {
     percentageValues: number[]
@@ -57,15 +57,13 @@ export const PercentageButtons: React.FC<PercentageButtonsProps> = ({
                             }`}
                         >
                             {percent}%
-                            <img
-                                src={"/pencil.png"}
-                                alt="pencil"
-                                className="cursor-pointer hover:opacity-80 dark:invert"
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onEditClick(index)
-                                }}
-                            />
+                            <Pencil
+                                    className="w-4 h-4 cursor-pointer hover:opacity-80 text-white dark:text-neutral-400"
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onEditClick(index)
+                                    }}
+                                />
                         </button>
                     )}
                 </div>

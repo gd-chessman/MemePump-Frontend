@@ -1,5 +1,5 @@
 import React from 'react'
-import { Check } from 'lucide-react'
+import { Check, Pencil } from 'lucide-react'
 
 interface AmountButtonsProps {
     amountValues: number[]
@@ -53,10 +53,8 @@ export const AmountButtons: React.FC<AmountButtonsProps> = ({
                                 className="px-1 w-full h-[30px] rounded-md flex items-center justify-between gap-1 border border-solid border-gray-200 dark:border-neutral-700 text-xs font-semibold text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
                             >
                                 {value}
-                                <img
-                                    src={"/pencil.png"}
-                                    alt="pencil"
-                                    className="cursor-pointer hover:opacity-80 dark:invert"
+                                <Pencil
+                                    className="w-4 h-4 cursor-pointer hover:opacity-80 text-gray-500 dark:text-neutral-400"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         onEditClick(index)
