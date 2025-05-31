@@ -171,7 +171,7 @@ const ListToken = () => {
                                 key={i}
                                 className="flex items-center gap-2 py-2 border-b border-neutral-800 group dark:hover:bg-neutral-800/50 hover:bg-theme-green-300 px-2 rounded cursor-pointer"
                             >
-                                <button className="text-neutral-500" onClick={() => handleToggleWishlist({ token_address: item.address, status: item.is_wishlist ? "off" : "on" })}>
+                                <button className="text-neutral-500" onClick={() => handleToggleWishlist({ token_address: item.address, status: myWishlist?.tokens?.some((t: { address: string }) => t.address === item.address) ? "off" : "on" })}>
                                     {/* {i <= 2 ? <FontAwesomeIcon icon={['fas', 'star']} className='text-yellow-400'/> : <Star className="h-4 w-4" />} */}
                                     <Star className={`w-4 h-4 ${myWishlist?.tokens?.some((t: { address: string }) => t.address === item.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
                                 </button>
