@@ -1,7 +1,7 @@
 'use client'
 import { getInforWallet } from '@/services/api/TelegramWalletService';
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import DepositWallet from './deposit';
 import WithdrawWallet from './withdraw';
 import { Toaster } from 'react-hot-toast';
@@ -27,7 +27,8 @@ type Transaction = {
     updated_at: string
 }
 
-const universal_accountPage = () => {
+// Create a client component for the content
+const UniversalAccountContent = () => {
     const { t } = useLang();
     const { data: walletInfor, isLoading, isError, error } = useQuery({
         queryKey: ["wallet-infor"],
@@ -250,6 +251,15 @@ const universal_accountPage = () => {
             </div>
 
         </div>
+    )
+}
+
+// Main page component
+const universal_accountPage = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <UniversalAccountContent />
+        </Suspense>
     )
 }
 
