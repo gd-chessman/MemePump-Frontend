@@ -23,6 +23,7 @@ interface Token {
   address: string;
   decimals: number;
   logo_uri: string;
+  logoUrl?: string;
   coingeckoId: string | null;
   tradingviewSymbol: string | null;
   isVerified: boolean;
@@ -84,8 +85,15 @@ export default function Trading() {
         logoUrl: token.logo_url || token.logo_uri || "/token-placeholder.png"
       }));
       setTokens(transformedTokens);
+    } else if (activeTab === '3' && myWishlist?.tokens && myWishlist.tokens.length > 0) {
+      const transformedTokens = myWishlist.tokens.map((token: any) => ({
+        ...token,
+        logoUrl: token.logoUrl,
+        isFavorite: true
+      }));
+      setTokens(transformedTokens);
     }
-  }, [topCoins, newCoins, activeTab]);
+  }, [topCoins, newCoins, myWishlist, activeTab]);
 
   // Effect to handle search when debounced value changes
   useEffect(() => {
@@ -178,6 +186,12 @@ export default function Trading() {
             >
               <span className={`${activeTab === '2' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.new')}</span>
             </button>
+            <button
+              className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '3' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
+              onClick={() => setActiveTab('3')}
+            >
+              <span className={`${activeTab === '3' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.favorite')}</span>
+            </button>
           </div>
 
           <TabsContent value="1">
@@ -209,7 +223,7 @@ export default function Trading() {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <img 
-                            src={token.logo_uri || "/placeholder.png"} 
+                            src={token.logoUrl || token.logo_uri || "/token-placeholder.png"} 
                             alt={token.symbol} 
                             className="w-8 h-8 rounded-full"
                           />
@@ -322,7 +336,7 @@ export default function Trading() {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <img 
-                            src={token.logo_uri || "/token-placeholder.png"} 
+                            src={token.logoUrl || token.logo_uri || "/token-placeholder.png"} 
                             alt={token.symbol} 
                             className="w-8 h-8 rounded-full"
                           />
@@ -404,6 +418,121 @@ export default function Trading() {
                 </div>
               </CardContent>
             )}
+          </TabsContent>
+
+          <TabsContent value="3">
+            {displayTokens && (
+              <CardContent className="w-full p-0">
+                {/* Desktop Table View */}
+                <div className="hidden md:block">
+                  <TableTokenList
+                    tokens={displayTokens}
+                    onCopyAddress={handleCopyAddress}
+                    onStarClick={handleStarClick}
+                    isFavoritesTab={true}
+                    isLoading={false}
+                    sortBy={sortBy}
+                    sortType={sortType}
+                    onSort={handleSort}
+                    enableSort={!debouncedSearchQuery.trim()}
+                  />
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-4">
+                  {displayTokens.map((token) => {
+                    console.log("token", token.logoUrl)
+                    return(
+                    <div 
+                      key={token.address}
+                      className="bg-white dark:bg-neutral-900 rounded-lg p-4 border border-gray-200 dark:border-neutral-800"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <img 
+                            src={token.logoUrl || token.logo_uri || "/token-placeholder.png"} 
+                            alt={token.symbol} 
+                            className="w-8 h-8 rounded-full"
+                          />
+                          <div>
+                            <div className="font-medium text-sm">{token.symbol}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 max-w-[10ch] truncate">{token.name}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => router.push(`/trading?address=${token.address}`)}
+                            className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap"
+                          >
+                            {t('trading.trade')}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCopyAddress(token.address, e);
+                            }}
+                            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
+                          >
+                            <Copy className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={() => toggleRow(token.address)}
+                            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
+                          >
+                            {expandedRows[token.address] ? (
+                              <ChevronUp className="h-4 w-4" />
+                            ) : (
+                              <ChevronDown className="h-4 w-4" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="flex gap-2 items-center">
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.price')}</div>
+                          <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.24hChange')}</div>
+                          <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                            {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
+                          </div>
+                        </div>
+                      </div>
+
+                      {expandedRows[token.address] && (
+                        <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-800">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="flex gap-2 items-center">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.marketCap')}</div>
+                              <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.holders')}</div>
+                              <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.address')}</div>
+                              <div className="flex items-center gap-1">
+                                <span className="font-medium text-sm">{truncateString(token.address, 6)}</span>
+                                <button
+                                  onClick={(e) => handleCopyAddress(token.address, e)}
+                                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                  })}
+                </div>
+              </CardContent>
+            )}  
           </TabsContent>
 
       

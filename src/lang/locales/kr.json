@@ -591,7 +591,10 @@
       "listToken": {
         "allMarkets": "모든 토큰 시장",
         "newTrending": "신규 및 트렌딩",
-        "meme": "밈"
+        "meme": "밈",
+        "favorite": "즐겨찾기",
+        "trending": "트렌딩",
+        "new": "신규"
       },
       "tokenInfo": {
         "price": "가격",
@@ -625,7 +628,8 @@
     "tableDashboard": {
       "tabs": {
         "trending": "인기",
-        "new": "신규"
+        "new": "신규",
+        "favorite": "즐겨찾기"
       },
       "mobile": {
         "price": "가격",
@@ -757,6 +761,7 @@
       "confirm": "확인",
       "save": "저장",
       "delete": "삭제",
+      "close": "닫기",
       "edit": "수정",
       "search": "검색",
       "noResults": "결과가 없습니다",

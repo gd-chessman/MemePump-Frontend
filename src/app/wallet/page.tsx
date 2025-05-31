@@ -301,18 +301,6 @@ export default function WalletPage() {
         if (password.length < 8) {
             return t("wallet.passwordMustBeAtLeast8CharactersLong");
         }
-        if (!/[A-Z]/.test(password)) {
-            return t("wallet.passwordMustContainAtLeastOneUppercaseLetter");
-        }
-        if (!/[a-z]/.test(password)) {
-            return t("wallet.passwordMustContainAtLeastOneLowercaseLetter");
-        }
-        if (!/[0-9]/.test(password)) {
-            return t("wallet.passwordMustContainAtLeastOneNumber");
-        }
-        if (!/[!@#$%^&*]/.test(password)) {
-            return t("wallet.passwordMustContainAtLeastOneSpecialCharacter");
-        }
         return "";
     };
 
@@ -320,7 +308,7 @@ export default function WalletPage() {
         const value = e.target.value;
         setNewPassword(value);
         const error = validatePassword(value);
-        setPasswordError(t("wallet.passwordValidationError"));
+        setPasswordError(error);
 
         // Clear confirm password error if passwords match
         if (value === confirmPassword) {
@@ -342,8 +330,9 @@ export default function WalletPage() {
 
     const handleCreatePassword = async () => {
         // Validate both passwords
-        const passwordValidationError = validatePassword(newPassword);
+        const passwordValidationError = validatePassword(newPassword);      
         if (passwordValidationError) {
+            console.log("Password validation failed");
             setPasswordError(t("wallet.passwordValidationError"));
             return;
         }
@@ -369,6 +358,7 @@ export default function WalletPage() {
             handleCloseCreatePassword();
             setShowPrivateKeys(true);
         } catch (error) {
+            console.error("Error in handleCreatePassword:", error);
             toast({
                 title: t('wallet.error'),
                 description: t('wallet.failedToCreatePassword'),
@@ -674,7 +664,7 @@ export default function WalletPage() {
                                     <div className="flex flex-col justify-start items-center gap-1">
 
 
-                                        <button onClick={() => router.push('/universal-account')} className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
+                                        <button onClick={() => router.replace('/universal-account?type=deposit')} className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
                                             <div className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center group  transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95">
                                                 <ArrowDownToLine className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
                                             </div>
@@ -685,7 +675,7 @@ export default function WalletPage() {
 
                                     </div>
                                     <div className="flex flex-col justify-start items-center gap-1">
-                                        <button onClick={() => router.push('/universal-account')} className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
+                                        <button onClick={() => router.replace('/universal-account?type=withdraw')} className="flex flex-col justify-start items-center gap-0.5 md:gap-1">
                                             <div className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 gradient-overlay border border-neutral-200 rounded-full flex justify-center items-center transition-all hover:scale-105">
                                                 <ArrowUpFromLine className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
                                             </div>
@@ -990,40 +980,24 @@ export default function WalletPage() {
                                             <div className="relative w-full">
                                                 <input
                                                     type={showPassword.sol ? "text" : "password"}
-                                                    value={privateKey}
-                                                    onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        setPrivateKey(value);
-                                                        if (value) {
-                                                            debouncedFetchWalletInfo(value);
-                                                        } else {
-                                                            setPrivateKeyError("");
-                                                        }
-                                                    }}
+                                                    value={privateKeyDefault.sol_private_key}
+                                                    readOnly
                                                     placeholder={t('wallet.enterSolanaPrivateKey')}
-                                                    className={`${modalInputStyles} pr-20 ${privateKeyError ? 'border-red-500' : ''}`}
+                                                    className={`${modalInputStyles} pr-10 cursor-default`}
                                                 />
-                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                                    {isLoadingWalletInfo && (
-                                                        <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword(prev => ({ ...prev, sol: !prev.sol }))}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                                                >
+                                                    {showPassword.sol ? (
+                                                        <EyeOff className="w-4 h-4" />
+                                                    ) : (
+                                                        <Eye className="w-4 h-4" />
                                                     )}
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => setShowPassword(prev => ({ ...prev, sol: !prev.sol }))}
-                                                        className="text-gray-400 hover:text-gray-200"
-                                                    >
-                                                        {showPassword.sol ? (
-                                                            <EyeOff className="w-4 h-4" />
-                                                        ) : (
-                                                            <Eye className="w-4 h-4" />
-                                                        )}
-                                                    </button>
-                                                </div>
+                                                </button>
                                             </div>
                                         </div>
-                                        {privateKeyError && (
-                                            <div className={modalErrorStyles}>{privateKeyError}</div>
-                                        )}
                                         <div className={modalHelperTextStyles}>
                                             {t('wallet.privateKeySecurity')}
                                         </div>

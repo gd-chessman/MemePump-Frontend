@@ -1,7 +1,7 @@
 'use client'
 import { getInforWallet } from '@/services/api/TelegramWalletService';
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import DepositWallet from './deposit';
 import WithdrawWallet from './withdraw';
 import { Toaster } from 'react-hot-toast';
@@ -11,6 +11,7 @@ import { getTransactionHistory } from '@/services/api/HistoryTransactionWallet';
 import { toast } from '@/hooks/use-toast';
 import { truncateString } from '@/utils/format';
 import { useLang } from '@/lang';
+import { useSearchParams } from 'next/navigation';
 
 type Transaction = {
     id: number
@@ -26,15 +27,17 @@ type Transaction = {
     updated_at: string
 }
 
-const universal_accountPage = () => {
+// Create a client component for the content
+const UniversalAccountContent = () => {
     const { t } = useLang();
     const { data: walletInfor, isLoading, isError, error } = useQuery({
         queryKey: ["wallet-infor"],
         queryFn: getInforWallet,
     });
 
-
-    const [tab, setTab] = useState<("deposit" | "withdraw")>("deposit");
+    const searchParams = useSearchParams()
+    const type = searchParams.get('type')
+    const [tab, setTab] = useState<"deposit" | "withdraw">(type === "withdraw" ? "withdraw" : "deposit");
 
     const { data: transactions } = useQuery({
         queryKey: ["transactions"],
@@ -248,6 +251,15 @@ const universal_accountPage = () => {
             </div>
 
         </div>
+    )
+}
+
+// Main page component
+const universal_accountPage = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <UniversalAccountContent />
+        </Suspense>
     )
 }
 
