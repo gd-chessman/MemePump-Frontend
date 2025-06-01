@@ -1,7 +1,7 @@
 'use client'
 import { Search, Star } from 'lucide-react'
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import token from '@/assets/svgs/token.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -21,6 +21,10 @@ const ListToken = () => {
     const [sortType, setSortType] = useState("desc");
     const [activeTab, setActiveTab] = useState("trending");
     const [searchQuery, setSearchQuery] = useState("");
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
     const debouncedSearchQuery = useDebounce(searchQuery, 600);
     const [isSearching, setIsSearching] = useState(false);
     const [pendingWishlist, setPendingWishlist] = useState<Record<string, boolean>>({});
@@ -138,6 +142,29 @@ const ListToken = () => {
         return myWishlist?.tokens?.some((t: { address: string }) => t.address === address) ?? false;
     }
 
+    const handleMouseDown = (e: React.MouseEvent) => {
+        if (!scrollContainerRef.current) return;
+        setIsDragging(true);
+        setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+        setScrollLeft(scrollContainerRef.current.scrollLeft);
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging || !scrollContainerRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - scrollContainerRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    };
+
+    const handleMouseLeave = () => {
+        setIsDragging(false);
+    };
+
     console.log("tokenList", tokenList)
     return (
         <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-3 overflow-hidden'>
@@ -165,40 +192,49 @@ const ListToken = () => {
             </div> */}
 
             <div className='pr-1 h-full'>
-                <div className="flex gap-2 px-2 bg-theme-neutral-200 dark:bg-theme-neutral-1000 overflow-x-scroll">
-                    <button
-                        className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal ${activeTab === "trending" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "text-theme-neutral-100"}`}
-                        onClick={() => setActiveTab("trending")}
-                    >
-                        {t('trading.listToken.trending')}
-                    </button>
-                    <button
-                        className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "text-theme-neutral-100"}`}
-                        onClick={() => setActiveTab("new")}
-                    >
-                        {t('trading.listToken.new')}
-                    </button>
-                    <button
-                        className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal ${activeTab === "favorite" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "text-theme-neutral-100"}`}
-                        onClick={() => {
-                            setActiveTab("favorite")
-                            refetchMyWishlist()
-                        }}
-                    >
-                        {t('trading.listToken.favorite')}
-                    </button>
-                    <button
-                        className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal ${activeTab === "category" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "text-theme-neutral-100"}`}
-                        onClick={() => {
-                            setActiveTab("category")
-                            refetchMyWishlist()
-                        }}
-                    >
-                        {t('trading.listToken.category')}
-                    </button>
+                <div 
+                    ref={scrollContainerRef}
+                    className={`flex gap-2 px-2 pt-1 custom-scroll bg-theme-neutral-200 dark:bg-theme-neutral-1000 overflow-x-auto whitespace-nowrap min-w-[280px] pb-1 max-w-full cursor-grab ${isDragging ? 'cursor-grabbing' : ''}`}
+                    onMouseDown={handleMouseDown}
+                    onMouseUp={handleMouseUp}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <div className="flex gap-2">
+                        <button
+                            className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "trending" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            onClick={() => setActiveTab("trending")}
+                        >
+                            {t('trading.listToken.trending')}
+                        </button>
+                        <button
+                            className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            onClick={() => setActiveTab("new")}
+                        >
+                            {t('trading.listToken.new')}
+                        </button>
+                        <button
+                            className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "favorite" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            onClick={() => {
+                                setActiveTab("favorite")
+                                refetchMyWishlist()
+                            }}
+                        >
+                            {t('trading.listToken.favorite')}
+                        </button>
+                        <button
+                            className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "category" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            onClick={() => {
+                                setActiveTab("category")
+                                refetchMyWishlist()
+                            }}
+                        >
+                            {t('trading.listToken.category')}
+                        </button>
+                    </div>
                 </div>
 
-                <div className="flex-grow h-[calc(100%-20px)] overflow-y-scroll mt-2">
+                <div className="flex-grow h-[calc(100%-20px)] custom-scroll overflow-y-scroll mt-2">
                     {Array.isArray(tokenList) && tokenList?.map((item: any, i: number) => {
                         const address = searchQuery.length > 0 ? item.poolAddress : item.address;
                         return (
@@ -214,7 +250,7 @@ const ListToken = () => {
                                         <img src={item.logo_uri ?? item.logoUrl ?? "/placeholder.png"} alt="" width={24} height={24} className='w-[24px] h-[24px] rounded-full object-cover' />
                                         <div className='flex gap-1 items-center'>
 
-                                            <span className='text-xs font-light text-neutral-300'>{item.symbol}</span>
+                                            <span className='text-xs font-light dark:text-neutral-300 text-neutral-800'>{item.symbol}</span>
                                         </div>
                                     </div>
                                     <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}</span>

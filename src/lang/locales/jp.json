@@ -139,7 +139,10 @@
       "title": "確認",
       "description": "このトークンを作成するには<span class=\"font-bold\">0.0025 SOL</span>が必要です",
       "cancel": "キャンセル",
-      "confirm": "確認"
+      "confirm": "確認",
+      "description1": "このトークンを作成するには",
+      "description2": " <span class=\"font-bold\">",
+      "description3": "が必要です"
     }
   },
   "masterTrade": {
@@ -524,6 +527,17 @@
     "volume24hChange": "24時間取引量変化",
     "noTokens": "トークンが見つかりません",
     "trade": "取引",
+    "control": {
+      "searchBar": {
+        "placeholder": "トークン名/アドレス"
+      },
+      "category": {
+        "all": "すべて",
+        "pumpfun": "Pumpfun",
+        "memepumpfun": "ミームPumpfun"
+      }
+      
+    },
     "panel": {
       "buy": "購入",
       "sell": "売却",
@@ -548,7 +562,7 @@
       "liquidity": "流動性",
       "vol": "取引量",
       "buy": "買い",
-      "sell": "売却",
+      "sells": "売却",
       "netBuy": "純買い",
       "timeFrames": {
         "5m": "5分",
@@ -620,7 +634,12 @@
   "tableDashboard": {
     "tabs": {
       "trending": "トレンド",
-      "new": "新着"
+      "new": "新着",
+      "hot": "人気",
+      "category": "カテゴリー",
+      "favorite": "お気に入り",
+      "pumpfun": "Pumpfun",
+      "memepumpfun": "ミームPumpfun"
     },
     "mobile": {
       "price": "価格",
