@@ -16,7 +16,8 @@
     "launchToken": {
       "title": "Phát hành token của riêng bạn",
       "description": "Tùy chỉnh tên, biểu tượng, thuế và nguồn cung chỉ trong vài bước đơn giản",
-      "createNow": "Tạo ngay"
+      "createNow": "Tạo ngay",
+      "description2": "Tạo coin mới trên Pumpfun và Meme Pumpfun"
     },
     "universalAccount": {
       "title": "TÀI KHOẢN PHỔ THÔNG",
@@ -51,7 +52,8 @@
         "label": "Số lượng",
         "placeholder": "Nhập số lượng thanh khoản ban đầu bằng SOL",
         "required": "Số lượng thanh khoản ban đầu là bắt buộc",
-        "invalid": "Vui lòng nhập số lượng hợp lệ"
+        "invalid": "Vui lòng nhập số lượng hợp lệ",
+        "tooltip": "Nhập số lượng thanh khoản ban đầu bằng SOL mà bạn muốn cung cấp cho token của mình"
       },
       "categories": {
         "label": "Danh mục",
@@ -244,7 +246,52 @@
         "searchGroup": "Tìm kiếm nhóm...",
         "noGroup": "Không có nhóm",
         "copyAddress": "Sao chép địa chỉ",
-        "addressCopied": "Đã sao chép địa chỉ"
+        "addressCopied": "Đã sao chép địa chỉ",
+        "stream": "Stream",
+        "streamChange": "Stream thay đổi",
+        "confirmChangeRole": "Hiện tại: {currentRole}",
+        "confirmChangeRoleDescription": "Bạn có chắc chắn muốn thay đổi vai trò của bạn không?",
+        "confirmChangeRoleButton": "Xác nhận",
+        "enterPassword": "Nhập mật khẩu",
+        "password": "Mật khẩu",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "passwordRequirements": "Mật khẩu phải có ít nhất 8 ký tự và chứa chữ hoa, chữ thường, số và ký tự đặc biệt.",
+        "forgotPassword": "Quên mật khẩu?",
+        "email": "Email",
+        "forgotPasswordDescription": "Nhập email của bạn để đặt lại mật khẩu của bạn.",
+        "forgotPasswordButton": "Gửi yêu cầu",
+        "forgotPasswordSuccess": "Yêu cầu đặt lại mật khẩu đã được gửi đến email của bạn.",
+        "forgotPasswordError": "Không thể gửi yêu cầu đặt lại mật khẩu. Vui lòng thử lại.",
+        "forgotPasswordExpired": "Yêu cầu đặt lại mật khẩu đã hết hạn.",
+        "forgotPasswordInvalid": "Email không hợp lệ.",
+        "forgotPasswordRequired": "Vui lòng nhập email.",
+        "resetPassword": "Đặt lại mật khẩu",
+        "resetPasswordDescription": "Nhập mật khẩu mới của bạn.",
+        "resetPasswordButton": "Đặt lại mật khẩu",
+        "resetPasswordSuccess": "Mật khẩu đã được đặt lại.",
+        "resetPasswordError": "Không thể đặt lại mật khẩu. Vui lòng thử lại.",
+        "resetPasswordExpired": "Mật khẩu đã hết hạn.",
+        "resetPasswordInvalid": "Mật khẩu không hợp lệ.",
+        "resetPasswordRequired": "Vui lòng nhập mật khẩu mới.",
+        "resetPasswordConfirm": "Xác nhận mật khẩu mới.",
+        "resetPasswordConfirmRequired": "Vui lòng xác nhận mật khẩu mới.",
+        "resetPasswordConfirmInvalid": "Mật khẩu không khớp.",
+        "resetPasswordConfirmSuccess": "Mật khẩu đã được xác nhận.",
+        "resetPasswordConfirmError": "Không thể xác nhận mật khẩu. Vui lòng thử lại.",
+        "resetPasswordConfirmExpired": "Mật khẩu đã hết hạn.",
+        "passwordPlaceholder": "Nhập mật khẩu",
+        "confirmPasswordPlaceholder": "Xác nhận mật khẩu",
+        "passwordRequired": "Vui lòng nhập mật khẩu.",
+        "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu.",
+        "passwordInvalid": "Mật khẩu không hợp lệ.",
+        "confirmPasswordInvalid": "Mật khẩu không khớp.",
+        "passwordMismatch": "Mật khẩu không khớp.",
+        "confirmChangeRolePassword": "Mật khẩu để thay đổi vai trò",
+        "normal": "THƯỜNG",
+        "vip": "VIP",
+        "warningChangeRole": "Lưu ý: (Nếu thay đổi luồng, mọi dữ liệu kết nối và group master của bạn sẽ bị xóa toàn bộ)",
+        "changeRoleTitle": "Chuyển đổi vai trò",
+        "to": "thành"
       },
       "groupManagement": {
         "createGroup": "TẠO NHÓM",
@@ -557,7 +604,12 @@
     "listToken": {
       "allMarkets": "Tất cả thị trường token",
       "newTrending": "Mới & thịnh hành",
-      "meme": "Meme"
+      "meme": "Meme",
+      "hot": "Hot",
+      "favorite": "Yêu thích",
+      "category": "Danh mục",
+      "trending": "Thịnh hành",
+      "new": "Mới"
     }
   },
   "auth": {
@@ -573,7 +625,10 @@
   "tableDashboard": {
     "tabs": {
       "trending": "Thịnh hành",
-      "new": "Mới nhất"
+      "new": "Mới nhất",
+      "hot": "Hot",
+      "favorite": "Yêu thích",
+      "category": "Danh mục"
     },
     "mobile": {
       "price": "Giá",

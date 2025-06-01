@@ -23,6 +23,7 @@ const ListToken = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const debouncedSearchQuery = useDebounce(searchQuery, 600);
     const [isSearching, setIsSearching] = useState(false);
+    const [pendingWishlist, setPendingWishlist] = useState<Record<string, boolean>>({});
     const { data: topCoins, isLoading: isLoadingTopCoins } = useQuery({
         queryKey: ["topCoins", sortBy, sortType],
         queryFn: () => getTopCoins({ sort_by: sortBy, sort_type: sortType, offset: 3, limit: 50 }),
@@ -52,7 +53,6 @@ const ListToken = () => {
 
     const [tokenList, setTokenList] = useState<any[]>([]);
     const [selectedTokenAddress, setSelectedTokenAddress] = useState<string | null>(null);
-
     const { data: tokenInfo } = useQuery({
         queryKey: ["token-infor", selectedTokenAddress],
         queryFn: () => selectedTokenAddress ? getTokenInforByAddress(selectedTokenAddress) : null,
@@ -95,20 +95,44 @@ const ListToken = () => {
     }
 
     const handleToggleWishlist = async (data: { token_address: string; status: string }) => {
+        const { token_address, status } = data;
+        const isAdding = status === "on";
+        
+        // Optimistically update UI
+        setPendingWishlist(prev => ({
+            ...prev,
+            [token_address]: isAdding
+        }));
+
         try {
-            const response = await SolonaTokenService.toggleWishlist(data);
-            
-            // If API returns 404, set selected token and call API again
-            if (response?.status === 404) {
-                setSelectedTokenAddress(data.token_address);
-                // Call API again after setting selected token
-                await SolonaTokenService.toggleWishlist(data);
-            }
-            
+            await SolonaTokenService.toggleWishlist(data);
+            // After successful API call, refetch the wishlist
             await refetchMyWishlist();
         } catch (error) {
             console.error('Error toggling wishlist:', error);
+            // Revert optimistic update on error
+            setPendingWishlist(prev => ({
+                ...prev,
+                [token_address]: !isAdding
+            }));
+        } finally {
+            // Clear pending state after a short delay
+            setTimeout(() => {
+                setPendingWishlist(prev => {
+                    const newState = { ...prev };
+                    delete newState[token_address];
+                    return newState;
+                });
+            }, 500);
         }
+    }
+
+    const isTokenInWishlist = (address: string) => {
+        // Check pending state first, then fall back to actual wishlist state
+        if (address in pendingWishlist) {
+            return pendingWishlist[address];
+        }
+        return myWishlist?.tokens?.some((t: { address: string }) => t.address === address) ?? false;
     }
 
     console.log("tokenList", tokenList)
@@ -162,28 +186,28 @@ const ListToken = () => {
                     </button>
                 </div>
 
-                <div className="flex-grow h-[calc(100%-20px)] overflow-y-scroll">
+                <div className="flex-grow h-[calc(100%-20px)] overflow-y-scroll mt-2">
                     {Array.isArray(tokenList) && tokenList?.map((item: any, i: number) => {
                         const address = searchQuery.length > 0 ? item.poolAddress : item.address;
-                        console.log("item", item)
                         return (
                             <div
                                 key={i}
-                                className="flex items-center gap-2 py-2 border-b border-neutral-800 group dark:hover:bg-neutral-800/50 hover:bg-theme-green-300 px-2 rounded cursor-pointer"
+                                className="flex items-center justify-between border-b border-neutral-800 group dark:hover:bg-neutral-800/50 hover:bg-theme-green-300 rounded "
                             >
-                                <button className="text-neutral-500" onClick={() => handleToggleWishlist({ token_address: item.address, status: item.is_wishlist ? "off" : "on" })}>
-                                    {/* {i <= 2 ? <FontAwesomeIcon icon={['fas', 'star']} className='text-yellow-400'/> : <Star className="h-4 w-4" />} */}
-                                    <Star className={`w-4 h-4 ${myWishlist?.tokens?.some((t: { address: string }) => t.address === item.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
-                                </button>
-                                <div className="flex items-center gap-2" onClick={() => handleChangeToken(address)}>
-                                    <img src={item.logo_uri ?? item.logoUrl ?? "/placeholder.png"} alt="" width={24} height={24} className='rounded-full' />
-                                    <div className='flex gap-1 items-center'>
-                                        <span className="text-xs font-semibold dark:text-theme-neutral-100 text-theme-neutral-800 capitalize">{item.name}</span>
-                                        <span className='text-xs font-light text-neutral-300'>{item.symbol}</span>
+                                <div className='flex items-center'>
+                                    <button className="text-neutral-500 px-2 py-2 cursor-pointer" onClick={() => handleToggleWishlist({ token_address: item.address, status: isTokenInWishlist(item.address) ? "off" : "on" })}>
+                                        <Star className={`w-4 h-4 ${isTokenInWishlist(item.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
+                                    </button>
+                                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleChangeToken(address)}>
+                                        <img src={item.logo_uri ?? item.logoUrl ?? "/placeholder.png"} alt="" width={24} height={24} className='rounded-full' />
+                                        <div className='flex gap-1 items-center'>
+                                         
+                                            <span className='text-xs font-light text-neutral-300'>{item.symbol}</span>
+                                        </div>
+                                        {(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}
                                     </div>
-                                    {(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}
                                 </div>
-                                <div className="text-right">
+                                <div className="text-right pr-3 flex flex-col">
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>
                                 </div>
 

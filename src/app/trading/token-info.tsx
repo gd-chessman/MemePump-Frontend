@@ -193,7 +193,7 @@ export default function TokenInfo() {
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                <img src={tokenInfor?.logoUrl || '/placeholder.png'} width={40} height={40} alt="Token logo" className="rounded-full" />
+                <img src={tokenInfor?.logoUrl || '/placeholder.png'} width={40} height={40} alt="Token logo" className="rounded-full object-cover" />
               </div>
               <div>
                 <div className="flex items-center gap-2">

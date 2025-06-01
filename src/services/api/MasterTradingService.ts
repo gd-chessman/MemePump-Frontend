@@ -149,3 +149,14 @@ export const getDetailCopies = async (wallet_master: any) => {
         throw error;
     }
 }
+
+export const changeStreamWallet = async (password: string)=>{
+    try {
+        const temp = await axiosClient.post("/master-trading/change-stream", {password})
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+

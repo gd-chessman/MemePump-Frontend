@@ -44,6 +44,9 @@ const OverView = () => {
                     <div className='flex gap-1 md:gap-2'>
                         <Title name={t('overview.launchToken.title')} />
                     </div>
+                    <div className='flex flex-col items-center gap-1 md:gap-2'>
+                        <span className='dark:text-neutral-100 text-theme-brown-100 font-normal capitalize text-[11px] md:text-xs mb-1 text-center px-1 md:px-2 lg:px-0'>{t('overview.launchToken.description2')}</span>
+                    </div>
                     <span className='dark:text-neutral-100 text-theme-brown-100 font-normal capitalize text-[11px] md:text-xs mb-1 text-center px-1 md:px-2 lg:px-0'>{t('overview.launchToken.description')}</span>
                     <button
                         onClick={() => router.push('/create-coin')}

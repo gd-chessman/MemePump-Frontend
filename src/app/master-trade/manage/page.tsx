@@ -10,35 +10,22 @@ import { getGroupHistories } from "@/services/api/ChatService"
 import { useLang } from "@/lang/useLang"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUsersGear } from "@fortawesome/free-solid-svg-icons"
+import { faUsersGear, faArrowsRotate } from "@fortawesome/free-solid-svg-icons"
 import { useRouter } from "next/navigation"
 import ChatMessage from "@/app/components/chat/ChatMessage"
 import { getMyConnects, getMyGroups } from "@/services/api/MasterTradingService"
 import { ChatService, MasterTradingService } from "@/services/api"
 import { GroupSelect } from "@/app/trading/control/components/GroupSelect"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/ui/dialog"
 import { Button } from "@/ui/button"
 import MasterMessage from "@/app/components/chat/MasterMessage"
 import { useMasterChatStore } from "@/store/masterChatStore"
 import type { MasterMessage as StoreMasterMessage } from "@/store/masterChatStore"
 import { truncateString } from "@/utils/format"
+import { Wallet } from "@/app/components/list-wallet"
 
 // Định nghĩa các kiểu dữ liệu
 type TabType = "Connected" | "Paused" | "Pending" | "Block"
-const data = [{
-  ch_content: "alo ae",
-  ch_id: "1745422427753-44",
-  ch_is_master: true,
-  ch_lang: "vi",
-  ch_status: "send",
-  ch_wallet_address: "s4uJWXe7C3QeKsUBoMTvNDRGtrk5LJYJK1Az7jyfvdy",
-  chat_id: "23",
-  chat_type: "public",
-  country: "vi",
-  createdAt: "2025-04-23T15:33:47.755Z",
-  nick_name: "khanh382",
-  _id: "6809085b48386b72708da4ea"
-}]
 interface TradeItem {
   connection_id: number;
   member_id: number;
@@ -147,13 +134,22 @@ export default function MasterTradeInterface() {
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
   const { t, lang } = useLang();
   const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
+  const [isChangeRoleDialogOpen, setIsChangeRoleDialogOpen] = useState(false);
   const [selectedGroupName, setSelectedGroupName] = useState<string>("");
   const [selectedChatGroup, setSelectedChatGroup] = useState<string>("");
+  const [roleChangePassword, setRoleChangePassword] = useState("");
+  const [roleChangeError, setRoleChangeError] = useState("");
 
   const { data: myConnects = [], refetch: refetchMyConnects } = useQuery<Connection[]>({
     queryKey: ["my-connects-manage"],
     queryFn: getMyConnects,
   });
+
+  const { data: inforWallet = [], refetch: refetchInforWallet } = useQuery({
+    queryKey: ["infor-wallet-manage"],
+    queryFn: getInforWallet,
+  });
+
 
   const { data: myGroups = [], refetch: refetchMyGroups } = useQuery<Group[]>({
     queryKey: ["my-groups-manage"],
@@ -500,10 +496,19 @@ export default function MasterTradeInterface() {
         break;
     }
 
-
-
     return title;
   }
+
+  const handleChangeRole = async () => {
+    try {
+      await MasterTradingService.changeStreamWallet(roleChangePassword)
+      setToastMessage(t("masterTrade.manage.connectionManagement.changeRoleSuccess"));
+      setIsChangeRoleDialogOpen(false);
+      router.refresh();
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -899,11 +904,21 @@ export default function MasterTradeInterface() {
 
       {/* Chat Section */}
       <div className={styles.chatSection}>
-        <button className={styles.groupButton} onClick={() => router.push("/master-trade")}>
-          <FontAwesomeIcon icon={faUsersGear} className="w-4 h-4 text-theme-neutral-100 z-20" />&ensp;
-          <span className="relative z-10 text-theme-neutral-100">{t('masterTrade.manage.chat.connectWithMaster')}</span>
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
-        </button>
+        <div className="flex items-center justify-between w-full">
+          <button
+            className={styles.groupButton}
+            onClick={() => setIsChangeRoleDialogOpen(true)}
+          >
+            <span className="relative z-10 text-theme-neutral-100 capitalize">Stream: {inforWallet?.stream} &ensp;&ensp;</span>
+            <FontAwesomeIcon icon={faArrowsRotate} className="w-4 h-4 relative text-theme-secondary-500 z-20 " />
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
+          </button>
+          <button className={styles.groupButton} onClick={() => router.push("/master-trade")}>
+            <FontAwesomeIcon icon={faUsersGear} className="w-4 h-4 text-theme-neutral-100 z-20" />&ensp;
+            <span className="relative z-10 text-theme-neutral-100">{t('masterTrade.manage.chat.connectWithMaster')}</span>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
+          </button>
+        </div>
         <div className={styles.chatContainer}>
           <div className={styles.chatHeader}>
             <h2 className={styles.chatTitle}>
@@ -980,8 +995,8 @@ export default function MasterTradeInterface() {
                     onClick={handleSendMessage}
                     disabled={!newMessage.trim()}
                     className={`p-1.5 rounded-full ${!newMessage.trim()
-                        ? "dark:bg-theme-neutral-1000 bg-theme-gradient-linear-start text-theme-neutral-100"
-                        : "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                      ? "dark:bg-theme-neutral-1000 bg-theme-gradient-linear-start text-theme-neutral-100"
+                      : "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
                       }`}
                   >
                     <Send className="h-3 w-3 mr-[2px" />
@@ -1012,6 +1027,69 @@ export default function MasterTradeInterface() {
               </Button>
               <Button
                 onClick={handleJoin}
+                className={`${styles.dialogButton} bg-blue-500 hover:bg-blue-600`}
+              >
+                {t('masterTrade.manage.connectionManagement.confirm')}
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog xác nhận thay đổi role */}
+      <Dialog open={isChangeRoleDialogOpen} onOpenChange={(open) => {
+        setIsChangeRoleDialogOpen(open);
+        const data = "normal"
+        if (!open) {
+          setRoleChangePassword("");
+          setRoleChangeError("");
+        }
+      }}>
+        <DialogContent className={`${styles.dialogContent} dark:border-theme-neutral-1000 border-theme-neutral-100 p-4 [&>button]:hidden`}>
+          <DialogHeader>
+            <DialogDescription>
+              <h2 className="text-theme-primary-300 text-lg text-center font-bold pb-4">{t('masterTrade.manage.connectionManagement.changeRoleTitle')}</h2>
+              <div className="text-theme-primary-300">
+                {t('masterTrade.manage.connectionManagement.confirmChangeRole', { currentRole: t('masterTrade.manage.connectionManagement.' + inforWallet?.stream) })} {t('masterTrade.manage.connectionManagement.to')} {inforWallet?.stream == "normal" ? t('masterTrade.manage.connectionManagement.vip') : t('masterTrade.manage.connectionManagement.normal')}
+              </div>
+              <div className="mt-4">
+                <label htmlFor="role-password" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  {t('masterTrade.manage.connectionManagement.confirmChangeRolePassword', { currentRole: inforWallet?.stream })}
+                </label>
+                <input
+                  type="password"
+                  id="role-password"
+                  value={roleChangePassword}
+                  onChange={(e) => {
+                    setRoleChangePassword(e.target.value);
+                    setRoleChangeError("");
+                  }}
+                  className={`${styles.input} w-full ${roleChangeError ? 'border-red-500' : ''}`}
+                  placeholder={t('masterTrade.manage.connectionManagement.passwordPlaceholder')}
+                />
+                {roleChangeError && (
+                  <p className="mt-1 text-sm text-red-500">{roleChangeError}</p>
+                )}
+                <div className="text-xs text-gray-500 pr-3 pt-2">{t('masterTrade.manage.connectionManagement.warningChangeRole')}</div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <div className="flex w-full gap-4 md:gap-6 justify-center">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsChangeRoleDialogOpen(false);
+                  setRoleChangePassword("");
+                  setRoleChangeError("");
+                }}
+                className={styles.dialogButton}
+              >
+                {t('masterTrade.manage.connectionManagement.cancel')}
+              </Button>
+              <Button
+                onClick={handleChangeRole}
+                disabled={!roleChangePassword}
                 className={`${styles.dialogButton} bg-blue-500 hover:bg-blue-600`}
               >
                 {t('masterTrade.manage.connectionManagement.confirm')}
