@@ -253,9 +253,29 @@ const ListToken = () => {
                                             <span className='text-xs font-light dark:text-neutral-300 text-neutral-800'>{item.symbol}</span>
                                         </div>
                                     </div>
-                                    <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}</span>
+                                    {item.program.includes("pumpfun") && (
+                                        <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}</span>
+                                    )}
+                                    {item.program === "orca" && (
+                                        <img 
+                                        src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
+                                        alt="orca logo"
+                                        width={16}
+                                        height={16}
+                                        className="rounded-full"
+                                        />
+                                    )}
+                                    {item.program === "raydium-clmm" && (
+                                        <img 
+                                        src="https://raydium.io/favicon.ico"
+                                        alt="raydium logo"
+                                        width={16}
+                                        height={16}
+                                        className="rounded-full"
+                                        />
+                                    )}
                                 </div>
-                                <div className="text-right pr-3 flex flex-col">
+                                <div className="text-right pr-3 flex flex-col cursor-pointer" onClick={() => handleChangeToken(address)}>
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>
                                 </div>
 

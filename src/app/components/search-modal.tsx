@@ -384,7 +384,9 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
             {/* Token List */}
             <div className="px-4 sm:px-6 pb-4 sm:pb-6 max-h-[calc(80vh-180px)] sm:max-h-[calc(80vh-200px)] overflow-y-auto">
               <div className="space-y-1 sm:space-y-2">
-                {filteredAndSortedTokens.map((token) => (
+                {filteredAndSortedTokens.map((token) => {
+                  console.log("tokentoken", token)
+                  return (
                   <div
                     key={token.address}
                     onClick={() => {
@@ -462,7 +464,8 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
                       </div>
                     </div>
                   </div>
-                ))}
+                  )
+                })}
               </div>
 
               {filteredAndSortedTokens.length === 0 && (

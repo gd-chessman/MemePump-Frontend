@@ -233,8 +233,26 @@ export function TableTokenList({
                         <div className="flex gap-2">
                           <span className="line-clamp-2 text-xs font-semibold dark:text-neutral-100 text-black-300">{token.name}</span>
                           <span className="text-xs uppercase dark:text-neutral-300 text-theme-brown-100">{token.symbol}</span>
-                          {token.program === "pumpfun-amm" && (
+                          {token.program.includes("pumpfun") && (
                             <PumpFun />
+                          )}
+                          {token.program === "orca" && (
+                            <img 
+                              src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
+                              alt="orca logo"
+                              width={16}
+                              height={16}
+                              className="rounded-full"
+                            />
+                          )}
+                          {token.program === "raydium-clmm" && (
+                            <img 
+                              src="https://raydium.io/favicon.ico"
+                              alt="raydium logo"
+                              width={16}
+                              height={16}
+                              className="rounded-full"
+                            />
                           )}
                         </div>
                       </div>
