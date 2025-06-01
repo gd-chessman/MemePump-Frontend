@@ -16,7 +16,8 @@
     "launchToken": {
       "title": "独自のトークンを発行",
       "description": "数ステップで名前、シンボル、税金、供給量をカスタマイズ",
-      "createNow": "今すぐ作成"
+      "createNow": "今すぐ作成",
+      "description2": "ポンプファン上場、メムポンプファン上場"
     },
     "universalAccount": {
       "title": "ユニバーサルアカウント",
@@ -51,7 +52,8 @@
         "label": "数量",
         "placeholder": "初期流動性のSOL数量を入力",
         "required": "初期流動性は必須です",
-        "invalid": "有効な数量を入力してください"
+        "invalid": "有効な数量を入力してください",
+        "tooltip": "トークンに提供したい初期流動性のSOL数量を入力してください"
       },
       "categories": {
         "label": "カテゴリー",
@@ -241,7 +243,18 @@
         "disconnect": "切断済み",
         "pause": "一時停止",
         "pending": "保留中",
-        "block": "ブロック済み"
+        "block": "ブロック済み",
+        "changeRoleTitle": "ロール変更",
+        "to": "に",
+        "normal": "通常",
+        "vip": "VIP",
+        "confirmChangeRole": "選択した{count}つのウォレットを{currentRole}から{newRole}に変更しますか？",
+        "confirmChangeRoleSuccess": "ロール変更に成功しました",
+        "confirmChangeRoleError": "ロール変更に失敗しました",
+        "confirmChangeRolePasswordRequired": "パスワードを入力してください",
+        "confirmChangeRolePasswordInvalid": "パスワードが無効です",
+        "confirmChangeRolePasswordMatch": "パスワードが一致しました",
+        "confirmChangeRolePassword": "パスワードを確認"
       },
       "groupManagement": {
         "createGroup": "グループ作成",

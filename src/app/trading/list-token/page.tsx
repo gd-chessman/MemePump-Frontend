@@ -189,7 +189,6 @@ const ListToken = () => {
                 <div className="flex-grow h-[calc(100%-20px)] overflow-y-scroll mt-2">
                     {Array.isArray(tokenList) && tokenList?.map((item: any, i: number) => {
                         const address = searchQuery.length > 0 ? item.poolAddress : item.address;
-                        console.log("item", item)
                         return (
                             <div
                                 key={i}
@@ -208,7 +207,7 @@ const ListToken = () => {
                                         {(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}
                                     </div>
                                 </div>
-                                <div className="text-right">
+                                <div className="text-right pr-3 flex flex-col">
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>
                                 </div>
 

@@ -16,7 +16,8 @@
       "launchToken": {
         "title": "자신만의 토큰 발행",
         "description": "몇 가지 간단한 단계로 이름, 심볼, 세금 및 공급량을 맞춤 설정",
-        "createNow": "지금 만들기"
+        "createNow": "지금 만들기",
+        "description2": "펌프펀상장, 밈펌프 상장"
       },
       "universalAccount": {
         "title": "유니버설 계정",
@@ -255,7 +256,25 @@
           "searchGroup": "그룹 검색...",
           "noGroup": "그룹 없음",
           "copyAddress": "주소 복사",
-          "addressCopied": "주소가 복사되었습니다"
+          "addressCopied": "주소가 복사되었습니다",
+          "stream": "스트림",
+          "streamChange": "스트림 변경",
+          "confirmChangeRole": "현재 역할: {currentRole}",
+          "confirmChangeRoleDescription": "현재 역할을 변경하시겠습니까?",
+          "warningChangeRole": "주의: (스트림을 변경하면 모든 연결 및 그룹 마스터 데이터가 초기화됩니다)",
+          "normal": "일반",
+          "vip": "VIP",
+          "changeRoleTitle": "역할 변경",
+          "changeRole": "역할 변경",
+          "passwordPlaceholder": "비밀번호 입력",
+          "confirmChangeRoleSuccess": "역할 변경 성공",
+          "confirmChangeRoleError": "역할 변경 실패",
+          "confirmChangeRolePasswordRequired": "비밀번호를 입력해 주세요",
+          "confirmChangeRoleInvalidPassword": "잘못된 비밀번호입니다. 다시 시도해 주세요.",
+          "confirmChangeRolePassword": "비밀번호 확인",
+          "confirmChangeRolePasswordInvalid": "비밀번호가 일치하지 않습니다. 다시 시도해 주세요.",
+          "confirmChangeRolePasswordMatch": "비밀번호가 일치합니다.",
+          "to": "을"
         },
         "groupManagement": {
           "createGroup": "그룹 생성",

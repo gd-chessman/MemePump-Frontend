@@ -193,7 +193,7 @@ export default function Trading() {
               <span className={`${activeTab === '3' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.favorite')}</span>
             </button>
             <button
-              className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '3' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
+              className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '4' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
               onClick={() => setActiveTab('4')}
             >
               <span className={`${activeTab === '4' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.category')}</span>
@@ -540,7 +540,117 @@ export default function Trading() {
               </CardContent>
             )}  
           </TabsContent>
+          <TabsContent value="4">
+            {displayTokens && (
+              <CardContent className="w-full">
+                {/* Desktop Table View */}
+                <div className="hidden md:block">
+                  <TableTokenList
+                    tokens={displayTokens}
+                    onCopyAddress={handleCopyAddress}
+                    onStarClick={handleStarClick}
+                    isFavoritesTab={false}
+                    isLoading={isLoadingNewCoins}
+                    sortBy={sortBy}
+                    sortType={sortType}
+                    onSort={handleSort}
+                    enableSort={!debouncedSearchQuery.trim()}
+                  />
+                </div>
 
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-4">
+                  {displayTokens.map((token) => (
+                    <div 
+                      key={token.address}
+                      className="bg-white dark:bg-neutral-900 rounded-lg p-4 border border-gray-200 dark:border-neutral-800"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <img 
+                            src={token.logoUrl || token.logo_uri || "/token-placeholder.png"} 
+                            alt={token.symbol} 
+                            className="w-8 h-8 rounded-full"
+                          />
+                          <div className="flex items-center gap-2">
+                            <div className="font-medium text-sm">{token.symbol}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 max-w-[10ch] truncate">{token.name}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => router.push(`/trading?address=${token.address}`)}
+                            className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-3 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
+                          >
+                            Trade
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCopyAddress(token.address, e);
+                            }}
+                            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
+                          >
+                            <Copy className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={() => toggleRow(token.address)}
+                            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
+                          >
+                            {expandedRows[token.address] ? (
+                              <ChevronUp className="h-4 w-4" />
+                            ) : (
+                              <ChevronDown className="h-4 w-4" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="flex gap-2 items-center">
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.price')}</div>
+                          <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.24hChange')}</div>
+                          <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                            {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
+                          </div>
+                        </div>
+                      </div>
+
+                      {expandedRows[token.address] && (
+                        <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-800">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="flex gap-2 items-center">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.marketCap')}</div>
+                              <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.holders')}</div>
+                              <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.address')}</div>
+                              <div className="flex items-center gap-1">
+                                <span className="font-medium text-sm">{truncateString(token.address, 6)}</span>
+                                <button
+                                  onClick={(e) => handleCopyAddress(token.address, e)}
+                                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            )}
+          </TabsContent>
       
         </Tabs>
         {debouncedSearchQuery.trim() &&

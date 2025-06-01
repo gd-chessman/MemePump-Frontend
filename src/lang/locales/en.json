@@ -5,7 +5,8 @@
     "launchToken": {
       "title": "Launch your own token",
       "description": "Customize name, symbol, tax, and supply in just a few simple steps",
-      "createNow": "Create Now"
+      "createNow": "Create Now",
+      "description2": "Create a new coin on Pumpfun and Meme Pumpfun"
     },
     "universalAccount": {
       "title": "UNIVERSAL ACCOUNT",
@@ -48,7 +49,8 @@
         "label": "Amount",
         "placeholder": "Enter initial liquidity amount in SOL",
         "required": "Initial liquidity amount is required",
-        "invalid": "Please enter a valid amount"
+        "invalid": "Please enter a valid amount",
+        "tooltip": "Enter the initial liquidity amount in SOL that you want to provide for your token"
       },
       "categories": {
         "label": "Categories",
@@ -238,7 +240,12 @@
         "disconnect": "Disconnected",
         "pause": "Paused",
         "pending": "Pending",
-        "block": "Blocked"
+        "block": "Blocked",
+        "warningChangeRole": "Warning: (If you change the stream, all connection and master group data will be deleted)",
+        "normal": "Normal",
+        "vip": "VIP",
+        "changeRoleTitle": "Change Role",
+        "to": "to"
       },
       "groupManagement": {
         "createGroup": "CREATE GROUP",
@@ -543,7 +550,12 @@
     "listToken": {
       "allMarkets": "All token markets",
       "newTrending": "New & trending",
-      "meme": "Meme"
+      "meme": "Meme",
+      "hot": "Hot",
+      "favorite": "Favorite",
+      "category": "Category",
+      "trending": "Trending",
+      "new": "New"
     },
     "tokenInfo": {
       "marketCap": "Market Cap",
@@ -575,7 +587,10 @@
   "tableDashboard": {
     "tabs": {
       "trending": "Trending",
-      "new": "New"
+      "new": "New",
+      "hot": "Hot",
+      "favorite": "Favorite",
+      "category": "Category"
     },
     "mobile": {
       "price": "Price",
