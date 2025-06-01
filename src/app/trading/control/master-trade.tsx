@@ -118,7 +118,9 @@ export default function MasterTradeChat({
     }, [mounted, myConnects, selectedGroups, setSelectedConnections, initialized]);
 
     useEffect(() => {
-        if (walletInfor?.role !== "master") {
+        if (walletInfor?.role === "master") {
+            setActiveTab("trade")
+        } else {
             setActiveTab("chat")
         }
     }, [walletInfor, setActiveTab])

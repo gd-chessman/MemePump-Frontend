@@ -25,6 +25,8 @@ import notify from "@/app/components/notify";
 import { NotifyProvider } from "@/app/components/notify";
 import { useLang } from "@/lang/useLang";
 import { truncateString } from "@/utils/format";
+import { Tooltip } from "@radix-ui/react-tooltip";
+import { TooltipContent } from "@/ui/tooltip";
 
 type CoinFormData = {
   name: string;
@@ -383,16 +385,23 @@ export default function CreateCoinForm() {
       {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="dark:border-create-coin border-create-coin-light bg-white dark:bg-theme-black-1/3 rounded-xl p-6 max-w-md w-full mx-4">
+          <div className="dark:border-create-coin border-create-coin-light bg-white dark:bg-theme-black-1/3 rounded-xl p-6 max-w-xl w-full mx-4 flex flex-col items-center">
             <div className="flex items-center justify-center mb-4">
               <AlertCircle className="h-12 w-12 text-theme-primary-300" />
             </div>
             <h3 className="text-lg font-semibold text-center mb-2 dark:text-theme-neutral-100 text-theme-neutral-900">
               {t('createCoin.confirmation.title')}
             </h3>
-            <p className="text-center mb-6 dark:text-theme-neutral-100 text-theme-neutral-900" dangerouslySetInnerHTML={{ __html: t('createCoin.confirmation.description') }}>
-            </p>
-            <div className="flex w-full gap-4 justify-center px-2">
+            <span>
+              {t('createCoin.confirmation.description1')}
+
+              <span className="font-bold">
+                &nbsp;{Number(formData.amount) + 0.0025} SOL
+              </span>
+              {t('createCoin.confirmation.description3')}
+            </span>
+            <span className="text-xs text-theme-primary-300 italic">({t('createCoin.form.amount.label')}: {Number(formData.amount) })</span>
+            <div className="flex w-full gap-4 justify-center px-2 mt-4">
               <button
                 onClick={() => setShowConfirmModal(false)}
                 className="px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors dark:text-theme-neutral-100 text-theme-neutral-900"
@@ -475,40 +484,45 @@ export default function CreateCoinForm() {
                     <label htmlFor="amount" className={classLabel}>
                       {t('createCoin.form.amount.label')} <span className="text-theme-red-200">*</span>
                     </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        id="amount"
-                        name="amount"
-                        value={formData.amount ?? 0}
-                        disabled={disabledAmount}
-                        onChange={handleAmountChange}
-                        placeholder={t('createCoin.form.amount.placeholder')}
-                        className={`${classInput} ${disabledAmount ? "bg-gray-200" : ""}`}
-                      />
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <span className="dark:text-neutral-200 text-theme-neutral-800 text-sm">(SOL)</span>
-                      </div>
-                      {formData.amount && (
+                    <div>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          id="amount"
+                          name="amount"
+                          value={formData.amount ?? 0}
+                          // disabled={disabledAmount}
+                          onChange={handleAmountChange}
+                          placeholder={t('createCoin.form.amount.placeholder')}
+                          className={`${classInput} ${disabledAmount ? "bg-gray-200" : ""}`}
+                        />
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                          <span className="dark:text-neutral-200 text-theme-neutral-800 text-sm">(SOL)</span>
+                        </div>
+                        {formData.amount && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData((prev) => ({ ...prev, amount: "" }))
+                            }
+                            className="absolute inset-y-0 right-16 flex items-center pr-3 text-neutral-200 hover:text-gray-200"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        )}
                         <button
-                          type="button"
-                          onClick={() =>
-                            setFormData((prev) => ({ ...prev, amount: "" }))
-                          }
-                          className="absolute inset-y-0 right-16 flex items-center pr-3 text-neutral-200 hover:text-gray-200"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                      <button
                           type="button"
                           onClick={() =>
                             setDisabledAmount(!disabledAmount)
                           }
                           className="absolute inset-y-0 right-16 flex items-center pr-3 text-theme-neutral-1000 text-xl dark:hover:text-gray-200"
                         >
-                        {disabledAmount ? <Plus className="h-4 w-4" /> : <Minus className="h-4 w-4" />}
+                          {/* {disabledAmount ? <Plus className="h-4 w-4" /> : <Minus className="h-4 w-4" />} */}
                         </button>
+                      </div>
+                      <span className="text-xs text-theme-primary-300 italic">
+                        (i) {t('createCoin.form.amount.tooltip')}
+                      </span>
                     </div>
                     {errors.amount && (
                       <p className="mt-1 text-xs text-red-500">

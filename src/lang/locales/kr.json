@@ -64,7 +64,8 @@
           "label": "수량",
           "placeholder": "초기 유동성 SOL 수량 입력",
           "required": "초기 유동성은 필수입니다",
-          "invalid": "유효한 수량을 입력해주세요"
+          "invalid": "유효한 수량을 입력해주세요",
+          "tooltip": "토큰에 유동성을 제공합니다"
         },
         "categories": {
           "label": "카테고리",
@@ -143,7 +144,9 @@
       },
       "confirmation": {
         "title": "확인",
-        "description": "이 토큰을 생성하려면 <span class=\"font-bold\">0.0025 SOL</span>이 필요합니다",
+        "description1": "이 토큰을 생성하려면",
+        "description2": " <span class=\"font-bold\">",
+        "description3": "이 필요합니다",
         "cancel": "취소",
         "confirm": "확인"
       }
@@ -629,7 +632,8 @@
       "tabs": {
         "trending": "인기",
         "new": "신규",
-        "favorite": "즐겨찾기"
+        "favorite": "즐겨찾기",
+        "category": "테마"
       },
       "mobile": {
         "price": "가격",

@@ -192,6 +192,12 @@ export default function Trading() {
             >
               <span className={`${activeTab === '3' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.favorite')}</span>
             </button>
+            <button
+              className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '3' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
+              onClick={() => setActiveTab('4')}
+            >
+              <span className={`${activeTab === '4' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.category')}</span>
+            </button>
           </div>
 
           <TabsContent value="1">
