@@ -13,7 +13,7 @@ export function LangToggle({ className, showArrow = false }: { className?: strin
     <DropdownMenu >
       <DropdownMenuTrigger className={className} asChild>
         <Button variant="ghost" size="icon" className="w-full dark:bg-neutral-900 bg-gray-100 dark:text-theme-neutral-100 text-theme-neutral-800 px-2 flex justify-start gap-2">
-          {currentLang && <img src={currentLang.flag} alt={t(currentLang.translationKey)} className="w-77 h-5" />}
+          {currentLang && <img src={currentLang.flag} alt={t(currentLang.translationKey)} className="w-7 h-5" />}
           <span>{currentLang && t(currentLang.translationKey)}</span>
           {showArrow && <ChevronDown className="h-6 w-6 ml-auto" />}
         </Button>

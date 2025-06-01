@@ -577,6 +577,26 @@
       "selectConnection": "Chọn kết nối",
       "noGroupsAvailable": "Không có nhóm nào khả dụng"
     },
+    "tokenInfo":{
+      "price": "Giá",
+      "change": "Thay đổi",
+      "marketCap": "Vốn hóa thị trường",
+      "volume24h": "Khối lượng 24h",
+      "holders": "Người nắm giữ",
+      "liquidity": "Thanh khoản",
+      "vol": "KL",
+      "timeFrames": {
+        "5m": "5 phút",
+        "15m": "15 phút",
+        "1h": "1 giờ",
+        "4h": "4 giờ",
+        "1d": "1 ngày",
+        "1w": "1 tuần"
+      },
+      "buy": "Mua",
+      "sells": "Bán",
+      "netBuy": "Mua ròng"
+    },
     "interface": {
       "loading": "Đang tải thông tin token...",
       "noTokens": "Chưa có token nào được xem gần đây",
@@ -592,7 +612,13 @@
         "vol": "KL",
         "buy": "Mua",
         "sells": "Bán",
-        "netBuy": "Mua ròng"
+        "netBuy": "Mua ròng",
+        "5m": "5 phút",
+        "15m": "15 phút",
+        "1h": "1 giờ",
+        "4h": "4 giờ",
+        "1d": "1 ngày",
+        "1w": "1 tuần"
       },
       "error": {
         "loadingFailed": "Không thể tải thông tin token",
@@ -609,7 +635,9 @@
       "favorite": "Yêu thích",
       "category": "Danh mục",
       "trending": "Thịnh hành",
-      "new": "Mới"
+      "new": "Mới",
+      "pumpfun": "Pumpfun",
+      "memepumpfun": "Meme Pumpfun"
     }
   },
   "auth": {
