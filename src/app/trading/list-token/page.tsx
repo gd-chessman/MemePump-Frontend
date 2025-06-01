@@ -77,6 +77,9 @@ const ListToken = () => {
             case "favorite":
                 setTokenList(myWishlist.tokens);
                 break;
+            case "category":
+                setTokenList(newCoins);
+                break;
             default:
                 setTokenList(topCoins);
         }
@@ -97,7 +100,7 @@ const ListToken = () => {
     const handleToggleWishlist = async (data: { token_address: string; status: string }) => {
         const { token_address, status } = data;
         const isAdding = status === "on";
-        
+
         // Optimistically update UI
         setPendingWishlist(prev => ({
             ...prev,
@@ -162,7 +165,7 @@ const ListToken = () => {
             </div> */}
 
             <div className='pr-1 h-full'>
-                <div className="flex gap-2 px-2 bg-theme-neutral-200 dark:bg-theme-neutral-1000">
+                <div className="flex gap-2 px-2 bg-theme-neutral-200 dark:bg-theme-neutral-1000 overflow-x-scroll">
                     <button
                         className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal ${activeTab === "trending" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "text-theme-neutral-100"}`}
                         onClick={() => setActiveTab("trending")}
@@ -184,6 +187,15 @@ const ListToken = () => {
                     >
                         {t('trading.listToken.favorite')}
                     </button>
+                    <button
+                        className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal ${activeTab === "category" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "text-theme-neutral-100"}`}
+                        onClick={() => {
+                            setActiveTab("category")
+                            refetchMyWishlist()
+                        }}
+                    >
+                        {t('trading.listToken.category')}
+                    </button>
                 </div>
 
                 <div className="flex-grow h-[calc(100%-20px)] overflow-y-scroll mt-2">
@@ -194,18 +206,18 @@ const ListToken = () => {
                                 key={i}
                                 className="flex items-center justify-between border-b border-neutral-800 group dark:hover:bg-neutral-800/50 hover:bg-theme-green-300 rounded "
                             >
-                                <div className='flex items-center'>
+                                <div className='flex items-center gap-2'>
                                     <button className="text-neutral-500 px-2 py-2 cursor-pointer" onClick={() => handleToggleWishlist({ token_address: item.address, status: isTokenInWishlist(item.address) ? "off" : "on" })}>
                                         <Star className={`w-4 h-4 ${isTokenInWishlist(item.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
                                     </button>
                                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleChangeToken(address)}>
-                                        <img src={item.logo_uri ?? item.logoUrl ?? "/placeholder.png"} alt="" width={24} height={24} className='rounded-full' />
+                                        <img src={item.logo_uri ?? item.logoUrl ?? "/placeholder.png"} alt="" width={24} height={24} className='w-[24px] h-[24px] rounded-full object-cover' />
                                         <div className='flex gap-1 items-center'>
-                                         
+
                                             <span className='text-xs font-light text-neutral-300'>{item.symbol}</span>
                                         </div>
-                                        {(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}
                                     </div>
+                                    <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}</span>
                                 </div>
                                 <div className="text-right pr-3 flex flex-col">
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>

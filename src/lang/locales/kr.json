@@ -616,7 +616,8 @@
         "meme": "밈",
         "favorite": "즐겨찾기",
         "trending": "인기",
-        "new": "신규"
+        "new": "신규",
+        "category": "테마"
       },
       "tokenInfo": {
         "price": "가격",
