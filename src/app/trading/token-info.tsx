@@ -198,7 +198,27 @@ export default function TokenInfo() {
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="dark:text-neutral-300 text-neutral-800 text-sm font-normal">{tokenInfor?.symbol}</span> </h2>
-                  {tokenInfor?.program?.includes("pumpfun") && <PumpFun />}
+                  {tokenInfor?.program.includes("pumpfun") && (
+                    <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(tokenInfor.market == "pumpfun" || tokenInfor?.program == "pumpfun-amm") && <PumpFun />}</span>
+                  )}
+                  {tokenInfor?.program === "orca" && (
+                    <img
+                      src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
+                      alt="orca logo"
+                      width={16}
+                      height={16}
+                      className="rounded-full"
+                    />
+                  )}
+                  {tokenInfor?.program === "raydium-clmm" && (
+                    <img
+                      src="https://raydium.io/favicon.ico"
+                      alt="raydium logo"
+                      width={16}
+                      height={16}
+                      className="rounded-full"
+                    />
+                  )}
                 </div>
                 <div className="text-xs text-neutral-400 flex items-center">
                   {truncateString(tokenInfor?.address, 12)}
