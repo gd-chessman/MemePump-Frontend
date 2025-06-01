@@ -254,7 +254,7 @@ function TransactionHistoryContent() {
               {new Date(order.time).toLocaleString()}
             </span>
           </div>
-          <span className="text-xs font-medium text-theme-primary-400 ">
+          <span className={`text-xs font-medium ${order.type === "buy" ? "text-green-400 dark:text-green-300" : "text-pink-500 dark:text-pink-400"}`}>
             ${formatPrice(order.priceUsd)}
           </span>
         </div>
@@ -266,7 +266,7 @@ function TransactionHistoryContent() {
           </div>
           <div>
             <span className="text-gray-500 dark:text-neutral-400">{t("transactionHistory.total")}:</span>
-            <span className="ml-1 text-gray-700 dark:text-neutral-200">${(order.priceUsd * order.amount).toFixed(6)}</span>
+            <span className={`ml-1 ${order.type === "buy" ? "text-green-400 dark:text-green-300" : "text-pink-500 dark:text-pink-400"}`}>${(order.priceUsd * order.amount).toFixed(6)}</span>
           </div>
           <div>
             <span className="text-gray-500 dark:text-neutral-400">{t("transactionHistory.source")}:</span>
@@ -274,7 +274,7 @@ function TransactionHistoryContent() {
           </div>
           <div>
             <span className="text-gray-500 dark:text-neutral-400">{t("transactionHistory.status")}:</span>
-            <span className="ml-1 text-gray-700 dark:text-neutral-200">{t("transactionHistory.completed")}</span>
+            <span className="ml-1 text-green-500 dark:text-green-400">{t("transactionHistory.completed")}</span>
           </div>
         </div>
 
@@ -332,13 +332,13 @@ function TransactionHistoryContent() {
                   <td className={`px-4 text-xs py-2 font-medium truncate ${order.type === "buy" ? "text-green-600 dark:text-green-500 uppercase" : "text-red-600 dark:text-red-500 uppercase"}`}>
                     {order.type === "buy" ? t("transactionHistory.buy") : t("transactionHistory.sell")}
                   </td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                  <td className={`px-4 text-xs py-2 font-medium truncate ${order.type === "buy" ? "text-green-400 dark:text-green-300" : "text-pink-500 dark:text-pink-400"}`}>
                     ${formatPrice(order.priceUsd)}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
                     {formatNumberWithSuffix(order.amount)}
                   </td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                  <td className={`px-4 text-xs py-2 font-medium truncate ${order.type === "buy" ? "text-green-400 dark:text-green-300" : "text-pink-500 dark:text-pink-400"}`}>
                     ${(order.priceUsd * order.amount).toFixed(6)}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
@@ -347,7 +347,7 @@ function TransactionHistoryContent() {
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
                     {order.tx}
                   </td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                  <td className="px-4 text-green-500 dark:text-green-400 text-xs py-2 font-medium truncate">
                     {t("transactionHistory.completed")}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium flex items-center truncate">
@@ -407,13 +407,13 @@ function TransactionHistoryContent() {
                   <td className={`px-4 text-xs py-2 font-medium truncate ${order.type === "buy" ? "text-green-600 dark:text-green-500 uppercase" : "text-red-600 dark:text-red-500 uppercase"}`}>
                     {order.type === "buy" ? t("transactionHistory.buy") : t("transactionHistory.sell")}
                   </td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                  <td className={`px-4 text-xs py-2 font-medium truncate ${order.type === "buy" ? "text-green-400 dark:text-green-300" : "text-pink-500 dark:text-pink-400"}`}>
                     ${formatPrice(order.priceUsd)}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
                     {formatNumberWithSuffix(order.amount)}
                   </td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                  <td className={`px-4 text-xs py-2 font-medium truncate ${order.type === "buy" ? "text-green-400 dark:text-green-300" : "text-pink-500 dark:text-pink-400"}`}>
                     ${(order.priceUsd * order.amount).toFixed(6)}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
@@ -422,7 +422,7 @@ function TransactionHistoryContent() {
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
                     {order.tx}
                   </td>
-                  <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                  <td className="px-4 text-green-500 dark:text-green-400 text-xs py-2 font-medium truncate">
                     {t("transactionHistory.completed")}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium flex items-center truncate">
