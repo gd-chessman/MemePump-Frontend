@@ -4,14 +4,7 @@ import axiosClient from "@/utils/axiosClient"
 export const getMasters = async ()=>{
     try {
         const temp = await axiosClient.get("/master-trading/masters")
-        const data = temp.data.data;
-        // Transform wallet_address to solana_address
-        const transformedData = data.map((item: any) => ({
-            ...item,
-            solana_address: item.wallet_address,
-            wallet_address: undefined
-        }));
-        return transformedData;
+        return temp.data.data;
     } catch (error) {
         console.log(error)
         return [];

@@ -77,13 +77,13 @@ export default function Trading() {
     if (activeTab === '1' && topCoins && topCoins.length > 0) {
       const transformedTokens = topCoins.map((token: any) => ({
         ...token,
-        logoUrl: token.logo_url || token.logo_uri || "/token-placeholder.png"
+        logoUrl: token.logo_url || token.logo_uri || "/placeholder.png"
       }));
       setTokens(transformedTokens);
     } else if (activeTab === '2' && newCoins && newCoins.length > 0) {
       const transformedTokens = newCoins.map((token: any) => ({
         ...token,
-        logoUrl: token.logo_url || token.logo_uri || "/token-placeholder.png"
+        logoUrl: token.logo_url || token.logo_uri || "/placeholder.png"
       }));
       setTokens(transformedTokens);
     } else if (activeTab === '3' && myWishlist?.tokens && myWishlist.tokens.length > 0) {
