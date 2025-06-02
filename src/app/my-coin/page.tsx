@@ -270,9 +270,7 @@ export default function MyCoinsTable() {
                                                     <img
                                                         src={coin.logo}
                                                         alt={coin.name}
-                                                        width={32}
-                                                        height={32}
-                                                        className="object-cover"
+                                                        className="object-cover w-8 h-8"
                                                     />
                                                 </div>
                                                 <span className="text-neutral-700 dark:text-neutral-200 text-[10px] md:text-xs font-normal truncate max-w-[80px] md:max-w-none">{coin.name}</span>

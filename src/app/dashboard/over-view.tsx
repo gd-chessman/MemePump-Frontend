@@ -7,9 +7,9 @@ import { formatNumberWithSuffix3 } from '@/utils/format'
 import { useRouter } from 'next/navigation'
 import { useLang } from '@/lang/useLang'
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ children, className }: { children: React.ReactNode, className?: string }) => {
     return (
-        <div className='bg-gradient-to-t from-theme-gradient-linear-start to-theme-gradient-linear-end dark:from-theme-blue-100 dark:to-theme-blue-200 relative w-full rounded-xl transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-lg p-[1px]'>
+        <div className={`bg-gradient-to-t from-theme-gradient-linear-start to-theme-gradient-linear-end dark:from-theme-blue-100 dark:to-theme-blue-200 relative w-full rounded-xl transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-lg p-[1px] ${className}`}>
             <div className='w-full h-full rounded-xl dark:bg-gradient-to-r  dark:from-theme-primary-500 dark:to-theme-secondary-400'>
                 <div className='bg-theme-blue-300  dark:bg-[#00000054] p-6 rounded-xl w-full h-full flex flex-col items-center justify-center gap-1 xl:gap-3'>
                     {children}
@@ -23,7 +23,7 @@ const Title = ({ name }: { name: string }) => {
     return (
         <div className='flex items-center gap-1 md:gap-2'>
             <img src={"/ethereum.png"} alt="ethereum" className='w-[14px] h-[14px] md:w-[16px] md:h-[16px]' />
-            <span className='dark:dark:text-neutral-100 text-theme-black-300 text-[13px] md:text-[14px] lg:text-[16px] font-semibold capitalize'>{name}</span>
+            <span className='dark:dark:text-neutral-100 text-theme-black-300 text-[13px] md:text-[14px] lg:text-[20px] font-semibold capitalize'>{name}</span>
             <img src={"/ethereum.png"} alt="ethereum" className='w-[14px] h-[14px] md:w-[16px] md:h-[16px]' />
         </div>
     )
@@ -39,7 +39,7 @@ const OverView = () => {
     return (
         <div className='flex flex-col gap-2'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6 z-10'>
-                <Layout>
+                <Layout className=''>
                     <img src="/solana-logo.png" alt="solana" className='w-[40px] h-[40px] md:w-[48px] md:h-[48px] lg:w-[56px] lg:h-[56px] rounded-full' />
                     <div className='flex gap-1 md:gap-2'>
                         <Title name={t('overview.launchToken.title')} />

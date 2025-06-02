@@ -728,6 +728,7 @@
     "type": "タイプ",
     "price": "価格",
     "amount": "数量",
+    "holders": "保有者",
     "total": "合計",
     "source": "ソース",
     "transactionHash": "取引ハッシュ",
@@ -742,6 +743,10 @@
     "copied": "コピーしました",
     "noTransactions": "取引履歴がありません",
     "loading": "取引履歴を読み込み中...",
+    "quoteValue": "見積もり価格",
+    "ownerPercentage": "保有者%",
+    "usdValue": "USD価格",
+    "percentage": "パーセンテージ",
     "error": {
       "loadFailed": "取引履歴の読み込みに失敗しました",
       "invalidAddress": "無効なアドレスです"
@@ -767,6 +772,7 @@
     "search": "検索",
     "noResults": "結果が見つかりません",
     "required": "必須",
+    "redirecting": "リダイレクト中...",
     "optional": "任意",
     "actions": "アクション",
     "copy": {

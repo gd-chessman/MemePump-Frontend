@@ -28,6 +28,7 @@ const ListToken = () => {
     const debouncedSearchQuery = useDebounce(searchQuery, 600);
     const [isSearching, setIsSearching] = useState(false);
     const [pendingWishlist, setPendingWishlist] = useState<Record<string, boolean>>({});
+    const [isToggling, setIsToggling] = useState<Record<string, boolean>>({});
     const { data: topCoins, isLoading: isLoadingTopCoins } = useQuery({
         queryKey: ["topCoins", sortBy, sortType],
         queryFn: () => getTopCoins({ sort_by: sortBy, sort_type: sortType, offset: 3, limit: 50 }),
@@ -103,9 +104,21 @@ const ListToken = () => {
 
     const handleToggleWishlist = async (data: { token_address: string; status: string }) => {
         const { token_address, status } = data;
+
+        // Prevent multiple toggles for the same token
+        if (isToggling[token_address]) {
+            return;
+        }
+
         const isAdding = status === "on";
 
-        // Optimistically update UI
+        // Set toggling state
+        setIsToggling(prev => ({
+            ...prev,
+            [token_address]: true
+        }));
+
+        // Optimistic update UI
         setPendingWishlist(prev => ({
             ...prev,
             [token_address]: isAdding
@@ -113,7 +126,6 @@ const ListToken = () => {
 
         try {
             await SolonaTokenService.toggleWishlist(data);
-            // After successful API call, refetch the wishlist
             await refetchMyWishlist();
         } catch (error) {
             console.error('Error toggling wishlist:', error);
@@ -123,9 +135,14 @@ const ListToken = () => {
                 [token_address]: !isAdding
             }));
         } finally {
-            // Clear pending state after a short delay
+            // Clear both pending and toggling states after a delay
             setTimeout(() => {
                 setPendingWishlist(prev => {
+                    const newState = { ...prev };
+                    delete newState[token_address];
+                    return newState;
+                });
+                setIsToggling(prev => {
                     const newState = { ...prev };
                     delete newState[token_address];
                     return newState;
@@ -192,7 +209,7 @@ const ListToken = () => {
             </div> */}
 
             <div className='pr-1 h-full'>
-                <div 
+                <div
                     ref={scrollContainerRef}
                     className={`flex gap-2 px-2 pt-1 custom-scroll bg-theme-neutral-200 dark:bg-theme-neutral-1000 overflow-x-auto whitespace-nowrap min-w-[280px] pb-1 max-w-full cursor-grab ${isDragging ? 'cursor-grabbing' : ''}`}
                     onMouseDown={handleMouseDown}
@@ -237,46 +254,70 @@ const ListToken = () => {
                 <div className="flex-grow h-[calc(100%-20px)] custom-scroll overflow-y-scroll mt-2">
                     {Array.isArray(tokenList) && tokenList?.map((item: any, i: number) => {
                         const address = searchQuery.length > 0 ? item.poolAddress : item.address;
+                        console.log("item", item)
                         return (
                             <div
                                 key={i}
-                                className="flex items-center justify-between border-b border-neutral-800 group dark:hover:bg-neutral-800/50 hover:bg-theme-green-300 rounded "
+                                className="flex items-center justify-between border-b h-[45px] border-neutral-800 group dark:hover:bg-neutral-800/50 hover:bg-theme-green-300 rounded "
                             >
                                 <div className='flex items-center gap-2'>
-                                    <button className="text-neutral-500 px-2 py-2 cursor-pointer" onClick={() => handleToggleWishlist({ token_address: item.address, status: isTokenInWishlist(item.address) ? "off" : "on" })}>
+                                    <button
+                                        className={`text-neutral-500 px-2 py-2 cursor-pointer ${isToggling[item.address] ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        onClick={() => !isToggling[item.address] && handleToggleWishlist({
+                                            token_address: item.address,
+                                            status: isTokenInWishlist(item.address) ? "off" : "on"
+                                        })}
+                                        disabled={isToggling[item.address]}
+                                    >
                                         <Star className={`w-4 h-4 ${isTokenInWishlist(item.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
                                     </button>
                                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleChangeToken(address)}>
-                                        <img src={item.logo_uri ?? item.logoUrl ?? "/placeholder.png"} alt="" width={24} height={24} className='w-[24px] h-[24px] rounded-full object-cover' />
+                                        <img src={item?.logo_uri ?? item?.logoUrl ?? "/placeholder.png"} alt="" width={24} height={24} className='w-[24px] h-[24px] rounded-full object-cover' />
+                                        {item?.program.includes("pumpfun") && (
+                                            <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item?.market == "pumpfun" || item?.program == "pumpfun-amm") && <PumpFun />}</span>
+                                        )}
+                                        {item?.program.includes("orca") && (
+                                            <img
+                                                src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
+                                                alt="orca logo"
+                                                width={12}
+                                                height={12}
+                                                className="rounded-full"
+                                            />
+                                        )}
+                                        {item?.program.includes("meteora") && (
+                                            <img
+                                                src="https://www.meteora.ag/icons/v2.svg"
+                                                alt="metora logo"
+                                                width={12}
+                                                height={12}
+                                                className="rounded-full"
+                                            />
+                                        )}
+                                        {item?.program.includes("raydium") && (
+                                            <img
+                                                src="https://raydium.io/favicon.ico"
+                                                alt="raydium logo"
+                                                width={12}
+                                                height={12}
+                                                className="rounded-full"
+                                            />
+                                        )}
                                         <div className='flex gap-1 items-center'>
 
                                             <span className='text-xs font-light dark:text-neutral-300 text-neutral-800'>{item.symbol}</span>
                                         </div>
                                     </div>
-                                    {item.program.includes("pumpfun") && (
-                                        <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item.market == "pumpfun" || item.program == "pumpfun-amm") && <PumpFun />}</span>
-                                    )}
-                                    {item.program === "orca" && (
-                                        <img 
-                                        src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
-                                        alt="orca logo"
-                                        width={16}
-                                        height={16}
-                                        className="rounded-full"
-                                        />
-                                    )}
-                                    {item.program === "raydium-clmm" && (
-                                        <img 
-                                        src="https://raydium.io/favicon.ico"
-                                        alt="raydium logo"
-                                        width={16}
-                                        height={16}
-                                        className="rounded-full"
-                                        />
-                                    )}
+
                                 </div>
-                                <div className="text-right pr-3 flex flex-col cursor-pointer" onClick={() => handleChangeToken(address)}>
+                                <div className="text-right pr-3 flex flex-col gap-1 cursor-pointer" onClick={() => handleChangeToken(address)}>
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>
+                                    <span className={`text-xs font-medium ${item.volume_24h_change_percent > 0
+                                        ? 'text-theme-green-200'
+                                        : item.volume_24h_change_percent < 0
+                                            ? 'text-theme-red-100'
+                                            : 'dark:text-theme-neutral-100 text-theme-neutral-800'
+                                        }`}>{formatNumberWithSuffix(item.volume_24h_change_percent)}%</span>
                                 </div>
 
                             </div>

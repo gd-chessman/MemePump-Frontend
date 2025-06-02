@@ -112,12 +112,12 @@ function SingleTokenCard({ token }: any) {
       <div className="flex items-stretch gap-3">
         {/* Left side - Image section */}
         <div className="h-full flex-shrink-0">
-          <div className="relative w-28 h-28">
+          <div className="relative w-24 h-24">
             <div className="absolute inset-0 rounded-full bg-zinc-100 dark:bg-zinc-800 border-4 border-[#2532a1] p-0.5">
               {(!imageLoaded || imageError) && (
                 <div className="absolute inset-0 bg-zinc-200 dark:bg-zinc-700 animate-pulse rounded-full" />
               )}
-              <div className="relative w-full h-full overflow-hidden rounded-full">
+              <div className="relative w-[84px] h-[84px] overflow-hidden rounded-full">
                 <img
                   src={imageError ? `/placeholder.svg?height=48&width=48&query=${token.name}+logo` : (token.logo || `/placeholder.svg?height=48&width=48&query=${token.name}+logo`)}
                   alt={token.name}
@@ -139,7 +139,7 @@ function SingleTokenCard({ token }: any) {
         </div>
 
         {/* Right side - Content section */}
-        <div className="ml-auto flex-1">
+        <div className="ml-auto flex-1 flex flex-col justify-between">
           <div className="flex items-start justify-between flex-wrap ">
             <div className="flex-1">
               <div className="flex items-center gap-1">
@@ -149,7 +149,7 @@ function SingleTokenCard({ token }: any) {
               <div className="flex items-center text-xs text-zinc-500 dark:text-zinc-400 gap-1.5 mt-0.5">
                 <span>{token.time}</span>
                 <span className="text-zinc-700">|</span>
-                <span className="text-base">{truncateString(token.address, 12)}</span>
+                <span className="text-xs">{truncateString(token.address, 12)}</span>
                 {copied ? (
                   <svg className="h-3 w-3 text-green-500" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -168,7 +168,7 @@ function SingleTokenCard({ token }: any) {
             <div className="flex flex-col items-end">
               <button 
                 onClick={handleTrade}
-                className="inline-flex items-center justify-center my-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 h-9"
+                className="lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto flex items-center justify-center"
               >
                 <Zap className="h-4 w-4 mr-1.5 text-green-400" />
                 {t("trading.trade")}
@@ -177,8 +177,8 @@ function SingleTokenCard({ token }: any) {
             </div>
           </div>
           <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-2">
-                <span className="text-zinc-600 dark:text-zinc-500 text-lg whitespace-nowrap">{t("trading.marketCap")}</span>
-                <span className="text-zinc-800 dark:text-zinc-300 text-lg">{formatNumber(Number(token.marketCap * 1000))}</span>
+                <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{t("trading.marketCap")}</span>
+                <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap * 1000))}</span>
               </div>
         </div>
       </div>

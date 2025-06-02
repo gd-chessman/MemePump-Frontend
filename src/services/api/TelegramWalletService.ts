@@ -128,7 +128,7 @@ export const getMyTokens = async ()=>{
 
 export const getTokenCategorys = async ()=>{
     try {   
-        const temp = await axiosClient.get(`/telegram-wallets/token-categories`) 
+        const temp = await axiosClient.get(`/solana-tokens/token-categories`) 
         return temp.data.data;
     } catch (error) {
         console.log(error)

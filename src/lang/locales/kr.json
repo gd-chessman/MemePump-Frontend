@@ -764,6 +764,11 @@
       "copied": "복사됨",
       "noTransactions": "거래 내역이 없습니다",
       "loading": "거래 내역을 불러오는 중...",
+      "holders": "보유자",
+      "ownerPercentage": "보유자 %",
+      "percentage": "비율",
+      "quoteValue": "참조 가격",
+      "usdValue": "USD 가격",
       "error": {
         "loadFailed": "거래 내역을 불러오는데 실패했습니다",
         "invalidAddress": "유효하지 않은 주소입니다"

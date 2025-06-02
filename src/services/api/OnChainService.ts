@@ -104,3 +104,13 @@ export const getStatsToken = async (address: any) => {
     return {};
   }
 };
+
+export const getHolders = async (address: string) => {
+  try {
+    const temp = await axiosClient.get(`/on-chain/holders/${address}`);
+    return temp.data.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

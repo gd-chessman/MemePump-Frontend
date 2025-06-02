@@ -137,15 +137,16 @@ export default function Trading() {
     notify({ message: t('tableDashboard.toast.addressCopied'), type: 'success' });
   };
   const handleStarClick = (token: Token) => {
+    const status = myWishlist?.tokens?.some((t: { address: string }) => t.address === token.address) ? "off" : "on";
     const data = {
       token_address: token.address,
-      status: myWishlist?.tokens?.some((t: { address: string }) => t.address === token.address) ? "off" : "on",
+      status: status,
     };
     SolonaTokenService.toggleWishlist(data).then(() => {
       refetchMyWishlist();
-      notify({ message: t("tableDashboard.toast.addWishlistSuccess"), type: 'success' });
+      notify({ message: status === "on" ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}` : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}`, type: 'success' });
     }).catch(() => {
-      notify({ message: t("tableDashboard.toast.addWishlistFailed"), type: 'error' });
+      notify({ message: status === "on" ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}` : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}`, type: 'error' });
     });
   };
 
@@ -342,7 +343,6 @@ export default function Trading() {
                 {/* Mobile Card View */}
                 <div className="md:hidden space-y-4">
                   {displayTokens.map((token) => {
-                    console.log("token", token.logoUrl)
                     return(
                     <div 
                       key={token.address}
