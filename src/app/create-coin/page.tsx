@@ -27,6 +27,7 @@ import { useLang } from "@/lang/useLang";
 import { truncateString } from "@/utils/format";
 import { Tooltip } from "@radix-ui/react-tooltip";
 import { TooltipContent } from "@/ui/tooltip";
+import { getTokenByCategory } from "@/services/api/SolonaTokenService";
 
 type CoinFormData = {
   name: string;
@@ -123,6 +124,12 @@ export default function CreateCoinForm() {
     queryFn: getTokenCategorys,
   });
 
+  const { data: tokenByCategory = [] } = useQuery({
+    queryKey: ["token-by-category", formData.category],
+    queryFn: () => getTokenByCategory(formData.category_list[0]),
+    enabled: !!formData.category,
+  });
+  console.log("tokenByCategory", tokenByCategory)
   const [searchQuery, setSearchQuery] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 

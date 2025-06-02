@@ -1,6 +1,6 @@
 "use client"
 
-import { getOrderHistories, getOrderMyHistories } from "@/services/api/OnChainService"
+import { getHolders, getOrderHistories, getOrderMyHistories } from "@/services/api/OnChainService"
 import { getInforWallet } from "@/services/api/TelegramWalletService"
 import { formatNumberWithSuffix, truncateString } from "@/utils/format"
 import { useQuery } from "@tanstack/react-query"
@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation"
 import { useState, Suspense, useEffect, useMemo } from "react"
 import { io as socketIO } from "socket.io-client"
 import { useLang } from "@/lang/useLang"
+import { getTokenInforByAddress } from "@/services/api/SolonaTokenService"
 
 type Transaction = {
   time: string
@@ -31,7 +32,7 @@ export default function TransactionHistory() {
 
 function TransactionHistoryContent() {
   const { t } = useLang();
-  const [activeTab, setActiveTab] = useState<"all" | "my">("all")
+  const [activeTab, setActiveTab] = useState<"all" | "my" | "holder">("all")
   const [socket, setSocket] = useState<any>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +42,10 @@ function TransactionHistoryContent() {
   const searchParams = useSearchParams();
   const address = searchParams?.get("address");
 
+  const { data: tokenInfor } = useQuery({
+    queryKey: ["token-infor", address],
+    queryFn: () => getTokenInforByAddress(address),
+  });
   const { data: orderHistories, isLoading: isLoadingOrderHistories, refetch: refetchOrderHistories } = useQuery(
     {
       queryKey: ["orderHistories", address],
@@ -61,7 +66,11 @@ function TransactionHistoryContent() {
     queryFn: getInforWallet,
   });
 
-
+  const { data: holders, refetch: refetchHolders } = useQuery({
+    queryKey: ["holders", address],
+    queryFn: () => getHolders(address || ""),
+    enabled: !!address,
+  });
 
   const { data: orderMyHistories, refetch: refetchOrderMyHistories } = useQuery({
     queryKey: ["orderMyHistories", address],
@@ -453,26 +462,131 @@ function TransactionHistoryContent() {
     );
   };
 
+  const renderHoldersTable = () => {
+    const { t } = useLang();
+    const marketCap = tokenInfor?.marketCap || 0;
+
+    return (
+      <>
+        {/* Desktop view */}
+        <div className="hidden md:block">
+          <table className="w-full text-sm table-fixed">
+            <thead className="sticky top-0 z-10 bg-white dark:bg-[#0F0F0F]">
+              <tr className="border-b border-gray-200 dark:border-neutral-800">
+                <th className="px-4 py-2 text-left text-gray-700 dark:text-neutral-200 font-medium w-[20%]">{t("transactionHistory.address")}</th>
+                <th className="px-4 py-2 text-left text-gray-700 dark:text-neutral-200 font-medium w-[12%]">{t("transactionHistory.amount")}</th>
+                <th className="px-4 py-2 text-left text-gray-700 dark:text-neutral-200 font-medium w-[12%]">{t("transactionHistory.quoteValue")}</th>
+                <th className="px-4 py-2 text-left text-gray-700 dark:text-neutral-200 font-medium w-[12%]">{t("transactionHistory.usdValue")}</th>
+                <th className="px-4 py-2 text-left text-gray-700 dark:text-neutral-200 font-medium w-[12%]">{t("transactionHistory.ownerPercentage")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {holders?.accounts.map((holder: any, index: number) => {
+                return (
+                  <tr key={index} className="hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50">
+                    <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium flex items-center truncate">
+                      {truncateString(holder.wallet, 10)}
+                      <button className="ml-1 text-gray-400 hover:text-gray-600 dark:text-neutral-500 dark:hover:text-neutral-300">
+                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                    <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                      {formatNumberWithSuffix(holder.amount)}
+                    </td>
+                    <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                      {formatNumberWithSuffix(holder.value.quote)} SOL
+                    </td>
+                    <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                      ${formatNumberWithSuffix(holder.value.usd)}
+                    </td>
+                    <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium truncate">
+                      {holder.percentage.toFixed(2)}%
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile view */}
+        <div className="md:hidden">
+          {holders?.accounts.map((holder: any, index: number) => {
+            const ownerPercentage = marketCap > 0 ? (holder.value.usd / marketCap) * 100 : 0;
+            return (
+              <div key={index} className="p-3 border-b border-theme-neutral-800/40 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-gray-500 dark:text-neutral-400">
+                      {truncateString(holder.wallet, 10)}
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-end">
+                   
+                    <span className="text-[10px] text-gray-500 dark:text-neutral-400">
+                      {t("transactionHistory.ownerPercentage")}: {ownerPercentage.toFixed(4)}%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span className="text-gray-500 dark:text-neutral-400">{t("transactionHistory.amount")}:</span>
+                    <span className="ml-1 text-gray-700 dark:text-neutral-200">{formatNumberWithSuffix(holder.amount)}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 dark:text-neutral-400">{t("transactionHistory.quoteValue")}:</span>
+                    <span className="ml-1 text-gray-700 dark:text-neutral-200">${formatNumberWithSuffix(holder.value.quote)}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 dark:text-neutral-400">{t("transactionHistory.usdValue")}:</span>
+                    <span className="ml-1 text-gray-700 dark:text-neutral-200">${formatNumberWithSuffix(holder.value.usd)}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="shadow-inset dark:bg-theme-neutral-1000 rounded-xl p-2 sm:p-3 lg:overflow-hidden bg-white dark:bg-neutral-1000 flex flex-col h-full w-full">
-      <div className="flex border-gray-200 dark:border-neutral-800 h-[30px] bg-gray-100 dark:bg-theme-neutral-1000 rounded-xl">
+      <div className="flex border-gray-200 dark:border-neutral-800 h-[30px] bg-gray-100  rounded-full dark:bg-[#333]">
         <button
-          className={`flex-1 rounded-xl text-xs sm:text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "all" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
+          className={`flex-1 rounded-full text-xs sm:text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "all" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
           onClick={() => setActiveTab("all")}
         >
           {t("transactionHistory.allTransactions")}
         </button>
         <button
-          className={`flex-1 rounded-xl cursor-pointer text-xs sm:text-sm font-medium uppercase text-center ${activeTab === "my" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
+          className={`flex-1 rounded-full cursor-pointer text-xs sm:text-sm font-medium uppercase text-center ${activeTab === "my" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
           onClick={() => setActiveTab("my")}
         >
           {t("transactionHistory.myTransactions")}
         </button>
+        <button
+          className={`flex-1 rounded-full cursor-pointer text-xs sm:text-sm font-medium uppercase text-center ${activeTab === "holder" ? "bg-blue-500 text-white dark:linear-gradient-connect" : "text-gray-500 dark:text-neutral-400"}`}
+          onClick={() => setActiveTab("holder")}
+        >
+          {t("transactionHistory.holders")}
+        </button>
       </div>
 
       <div className="mt-2 sm:mt-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-xl relative flex-1 flex flex-col min-h-0">
-        <div className="flex-1 overflow-auto">
-          {activeTab === "all" ? renderAllTransactionsTable() : renderMyTransactionsTable()}
+        <div className="flex-1 lg:overflow-auto">
+          {activeTab === "all" ? renderAllTransactionsTable() : 
+           activeTab === "my" ? renderMyTransactionsTable() : 
+           renderHoldersTable()}
         </div>
       </div>
     </div>

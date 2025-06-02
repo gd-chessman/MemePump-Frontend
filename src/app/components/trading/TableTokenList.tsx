@@ -1,5 +1,9 @@
 "use client"
 
+import { useLang } from "@/lang";
+import { getMyWishlist } from "@/services/api/SolonaTokenService";
+import { Button } from "@/ui/button";
+import { Card, CardContent } from "@/ui/card";
 import {
   Table,
   TableBody,
@@ -8,16 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/ui/table";
-import { Button } from "@/ui/button";
-import { Copy, ExternalLink, Star, Loader2 } from "lucide-react";
-import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
-import { useRouter } from "next/navigation";
-import { useLang } from "@/lang";
 import { formatNumberWithSuffix, truncateString } from "@/utils/format";
-import { Card, CardContent } from "@/ui/card";
-import { getMyWishlist } from "@/services/api/SolonaTokenService";
-import { useQuery } from "@tanstack/react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Copy, Loader2, Star } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import PumpFun from "../pump-fun";
 
 const textTitle = 'dark:text-neutral-200 text-black-300 font-normal text-xs max-h-[38px]'
@@ -88,11 +89,61 @@ export function TableTokenList({
 }: TableTokenListProps) {
   const router = useRouter();
   const { t } = useLang();
-  const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
+  const queryClient = useQueryClient();
+  const [pendingWishlist, setPendingWishlist] = useState<Record<string, boolean>>({});
+  const { data: myWishlist } = useQuery({
     queryKey: ["myWishlist"],
     queryFn: getMyWishlist,
-    refetchOnMount: true,
+    // refetchOnMount: true,
   });
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+
+  const handleStarClick = async (e: React.MouseEvent, token: any) => {
+    e.stopPropagation();
+
+    const isInWishlist = myWishlist?.tokens?.some((item: any) => item.address === token.address);
+    const isAdding = !isInWishlist;
+
+    // Update UI immediately
+    setPendingWishlist(prev => ({
+      ...prev,
+      [token.address]: isAdding
+    }));
+
+    // Update wishlist data immediately
+    if (myWishlist) {
+      const newTokens = isAdding
+        ? [{ address: token.address }, ...myWishlist.tokens]
+        : myWishlist.tokens.filter((t: { address: string }) => t.address !== token.address);
+      
+      queryClient.setQueryData(["myWishlist"], {
+        ...myWishlist,
+        tokens: newTokens
+      });
+    }
+
+    // Call API in background
+    onStarClick?.({
+      ...token,
+      status: isAdding ? "on" : "off"
+    });
+
+    // Clear pending state after a short delay
+    setTimeout(() => {
+      setPendingWishlist(prev => {
+        const newState = { ...prev };
+        delete newState[token.address];
+        return newState;
+      });
+    }, 100);
+  };
+
+  const isTokenInWishlist = (address: string) => {
+    if (address in pendingWishlist) {
+      return pendingWishlist[address];
+    }
+    return myWishlist?.tokens?.some((t: { address: string }) => t.address === address) ?? false;
+  };
 
   // Sort tokens client-side
   const sortedTokens = enableSort ? sortTokens(tokens, sortBy, sortType) : tokens;
@@ -216,44 +267,65 @@ export function TableTokenList({
                         <Button
                           variant="ghost"
                           size="icon"
-                          className={` hover:text-yellow-500 ${isFavoritesTab || (myWishlist?.tokens?.some((item: any) => item.address === token.address)) ? 'text-yellow-500' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onStarClick?.({ ...token, status: myWishlist?.tokens?.some((item: any) => item.address === token.address) });
-                          }}
+                          className={`hover:text-yellow-500 ${isFavoritesTab || isTokenInWishlist(token.address) ? 'text-yellow-500' : ''}`}
+                          onClick={(e) => handleStarClick(e, token)}
                         >
-                          {isFavoritesTab || (myWishlist?.tokens?.some((item: any) => item.address === token.address)) ? <FontAwesomeIcon icon={['fas', 'star']} /> : <Star className="h-4 w-4" />}
+                          {isFavoritesTab || isTokenInWishlist(token.address) ?
+                            <FontAwesomeIcon icon={['fas', 'star']} /> :
+                            <Star className="h-4 w-4" />
+                          }
                         </Button>
+
                         <img
-                          src={token.logoUrl || token.logo_uri || "/token-placeholder.png"}
+                          src={failedImages[token.address] ? "/logo.png" : (token.logoUrl || token.logo_uri || "/logo.png")}
                           alt="token logo"
                           width={30} height={30}
                           className="rounded-full h-[30px]"
+                          onError={(e) => {
+                            setFailedImages(prev => ({
+                              ...prev,
+                              [token.address]: true
+                            }));
+                            // Force fallback image
+                            (e.target as HTMLImageElement).src = "/logo.png";
+                          }}
                         />
+                        {token.program.includes("pumpfun") && (
+                          <span className='cursor-pointer' onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(`https://pump.fun/coin/${token.address}`, '_blank')
+                          }}>{(token.market == "pumpfun" || token.program == "pumpfun-amm") && <PumpFun />}</span>
+                        )}
+                        {token.program === "orca" && (
+                          <img
+                            src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
+                            alt="orca logo"
+                            width={12}
+                            height={12}
+                            className="rounded-full"
+                          />
+                        )}
+                        {token.program.includes("meteora") && (
+                          <img
+                            src="https://www.meteora.ag/icons/v2.svg"
+                            alt="metora logo"
+                            width={12}
+                            height={12}
+                            className="rounded-full"
+                          />
+                        )}
+                        {token.program.includes("raydium") && (
+                          <img
+                            src="https://raydium.io/favicon.ico"
+                            alt="raydium logo"
+                            width={12}
+                            height={12}
+                            className="rounded-full"
+                          />
+                        )}
                         <div className="flex gap-2">
                           <span className="line-clamp-2 text-xs font-semibold dark:text-neutral-100 text-black-300">{token.name}</span>
                           <span className="text-xs uppercase dark:text-neutral-300 text-theme-brown-100">{token.symbol}</span>
-                          {token.program.includes("pumpfun") && (
-                            <PumpFun />
-                          )}
-                          {token.program === "orca" && (
-                            <img 
-                              src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
-                              alt="orca logo"
-                              width={16}
-                              height={16}
-                              className="rounded-full"
-                            />
-                          )}
-                          {token.program === "raydium-clmm" && (
-                            <img 
-                              src="https://raydium.io/favicon.ico"
-                              alt="raydium logo"
-                              width={16}
-                              height={16}
-                              className="rounded-full"
-                            />
-                          )}
                         </div>
                       </div>
                     </TableCell>
@@ -266,7 +338,10 @@ export function TableTokenList({
                           variant="ghost"
                           size="icon"
                           className="h-6 w-6 p-0"
-                          onClick={(e) => onCopyAddress(token.address, e)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onCopyAddress(token.address, e);
+                          }}
                         >
                           <Copy className="h-4 w-4" />
                         </Button>

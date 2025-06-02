@@ -93,10 +93,6 @@ const Control = () => {
               currency={currencies}
               isConnected={isConnected}
               onConnect={() => setIsConnected(!isConnected)}
-              selectedGroups={selectedGroups}
-              setSelectedGroups={setSelectedGroups}
-              selectedConnections={selectedConnections}
-              setSelectedConnections={setSelectedConnections}
             />
           </Suspense>
         )
@@ -105,12 +101,7 @@ const Control = () => {
           <div className="h-[70vh] flex flex-col">
             <div className="flex-1 overflow-y-auto">
               <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
-                <MasterTradeChat
-                  selectedGroups={selectedGroups}
-                  setSelectedGroups={setSelectedGroups}
-                  selectedConnections={selectedConnections}
-                  setSelectedConnections={setSelectedConnections}
-                />
+                <MasterTradeChat />
               </Suspense>
             </div>
           </div>
@@ -204,7 +195,7 @@ const Control = () => {
             }`}>
               <div className="p-4">
                 {/* Drag handle */}
-                <div className="w-12 h-1 bg-neutral-600 rounded-full mx-auto lg:mb-4" />
+                <div className="w-12 h-1 bg-neutral-600 rounded-full mx-auto mb-4" onClick={handleClosePanel}/>
                 
                 {/* Panel Content */}
                 {renderTabContent()}
@@ -226,21 +217,12 @@ const Control = () => {
             currency={currencies} 
             isConnected={isConnected} 
             onConnect={() => setIsConnected(!isConnected)}
-            selectedGroups={selectedGroups}
-            setSelectedGroups={setSelectedGroups}
-            selectedConnections={selectedConnections}
-            setSelectedConnections={setSelectedConnections}
           />
         </Suspense>
       </div>
       <div className={classLayout + " flex-1 min-h-0"}>
         <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
-          <MasterTradeChat 
-            selectedGroups={selectedGroups}
-            setSelectedGroups={setSelectedGroups}
-            selectedConnections={selectedConnections}
-            setSelectedConnections={setSelectedConnections}
-          />
+          <MasterTradeChat />
         </Suspense>
       </div>
     </div>

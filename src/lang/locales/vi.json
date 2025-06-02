@@ -139,7 +139,10 @@
       "title": "Xác nhận",
       "description": "Bạn cần bỏ ra <span class=\"font-bold\">0.0025 SOL</span> để tạo đồng token này",
       "cancel": "Hủy",
-      "confirm": "Xác nhận"
+      "confirm": "Xác nhận",
+      "description1": "Để tạo đồng token này, bạn cần bỏ ra",
+      "description2": " <span class=\"font-bold\">",
+      "description3": " SOL"
     }
   },
   "masterTrade": {
@@ -562,6 +565,9 @@
     "volume24hChange": "Thay đổi 24h",
     "noTokens": "Không tìm thấy token nào",
     "trade": "Giao dịch",
+    "buy": "Mua",
+    "sell": "Bán",
+    "master": "Giao dịch chuyên nghiệp",
     "panel": {
       "buy": "Mua",
       "sell": "Bán",
@@ -577,7 +583,12 @@
       "selectConnection": "Chọn kết nối",
       "noGroupsAvailable": "Không có nhóm nào khả dụng"
     },
-    "tokenInfo":{
+    "control": {
+      "searchBar": {
+        "placeholder": "Tìm kiếm ví thành viên..."
+      }
+    },
+    "tokenInfo": {
       "price": "Giá",
       "change": "Thay đổi",
       "marketCap": "Vốn hóa thị trường",
@@ -590,7 +601,7 @@
         "15m": "15 phút",
         "1h": "1 giờ",
         "4h": "4 giờ",
-        "1d": "1 ngày",
+        "24h": "24 giờ",
         "1w": "1 tuần"
       },
       "buy": "Mua",
@@ -675,8 +686,15 @@
     },
     "toast": {
       "addressCopied": "Đã sao chép địa chỉ vào clipboard",
-      "addToWishlistSuccess": "Thêm vào danh sách yêu thích thành công",
-      "addToWishlistFailed": "Thêm vào danh sách yêu thích thất bại"
+      "add": "Thêm",
+      "remove": "Xóa",
+      "wishlist": "token yêu thích",
+      "success": "thành công",
+      "failed": "thất bại",
+      "addToWishlistSuccess": "Thêm token yêu thích thành công",
+      "addToWishlistFailed": "Thêm token yêu thích thất bại",
+      "addWishlistSuccess": "Thêm token yêu thích thành công",
+      "addWishlistFailed": "Thêm token yêu thích thất bại"
     }
   },
   "header": {
@@ -750,6 +768,7 @@
     "time": "Thời gian",
     "type": "Loại",
     "price": "Giá",
+    "holders": "NGƯỜI NẮM GIỮ",
     "amount": "Số lượng",
     "total": "Tổng",
     "source": "Nguồn",
@@ -765,6 +784,10 @@
     "copied": "Đã sao chép",
     "noTransactions": "Không có giao dịch nào",
     "loading": "Đang tải giao dịch...",
+    "quoteValue": "Giá trị tham chiếu",
+    "ownerPercentage": "Phần trăm sở hữu",
+    "usdValue": "Giá trị USD",
+    "percentage": "Phần trăm",
     "error": {
       "loadFailed": "Không thể tải lịch sử giao dịch",
       "invalidAddress": "Địa chỉ không hợp lệ"
@@ -791,6 +814,7 @@
     "noResults": "Không tìm thấy kết quả",
     "required": "Bắt buộc",
     "optional": "Tùy chọn",
+    "redirecting": "Đang chuyển hướng...",
     "copy": {
       "copyAddress": "Sao chép địa chỉ",
       "copied": "Đã sao chép!"

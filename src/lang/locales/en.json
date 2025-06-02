@@ -654,6 +654,7 @@
   "transactionHistory": {
     "allTransactions": "ALL TRANSACTIONS",
     "myTransactions": "MY TRANSACTIONS",
+    "holders": "Holders",
     "time": "Time",
     "type": "Type",
     "price": "Price",
@@ -672,6 +673,11 @@
     "copied": "Copied",
     "noTransactions": "No transactions found",
     "loading": "Loading transactions...",
+    "percentage": "Percentage",
+    "quoteValue": "Quote Value",
+    "ownerPercentage": "Owner %",
+    "redirecting": "Redirecting...",
+    "usdValue": "USD Value",
     "error": {
       "loadFailed": "Failed to load transaction history",
       "invalidAddress": "Invalid address"

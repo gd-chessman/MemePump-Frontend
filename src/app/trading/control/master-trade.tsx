@@ -12,15 +12,11 @@ import { useTradingChatStore } from "@/store/tradingChatStore"
 import { useSearchParams } from "next/navigation"
 import { useAuth } from "@/hooks/useAuth"
 import { useLang } from "@/lang"
+import { useTradingState } from './hooks/useTradingState'
 
 type TabType = "chat" | "trade";
 
-export default function MasterTradeChat({
-    selectedGroups,
-    setSelectedGroups,
-    selectedConnections,
-    setSelectedConnections
-}: MasterTradeChatProps) {
+export default function MasterTradeChat() {
     const searchParams = useSearchParams();
     const tokenAddress = searchParams?.get("address");
     const { token } = useAuth();
@@ -34,6 +30,15 @@ export default function MasterTradeChat({
         initializeWebSocket,
         disconnectWebSocket
     } = useTradingChatStore();
+
+    const {
+        selectedGroups,
+        setSelectedGroups,
+        selectedConnections,
+        setSelectedConnections,
+        refreshTradingData
+    } = useTradingState()
+
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
     const [mounted, setMounted] = useState(false);
@@ -72,50 +77,72 @@ export default function MasterTradeChat({
         queryFn: getInforWallet,
     });
 
-    // Filter connections based on search query
+    // Filter connections based on search query and selected groups
     const filteredConnections = useMemo(() => {
-        if (!searchQuery.trim()) return myConnects
+        let filtered = myConnects || []
 
-        const query = searchQuery.toLowerCase().trim()
-        return myConnects.filter((connect: any) => {
-            const memberName = connect.member_name?.toLowerCase() || ""
-            const memberAddress = connect.member_address?.toLowerCase() || ""
-            return memberName.includes(query) || memberAddress.includes(query)
-        })
-    }, [myConnects, searchQuery])
+        // First filter by selected groups if any groups are selected
+        if (selectedGroups.length > 0) {
+            filtered = filtered.filter((connect: any) =>
+                connect.joined_groups.some((group: any) =>
+                    selectedGroups.includes(group.group_id.toString())
+                )
+            )
+        }
 
-    // Update selected connections based on selected groups
+        // Then apply search filter if there's a search query
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase().trim()
+            filtered = filtered.filter((connect: any) => {
+                const memberName = connect.member_name?.toLowerCase() || ""
+                const memberAddress = connect.member_address?.toLowerCase() || ""
+                return memberName.includes(query) || memberAddress.includes(query)
+            })
+        }
+
+        return filtered
+    }, [myConnects, selectedGroups, searchQuery])
+
+    // Update selected connections when groups change
     useEffect(() => {
-        if (!mounted || !initialized) return;
+        if (!mounted || !initialized || !myConnects) return
 
+        // If no groups are selected, keep current selections
+        if (selectedGroups.length === 0) return
+
+        // Get all connections that belong to selected groups
         const newSelectedConnections = myConnects
             .filter((connect: any) =>
                 connect.joined_groups.some((group: any) =>
                     selectedGroups.includes(group.group_id.toString())
                 )
-            ).map((connect: any) => connect.member_id.toString());
-        
-        // Only update if there are actual changes
-        const uniqueConnections = Array.from(new Set([...selectedConnections, ...newSelectedConnections]));
-        if (JSON.stringify(uniqueConnections) !== JSON.stringify(selectedConnections)) {
-            setSelectedConnections(uniqueConnections);
-        }
-    }, [selectedGroups, myConnects, setSelectedConnections, selectedConnections, mounted, initialized]);
+            )
+            .map((connect: any) => connect.member_id.toString())
 
-// Initialize connections after mount
+        // Update selected connections if there are changes
+        if (JSON.stringify(newSelectedConnections) !== JSON.stringify(selectedConnections)) {
+            setSelectedConnections(newSelectedConnections)
+        }
+    }, [selectedGroups, myConnects, mounted, initialized])
+
+    // Initialize connections after mount
     useEffect(() => {
-        if (!mounted || initialized) return;
-        
-        const initialConnections = myConnects
-            .filter((connect: any) =>
-                connect.joined_groups.some((group: any) =>
-                    selectedGroups.includes(group.group_id.toString())
+        if (!mounted || initialized || !myConnects) return
+
+        // If there are selected groups, initialize with their connections
+        if (selectedGroups.length > 0) {
+            const initialConnections = myConnects
+                .filter((connect: any) =>
+                    connect.joined_groups.some((group: any) =>
+                        selectedGroups.includes(group.group_id.toString())
+                    )
                 )
-            ).map((connect: any) => connect.member_id.toString());
-        
-        setSelectedConnections(initialConnections);
-        setInitialized(true);
-    }, [mounted, myConnects, selectedGroups, setSelectedConnections, initialized]);
+                .map((connect: any) => connect.member_id.toString())
+
+            setSelectedConnections(initialConnections)
+        }
+        setInitialized(true)
+    }, [mounted, myConnects, selectedGroups, initialized])
 
     useEffect(() => {
         if (walletInfor?.role === "master") {
@@ -132,18 +159,21 @@ export default function MasterTradeChat({
     }, [])
 
     const handleSelectItem = useCallback((id: string) => {
-        if (selectedConnections.includes(id)) {
-            setSelectedConnections(selectedConnections.filter(item => item !== id))
-            // Remove groups associated with this connection
-            const connection = myConnects.find((connect: any) => connect.connection_id.toString() === id)
-            if (connection) {
-                const groupIds = connection.joined_groups.map((group: any) => group.group_id.toString())
-                setSelectedGroups(selectedGroups.filter(groupId => !groupIds.includes(groupId)))
+        setSelectedConnections(prev => {
+            if (prev.includes(id)) {
+                // If deselecting, also remove associated groups
+                const connection = myConnects?.find((connect: any) => connect.member_id.toString() === id)
+                if (connection) {
+                    const groupIds = connection.joined_groups.map((group: any) => group.group_id.toString())
+                    setSelectedGroups(prevGroups => prevGroups.filter(groupId => !groupIds.includes(groupId)))
+                }
+                return prev.filter(item => item !== id)
+            } else {
+                // If selecting, add to selected connections
+                return [...prev, id]
             }
-        } else {
-            setSelectedConnections([...selectedConnections, id])
-        }
-    }, [selectedConnections, myConnects, setSelectedConnections, setSelectedGroups, selectedGroups])
+        })
+    }, [myConnects])
 
     const handleTabChange = (tab: TabType) => {
         setActiveTab(tab);
@@ -157,7 +187,7 @@ export default function MasterTradeChat({
                 </div>
             )} */}
             {/* Tabs */}
-            <div className="flex-none flex h-[30px] bg-gray-300 my-3 mx-3 rounded-xl relative dark:bg-theme-neutral-800">
+            <div className="flex-none flex h-[30px] bg-gray-300 my-3 mx-3 rounded-full relative dark:bg-theme-neutral-800">
                 {walletInfor?.role === "master" && (
                     <button
                         className={`flex-1 rounded-xl text-sm cursor-pointer font-medium uppercase text-center ${activeTab === "trade" ? "linear-gradient-connect" : "text-neutral-400"
@@ -198,6 +228,7 @@ export default function MasterTradeChat({
                             onSelectConnection={handleSelectItem}
                             copiedAddress={copiedAddress}
                             onCopyAddress={handleCopyAddress}
+                            isLoading={isLoadingConnects}
                         />
                     </div>
                 </div>

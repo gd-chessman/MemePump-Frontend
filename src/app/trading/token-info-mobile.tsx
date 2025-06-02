@@ -32,7 +32,7 @@ export default function TokenInfoMobile({
     const [isExpanded, setIsExpanded] = useState(false)
     const [timeFrame, setTimeFrame] = useState<TimeFrame>("24h")
     const { t } = useLang()
-
+    
     return (
         <div className="flex flex-col w-full">
             {/* Token Header - Always Visible */}
@@ -42,10 +42,8 @@ export default function TokenInfoMobile({
                         <div className="w-[40px] h-[40px] bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <img
                                 src={tokenInfor?.logoUrl || '/placeholder.png'}
-                                width={40}
-                                height={40}
                                 alt="Token logo"
-                                className="rounded-full object-cover"
+                                className="rounded-full object-cover w-10 h-10"
                             />
                         </div>
                         <div className="min-w-0 flex-1">

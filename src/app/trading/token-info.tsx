@@ -191,34 +191,47 @@ export default function TokenInfo() {
       <div className="flex flex-col gap-4 w-full">
         <div className="dark:bg-theme-neutral-1000 bg-white shadow-inset shadow-md rounded-xl p-3 h-full flex flex-col ">
           <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3">
               <div className="w-10 h-10 bg-transparent rounded-full flex items-center justify-center">
-                <img src={tokenInfor?.logoUrl || '/placeholder.png'} width={40} height={40} alt="Token logo" className="rounded-full object-cover" />
+                <img src={tokenInfor?.logoUrl || '/placeholder.png'} alt="Token logo" className="rounded-full object-cover w-10 h-auto" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name} &ensp; <span className="dark:text-neutral-300 text-neutral-800 text-sm font-normal">{tokenInfor?.symbol}</span> </h2>
-                  {tokenInfor?.program.includes("pumpfun") && (
-                    <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(tokenInfor.market == "pumpfun" || tokenInfor?.program == "pumpfun-amm") && <PumpFun />}</span>
-                  )}
-                  {tokenInfor?.program === "orca" && (
-                    <img
-                      src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
-                      alt="orca logo"
-                      width={16}
-                      height={16}
-                      className="rounded-full"
-                    />
-                  )}
-                  {tokenInfor?.program === "raydium-clmm" && (
-                    <img
-                      src="https://raydium.io/favicon.ico"
-                      alt="raydium logo"
-                      width={16}
-                      height={16}
-                      className="rounded-full"
-                    />
-                  )}
+                <div className="flex items-center gap-2 flex-start">
+                  <div className="flex flex-col mb-1"><h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name}</h2>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="dark:text-neutral-300 text-neutral-800 text-xs font-normal">{tokenInfor?.symbol}</span>
+                      {tokenInfor?.program.includes("pumpfun") && (
+                        <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(tokenInfor.market == "pumpfun" || tokenInfor.program == "pumpfun-amm") && <PumpFun />}</span>
+                      )}
+                      {tokenInfor?.program.includes("orca") && (
+                        <img
+                          src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
+                          alt="orca logo"
+                          width={12}
+                          height={12}
+                          className="rounded-full"
+                        />
+                      )}
+                      {tokenInfor?.program.includes("meteora") && (
+                        <img
+                          src="https://www.meteora.ag/icons/v2.svg"
+                          alt="metora logo"
+                          width={12}
+                          height={12}
+                          className="rounded-full"
+                        />
+                      )}
+                      {tokenInfor?.program.includes("raydium") && (
+                        <img
+                          src="https://raydium.io/favicon.ico"
+                          alt="raydium logo"
+                          width={12}
+                          height={12}
+                          className="rounded-full"
+                        />
+                      )}
+                    </div></div>
+
                 </div>
                 <div className="text-xs text-neutral-400 flex items-center">
                   {truncateString(tokenInfor?.address, 12)}
