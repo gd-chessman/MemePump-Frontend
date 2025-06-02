@@ -192,7 +192,7 @@ export default function TokenInfo() {
         <div className="dark:bg-theme-neutral-1000 bg-white shadow-inset shadow-md rounded-xl p-3 h-full flex flex-col ">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-transparent rounded-full flex items-center justify-center">
                 <img src={tokenInfor?.logoUrl || '/placeholder.png'} width={40} height={40} alt="Token logo" className="rounded-full object-cover" />
               </div>
               <div>
