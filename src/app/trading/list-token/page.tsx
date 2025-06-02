@@ -5,7 +5,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import token from '@/assets/svgs/token.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getNewCoins, getSearchTokenInfor, getTopCoins } from '@/services/api/OnChainService'
 import { formatNumberWithSuffix } from '@/utils/format'
 import { SolonaTokenService } from '@/services/api'
@@ -17,9 +17,11 @@ import { getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaToke
 const ListToken = () => {
     const { t } = useLang()
     const router = useRouter()
+    const queryClient = useQueryClient()
     const [sortBy, setSortBy] = useState("volume_1h_usd");
     const [sortType, setSortType] = useState("desc");
     const [activeTab, setActiveTab] = useState("trending");
+    const [timeFilter, setTimeFilter] = useState("24h");
     const [searchQuery, setSearchQuery] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -72,23 +74,55 @@ const ListToken = () => {
         }
 
         // Handle different tabs
+        let filteredList;
         switch (activeTab) {
             case "trending":
-                setTokenList(topCoins);
+                filteredList = topCoins;
                 break;
             case "new":
-                setTokenList(newCoins);
+                filteredList = newCoins;
                 break;
             case "favorite":
-                setTokenList(myWishlist.tokens);
+                filteredList = myWishlist.tokens;
                 break;
             case "category":
-                setTokenList(newCoins);
+                filteredList = newCoins;
                 break;
             default:
-                setTokenList(topCoins);
+                filteredList = topCoins;
         }
-    }, [debouncedSearchQuery, listToken, topCoins, newCoins, myWishlist, activeTab]);
+
+        // Apply time filter if data exists
+        if (Array.isArray(filteredList)) {
+            filteredList = filteredList.map(item => {
+                // Get the appropriate volume change percent based on time filter
+                let volume_change_percent;
+                switch (timeFilter) {
+                    case "5m":
+                        volume_change_percent = item.volume_5m_change_percent;
+                        break;
+                    case "1h":
+                        volume_change_percent = item.volume_1h_change_percent;
+                        break;
+                    case "4h":
+                        volume_change_percent = item.volume_4h_change_percent;
+                        break;
+                    case "24h":
+                    default:
+                        volume_change_percent = item.volume_24h_change_percent;
+                }
+
+                return {
+                    ...item,
+                    volume_change_percent,
+                    // Use volume_24h_usd as fallback for all time periods since specific volumes aren't available
+                    volume_usd: item.volume_24h_usd
+                };
+            });
+        }
+
+        setTokenList(filteredList);
+    }, [debouncedSearchQuery, listToken, topCoins, newCoins, myWishlist, activeTab, timeFilter]);
     // Add paste handler
     const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
         e.preventDefault(); // Prevent default paste behavior
@@ -112,43 +146,35 @@ const ListToken = () => {
 
         const isAdding = status === "on";
 
-        // Set toggling state
-        setIsToggling(prev => ({
-            ...prev,
-            [token_address]: true
-        }));
-
-        // Optimistic update UI
+        // Update UI immediately without any delay
         setPendingWishlist(prev => ({
             ...prev,
             [token_address]: isAdding
         }));
 
-        try {
-            await SolonaTokenService.toggleWishlist(data);
-            await refetchMyWishlist();
-        } catch (error) {
-            console.error('Error toggling wishlist:', error);
-            // Revert optimistic update on error
-            setPendingWishlist(prev => ({
-                ...prev,
-                [token_address]: !isAdding
-            }));
-        } finally {
-            // Clear both pending and toggling states after a delay
-            setTimeout(() => {
-                setPendingWishlist(prev => {
-                    const newState = { ...prev };
-                    delete newState[token_address];
-                    return newState;
-                });
-                setIsToggling(prev => {
-                    const newState = { ...prev };
-                    delete newState[token_address];
-                    return newState;
-                });
-            }, 500);
+        // Update wishlist data immediately
+        if (myWishlist) {
+            const newTokens = isAdding
+                ? [{ address: token_address }, ...myWishlist.tokens]
+                : myWishlist.tokens.filter((t: { address: string }) => t.address !== token_address);
+
+            queryClient.setQueryData(["myWishlist"], {
+                ...myWishlist,
+                tokens: newTokens
+            });
         }
+
+        // Call API in background without waiting
+        SolonaTokenService.toggleWishlist(data).catch(console.error);
+
+        // Clear pending state after a very short delay
+        setTimeout(() => {
+            setPendingWishlist(prev => {
+                const newState = { ...prev };
+                delete newState[token_address];
+                return newState;
+            });
+        }, 100);
     }
 
     const isTokenInWishlist = (address: string) => {
@@ -184,7 +210,7 @@ const ListToken = () => {
 
     console.log("tokenList", tokenList)
     return (
-        <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-3 overflow-hidden'>
+        <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-1 overflow-hidden'>
             {/* <div className="relative mb-3 pr-3 px-3">
                 <div className="flex relative items-center dark:bg-neutral-800 bg-white rounded-full px-3 py-1 border-1 border-t-theme-primary-300 border-l-theme-primary-300 border-b-theme-secondary-400 border-r-theme-secondary-400">
                     <input
@@ -219,19 +245,19 @@ const ListToken = () => {
                 >
                     <div className="flex gap-2">
                         <button
-                            className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "trending" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "trending" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
                             onClick={() => setActiveTab("trending")}
                         >
                             {t('trading.listToken.trending')}
                         </button>
                         <button
-                            className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
                             onClick={() => setActiveTab("new")}
                         >
                             {t('trading.listToken.new')}
                         </button>
                         <button
-                            className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "favorite" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "favorite" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
                             onClick={() => {
                                 setActiveTab("favorite")
                                 refetchMyWishlist()
@@ -240,7 +266,7 @@ const ListToken = () => {
                             {t('trading.listToken.favorite')}
                         </button>
                         <button
-                            className={`text-sm cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "category" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "category" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
                             onClick={() => {
                                 setActiveTab("category")
                                 refetchMyWishlist()
@@ -249,7 +275,38 @@ const ListToken = () => {
                             {t('trading.listToken.category')}
                         </button>
                     </div>
+
                 </div>
+                {activeTab !== "favorite" && (
+                    <div>
+                        <div className="flex border-t border-b py-1 border-neutral-700 pl-2 gap-1">
+                            <button
+                                className={`text-[10px] cursor-pointer p-[2px] px-3 rounded-xl font-normal shrink-0 ${timeFilter === "5m" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                                onClick={() => setTimeFilter("5m")}
+                            >
+                                {t('tokenInfo.timeFrames.5m')}
+                            </button>
+                            <button
+                                className={`text-[10px] cursor-pointer p-[2px] px-3 rounded-xl font-normal shrink-0 ${timeFilter === "1h" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                                onClick={() => setTimeFilter("1h")}
+                            >
+                                {t('tokenInfo.timeFrames.1h')}
+                            </button>
+                            <button
+                                className={`text-[10px] cursor-pointer p-[2px] px-3 rounded-xl font-normal shrink-0 ${timeFilter === "4h" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                                onClick={() => setTimeFilter("4h")}
+                            >
+                                {t('tokenInfo.timeFrames.4h')}
+                            </button>
+                            <button
+                                className={`text-[10px] cursor-pointer p-[2px] px-3 rounded-xl font-normal shrink-0 ${timeFilter === "24h" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                                onClick={() => setTimeFilter("24h")}
+                            >
+                                {t('tokenInfo.timeFrames.24h')}
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 <div className="flex-grow h-[calc(100%-20px)] custom-scroll overflow-y-scroll mt-2">
                     {Array.isArray(tokenList) && tokenList?.map((item: any, i: number) => {
@@ -272,11 +329,21 @@ const ListToken = () => {
                                         <Star className={`w-4 h-4 ${isTokenInWishlist(item.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
                                     </button>
                                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleChangeToken(address)}>
-                                        <img src={item?.logo_uri ?? item?.logoUrl ?? "/placeholder.png"} alt="" width={24} height={24} className='w-[24px] h-[24px] rounded-full object-cover' />
-                                        {item?.program.includes("pumpfun") && (
+                                        <img 
+                                            src={item?.logo_uri ?? item?.logoUrl ?? "/logo.png"} 
+                                            alt="" 
+                                            width={24} 
+                                            height={24} 
+                                            className='w-[24px] h-[24px] rounded-full object-cover'
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = "/logo.png";
+                                            }}
+                                        />
+                                        {item?.program?.includes("pumpfun") && (
                                             <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item?.market == "pumpfun" || item?.program == "pumpfun-amm") && <PumpFun />}</span>
                                         )}
-                                        {item?.program.includes("orca") && (
+                                        {item?.program?.includes("orca") && (
                                             <img
                                                 src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
                                                 alt="orca logo"
@@ -285,7 +352,7 @@ const ListToken = () => {
                                                 className="rounded-full"
                                             />
                                         )}
-                                        {item?.program.includes("meteora") && (
+                                        {item?.program?.includes("meteora") && (
                                             <img
                                                 src="https://www.meteora.ag/icons/v2.svg"
                                                 alt="metora logo"
@@ -294,7 +361,7 @@ const ListToken = () => {
                                                 className="rounded-full"
                                             />
                                         )}
-                                        {item?.program.includes("raydium") && (
+                                        {item?.program?.includes("raydium") && (
                                             <img
                                                 src="https://raydium.io/favicon.ico"
                                                 alt="raydium logo"
@@ -304,20 +371,20 @@ const ListToken = () => {
                                             />
                                         )}
                                         <div className='flex gap-1 items-center'>
-
+                                            
                                             <span className='text-xs font-light dark:text-neutral-300 text-neutral-800'>{item.symbol}</span>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div className="text-right pr-3 flex flex-col gap-1 cursor-pointer" onClick={() => handleChangeToken(address)}>
-                                    <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_24h_usd)}</span>
-                                    <span className={`text-xs font-medium ${item.volume_24h_change_percent > 0
+                                    <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_usd)}</span>
+                                    <span className={`text-xs font-medium ${item.volume_change_percent > 0
                                         ? 'text-theme-green-200'
-                                        : item.volume_24h_change_percent < 0
+                                        : item.volume_change_percent < 0
                                             ? 'text-theme-red-100'
                                             : 'dark:text-theme-neutral-100 text-theme-neutral-800'
-                                        }`}>{formatNumberWithSuffix(item.volume_24h_change_percent)}%</span>
+                                        }`}>{formatNumberWithSuffix(item.volume_change_percent) ?? 0}%</span>
                                 </div>
 
                             </div>

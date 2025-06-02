@@ -46,7 +46,6 @@ function TransactionHistoryContent() {
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
   });
-  console.log("tokenInfor", tokenInfor);
   const { data: orderHistories, isLoading: isLoadingOrderHistories, refetch: refetchOrderHistories } = useQuery(
     {
       queryKey: ["orderHistories", address],
@@ -72,7 +71,6 @@ function TransactionHistoryContent() {
     queryFn: () => getHolders(address || ""),
     enabled: !!address,
   });
-  console.log("holders", holders);
 
   const { data: orderMyHistories, refetch: refetchOrderMyHistories } = useQuery({
     queryKey: ["orderMyHistories", address],

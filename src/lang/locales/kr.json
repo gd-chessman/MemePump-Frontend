@@ -672,10 +672,17 @@
       },
       "toast": {
         "addressCopied": "주소가 클립보드에 복사되었습니다",
-        "addToWishlistSuccess": "위시리스트에 성공적으로 추가되었습니다",
+        "addToWishlistSuccess": "즐겨찾기 성공적으로 추가되었습니다",
         "addToWishlistFailed": "위시리스트 추가에 실패했습니다",
-        "addWishlistSuccess": "위시리스트에 성공적으로 추가되었습니다",
-        "addWishlistFailed": "위시리스트 추가에 실패했습니다"
+        "addWishlistSuccess": "즐겨찾기 성공적으로 추가되었습니다",
+        "addWishlistFailed": "위시리스트 추가에 실패했습니다",
+        "wishlist": "즐겨찾기",
+        "wishlistSuccess": "즐겨찾기 성공적으로 추가되었습니다",
+        "wishlistFailed": "위시리스트 추가에 실패했습니다",
+        "success": "성공",
+        "failed": "실패",
+        "add": "추가",
+        "remove": "제거"
       }
     },
     "header": {

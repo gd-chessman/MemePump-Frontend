@@ -15,20 +15,24 @@ import { PercentageButtons } from "./components/PercentageButtons"
 import { AmountButtons } from "./components/AmountButtons"
 import { GroupSelect } from "./components/GroupSelect"
 import { getInforWallet } from "@/services/api/TelegramWalletService"
+import { useTradingState } from './hooks/useTradingState'
 
-export default function  TradingPanel({
+export default function TradingPanel({
     defaultMode = "buy",
     currency,
     isConnected,
-    selectedGroups,
-    setSelectedGroups,
-    selectedConnections,
-    setSelectedConnections
-}: TradingPanelProps) {
+}: Omit<TradingPanelProps, 'selectedGroups' | 'setSelectedGroups' | 'selectedConnections' | 'setSelectedConnections'>) {
     const { t } = useLang()
     const searchParams = useSearchParams()
     const address = searchParams?.get("address")
     const queryClient = useQueryClient()
+    const {
+        selectedGroups,
+        setSelectedGroups,
+        selectedConnections,
+        setSelectedConnections,
+        handleTradeSubmit
+    } = useTradingState()
 
     const { data: groups } = useQuery({
         queryKey: ["groups"],
@@ -258,8 +262,8 @@ export default function  TradingPanel({
             return
         }
 
-        try {
-            const response = await createTrading({
+        const submitTrade = async () => {
+            return await createTrading({
                 order_trade_type: mode,
                 order_type: "market",
                 order_token_name: tokenAmount?.token_address || tokenInfor.symbol,
@@ -271,42 +275,30 @@ export default function  TradingPanel({
                 order_qlty: Number(amount),
                 member_list: selectedConnections.map(e => Number(e)),
             })
+        }
 
-            if (response && (response.status === 201 || response.status === 200 || response.message?.includes('successfully'))) {
-                setAmount("0.00")
-                setPercentage(0)
-                setAmountUSD("0.00")
-                setSelectedGroups([])
-                setIsDirectAmountInput(false)
+        const { success, error } = await handleTradeSubmit(submitTrade)
 
-                queryClient.invalidateQueries({ queryKey: ["groups"] })
-                refetchTokenAmount()
-                refetchTradeAmount()
-                refetchMyConnects
-                notify({
-                    message: t('trading.panel.success'),
-                    type: 'success'
-                })
-            } else {
-                notify({
-                    message: t('trading.panel.error'),
-                    type: 'error'
-                })
-            }
-        } catch (error) {
+        if (success) {
             setAmount("0.00")
             setPercentage(0)
             setAmountUSD("0.00")
             setIsDirectAmountInput(false)
-
+            notify({
+                message: t('trading.panel.success'),
+                type: 'success'
+            })
+        } else {
+            setAmount("0.00")
+            setPercentage(0)
+            setAmountUSD("0.00")
+            setIsDirectAmountInput(false)
             notify({
                 message: t('trading.panel.error'),
                 type: 'error'
             })
-        } finally {
-           
         }
-    }, [mode, amount, tokenAmount, solPrice, selectedConnections, setSelectedGroups, queryClient, refetchTokenAmount, t, validateAmount, amountError, tokenInfor, refetchTradeAmount])
+    }, [mode, amount, tokenAmount, solPrice, selectedConnections, handleTradeSubmit, t, validateAmount, amountError, tokenInfor])
 
     // Reset amount and percentage when mode changes
     useEffect(() => {

@@ -14,7 +14,7 @@ import {
 } from "@/ui/table";
 import { formatNumberWithSuffix, truncateString } from "@/utils/format";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Copy, Loader2, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -89,43 +89,60 @@ export function TableTokenList({
 }: TableTokenListProps) {
   const router = useRouter();
   const { t } = useLang();
-  const [isToggling, setIsToggling] = useState<Record<string, boolean>>({});
-  const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
+  const queryClient = useQueryClient();
+  const [pendingWishlist, setPendingWishlist] = useState<Record<string, boolean>>({});
+  const { data: myWishlist } = useQuery({
     queryKey: ["myWishlist"],
     queryFn: getMyWishlist,
-    refetchOnMount: true,
+    // refetchOnMount: true,
   });
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   const handleStarClick = async (e: React.MouseEvent, token: any) => {
     e.stopPropagation();
 
-    // Prevent multiple toggles for the same token
-    if (isToggling[token.address]) {
-      return;
-    }
+    const isInWishlist = myWishlist?.tokens?.some((item: any) => item.address === token.address);
+    const isAdding = !isInWishlist;
 
-    // Set toggling state
-    setIsToggling(prev => ({
+    // Update UI immediately
+    setPendingWishlist(prev => ({
       ...prev,
-      [token.address]: true
+      [token.address]: isAdding
     }));
 
-    try {
-      await onStarClick?.({
-        ...token,
-        status: myWishlist?.tokens?.some((item: any) => item.address === token.address)
+    // Update wishlist data immediately
+    if (myWishlist) {
+      const newTokens = isAdding
+        ? [{ address: token.address }, ...myWishlist.tokens]
+        : myWishlist.tokens.filter((t: { address: string }) => t.address !== token.address);
+      
+      queryClient.setQueryData(["myWishlist"], {
+        ...myWishlist,
+        tokens: newTokens
       });
-      await refetchMyWishlist();
-    } finally {
-      // Clear toggling state after a delay
-      setTimeout(() => {
-        setIsToggling(prev => {
-          const newState = { ...prev };
-          delete newState[token.address];
-          return newState;
-        });
-      }, 500);
     }
+
+    // Call API in background
+    onStarClick?.({
+      ...token,
+      status: isAdding ? "on" : "off"
+    });
+
+    // Clear pending state after a short delay
+    setTimeout(() => {
+      setPendingWishlist(prev => {
+        const newState = { ...prev };
+        delete newState[token.address];
+        return newState;
+      });
+    }, 100);
+  };
+
+  const isTokenInWishlist = (address: string) => {
+    if (address in pendingWishlist) {
+      return pendingWishlist[address];
+    }
+    return myWishlist?.tokens?.some((t: { address: string }) => t.address === address) ?? false;
   };
 
   // Sort tokens client-side
@@ -250,21 +267,28 @@ export function TableTokenList({
                         <Button
                           variant="ghost"
                           size="icon"
-                          className={`hover:text-yellow-500 ${isFavoritesTab || (myWishlist?.tokens?.some((item: any) => item.address === token.address)) ? 'text-yellow-500' : ''} ${isToggling[token.address] ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          className={`hover:text-yellow-500 ${isFavoritesTab || isTokenInWishlist(token.address) ? 'text-yellow-500' : ''}`}
                           onClick={(e) => handleStarClick(e, token)}
-                          disabled={isToggling[token.address]}
                         >
-                          {isFavoritesTab || (myWishlist?.tokens?.some((item: any) => item.address === token.address)) ?
+                          {isFavoritesTab || isTokenInWishlist(token.address) ?
                             <FontAwesomeIcon icon={['fas', 'star']} /> :
                             <Star className="h-4 w-4" />
                           }
                         </Button>
 
                         <img
-                          src={token.logoUrl || token.logo_uri || "/token-placeholder.png"}
+                          src={failedImages[token.address] ? "/logo.png" : (token.logoUrl || token.logo_uri || "/logo.png")}
                           alt="token logo"
                           width={30} height={30}
                           className="rounded-full h-[30px]"
+                          onError={(e) => {
+                            setFailedImages(prev => ({
+                              ...prev,
+                              [token.address]: true
+                            }));
+                            // Force fallback image
+                            (e.target as HTMLImageElement).src = "/logo.png";
+                          }}
                         />
                         {token.program.includes("pumpfun") && (
                           <span className='cursor-pointer' onClick={(e) => {

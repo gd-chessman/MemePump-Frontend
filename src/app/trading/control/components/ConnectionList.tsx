@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Copy, Check } from 'lucide-react'
 import { formatNumberWithSuffix3, truncateString } from '@/utils/format'
 import { useLang } from '@/lang/useLang'
-import { getWalletBalanceByAddress } from '@/services/api/TelegramWalletService'
+import { useTradingState } from '../hooks/useTradingState'
 
-interface ConnectionListProps {
+export interface ConnectionListProps {
     connections: any[]
     selectedConnections: string[]
     onSelectConnection: (id: string) => void
     copiedAddress: string | null
     onCopyAddress: (address: string) => void
-}
-
-interface BalanceData {
-    sol_balance: number;
-    sol_balance_usd: number;
+    isLoading?: boolean
 }
 
 export const ConnectionList: React.FC<ConnectionListProps> = ({
@@ -23,43 +19,37 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
     onSelectConnection,
     copiedAddress,
     onCopyAddress,
+    isLoading: externalLoading = false
 }) => {
+    const { t } = useLang()
+    const { balances, isLoadingBalances, refreshBalance, setSelectedConnections } = useTradingState(connections)
+    const isLoading = externalLoading || isLoadingBalances
 
-    const { t } = useLang();
-    const [balances, setBalances] = useState<Record<string, BalanceData>>({});
-
-    const getBalance = async (address: string) => {
-        const balance = await getWalletBalanceByAddress(address)
-        return balance
+    const handleSelectConnection = (id: string) => {
+        setSelectedConnections(id)
+        onSelectConnection(id)
     }
 
-    useEffect(() => {
-        const fetchAllBalances = async () => {
-            const newBalances: Record<string, BalanceData> = {};
-            const filteredConnections = connections.filter((connection) => connection.status === "connect");
-            for (const connection of filteredConnections) {
-                try {
-                    const balance = await getBalance(connection.member_address);
-                    newBalances[connection.member_id] = {
-                        sol_balance: balance?.sol_balance || 0,
-                        sol_balance_usd: balance?.sol_balance_usd || 0
-                    };
-                } catch (error) {
-                    console.error(`Error fetching balance for ${connection.member_address}:`, error);
-                    newBalances[connection.member_id] = {
-                        sol_balance: 0,
-                        sol_balance_usd: 0
-                    };
-                }
-            }
-            
-            setBalances(newBalances);
-        };
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-theme-primary-400"></div>
+            </div>
+        )
+    }
 
-        if (connections.length > 0) {
-            fetchAllBalances();
-        }
-    }, [connections]);
+    if (!connections || connections.length === 0) {
+        return (
+            <div className="flex items-center justify-center h-full text-neutral-400">
+                No connections found
+            </div>
+        )
+    }
+
+    const handleRefreshBalance = async (memberId: string, address: string, e: React.MouseEvent) => {
+        e.stopPropagation()
+        await refreshBalance(memberId, address)
+    }
 
     return (
         <div className="h-full overflow-y-auto bg-gray-300/50 dark:bg-transparent rounded-xl">
@@ -67,7 +57,7 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
                 {connections.filter(conn => conn.status === "connect").map((item) => (
                     <div
                         key={item.member_id}
-                        onClick={() => onSelectConnection(item.member_id.toString())}
+                        onClick={() => handleSelectConnection(item.member_id.toString())}
                         className="flex items-center p-2 px-4 lg:rounded-lg dark:hover:bg-[#1a1a1a] hover:bg-theme-green-300 cursor-pointer relative dark:border-none border-b border-gray-400 dark:border-theme-neutral-700"
                     >
                         <div className="flex-1 min-w-0">
@@ -96,8 +86,18 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
                                 </button>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div>{formatNumberWithSuffix3(balances[item.member_id]?.sol_balance || 0)} SOL</div>
-                                <div>${formatNumberWithSuffix3(balances[item.member_id]?.sol_balance_usd || 0)}</div>
+                                <div className="flex items-center gap-1">
+                                    <span>{formatNumberWithSuffix3(balances[item.member_id]?.sol_balance || 0)} SOL</span>
+                                    <span>${formatNumberWithSuffix3(balances[item.member_id]?.sol_balance_usd || 0)}</span>
+                                    <button
+                                        onClick={(e) => handleRefreshBalance(item.member_id, item.member_address, e)}
+                                        className="ml-1 text-gray-400 hover:text-gray-300"
+                                    >
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <button
