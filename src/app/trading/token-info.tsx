@@ -241,10 +241,10 @@ export default function TokenInfo() {
                   <div className="flex flex-col mb-1"><h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name}</h2>
                     <div className="flex items-center justify-between gap-2">
                       <span className="dark:text-neutral-300 text-neutral-800 text-xs font-normal">{tokenInfor?.symbol}</span>
-                      {tokenInfor?.program.includes("pumpfun") && (
+                      {tokenInfor?.program?.includes("pumpfun") && (
                         <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(tokenInfor.market == "pumpfun" || tokenInfor.program == "pumpfun-amm" || tokenInfor.program == "pumpfun") && <PumpFun />}</span>
                       )}
-                      {tokenInfor?.program.includes("orca") && (
+                      {tokenInfor?.program?.includes("orca") && (
                         <img
                           src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
                           alt="orca logo"
@@ -253,7 +253,7 @@ export default function TokenInfo() {
                           className="rounded-full"
                         />
                       )}
-                      {tokenInfor?.program.includes("meteora") && (
+                      {tokenInfor?.program?.includes("meteora") && (
                         <img
                           src="https://www.meteora.ag/icons/v2.svg"
                           alt="metora logo"
@@ -262,7 +262,7 @@ export default function TokenInfo() {
                           className="rounded-full"
                         />
                       )}
-                      {tokenInfor?.program.includes("raydium") && (
+                      {tokenInfor?.program?.includes("raydium") && (
                         <img
                           src="https://raydium.io/favicon.ico"
                           alt="raydium logo"

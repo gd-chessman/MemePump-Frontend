@@ -532,6 +532,9 @@
     "volume24hChange": "Volume 24h Change",
     "noTokens": "No tokens found",
     "trade": "Trade",
+    "buy": "Buy",
+    "sell": "Sell",
+    "master": "Master & Chat",
     "panel": {
       "buy": "Buy",
       "sell": "Sell",

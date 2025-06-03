@@ -365,8 +365,8 @@ export default function TradingPanel({
                         )}
                         <div className={STYLE_TEXT_BASE}>
                             {t('trading.panel.balance')}: {mode === "buy"
-                                ? tradeAmount?.sol_balance.toFixed(6) + "  " + currency.symbol
-                                : tradeAmount?.token_balance.toFixed(6) + " " + tokenInfor?.symbol}
+                                ? tradeAmount?.sol_balance?.toFixed(6) + "  " + currency.symbol
+                                : tradeAmount?.token_balance?.toFixed(6) + " " + tokenInfor?.symbol}
                         </div>
                     </div>
 

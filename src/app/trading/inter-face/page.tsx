@@ -140,9 +140,9 @@ const InterfaceContent = () => {
       {recentTokens.length > 0 ? (
         <>
           <div className="flex gap-2">
-            {recentTokens.map((token, index) => (
+            {recentTokens?.map((token, index) => (
               <div 
-                key={token.address}
+                key={index}
                 onClick={() => handleTokenClick(token)}
                 className="cursor-pointer hover:opacity-80 transition-opacity"
                 title={t('trading.interface.openInNewTab')}
