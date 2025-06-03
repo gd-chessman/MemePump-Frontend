@@ -143,6 +143,7 @@ export default function CreateCoinForm() {
   console.log("tokenByCategory", tokenByCategory)
   const [searchQuery, setSearchQuery] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
 
   // Filter categories based on search query
   const filteredCategories = React.useMemo(() => {
@@ -334,7 +335,7 @@ export default function CreateCoinForm() {
       return;
     }
 
-    setShowConfirmModal(true);
+    setShowMaintenanceModal(true);
   };
 
   const handleConfirmSubmit = async () => {
@@ -422,6 +423,27 @@ export default function CreateCoinForm() {
   return (
     <>
       <NotifyProvider />
+      {/* Maintenance Modal */}
+      {showMaintenanceModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="dark:border-create-coin border-create-coin-light bg-white dark:bg-theme-black-1/3 rounded-xl p-6 max-w-xl w-full mx-4 flex flex-col items-center">
+            <div className="flex items-center justify-center mb-4">
+              <AlertCircle className="h-12 w-12 text-theme-primary-300" />
+            </div>
+            <h3 className="text-lg font-semibold text-center mb-2 dark:text-theme-neutral-100 text-theme-neutral-900">
+              {t('createCoin.maintenance.title')}
+            </h3>
+            <div className="flex w-full gap-4 justify-center px-2 mt-4">
+              <button
+                onClick={() => setShowMaintenanceModal(false)}
+                className="px-4 py-2 rounded-full bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 text-theme-neutral-100 hover:from-theme-blue-100 hover:to-theme-blue-200 transition-all duration-500"
+              >
+                {t('createCoin.maintenance.close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

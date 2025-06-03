@@ -150,6 +150,10 @@
       "description1": "To create this token, you need to spend",
       "description2": " <span class=\"font-bold\">",
       "description3": ""
+    },
+    "maintenance": {
+      "title": "Feature is being updated",
+      "close": "Close"
     }
   },
   "masterTrade": {

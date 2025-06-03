@@ -160,6 +160,10 @@
         "description3": "이 필요합니다",
         "cancel": "취소",
         "confirm": "확인"
+      },
+      "maintenance": {
+        "title": "기능이 업데이트 중입니다",
+        "close": "닫기"
       }
     },
     "masterTrade": {

@@ -153,6 +153,10 @@
       "description1": "Để tạo đồng token này, bạn cần bỏ ra",
       "description2": " <span class=\"font-bold\">",
       "description3": " SOL"
+    },
+    "maintenance": {
+      "title": "Tính năng đang được cập nhật",
+      "close": "Đóng"
     }
   },
   "masterTrade": {

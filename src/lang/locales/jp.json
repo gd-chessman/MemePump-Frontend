@@ -153,6 +153,10 @@
       "description1": "このトークンを作成するには",
       "description2": " <span class=\"font-bold\">",
       "description3": "が必要です"
+    },
+    "maintenance": {
+      "title": "機能は更新中です",
+      "close": "閉じる"
     }
   },
   "masterTrade": {
