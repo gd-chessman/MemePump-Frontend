@@ -294,7 +294,7 @@ function TransactionHistoryContent() {
           </div>
           <div className="flex items-center text-gray-500 dark:text-neutral-400">
             <span className="mr-1">{t("transactionHistory.address")}:</span>
-            <span className="text-gray-700 dark:text-neutral-200">{truncateString(order.wallet, 9)}</span>
+            <span className="text-[#FFB300] dark:text-[#FFB300]">{truncateString(order.wallet, 9)}</span>
             <button className="ml-1 text-gray-400 hover:text-gray-600 dark:text-neutral-500 dark:hover:text-neutral-300">
               <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -360,7 +360,7 @@ function TransactionHistoryContent() {
                     {t("transactionHistory.completed")}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium flex items-center truncate">
-                    {truncateString(order.wallet, 10)}
+                    <span className="text-[#FFB300] dark:text-[#FFB300]">{truncateString(order.wallet, 9)}</span>
                     <button className="ml-1 text-gray-400 hover:text-gray-600 dark:text-neutral-500 dark:hover:text-neutral-300">
                       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -435,7 +435,7 @@ function TransactionHistoryContent() {
                     {t("transactionHistory.completed")}
                   </td>
                   <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium flex items-center truncate">
-                    {truncateString(order.wallet, 10)}
+                    <span className="text-[#FFB300] dark:text-[#FFB300]">{truncateString(order.wallet, 9)}</span>
                     <button className="ml-1 text-gray-400 hover:text-gray-600 dark:text-neutral-500 dark:hover:text-neutral-300">
                       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -485,7 +485,7 @@ function TransactionHistoryContent() {
                 return (
                   <tr key={index} className="hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50">
                     <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium flex items-center truncate">
-                      {truncateString(holder.wallet, 10)}
+                      <span className="text-[#FFB300] dark:text-[#FFB300]">{truncateString(holder.wallet, 9)}</span>
                       <button className="ml-1 text-gray-400 hover:text-gray-600 dark:text-neutral-500 dark:hover:text-neutral-300">
                         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path
@@ -526,7 +526,7 @@ function TransactionHistoryContent() {
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] text-gray-500 dark:text-neutral-400">
-                      {truncateString(holder.wallet, 10)}
+                      {truncateString(holder.wallet, 9)}
                     </span>
                   </div>
                   <div className="flex flex-col items-end">

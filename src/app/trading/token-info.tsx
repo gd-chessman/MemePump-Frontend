@@ -242,7 +242,7 @@ export default function TokenInfo() {
                     <div className="flex items-center justify-between gap-2">
                       <span className="dark:text-neutral-300 text-neutral-800 text-xs font-normal">{tokenInfor?.symbol}</span>
                       {tokenInfor?.program.includes("pumpfun") && (
-                        <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(tokenInfor.market == "pumpfun" || tokenInfor.program == "pumpfun-amm") && <PumpFun />}</span>
+                        <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(tokenInfor.market == "pumpfun" || tokenInfor.program == "pumpfun-amm" || tokenInfor.program == "pumpfun") && <PumpFun />}</span>
                       )}
                       {tokenInfor?.program.includes("orca") && (
                         <img
