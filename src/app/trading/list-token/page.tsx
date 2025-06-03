@@ -402,12 +402,17 @@ const ListToken = () => {
                                 </div>
                                 <div className="text-right pr-3 flex flex-col gap-1 cursor-pointer" onClick={() => handleChangeToken(address)}>
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_usd)}</span>
-                                    <span className={`text-xs font-medium ${item.volume_change_percent > 0
-                                        ? 'text-theme-green-200'
-                                        : item.volume_change_percent < 0
-                                            ? 'text-theme-red-100'
-                                            : 'dark:text-theme-neutral-100 text-theme-neutral-800'
-                                        }`}>{formatNumberWithSuffix(item.volume_change_percent) ?? 0}%</span>
+                                    {
+                                        activeTab !== "new" && (
+                                            <span className={`text-xs font-medium ${item.volume_change_percent > 0
+                                                ? 'text-theme-green-200'
+                                                : item.volume_change_percent < 0
+                                                    ? 'text-theme-red-100'
+                                                    : 'dark:text-theme-neutral-100 text-theme-neutral-800'
+                                                }`}>{formatNumberWithSuffix(item.volume_change_percent) ?? 0}%</span>
+                                        )
+                                    }
+                                   
                                 </div>
 
                             </div>
