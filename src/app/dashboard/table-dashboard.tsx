@@ -87,15 +87,29 @@ export default function Trading() {
       }));
       setTokens(transformedTokens);
     } else if (activeTab === '3') {
-      if (myWishlist?.tokens && myWishlist.tokens.length > 0) {
-        const transformedTokens = myWishlist.tokens.map((token: any) => ({
-          ...token,
-          logoUrl: token.logoUrl,
-          isFavorite: true
-        }));
+      // Only set tokens when myWishlist data is available
+      if (myWishlist?.tokens) {
+        // If myWishlist is empty, set empty array
+        if (myWishlist.tokens.length === 0) {
+          setTokens([]);
+          return;
+        }
+        
+        // Transform wishlist tokens with complete data
+        const transformedTokens = myWishlist.tokens.map((token: any) => {
+          // Find complete token data from topCoins or newCoins
+          const completeTokenData = topCoins?.find((t: any) => t.address === token.address) || 
+                                  newCoins?.find((t: any) => t.address === token.address);
+          console.log("completeTokenData", completeTokenData);
+          
+          return {
+            ...completeTokenData, // Use complete data if available
+            ...token, // Fallback to wishlist data
+            logo_uri: completeTokenData?.logo_uri || token.logo_uri || "/placeholder.png",
+            isFavorite: true
+          };
+        });
         setTokens(transformedTokens);
-      } else {
-        setTokens([]);
       }
     }
   }, [topCoins, newCoins, myWishlist, activeTab]);
