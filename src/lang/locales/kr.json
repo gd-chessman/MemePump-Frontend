@@ -37,7 +37,8 @@
       "success": "코인 생성 성공",
       "error": "코인 생성 실패",
       "title": "새로운 코인 생성",
-      "subtitle": "Pumpfun에서 새로운 코인 만들기",
+      "subtitle": "Pumpfun에서 새로운 코인 생성",
+      "subtitleMemePump": "MemePump에서 새로운 코인 생성",
       "tabs": {
         "general": "일반",
         "advanced": "고급",

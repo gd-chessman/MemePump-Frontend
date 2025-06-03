@@ -36,6 +36,7 @@
   "createCoin": {
     "title": "TẠO COIN MỚI",
     "subtitle": "Tạo coin mới trên Pumpfun",
+    "subtitleMemePump": "Tạo coin mới trên MemePump",
     "form": {
       "name": {
         "label": "Tên",

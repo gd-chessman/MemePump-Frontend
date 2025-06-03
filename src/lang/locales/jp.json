@@ -34,8 +34,9 @@
   "trade": "取引",
   "create coin": "コイン作成",
   "createCoin": {
-    "title": "新規コイン作成",
+    "title": "新しいコインを作成",
     "subtitle": "Pumpfunで新しいコインを作成",
+    "subtitleMemePump": "MemePumpで新しいコインを作成",
     "form": {
       "name": {
         "label": "名前",

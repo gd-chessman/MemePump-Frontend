@@ -442,7 +442,7 @@ export default function CreateCoinForm() {
               {ethereumIcon(14, 14)}
             </div>
             <div className="text-center text-xs md:text-sm lg:text-base font-normal dark:text-theme-primary-300 text-theme-neutral-900 mb-4 md:mb-5 lg:mb-6">
-              {t('createCoin.subtitle')}
+              {t('createCoin.subtitleMemePump')}
             </div>
             <form
               onSubmit={handleSubmit}

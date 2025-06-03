@@ -33,6 +33,7 @@
   "createCoin": {
     "title": "CREATE NEW COIN",
     "subtitle": "Create a new coin on Pumpfun",
+    "subtitleMemePump": "Create a new coin on MemePump",
     "form": {
       "name": {
         "label": "Name",
