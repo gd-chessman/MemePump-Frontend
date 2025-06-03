@@ -26,6 +26,7 @@ import MobileWalletSelector from './mobile-wallet-selector';
 import { useWallets } from '@/hooks/useWallets';
 import { LangToggle } from './LanguageSelect';
 import { useTheme } from 'next-themes';
+import PumpFun from './pump-fun';
 
 
 const Header = () => {
@@ -190,8 +191,10 @@ const Header = () => {
                                                     <Link
                                                         key={subIndex}
                                                         href={subItem.href}
-                                                        className="block px-4 py-2 text-sm text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer"
+                                                        className="px-4 py-2 text-sm text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer flex items-center gap-2"
                                                     >
+                                                        {subItem.name === 'MemePump' && <img src="/logo.png" alt="MemePump" className="h-4 w-4" />}
+                                                        {subItem.name === 'PumpFun' && <PumpFun />}
                                                         {subItem.name}
                                                     </Link>
                                                 ))}
@@ -395,8 +398,9 @@ const Header = () => {
                                                             href={subItem.href}
                                                             key={subIndex}
                                                             onClick={() => setIsMobileMenuOpen(false)}
-                                                            className="block hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-1"
+                                                            className="block hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-1 flex items-center gap-2"
                                                         >
+                                                            {subItem.name === 'MemePump' && <img src="/logo.png" alt="MemePump" className="h-4 w-4" />}
                                                             {subItem.name}
                                                         </Link>
                                                     ))}
