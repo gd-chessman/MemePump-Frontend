@@ -558,7 +558,7 @@ export default function CreateCoinForm() {
                                   const category = categories.find((c: any) => c.id === categoryId);
                                   return category ? (
                                     <span key={categoryId} className="text-sm">
-                                      {t(`categories.${category.name}`)}
+                                      {category.name}
                                       {formData.category_list.indexOf(categoryId) !== formData.category_list.length - 1 ? ", " : ""}
                                     </span>
                                   ) : null;
@@ -596,7 +596,7 @@ export default function CreateCoinForm() {
                                     {formData.category_list.includes(category.id) && (
                                       <span className="text-blue-500">✓</span>
                                     )}
-                                    {t(`categories.${category.name}`)}
+                                    {category.name}
                                   </div>
                                 </SelectItem>
                               ))

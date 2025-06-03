@@ -290,13 +290,13 @@ export function TableTokenList({
                             (e.target as HTMLImageElement).src = "/logo.png";
                           }}
                         />
-                        {token.program.includes("pumpfun") && (
+                        {token?.program?.includes("pumpfun") && (
                           <span className='cursor-pointer' onClick={(e) => {
                             e.stopPropagation();
                             window.open(`https://pump.fun/coin/${token.address}`, '_blank')
                           }}>{(token.market == "pumpfun" || token.program == "pumpfun-amm") && <PumpFun />}</span>
                         )}
-                        {token.program === "orca" && (
+                        {token?.program === "orca" && (
                           <img
                             src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
                             alt="orca logo"
@@ -305,7 +305,7 @@ export function TableTokenList({
                             className="rounded-full"
                           />
                         )}
-                        {token.program.includes("meteora") && (
+                        {token?.program?.includes("meteora") && (
                           <img
                             src="https://www.meteora.ag/icons/v2.svg"
                             alt="metora logo"
@@ -314,7 +314,7 @@ export function TableTokenList({
                             className="rounded-full"
                           />
                         )}
-                        {token.program.includes("raydium") && (
+                        {token?.program?.includes("raydium") && (
                           <img
                             src="https://raydium.io/favicon.ico"
                             alt="raydium logo"

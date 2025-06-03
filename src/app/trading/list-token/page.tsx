@@ -13,6 +13,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { useLang } from '@/lang/useLang'
 import PumpFun from '@/app/components/pump-fun'
 import { getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaTokenService'
+import { useWsSubscribeTokens } from "@/hooks/useWsSubscribeTokens";
 
 const ListToken = () => {
     const { t } = useLang()
@@ -37,11 +38,7 @@ const ListToken = () => {
         // refetchInterval: 10000,
     });
 
-    const { data: newCoins, isLoading: isLoadingNewCoins } = useQuery({
-        queryKey: ["newCoins"],
-        queryFn: () => getNewCoins({ offset: 3, limit: 50 }),
-        refetchInterval: 10000,
-    });
+    const { tokens: newCoins, isLoading: isLoadingNewCoins } = useWsSubscribeTokens({ limit: 50 });
 
     const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
         queryKey: ["myWishlist"],
@@ -80,13 +77,29 @@ const ListToken = () => {
                 filteredList = topCoins;
                 break;
             case "new":
-                filteredList = newCoins;
+                filteredList = newCoins?.map(token => ({
+                    ...token,
+                    volume_24h_usd: token.marketCap,
+                    volume_24h_change_percent: 0,
+                    volume_1h_change_percent: 0,
+                    volume_4h_change_percent: 0,
+                    volume_5m_change_percent: 0,
+                    poolAddress: token.address
+                }));
                 break;
             case "favorite":
-                filteredList = myWishlist.tokens;
+                filteredList = myWishlist?.tokens || [];
                 break;
             case "category":
-                filteredList = newCoins;
+                filteredList = newCoins?.map(token => ({
+                    ...token,
+                    volume_24h_usd: token.marketCap,
+                    volume_24h_change_percent: 0,
+                    volume_1h_change_percent: 0,
+                    volume_4h_change_percent: 0,
+                    volume_5m_change_percent: 0,
+                    poolAddress: token.address
+                }));
                 break;
             default:
                 filteredList = topCoins;

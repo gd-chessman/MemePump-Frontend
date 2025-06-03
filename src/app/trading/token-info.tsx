@@ -11,7 +11,7 @@ import website from '@/assets/svgs/website.svg'
 import telegram from '@/assets/svgs/tele-icon.svg'
 import x from '@/assets/svgs/x-icon.svg'
 import { getMyWishlist, getTokenInforByAddress } from "@/services/api/SolonaTokenService"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { SolonaTokenService } from "@/services/api"
@@ -24,6 +24,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery"
 import BgGradientBox from "../components/bg-gradient-box"
 import { useTokenInfoStore } from "@/hooks/useTokenInfoStore"
 import PumpFun from "../components/pump-fun"
+import notify from "@/app/components/notify"
 
 type TimeFrame = '5m' | '1h' | '4h' | '24h'
 
@@ -33,6 +34,7 @@ export default function TokenInfo() {
   const { t } = useLang();
   const isMobile = useMediaQuery('(max-width: 768px)')
   const { setDataInfo } = useTokenInfoStore();
+  const queryClient = useQueryClient();
   const { data: tokenInfor, refetch } = useQuery({
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
@@ -54,6 +56,47 @@ export default function TokenInfo() {
   const [isConnected, setIsConnected] = useState(false);
   const [marketCap, setMarketCap] = useState<number>(0);
   const [isCopied, setIsCopied] = useState(false);
+
+  const toggleWishlistMutation = useMutation({
+    mutationFn: (data: { token_address: string; status: string }) => SolonaTokenService.toggleWishlist(data),
+    onMutate: async (data) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["myWishlist"] });
+
+      // Snapshot the previous value
+      const previousWishlist = queryClient.getQueryData(["myWishlist"]);
+
+      // Optimistically update to the new value
+      queryClient.setQueryData(["myWishlist"], (old: any) => {
+        const isCurrentlyFavorite = old?.tokens?.some((t: { address: string }) => t.address === data.token_address);
+        const updatedTokens = isCurrentlyFavorite
+          ? old.tokens.filter((t: { address: string }) => t.address !== data.token_address)
+          : [...(old?.tokens || []), { address: data.token_address }];
+        return { ...old, tokens: updatedTokens };
+      });
+
+      return { previousWishlist };
+    },
+    onError: (err, newData, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      queryClient.setQueryData(["myWishlist"], context?.previousWishlist);
+      notify({ 
+        message: newData.status === "on" 
+          ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}` 
+          : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}`, 
+        type: 'error' 
+      });
+    },
+    onSuccess: (data, variables) => {
+      refetchMyWishlist();
+      notify({ 
+        message: variables.status === "on" 
+          ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}` 
+          : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}`, 
+        type: 'success' 
+      });
+    },
+  });
 
   // Only listen for marketCap updates from chart
   useEffect(() => {
@@ -155,10 +198,8 @@ export default function TokenInfo() {
   }, [dataToken.cap, dataToken.aDayVolume, dataToken.liquidity, dataToken.holders, setDataInfo]);
 
   const handleToggleWishlist = (data: { token_address: string; status: string }) => {
-    SolonaTokenService.toggleWishlist(data).then(() => {
-      refetchMyWishlist()
-    })
-  }
+    toggleWishlistMutation.mutate(data);
+  };
 
   const handleCopyAddress = async () => {
     try {
