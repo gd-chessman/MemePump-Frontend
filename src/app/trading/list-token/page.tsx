@@ -167,14 +167,24 @@ const ListToken = () => {
 
         // Update wishlist data immediately
         if (myWishlist) {
-            const newTokens = isAdding
-                ? [{ address: token_address }, ...myWishlist.tokens]
-                : myWishlist.tokens.filter((t: { address: string }) => t.address !== token_address);
+            if (isAdding) {
+                // Find token info from current tokenList
+                const tokenInfo = tokenList.find((token: any) => token.address === token_address);
+                const newTokens = tokenInfo 
+                    ? [tokenInfo, ...myWishlist.tokens]
+                    : [{ address: token_address }, ...myWishlist.tokens];
 
-            queryClient.setQueryData(["myWishlist"], {
-                ...myWishlist,
-                tokens: newTokens
-            });
+                queryClient.setQueryData(["myWishlist"], {
+                    ...myWishlist,
+                    tokens: newTokens
+                });
+            } else {
+                const newTokens = myWishlist.tokens.filter((t: { address: string }) => t.address !== token_address);
+                queryClient.setQueryData(["myWishlist"], {
+                    ...myWishlist,
+                    tokens: newTokens
+                });
+            }
         }
 
         // Call API in background without waiting
