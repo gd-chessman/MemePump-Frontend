@@ -18,7 +18,7 @@ import {
 } from "@/ui/select";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { getTokenCategorys, createToken, getMyTokens } from "@/services/api/TelegramWalletService";
+import { getTokenCategorys, createTokenMemePump, getMyTokens } from "@/services/api/TelegramWalletService";
 import React from "react";
 import { useRouter } from "next/navigation";
 import notify from "@/app/components/notify";
@@ -28,6 +28,7 @@ import { truncateString } from "@/utils/format";
 import { Tooltip } from "@radix-ui/react-tooltip";
 import { TooltipContent } from "@/ui/tooltip";
 import { getTokenByCategory } from "@/services/api/SolonaTokenService";
+import { useTranslate } from "@/hooks/useTranslate";
 
 type CoinFormData = {
   name: string;
@@ -43,6 +44,8 @@ type CoinFormData = {
   logo: File | null;
   logoPreview: string | null;
   category_list: string[];
+  totalSupply: string;
+  allowMinting: boolean;
 };
 
 type FormErrors = {
@@ -93,7 +96,13 @@ const globalStyles = `
     }
 `;
 
+const TranslatedCategory = ({ name }: { name: string }) => {
+  const { translatedText } = useTranslate(name);
+  return <>{translatedText || name}</>;
+};
+
 export default function CreateCoinForm() {
+  // const { translate } = useTranslate();
   const router = useRouter();
   const { t, tArray } = useLang();
   const [formData, setFormData] = useState<CoinFormData>({
@@ -110,6 +119,8 @@ export default function CreateCoinForm() {
     category_list: [],
     image: null,
     showName: false,
+    totalSupply: "",
+    allowMinting: false,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -132,6 +143,7 @@ export default function CreateCoinForm() {
   console.log("tokenByCategory", tokenByCategory)
   const [searchQuery, setSearchQuery] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
 
   // Filter categories based on search query
   const filteredCategories = React.useMemo(() => {
@@ -154,11 +166,24 @@ export default function CreateCoinForm() {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    if (name === 'totalSupply') return; // Skip totalSupply in the general handler
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Clear error when user types
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const handleTotalSupplyChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, ""); // Only allow numbers
+    // Remove leading zeros except for single zero
+    const processedValue = value.replace(/^0+(\d)/, '$1').replace(/^0+$/, '0');
+    
+    setFormData((prev) => ({ ...prev, totalSupply: processedValue }));
+
+    if (errors.totalSupply) {
+      setErrors((prev) => ({ ...prev, totalSupply: undefined }));
     }
   };
 
@@ -277,11 +302,17 @@ export default function CreateCoinForm() {
     } else if (formData.symbol.length > 10) {
       newErrors.symbol = t("createCoin.form.symbol.maxLength");
     }
-    console.log("formData.amount", formData.amount)
+
     if (!formData.amount.trim()) {
       newErrors.amount = t("createCoin.form.amount.required");
     } else if (isNaN(Number(formData.amount)) || Number(formData.amount) < 0) {
       newErrors.amount = t("createCoin.form.amount.invalid");
+    }
+
+    if (!formData.totalSupply.trim()) {
+      newErrors.totalSupply = t("createCoin.form.totalSupply.required");
+    } else if (isNaN(Number(formData.totalSupply)) || Number(formData.totalSupply) <= 0) {
+      newErrors.totalSupply = t("createCoin.form.totalSupply.invalid");
     }
 
     if (!formData.logo) {
@@ -290,8 +321,7 @@ export default function CreateCoinForm() {
 
     // Optional fields validation
     if (formData.website && !formData.website.startsWith("http")) {
-      newErrors.website =
-        t("createCoin.form.website.invalid");
+      newErrors.website = t("createCoin.form.website.invalid");
     }
 
     setErrors(newErrors);
@@ -305,7 +335,7 @@ export default function CreateCoinForm() {
       return;
     }
 
-    setShowConfirmModal(true);
+    setShowMaintenanceModal(true);
   };
 
   const handleConfirmSubmit = async () => {
@@ -322,6 +352,8 @@ export default function CreateCoinForm() {
       formDataToSend.append("description", formData.description);
       formDataToSend.append("amount", String(formData.amount || 0));
       formDataToSend.append("category_list", formData.category_list.join(","));
+      formDataToSend.append("totalSupply", formData.totalSupply);
+      formDataToSend.append("allowMinting", String(formData.allowMinting));
 
       // Add optional fields if they exist
       if (formData.telegram) formDataToSend.append("telegram", formData.telegram);
@@ -333,7 +365,7 @@ export default function CreateCoinForm() {
         formDataToSend.append("image", formData.logo);
       }
 
-      const response = await createToken(formDataToSend);
+      const response = await createTokenMemePump(formDataToSend);
 
       // Handle success
       if (response) {
@@ -358,6 +390,8 @@ export default function CreateCoinForm() {
           category_list: [],
           image: null,
           showName: false,
+          totalSupply: "",
+          allowMinting: false,
         });
 
       }
@@ -389,6 +423,27 @@ export default function CreateCoinForm() {
   return (
     <>
       <NotifyProvider />
+      {/* Maintenance Modal */}
+      {showMaintenanceModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="dark:border-create-coin border-create-coin-light bg-white dark:bg-theme-black-1/3 rounded-xl p-6 max-w-xl w-full mx-4 flex flex-col items-center">
+            <div className="flex items-center justify-center mb-4">
+              <AlertCircle className="h-12 w-12 text-theme-primary-300" />
+            </div>
+            <h3 className="text-lg font-semibold text-center mb-2 dark:text-theme-neutral-100 text-theme-neutral-900">
+              {t('createCoin.maintenance.title')}
+            </h3>
+            <div className="flex w-full gap-4 justify-center px-2 mt-4">
+              <button
+                onClick={() => setShowMaintenanceModal(false)}
+                className="px-4 py-2 rounded-full bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 text-theme-neutral-100 hover:from-theme-blue-100 hover:to-theme-blue-200 transition-all duration-500"
+              >
+                {t('createCoin.maintenance.close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -435,7 +490,7 @@ export default function CreateCoinForm() {
               {ethereumIcon(14, 14)}
             </div>
             <div className="text-center text-xs md:text-sm lg:text-base font-normal dark:text-theme-primary-300 text-theme-neutral-900 mb-4 md:mb-5 lg:mb-6">
-              {t('createCoin.subtitle')}
+              {t('createCoin.subtitleMemePump')}
             </div>
             <form
               onSubmit={handleSubmit}
@@ -498,7 +553,6 @@ export default function CreateCoinForm() {
                           id="amount"
                           name="amount"
                           value={formData.amount ?? 0}
-                          // disabled={disabledAmount}
                           onChange={handleAmountChange}
                           placeholder={t('createCoin.form.amount.placeholder')}
                           className={`${classInput} ${disabledAmount ? "bg-gray-200" : ""}`}
@@ -517,15 +571,6 @@ export default function CreateCoinForm() {
                             <X className="h-4 w-4" />
                           </button>
                         )}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setDisabledAmount(!disabledAmount)
-                          }
-                          className="absolute inset-y-0 right-16 flex items-center pr-3 text-theme-neutral-1000 text-xl dark:hover:text-gray-200"
-                        >
-                          {/* {disabledAmount ? <Plus className="h-4 w-4" /> : <Minus className="h-4 w-4" />} */}
-                        </button>
                       </div>
                       <span className="text-xs text-theme-primary-300 italic">
                         (i) {t('createCoin.form.amount.tooltip')}
@@ -558,8 +603,8 @@ export default function CreateCoinForm() {
                                   const category = categories.find((c: any) => c.id === categoryId);
                                   return category ? (
                                     <span key={categoryId} className="text-sm">
-                                      {t(`categories.${category.name}`)}
                                       {formData.category_list.indexOf(categoryId) !== formData.category_list.length - 1 ? ", " : ""}
+                                      <TranslatedCategory name={category.name} />
                                     </span>
                                   ) : null;
                                 })}
@@ -596,7 +641,7 @@ export default function CreateCoinForm() {
                                     {formData.category_list.includes(category.id) && (
                                       <span className="text-blue-500">✓</span>
                                     )}
-                                    {t(`categories.${category.name}`)}
+                                    <TranslatedCategory name={category.name} />
                                   </div>
                                 </SelectItem>
                               ))
@@ -605,6 +650,45 @@ export default function CreateCoinForm() {
                         </SelectContent>
                       </Select>
                     </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row justify-between gap-3 md:gap-4 lg:gap-6">
+                  {/* Total Supply */}
+                  <div className="w-full md:w-1/2">
+                    <label htmlFor="totalSupply" className={classLabel}>
+                      {t('createCoin.form.totalSupply.label')} <span className="text-theme-red-200">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="totalSupply"
+                        name="totalSupply"
+                        value={formData.totalSupply}
+                        onChange={handleTotalSupplyChange}
+                        placeholder={t('createCoin.form.totalSupply.placeholder')}
+                        className={classInput}
+                      />
+                    </div>
+                    {errors.totalSupply && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {errors.totalSupply}
+                      </p>
+                    )}
+                  </div>
+                  {/* Allow Minting */}
+                  <div className="flex items-center gap-2 mb-4 justify-center my-auto">
+                    <input
+                      type="checkbox"
+                      id="allowMinting"
+                      name="allowMinting"
+                      checked={formData.allowMinting}
+                      onChange={(e) => setFormData(prev => ({ ...prev, allowMinting: e.target.checked }))}
+                      className="w-4 h-4 cursor-pointer text-theme-primary-300 border-gray-300 rounded focus:ring-theme-primary-300"
+                    />
+                    <label htmlFor="allowMinting" className={classLabel}>
+                      {t('createCoin.form.allowMinting.label')}
+                    </label>
                   </div>
                 </div>
 

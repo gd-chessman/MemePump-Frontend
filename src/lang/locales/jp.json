@@ -34,8 +34,9 @@
   "trade": "取引",
   "create coin": "コイン作成",
   "createCoin": {
-    "title": "新規コイン作成",
+    "title": "新しいコインを作成",
     "subtitle": "Pumpfunで新しいコインを作成",
+    "subtitleMemePump": "MemePumpで新しいコインを作成",
     "form": {
       "name": {
         "label": "名前",
@@ -53,7 +54,16 @@
         "placeholder": "初期流動性のSOL数量を入力",
         "required": "初期流動性は必須です",
         "invalid": "有効な数量を入力してください",
-        "tooltip": "トークンに提供したい初期流動性のSOL数量を入力してください"
+        "tooltip": "トークンに提供したい初期流動性のSOL量を入力してください"
+      },
+      "totalSupply": {
+        "label": "総供給量",
+        "placeholder": "総供給量を入力",
+        "required": "総供給量は必須です",
+        "invalid": "有効な総供給量を入力してください"
+      },
+      "allowMinting": {
+        "label": "追加発行を許可"
       },
       "categories": {
         "label": "カテゴリー",
@@ -143,6 +153,10 @@
       "description1": "このトークンを作成するには",
       "description2": " <span class=\"font-bold\">",
       "description3": "が必要です"
+    },
+    "maintenance": {
+      "title": "機能は更新中です",
+      "close": "閉じる"
     }
   },
   "masterTrade": {
@@ -379,7 +393,10 @@
     "invalidPassword": "無効なパスワードです。もう一度お試しください。",
     "verifying": "確認中...",
     "creating": "作成中...",
-    "adding": "追加中..."
+    "adding": "追加中...",
+    "enterNewPassword": "新しいパスワードを入力",
+    "enterConfirmPassword": "確認用パスワードを入力",
+    "noTokens": "トークンが見つかりません"
   },
   "searchPlaceholder": "トークン名/アドレス",
   "languages": {

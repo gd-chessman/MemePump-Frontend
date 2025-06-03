@@ -11,7 +11,7 @@ import website from '@/assets/svgs/website.svg'
 import telegram from '@/assets/svgs/tele-icon.svg'
 import x from '@/assets/svgs/x-icon.svg'
 import { getMyWishlist, getTokenInforByAddress } from "@/services/api/SolonaTokenService"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { SolonaTokenService } from "@/services/api"
@@ -24,6 +24,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery"
 import BgGradientBox from "../components/bg-gradient-box"
 import { useTokenInfoStore } from "@/hooks/useTokenInfoStore"
 import PumpFun from "../components/pump-fun"
+import notify from "@/app/components/notify"
 
 type TimeFrame = '5m' | '1h' | '4h' | '24h'
 
@@ -33,6 +34,7 @@ export default function TokenInfo() {
   const { t } = useLang();
   const isMobile = useMediaQuery('(max-width: 768px)')
   const { setDataInfo } = useTokenInfoStore();
+  const queryClient = useQueryClient();
   const { data: tokenInfor, refetch } = useQuery({
     queryKey: ["token-infor", address],
     queryFn: () => getTokenInforByAddress(address),
@@ -54,6 +56,47 @@ export default function TokenInfo() {
   const [isConnected, setIsConnected] = useState(false);
   const [marketCap, setMarketCap] = useState<number>(0);
   const [isCopied, setIsCopied] = useState(false);
+
+  const toggleWishlistMutation = useMutation({
+    mutationFn: (data: { token_address: string; status: string }) => SolonaTokenService.toggleWishlist(data),
+    onMutate: async (data) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["myWishlist"] });
+
+      // Snapshot the previous value
+      const previousWishlist = queryClient.getQueryData(["myWishlist"]);
+
+      // Optimistically update to the new value
+      queryClient.setQueryData(["myWishlist"], (old: any) => {
+        const isCurrentlyFavorite = old?.tokens?.some((t: { address: string }) => t.address === data.token_address);
+        const updatedTokens = isCurrentlyFavorite
+          ? old.tokens.filter((t: { address: string }) => t.address !== data.token_address)
+          : [...(old?.tokens || []), { address: data.token_address }];
+        return { ...old, tokens: updatedTokens };
+      });
+
+      return { previousWishlist };
+    },
+    onError: (err, newData, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      queryClient.setQueryData(["myWishlist"], context?.previousWishlist);
+      notify({ 
+        message: newData.status === "on" 
+          ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}` 
+          : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}`, 
+        type: 'error' 
+      });
+    },
+    onSuccess: (data, variables) => {
+      refetchMyWishlist();
+      notify({ 
+        message: variables.status === "on" 
+          ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}` 
+          : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}`, 
+        type: 'success' 
+      });
+    },
+  });
 
   // Only listen for marketCap updates from chart
   useEffect(() => {
@@ -155,10 +198,8 @@ export default function TokenInfo() {
   }, [dataToken.cap, dataToken.aDayVolume, dataToken.liquidity, dataToken.holders, setDataInfo]);
 
   const handleToggleWishlist = (data: { token_address: string; status: string }) => {
-    SolonaTokenService.toggleWishlist(data).then(() => {
-      refetchMyWishlist()
-    })
-  }
+    toggleWishlistMutation.mutate(data);
+  };
 
   const handleCopyAddress = async () => {
     try {
@@ -193,17 +234,17 @@ export default function TokenInfo() {
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 bg-transparent rounded-full flex items-center justify-center">
-                <img src={tokenInfor?.logoUrl || '/placeholder.png'} alt="Token logo" className="rounded-full object-cover w-10 h-auto" />
+                <img src={tokenInfor?.logoUrl || '/placeholder.png'} alt="Token logo" className="rounded-full object-cover w-10 h-auto aspect-square" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-start">
                   <div className="flex flex-col mb-1"><h2 className="font-semibold dark:text-neutral-100 text-theme-neutral-800 text-sm capitalize">{tokenInfor?.name}</h2>
                     <div className="flex items-center justify-between gap-2">
                       <span className="dark:text-neutral-300 text-neutral-800 text-xs font-normal">{tokenInfor?.symbol}</span>
-                      {tokenInfor?.program.includes("pumpfun") && (
-                        <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(tokenInfor.market == "pumpfun" || tokenInfor.program == "pumpfun-amm") && <PumpFun />}</span>
+                      {tokenInfor?.program?.includes("pumpfun") && (
+                        <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(tokenInfor.market == "pumpfun" || tokenInfor.program == "pumpfun-amm" || tokenInfor.program == "pumpfun") && <PumpFun />}</span>
                       )}
-                      {tokenInfor?.program.includes("orca") && (
+                      {tokenInfor?.program?.includes("orca") && (
                         <img
                           src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
                           alt="orca logo"
@@ -212,7 +253,7 @@ export default function TokenInfo() {
                           className="rounded-full"
                         />
                       )}
-                      {tokenInfor?.program.includes("meteora") && (
+                      {tokenInfor?.program?.includes("meteora") && (
                         <img
                           src="https://www.meteora.ag/icons/v2.svg"
                           alt="metora logo"
@@ -221,7 +262,7 @@ export default function TokenInfo() {
                           className="rounded-full"
                         />
                       )}
-                      {tokenInfor?.program.includes("raydium") && (
+                      {tokenInfor?.program?.includes("raydium") && (
                         <img
                           src="https://raydium.io/favicon.ico"
                           alt="raydium logo"

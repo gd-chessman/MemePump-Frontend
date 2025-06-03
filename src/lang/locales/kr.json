@@ -37,7 +37,8 @@
       "success": "코인 생성 성공",
       "error": "코인 생성 실패",
       "title": "새로운 코인 생성",
-      "subtitle": "Pumpfun에서 새로운 코인 만들기",
+      "subtitle": "Pumpfun에서 새로운 코인 생성",
+      "subtitleMemePump": "MemePump에서 새로운 코인 생성",
       "tabs": {
         "general": "일반",
         "advanced": "고급",
@@ -67,6 +68,15 @@
           "required": "초기 유동성은 필수입니다",
           "invalid": "유효한 수량을 입력해주세요",
           "tooltip": "토큰에 유동성을 제공합니다"
+        },
+        "totalSupply": {
+          "label": "총 공급량",
+          "placeholder": "총 공급량 입력",
+          "required": "총 공급량은 필수입니다",
+          "invalid": "유효한 총 공급량을 입력하세요"
+        },
+        "allowMinting": {
+          "label": "추가 발행 허용"
         },
         "categories": {
           "label": "카테고리",
@@ -150,6 +160,10 @@
         "description3": "이 필요합니다",
         "cancel": "취소",
         "confirm": "확인"
+      },
+      "maintenance": {
+        "title": "기능이 업데이트 중입니다",
+        "close": "닫기"
       }
     },
     "masterTrade": {

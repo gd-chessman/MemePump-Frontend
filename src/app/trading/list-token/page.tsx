@@ -13,6 +13,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { useLang } from '@/lang/useLang'
 import PumpFun from '@/app/components/pump-fun'
 import { getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaTokenService'
+import { useWsSubscribeTokens } from "@/hooks/useWsSubscribeTokens";
 
 const ListToken = () => {
     const { t } = useLang()
@@ -37,11 +38,7 @@ const ListToken = () => {
         // refetchInterval: 10000,
     });
 
-    const { data: newCoins, isLoading: isLoadingNewCoins } = useQuery({
-        queryKey: ["newCoins"],
-        queryFn: () => getNewCoins({ offset: 3, limit: 50 }),
-        refetchInterval: 10000,
-    });
+    const { tokens: newCoins, isLoading: isLoadingNewCoins } = useWsSubscribeTokens({ limit: 50 });
 
     const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
         queryKey: ["myWishlist"],
@@ -80,13 +77,29 @@ const ListToken = () => {
                 filteredList = topCoins;
                 break;
             case "new":
-                filteredList = newCoins;
+                filteredList = newCoins?.map(token => ({
+                    ...token,
+                    volume_24h_usd: token.marketCap,
+                    volume_24h_change_percent: 0,
+                    volume_1h_change_percent: 0,
+                    volume_4h_change_percent: 0,
+                    volume_5m_change_percent: 0,
+                    poolAddress: token.address
+                }));
                 break;
             case "favorite":
-                filteredList = myWishlist.tokens;
+                filteredList = myWishlist?.tokens || [];
                 break;
             case "category":
-                filteredList = newCoins;
+                filteredList = newCoins?.map(token => ({
+                    ...token,
+                    volume_24h_usd: token.marketCap,
+                    volume_24h_change_percent: 0,
+                    volume_1h_change_percent: 0,
+                    volume_4h_change_percent: 0,
+                    volume_5m_change_percent: 0,
+                    poolAddress: token.address
+                }));
                 break;
             default:
                 filteredList = topCoins;
@@ -154,14 +167,24 @@ const ListToken = () => {
 
         // Update wishlist data immediately
         if (myWishlist) {
-            const newTokens = isAdding
-                ? [{ address: token_address }, ...myWishlist.tokens]
-                : myWishlist.tokens.filter((t: { address: string }) => t.address !== token_address);
+            if (isAdding) {
+                // Find token info from current tokenList
+                const tokenInfo = tokenList.find((token: any) => token.address === token_address);
+                const newTokens = tokenInfo 
+                    ? [tokenInfo, ...myWishlist.tokens]
+                    : [{ address: token_address }, ...myWishlist.tokens];
 
-            queryClient.setQueryData(["myWishlist"], {
-                ...myWishlist,
-                tokens: newTokens
-            });
+                queryClient.setQueryData(["myWishlist"], {
+                    ...myWishlist,
+                    tokens: newTokens
+                });
+            } else {
+                const newTokens = myWishlist.tokens.filter((t: { address: string }) => t.address !== token_address);
+                queryClient.setQueryData(["myWishlist"], {
+                    ...myWishlist,
+                    tokens: newTokens
+                });
+            }
         }
 
         // Call API in background without waiting
@@ -208,7 +231,6 @@ const ListToken = () => {
         setIsDragging(false);
     };
 
-    console.log("tokenList", tokenList)
     return (
         <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-1 overflow-hidden'>
             {/* <div className="relative mb-3 pr-3 px-3">
@@ -277,7 +299,7 @@ const ListToken = () => {
                     </div>
 
                 </div>
-                {activeTab !== "favorite" && (
+                {activeTab !== "favorite" && activeTab !== "new" && (
                     <div>
                         <div className="flex border-t border-b py-1 border-neutral-700 pl-2 gap-1">
                             <button
@@ -311,7 +333,6 @@ const ListToken = () => {
                 <div className="flex-grow h-[calc(100%-20px)] custom-scroll overflow-y-scroll mt-2">
                     {Array.isArray(tokenList) && tokenList?.map((item: any, i: number) => {
                         const address = searchQuery.length > 0 ? item.poolAddress : item.address;
-                        console.log("item", item)
                         return (
                             <div
                                 key={i}
@@ -330,7 +351,7 @@ const ListToken = () => {
                                     </button>
                                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleChangeToken(address)}>
                                         <img 
-                                            src={item?.logo_uri ?? item?.logoUrl ?? "/logo.png"} 
+                                            src={item?.logo_uri || item?.logoUrl || "/logo.png"} 
                                             alt="" 
                                             width={24} 
                                             height={24} 
@@ -341,7 +362,7 @@ const ListToken = () => {
                                             }}
                                         />
                                         {item?.program?.includes("pumpfun") && (
-                                            <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item?.market == "pumpfun" || item?.program == "pumpfun-amm") && <PumpFun />}</span>
+                                            <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item?.market == "pumpfun" || item?.program == "pumpfun-amm" || item?.program == "pumpfun") && <PumpFun />}</span>
                                         )}
                                         {item?.program?.includes("orca") && (
                                             <img
@@ -379,12 +400,17 @@ const ListToken = () => {
                                 </div>
                                 <div className="text-right pr-3 flex flex-col gap-1 cursor-pointer" onClick={() => handleChangeToken(address)}>
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_usd)}</span>
-                                    <span className={`text-xs font-medium ${item.volume_change_percent > 0
-                                        ? 'text-theme-green-200'
-                                        : item.volume_change_percent < 0
-                                            ? 'text-theme-red-100'
-                                            : 'dark:text-theme-neutral-100 text-theme-neutral-800'
-                                        }`}>{formatNumberWithSuffix(item.volume_change_percent) ?? 0}%</span>
+                                    {
+                                        activeTab !== "new" && (
+                                            <span className={`text-xs font-medium ${item.volume_change_percent > 0
+                                                ? 'text-theme-green-200'
+                                                : item.volume_change_percent < 0
+                                                    ? 'text-theme-red-100'
+                                                    : 'dark:text-theme-neutral-100 text-theme-neutral-800'
+                                                }`}>{formatNumberWithSuffix(item.volume_change_percent) ?? 0}%</span>
+                                        )
+                                    }
+                                   
                                 </div>
 
                             </div>

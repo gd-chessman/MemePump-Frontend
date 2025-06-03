@@ -33,6 +33,7 @@
   "createCoin": {
     "title": "CREATE NEW COIN",
     "subtitle": "Create a new coin on Pumpfun",
+    "subtitleMemePump": "Create a new coin on MemePump",
     "form": {
       "name": {
         "label": "Name",
@@ -51,6 +52,15 @@
         "required": "Initial liquidity amount is required",
         "invalid": "Please enter a valid amount",
         "tooltip": "Enter the initial liquidity amount in SOL that you want to provide for your token"
+      },
+      "totalSupply": {
+        "label": "Total Supply",
+        "placeholder": "Enter total supply amount",
+        "required": "Total supply is required",
+        "invalid": "Please enter a valid total supply amount"
+      },
+      "allowMinting": {
+        "label": "Allow Minting"
       },
       "categories": {
         "label": "Categories",
@@ -136,7 +146,14 @@
       "title": "Confirmation",
       "description": "You need to spend <span class=\"font-bold\">0.0025 SOL</span> to create this token",
       "cancel": "Cancel",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "description1": "To create this token, you need to spend",
+      "description2": " <span class=\"font-bold\">",
+      "description3": ""
+    },
+    "maintenance": {
+      "title": "Feature is being updated",
+      "close": "Close"
     }
   },
   "masterTrade": {
@@ -245,7 +262,10 @@
         "normal": "Normal",
         "vip": "VIP",
         "changeRoleTitle": "Change Role",
-        "to": "to"
+        "to": "to",
+        "confirmChangeRole": "Are you sure you want to change the role of {count} selected wallets from {currentRole} to {newRole}?",
+        "confirmChangeRolePassword": "Password to change role",
+        "passwordPlaceholder": "Enter password"
       },
       "groupManagement": {
         "createGroup": "CREATE GROUP",
@@ -365,7 +385,10 @@
     "invalidPrivateKeyLength": "Invalid private key length",
     "addressCopied": "Wallet address has been copied to clipboard",
     "passwordRequired": "Please enter your password",
-    "invalidPassword": "Invalid password. Please try again."
+    "invalidPassword": "Invalid password. Please try again.",
+    "enterNewPassword": "Enter new password",
+    "enterConfirmPassword": "Enter confirm password",
+    "noTokens": "No tokens found"
   },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {
@@ -513,6 +536,9 @@
     "volume24hChange": "Volume 24h Change",
     "noTokens": "No tokens found",
     "trade": "Trade",
+    "buy": "Buy",
+    "sell": "Sell",
+    "master": "Master & Chat",
     "panel": {
       "buy": "Buy",
       "sell": "Sell",
@@ -562,6 +588,7 @@
       "volume24h": "24h Volume",
       "liquidity": "Liquidity",
       "holders": "Holders",
+      "price": "Price",
       "vol": "Vol",
       "buy": "Buy",
       "sells": "Sells",
@@ -571,6 +598,11 @@
         "1h": "1h",
         "4h": "4h",
         "24h": "24h"
+      }
+    },
+    "control": {
+      "searchBar": {
+        "placeholder": "Token Name/ Address"
       }
     }
   },
@@ -609,8 +641,15 @@
     },
     "toast": {
       "addressCopied": "Address copied to clipboard",
+      "add": "Add",
+      "remove": "Remove",
+      "wishlist": "Wishlist",
+      "success": "Success",
+      "failed": "Failed",
       "addToWishlistSuccess": "Successfully added to wishlist",
-      "addToWishlistFailed": "Failed to add to wishlist"
+      "addToWishlistFailed": "Failed to add to wishlist",
+      "addWishlistSuccess": "Successfully added to wishlist",
+      "addWishlistFailed": "Failed to add to wishlist"
     }
   },
   "header": {
@@ -785,6 +824,14 @@
       "cancel": "Cancel",
       "connect": "Connect",
       "connecting": "Connecting..."
+    }
+  },
+  "tokenInfo": {
+    "timeFrames": {
+      "5m": "5m",
+      "1h": "1h",
+      "4h": "4h",
+      "24h": "24h"
     }
   }
 }
