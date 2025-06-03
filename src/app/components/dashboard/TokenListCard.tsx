@@ -9,11 +9,47 @@ import { useState } from "react";
 import { useLang } from "@/lang";
 import { useRouter } from "next/navigation";
 
+// Skeleton card component for loading state
+function SkeletonCard() {
+  return (
+    <div className="border border-zinc-200 dark:border-zinc-800 p-3 bg-white dark:bg-neutral-900">
+      <div className="flex items-stretch gap-3">
+        <div className="h-full flex-shrink-0">
+          <div className="relative w-24 h-24">
+            <div className="absolute inset-0 rounded-full bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
+          </div>
+        </div>
+        <div className="ml-auto flex-1 flex flex-col justify-between">
+          <div className="flex items-start justify-between flex-wrap">
+            <div className="flex-1">
+              <div className="h-6 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse w-32 mb-2" />
+              <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse w-24" />
+            </div>
+            <div className="h-8 bg-zinc-200 dark:bg-zinc-700 rounded-full animate-pulse w-20" />
+          </div>
+          <div className="flex justify-end items-center gap-2 mt-2">
+            <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse w-24" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // Component to render a list of token cards
 export default function TokenList() {
   const { tokens: wsTokens } = useWsSubscribeTokens({ limit: 36 });
-  console.log(wsTokens);
+  
+  // Show skeleton loading when tokens array is empty or has length less than 1
+  if (!wsTokens || wsTokens.length < 1) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {[...Array(36)].map((_, index) => (
+          <SkeletonCard key={index} />
+        ))}
+      </div>
+    );
+  }
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -179,7 +215,7 @@ function SingleTokenCard({ token }: any) {
           </div>
           <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-2">
                 <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{t("trading.marketCap")}</span>
-                <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap * 1000))}</span>
+                <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap * 100))}</span>
               </div>
         </div>
       </div>
