@@ -27,6 +27,7 @@ import { useWallets } from '@/hooks/useWallets';
 import { LangToggle } from './LanguageSelect';
 import { useTheme } from 'next-themes';
 
+
 const Header = () => {
     const { t } = useLang();
     const router = useRouter();

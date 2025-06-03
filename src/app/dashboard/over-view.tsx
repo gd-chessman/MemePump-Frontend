@@ -49,7 +49,7 @@ const OverView = () => {
                     </div>
                     <span className='dark:text-neutral-100 text-theme-brown-100 font-normal capitalize text-[11px] md:text-xs mb-1 text-center px-1 md:px-2 lg:px-0'>{t('overview.launchToken.description')}</span>
                     <button
-                        onClick={() => router.push('/create-coin')}
+                        onClick={() => router.push('/create-coin/memepump')}
                         className='lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto'
                     >
                         <span className='relative z-10 text-neutral-100'>{t('overview.launchToken.createNow')}</span>
