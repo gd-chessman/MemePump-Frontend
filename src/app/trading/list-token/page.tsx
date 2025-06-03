@@ -231,7 +231,6 @@ const ListToken = () => {
         setIsDragging(false);
     };
 
-    console.log("tokenList", tokenList)
     return (
         <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-1 overflow-hidden'>
             {/* <div className="relative mb-3 pr-3 px-3">
@@ -334,7 +333,6 @@ const ListToken = () => {
                 <div className="flex-grow h-[calc(100%-20px)] custom-scroll overflow-y-scroll mt-2">
                     {Array.isArray(tokenList) && tokenList?.map((item: any, i: number) => {
                         const address = searchQuery.length > 0 ? item.poolAddress : item.address;
-                        console.log("item", item)
                         return (
                             <div
                                 key={i}
@@ -364,7 +362,7 @@ const ListToken = () => {
                                             }}
                                         />
                                         {item?.program?.includes("pumpfun") && (
-                                            <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item?.market == "pumpfun" || item?.program == "pumpfun-amm") && <PumpFun />}</span>
+                                            <span className='cursor-pointer' onClick={() => window.open(`https://pump.fun/coin/${address}`, '_blank')}>{(item?.market == "pumpfun" || item?.program == "pumpfun-amm" || item?.program == "pumpfun") && <PumpFun />}</span>
                                         )}
                                         {item?.program?.includes("orca") && (
                                             <img
