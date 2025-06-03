@@ -1,43 +1,56 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
+import translate from 'translate';
 import { useLang } from '@/lang/useLang';
 
-interface TranslateResponse {
-  translation: string;
-  error?: string;
-}
-
 interface UseTranslateReturn {
-  translate: (text: string, sourceLang?: string) => Promise<string>;
+  translatedText: string;
   isLoading: boolean;
   error: string | null;
 }
 
-export const useTranslate = (): UseTranslateReturn => {
+const convertLangCode = (lang: string): string => {
+  switch (lang.toLowerCase()) {
+    case 'kr':
+      return 'ko';
+    case 'jp':
+      return 'ja';
+    default:
+      return lang;
+  }
+};
+
+export const useTranslate = (text: string, sourceLang: string = 'ko'): UseTranslateReturn => {
+  const [translatedText, setTranslatedText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { lang } = useLang();
 
-  const translate = async (text: string, sourceLang: string = 'kr'): Promise<string> => {
-    setIsLoading(true);
-    setError(null);
+  useEffect(() => {
+    const translateText = async () => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const response = await axios.post<TranslateResponse>('/api/translate', {
-        text,
-        targetLanguage: lang,
-        sourceLanguage: sourceLang
-      });
+      try {
+        const translation = await translate(text, {
+          from: convertLangCode(sourceLang),
+          to: convertLangCode(lang)
+        });
 
-      return response.data.translation;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Lỗi khi dịch';
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        if (!translation) {
+          throw new Error('Không nhận được bản dịch');
+        }
 
-  return { translate, isLoading, error };
+        setTranslatedText(translation);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Lỗi khi dịch';
+        setError(errorMessage);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    translateText();
+  }, [text, sourceLang, lang]);
+
+  return { translatedText, isLoading, error };
 }; 

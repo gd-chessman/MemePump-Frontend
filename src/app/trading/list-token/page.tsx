@@ -343,7 +343,7 @@ const ListToken = () => {
                                     </button>
                                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleChangeToken(address)}>
                                         <img 
-                                            src={item?.logo_uri ?? item?.logoUrl ?? "/logo.png"} 
+                                            src={item?.logo_uri || item?.logoUrl || "/logo.png"} 
                                             alt="" 
                                             width={24} 
                                             height={24} 

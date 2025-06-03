@@ -28,6 +28,7 @@ import { truncateString } from "@/utils/format";
 import { Tooltip } from "@radix-ui/react-tooltip";
 import { TooltipContent } from "@/ui/tooltip";
 import { getTokenByCategory } from "@/services/api/SolonaTokenService";
+import { useTranslate } from "@/hooks/useTranslate";
 
 type CoinFormData = {
   name: string;
@@ -93,7 +94,13 @@ const globalStyles = `
     }
 `;
 
+const TranslatedCategory = ({ name }: { name: string }) => {
+  const { translatedText } = useTranslate(name);
+  return <>{translatedText || name}</>;
+};
+
 export default function CreateCoinForm() {
+  // const { translate } = useTranslate();
   const router = useRouter();
   const { t, tArray } = useLang();
   const [formData, setFormData] = useState<CoinFormData>({
@@ -524,7 +531,6 @@ export default function CreateCoinForm() {
                           }
                           className="absolute inset-y-0 right-16 flex items-center pr-3 text-theme-neutral-1000 text-xl dark:hover:text-gray-200"
                         >
-                          {/* {disabledAmount ? <Plus className="h-4 w-4" /> : <Minus className="h-4 w-4" />} */}
                         </button>
                       </div>
                       <span className="text-xs text-theme-primary-300 italic">
@@ -558,8 +564,8 @@ export default function CreateCoinForm() {
                                   const category = categories.find((c: any) => c.id === categoryId);
                                   return category ? (
                                     <span key={categoryId} className="text-sm">
-                                      {category.name}
                                       {formData.category_list.indexOf(categoryId) !== formData.category_list.length - 1 ? ", " : ""}
+                                      <TranslatedCategory name={category.name} />
                                     </span>
                                   ) : null;
                                 })}
@@ -596,7 +602,7 @@ export default function CreateCoinForm() {
                                     {formData.category_list.includes(category.id) && (
                                       <span className="text-blue-500">✓</span>
                                     )}
-                                    {category.name}
+                                    <TranslatedCategory name={category.name} />
                                   </div>
                                 </SelectItem>
                               ))
