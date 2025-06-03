@@ -379,7 +379,10 @@
     "invalidPassword": "無効なパスワードです。もう一度お試しください。",
     "verifying": "確認中...",
     "creating": "作成中...",
-    "adding": "追加中..."
+    "adding": "追加中...",
+    "enterNewPassword": "新しいパスワードを入力",
+    "enterConfirmPassword": "確認用パスワードを入力",
+    "noTokens": "トークンが見つかりません"
   },
   "searchPlaceholder": "トークン名/アドレス",
   "languages": {

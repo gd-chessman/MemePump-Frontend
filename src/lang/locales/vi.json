@@ -417,7 +417,10 @@
     "invalidPrivateKeyLength": "Độ dài khóa riêng tư không hợp lệ",
     "addressCopied": "Đã sao chép địa chỉ ví vào clipboard",
     "passwordRequired": "Vui lòng nhập mật khẩu của bạn",
-    "invalidPassword": "Mật khẩu không hợp lệ. Vui lòng thử lại."
+    "invalidPassword": "Mật khẩu không hợp lệ. Vui lòng thử lại.",
+    "enterNewPassword": "Nhập mật khẩu mới",
+    "enterConfirmPassword": "Nhập xác nhận mật khẩu",
+    "noTokens": "Không tìm thấy token nào"
   },
   "searchPlaceholder": "Tên Token/ Địa chỉ",
   "languages": {

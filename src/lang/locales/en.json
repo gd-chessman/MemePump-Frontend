@@ -245,7 +245,10 @@
         "normal": "Normal",
         "vip": "VIP",
         "changeRoleTitle": "Change Role",
-        "to": "to"
+        "to": "to",
+        "confirmChangeRole": "Are you sure you want to change the role of {count} selected wallets from {currentRole} to {newRole}?",
+        "confirmChangeRolePassword": "Password to change role",
+        "passwordPlaceholder": "Enter password"
       },
       "groupManagement": {
         "createGroup": "CREATE GROUP",
@@ -365,7 +368,10 @@
     "invalidPrivateKeyLength": "Invalid private key length",
     "addressCopied": "Wallet address has been copied to clipboard",
     "passwordRequired": "Please enter your password",
-    "invalidPassword": "Invalid password. Please try again."
+    "invalidPassword": "Invalid password. Please try again.",
+    "enterNewPassword": "Enter new password",
+    "enterConfirmPassword": "Enter confirm password",
+    "noTokens": "No tokens found"
   },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {
@@ -562,6 +568,7 @@
       "volume24h": "24h Volume",
       "liquidity": "Liquidity",
       "holders": "Holders",
+      "price": "Price",
       "vol": "Vol",
       "buy": "Buy",
       "sells": "Sells",
@@ -571,6 +578,11 @@
         "1h": "1h",
         "4h": "4h",
         "24h": "24h"
+      }
+    },
+    "control": {
+      "searchBar": {
+        "placeholder": "Token Name/ Address"
       }
     }
   },
@@ -785,6 +797,14 @@
       "cancel": "Cancel",
       "connect": "Connect",
       "connecting": "Connecting..."
+    }
+  },
+  "tokenInfo": {
+    "timeFrames": {
+      "5m": "5m",
+      "1h": "1h",
+      "4h": "4h",
+      "24h": "24h"
     }
   }
 }
