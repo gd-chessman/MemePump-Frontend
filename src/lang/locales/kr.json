@@ -69,6 +69,15 @@
           "invalid": "유효한 수량을 입력해주세요",
           "tooltip": "토큰에 유동성을 제공합니다"
         },
+        "totalSupply": {
+          "label": "총 공급량",
+          "placeholder": "총 공급량 입력",
+          "required": "총 공급량은 필수입니다",
+          "invalid": "유효한 총 공급량을 입력하세요"
+        },
+        "allowMinting": {
+          "label": "추가 발행 허용"
+        },
         "categories": {
           "label": "카테고리",
           "placeholder": "카테고리 선택...",

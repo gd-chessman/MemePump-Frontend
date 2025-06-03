@@ -54,7 +54,16 @@
         "placeholder": "初期流動性のSOL数量を入力",
         "required": "初期流動性は必須です",
         "invalid": "有効な数量を入力してください",
-        "tooltip": "トークンに提供したい初期流動性のSOL数量を入力してください"
+        "tooltip": "トークンに提供したい初期流動性のSOL量を入力してください"
+      },
+      "totalSupply": {
+        "label": "総供給量",
+        "placeholder": "総供給量を入力",
+        "required": "総供給量は必須です",
+        "invalid": "有効な総供給量を入力してください"
+      },
+      "allowMinting": {
+        "label": "追加発行を許可"
       },
       "categories": {
         "label": "カテゴリー",

@@ -56,6 +56,15 @@
         "invalid": "Vui lòng nhập số lượng hợp lệ",
         "tooltip": "Nhập số lượng thanh khoản ban đầu bằng SOL mà bạn muốn cung cấp cho token của mình"
       },
+      "totalSupply": {
+        "label": "Tổng cung",
+        "placeholder": "Nhập tổng số lượng cung cấp",
+        "required": "Tổng cung là bắt buộc",
+        "invalid": "Vui lòng nhập tổng số lượng cung cấp hợp lệ"
+      },
+      "allowMinting": {
+        "label": "Cho phép đúc thêm"
+      },
       "categories": {
         "label": "Danh mục",
         "placeholder": "Chọn danh mục...",

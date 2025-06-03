@@ -53,6 +53,15 @@
         "invalid": "Please enter a valid amount",
         "tooltip": "Enter the initial liquidity amount in SOL that you want to provide for your token"
       },
+      "totalSupply": {
+        "label": "Total Supply",
+        "placeholder": "Enter total supply amount",
+        "required": "Total supply is required",
+        "invalid": "Please enter a valid total supply amount"
+      },
+      "allowMinting": {
+        "label": "Allow Minting"
+      },
       "categories": {
         "label": "Categories",
         "placeholder": "Select categories...",
