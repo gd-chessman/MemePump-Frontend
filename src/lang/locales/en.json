@@ -621,8 +621,15 @@
     },
     "toast": {
       "addressCopied": "Address copied to clipboard",
+      "add": "Add",
+      "remove": "Remove",
+      "wishlist": "Wishlist",
+      "success": "Success",
+      "failed": "Failed",
       "addToWishlistSuccess": "Successfully added to wishlist",
-      "addToWishlistFailed": "Failed to add to wishlist"
+      "addToWishlistFailed": "Failed to add to wishlist",
+      "addWishlistSuccess": "Successfully added to wishlist",
+      "addWishlistFailed": "Failed to add to wishlist"
     }
   },
   "header": {
