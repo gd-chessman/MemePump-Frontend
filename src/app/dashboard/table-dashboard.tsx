@@ -86,13 +86,17 @@ export default function Trading() {
         logoUrl: token.logo_url || token.logo_uri || "/placeholder.png"
       }));
       setTokens(transformedTokens);
-    } else if (activeTab === '3' && myWishlist?.tokens && myWishlist.tokens.length > 0) {
-      const transformedTokens = myWishlist.tokens.map((token: any) => ({
-        ...token,
-        logoUrl: token.logoUrl,
-        isFavorite: true
-      }));
-      setTokens(transformedTokens);
+    } else if (activeTab === '3') {
+      if (myWishlist?.tokens && myWishlist.tokens.length > 0) {
+        const transformedTokens = myWishlist.tokens.map((token: any) => ({
+          ...token,
+          logoUrl: token.logoUrl,
+          isFavorite: true
+        }));
+        setTokens(transformedTokens);
+      } else {
+        setTokens([]);
+      }
     }
   }, [topCoins, newCoins, myWishlist, activeTab]);
 

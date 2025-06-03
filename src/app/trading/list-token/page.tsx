@@ -290,7 +290,7 @@ const ListToken = () => {
                     </div>
 
                 </div>
-                {activeTab !== "favorite" && (
+                {activeTab !== "favorite" && activeTab !== "new" && (
                     <div>
                         <div className="flex border-t border-b py-1 border-neutral-700 pl-2 gap-1">
                             <button
