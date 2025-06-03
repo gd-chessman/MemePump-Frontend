@@ -25,7 +25,6 @@ import SearchModal from './search-modal';
 import MobileWalletSelector from './mobile-wallet-selector';
 import { useWallets } from '@/hooks/useWallets';
 import { LangToggle } from './LanguageSelect';
-import PumpFun from './pump-fun';
 import { useTheme } from 'next-themes';
 
 const Header = () => {
@@ -144,6 +143,16 @@ const Header = () => {
             href: '/create-coin',
             icon: Coins,
             logoPump: true,
+            dropdown: [
+                {
+                    name: 'MemePump',
+                    href: '/create-coin/memepump',
+                },
+                {
+                    name: 'PumpFun',
+                    href: '/create-coin/pumpfun',
+                }
+            ]
         },
         {
             name: t('overview.masterTrade.title'),
@@ -169,14 +178,33 @@ const Header = () => {
                             {/* Desktop Navigation */}
                             <nav className='hidden lg:flex items-center gap-10 xl:gap-15'>
                                 {listSidebar.map((item, index) => (
-                                    <Link
-                                        href={item.href}
-                                        key={index}
-                                        className={`hover:gradient-hover text-theme-neutral-800 dark:text-theme-neutral-300 capitalize transition-colors flex items-center gap-2 ${pathname === item.href ? 'gradient-hover font-semibold' : ''}`}
-                                    >
-                                        {item.name}
-                                        {item.logoPump && <PumpFun />}
-                                    </Link>
+                                    item.dropdown ? (
+                                        <div key={index} className="relative group">
+                                            <button className={`hover:gradient-hover text-theme-neutral-800 dark:text-theme-neutral-300 capitalize transition-colors flex items-center gap-2 ${pathname.startsWith(item.href) ? 'gradient-hover font-semibold' : ''}`}>
+                                                {item.name}
+                                                <ChevronDown size={16} className="ml-1" />
+                                            </button>
+                                            <div className="absolute left-0 top-full mt-2 w-48 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                                                {item.dropdown.map((subItem, subIndex) => (
+                                                    <Link
+                                                        key={subIndex}
+                                                        href={subItem.href}
+                                                        className="block px-4 py-2 text-sm text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer"
+                                                    >
+                                                        {subItem.name}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <Link
+                                            href={item.href}
+                                            key={index}
+                                            className={`hover:gradient-hover text-theme-neutral-800 dark:text-theme-neutral-300 capitalize transition-colors flex items-center gap-2 ${pathname === item.href ? 'gradient-hover font-semibold' : ''}`}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    )
                                 ))}
                             </nav>
                         </div>
@@ -354,7 +382,26 @@ const Header = () => {
                                 <nav className="flex flex-col p-4 space-y-4">
                                     {listSidebar.map((item, index) => {
                                         const Icon = item.icon;
-                                        return (
+                                        return item.dropdown ? (
+                                            <div key={index} className="space-y-2">
+                                                <div className={`hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-lg py-2 flex items-center gap-3 ${pathname.startsWith(item.href) ? 'gradient-hover font-semibold' : ''}`}>
+                                                    <Icon className="h-5 w-5" />
+                                                    {item.name}
+                                                </div>
+                                                <div className="pl-8 space-y-2">
+                                                    {item.dropdown.map((subItem, subIndex) => (
+                                                        <Link
+                                                            href={subItem.href}
+                                                            key={subIndex}
+                                                            onClick={() => setIsMobileMenuOpen(false)}
+                                                            className="block hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-1"
+                                                        >
+                                                            {subItem.name}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ) : (
                                             <Link
                                                 href={item.href}
                                                 key={index}
@@ -363,7 +410,6 @@ const Header = () => {
                                             >
                                                 <Icon className="h-5 w-5" />
                                                 {item.name}
-                                                {item.logoPump && <PumpFun />}
                                             </Link>
                                         );
                                     })}
