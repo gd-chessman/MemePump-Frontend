@@ -44,6 +44,8 @@ type CoinFormData = {
   logo: File | null;
   logoPreview: string | null;
   category_list: string[];
+  totalSupply: string;
+  allowMinting: boolean;
 };
 
 type FormErrors = {
@@ -117,6 +119,8 @@ export default function CreateCoinForm() {
     category_list: [],
     image: null,
     showName: false,
+    totalSupply: "",
+    allowMinting: false,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -161,11 +165,24 @@ export default function CreateCoinForm() {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    if (name === 'totalSupply') return; // Skip totalSupply in the general handler
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Clear error when user types
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const handleTotalSupplyChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, ""); // Only allow numbers
+    // Remove leading zeros except for single zero
+    const processedValue = value.replace(/^0+(\d)/, '$1').replace(/^0+$/, '0');
+    
+    setFormData((prev) => ({ ...prev, totalSupply: processedValue }));
+
+    if (errors.totalSupply) {
+      setErrors((prev) => ({ ...prev, totalSupply: undefined }));
     }
   };
 
@@ -284,11 +301,17 @@ export default function CreateCoinForm() {
     } else if (formData.symbol.length > 10) {
       newErrors.symbol = t("createCoin.form.symbol.maxLength");
     }
-    console.log("formData.amount", formData.amount)
+
     if (!formData.amount.trim()) {
       newErrors.amount = t("createCoin.form.amount.required");
     } else if (isNaN(Number(formData.amount)) || Number(formData.amount) < 0) {
       newErrors.amount = t("createCoin.form.amount.invalid");
+    }
+
+    if (!formData.totalSupply.trim()) {
+      newErrors.totalSupply = t("createCoin.form.totalSupply.required");
+    } else if (isNaN(Number(formData.totalSupply)) || Number(formData.totalSupply) <= 0) {
+      newErrors.totalSupply = t("createCoin.form.totalSupply.invalid");
     }
 
     if (!formData.logo) {
@@ -297,8 +320,7 @@ export default function CreateCoinForm() {
 
     // Optional fields validation
     if (formData.website && !formData.website.startsWith("http")) {
-      newErrors.website =
-        t("createCoin.form.website.invalid");
+      newErrors.website = t("createCoin.form.website.invalid");
     }
 
     setErrors(newErrors);
@@ -329,6 +351,8 @@ export default function CreateCoinForm() {
       formDataToSend.append("description", formData.description);
       formDataToSend.append("amount", String(formData.amount || 0));
       formDataToSend.append("category_list", formData.category_list.join(","));
+      formDataToSend.append("totalSupply", formData.totalSupply);
+      formDataToSend.append("allowMinting", String(formData.allowMinting));
 
       // Add optional fields if they exist
       if (formData.telegram) formDataToSend.append("telegram", formData.telegram);
@@ -365,6 +389,8 @@ export default function CreateCoinForm() {
           category_list: [],
           image: null,
           showName: false,
+          totalSupply: "",
+          allowMinting: false,
         });
 
       }
@@ -505,7 +531,6 @@ export default function CreateCoinForm() {
                           id="amount"
                           name="amount"
                           value={formData.amount ?? 0}
-                          // disabled={disabledAmount}
                           onChange={handleAmountChange}
                           placeholder={t('createCoin.form.amount.placeholder')}
                           className={`${classInput} ${disabledAmount ? "bg-gray-200" : ""}`}
@@ -524,14 +549,6 @@ export default function CreateCoinForm() {
                             <X className="h-4 w-4" />
                           </button>
                         )}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setDisabledAmount(!disabledAmount)
-                          }
-                          className="absolute inset-y-0 right-16 flex items-center pr-3 text-theme-neutral-1000 text-xl dark:hover:text-gray-200"
-                        >
-                        </button>
                       </div>
                       <span className="text-xs text-theme-primary-300 italic">
                         (i) {t('createCoin.form.amount.tooltip')}
@@ -611,6 +628,45 @@ export default function CreateCoinForm() {
                         </SelectContent>
                       </Select>
                     </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row justify-between gap-3 md:gap-4 lg:gap-6">
+                  {/* Total Supply */}
+                  <div className="w-full md:w-1/2">
+                    <label htmlFor="totalSupply" className={classLabel}>
+                      {t('createCoin.form.totalSupply.label')} <span className="text-theme-red-200">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="totalSupply"
+                        name="totalSupply"
+                        value={formData.totalSupply}
+                        onChange={handleTotalSupplyChange}
+                        placeholder={t('createCoin.form.totalSupply.placeholder')}
+                        className={classInput}
+                      />
+                    </div>
+                    {errors.totalSupply && (
+                      <p className="mt-1 text-xs text-red-500">
+                        {errors.totalSupply}
+                      </p>
+                    )}
+                  </div>
+                  {/* Allow Minting */}
+                  <div className="flex items-center gap-2 mb-4 justify-center my-auto">
+                    <input
+                      type="checkbox"
+                      id="allowMinting"
+                      name="allowMinting"
+                      checked={formData.allowMinting}
+                      onChange={(e) => setFormData(prev => ({ ...prev, allowMinting: e.target.checked }))}
+                      className="w-4 h-4 cursor-pointer text-theme-primary-300 border-gray-300 rounded focus:ring-theme-primary-300"
+                    />
+                    <label htmlFor="allowMinting" className={classLabel}>
+                      {t('createCoin.form.allowMinting.label')}
+                    </label>
                   </div>
                 </div>
 
