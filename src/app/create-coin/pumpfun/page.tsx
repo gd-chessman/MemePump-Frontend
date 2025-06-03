@@ -18,7 +18,7 @@ import {
 } from "@/ui/select";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { getTokenCategorys, createToken, getMyTokens } from "@/services/api/TelegramWalletService";
+import { getTokenCategorys, createTokenPumpFun, getMyTokens } from "@/services/api/TelegramWalletService";
 import React from "react";
 import { useRouter } from "next/navigation";
 import notify from "@/app/components/notify";
@@ -340,7 +340,7 @@ export default function CreateCoinForm() {
         formDataToSend.append("image", formData.logo);
       }
 
-      const response = await createToken(formDataToSend);
+      const response = await createTokenPumpFun(formDataToSend);
 
       // Handle success
       if (response) {
