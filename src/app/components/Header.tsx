@@ -244,7 +244,7 @@ const Header = () => {
                             <>
                                 {!isAuthenticated ? (
                                     <button
-                                        onClick={() => window.open(process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL, "_blank")}
+                                        onClick={() => window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank")}
                                         className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-3 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
                                     >
                                         {t('connect')}
@@ -333,7 +333,7 @@ const Header = () => {
                             <>
                                 {!isAuthenticated ? (
                                     <button
-                                        onClick={() => window.open(process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL, "_blank")}
+                                        onClick={() => window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank")}
                                         className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap flex items-center gap-1"
                                     >
                                         {t('connect')}
@@ -484,7 +484,7 @@ const Header = () => {
                                                 {!isAuthenticated ? (
                                                     <button
                                                         onClick={() => {
-                                                            window.open(process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL, "_blank");
+                                                            window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank");
                                                             setIsMobileMenuOpen(false);
                                                         }}
                                                         className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-6 py-3 rounded-full transition-colors"
