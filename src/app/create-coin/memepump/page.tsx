@@ -335,7 +335,7 @@ export default function CreateCoinForm() {
       return;
     }
 
-    setShowMaintenanceModal(true);
+    setShowConfirmModal(true);
   };
 
   const handleConfirmSubmit = async () => {
@@ -350,7 +350,6 @@ export default function CreateCoinForm() {
       formDataToSend.append("name", formData.name);
       formDataToSend.append("symbol", formData.symbol);
       formDataToSend.append("description", formData.description);
-      formDataToSend.append("amount", String(formData.amount || 0));
       formDataToSend.append("category_list", formData.category_list.join(","));
       formDataToSend.append("totalSupply", formData.totalSupply);
       formDataToSend.append("allowMinting", String(formData.allowMinting));
@@ -543,48 +542,37 @@ export default function CreateCoinForm() {
                 <div className="flex flex-col md:flex-row justify-between gap-3 md:gap-4 lg:gap-6">
                   {/* Amount */}
                   <div className="w-full md:w-1/2">
-                    <label htmlFor="amount" className={classLabel}>
-                      {t('createCoin.form.amount.label')} <span className="text-theme-red-200">*</span>
+                    <label htmlFor="totalSupply" className={classLabel}>
+                      {t('createCoin.form.totalSupply.label')} <span className="text-theme-red-200">*</span>
                     </label>
-                    <div>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          id="amount"
-                          name="amount"
-                          value={formData.amount ?? 0}
-                          onChange={handleAmountChange}
-                          placeholder={t('createCoin.form.amount.placeholder')}
-                          className={`${classInput} ${disabledAmount ? "bg-gray-200" : ""}`}
-                        />
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                          <span className="dark:text-neutral-200 text-theme-neutral-800 text-sm">(SOL)</span>
-                        </div>
-                        {formData.amount && (
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setFormData((prev) => ({ ...prev, amount: "" }))
-                            }
-                            className="absolute inset-y-0 right-16 flex items-center pr-3 text-neutral-200 hover:text-gray-200"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        )}
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="totalSupply"
+                        name="totalSupply"
+                        value={formData.totalSupply}
+                        onChange={handleTotalSupplyChange}
+                        placeholder={t('createCoin.form.totalSupply.placeholder')}
+                        className={classInput}
+                      />
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                        <label className="flex items-center gap-2 text-xs dark:text-theme-neutral-100 text-theme-neutral-900">
+                          <input
+                            type="checkbox"
+                            checked={formData.allowMinting}
+                            onChange={(e) => setFormData(prev => ({ ...prev, allowMinting: e.target.checked }))}
+                            className="w-4 h-4 rounded cursor-pointer border-gray-300 text-theme-primary-300 focus:ring-theme-primary-300"
+                          />
+                          {t('createCoin.form.allowMinting.label')}
+                        </label>
                       </div>
-                      <span className="text-xs text-theme-primary-300 italic">
-                        (i) {t('createCoin.form.amount.tooltip')}
-                      </span>
                     </div>
-                    {errors.amount && (
+                    {errors.totalSupply && (
                       <p className="mt-1 text-xs text-red-500">
-                        {errors.amount === "Please enter a valid amount"
-                          ? t('createCoin.form.amount.invalid')
-                          : t('createCoin.form.amount.required')}
+                        {errors.totalSupply}
                       </p>
                     )}
                   </div>
-
                   {/* Categories */}
                   <div className="w-full md:w-1/2">
                     <label htmlFor="category" className={classLabel}>
@@ -650,45 +638,6 @@ export default function CreateCoinForm() {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col md:flex-row justify-between gap-3 md:gap-4 lg:gap-6">
-                  {/* Total Supply */}
-                  <div className="w-full md:w-1/2">
-                    <label htmlFor="totalSupply" className={classLabel}>
-                      {t('createCoin.form.totalSupply.label')} <span className="text-theme-red-200">*</span>
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        id="totalSupply"
-                        name="totalSupply"
-                        value={formData.totalSupply}
-                        onChange={handleTotalSupplyChange}
-                        placeholder={t('createCoin.form.totalSupply.placeholder')}
-                        className={classInput}
-                      />
-                    </div>
-                    {errors.totalSupply && (
-                      <p className="mt-1 text-xs text-red-500">
-                        {errors.totalSupply}
-                      </p>
-                    )}
-                  </div>
-                  {/* Allow Minting */}
-                  <div className="flex items-center gap-2 mb-4 justify-center my-auto">
-                    <input
-                      type="checkbox"
-                      id="allowMinting"
-                      name="allowMinting"
-                      checked={formData.allowMinting}
-                      onChange={(e) => setFormData(prev => ({ ...prev, allowMinting: e.target.checked }))}
-                      className="w-4 h-4 cursor-pointer text-theme-primary-300 border-gray-300 rounded focus:ring-theme-primary-300"
-                    />
-                    <label htmlFor="allowMinting" className={classLabel}>
-                      {t('createCoin.form.allowMinting.label')}
-                    </label>
                   </div>
                 </div>
 
