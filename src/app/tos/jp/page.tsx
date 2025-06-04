@@ -3,261 +3,262 @@ import React from 'react'
 export default function TosPage() {
   return (
     <div className="w-full mx-auto px-8 py-4">
-      <h1 className="text-2xl font-bold mb-4">Điều Khoản Dịch Vụ Memepump.gg</h1>
-      <p className="text-sm text-gray-600 mb-4">Cập nhật lần cuối: 4 tháng 6 năm 2025</p>
+      <h1 className="text-2xl font-bold mb-4">Memepump.gg 利用規約</h1>
+      <p className="text-sm text-gray-600 mb-4">最終更新日: 2025年6月4日</p>
 
       <p className="mb-4">
-Chào mừng đến với Memepump.gg! Những điều khoản dịch vụ này, cùng với bất kỳ tài liệu và điều khoản bổ sung nào được tham chiếu (gọi chung là "Điều Khoản Dịch Vụ"), được ký kết giữa Memepump.gg (gọi chung là "Memepump", "chúng tôi", "chúng tôi" và "của chúng tôi") và bạn, hoặc công ty hoặc pháp nhân khác mà bạn đại diện ("bạn" hoặc "của bạn").
+Memepump.ggへようこそ！本利用規約は、Memepump.gg（以下「Memepump」、「当社」、「私たち」および「当社の」）と、あなたまたはあなたが代表する会社または法人（「あなた」または「あなたの」）との間で締結されるものです。
       </p>
 
       <p className="mb-4">
-        Bằng việc truy cập hoặc sử dụng Dịch vụ theo bất kỳ cách nào, bạn xác nhận rằng (1) bạn đã đọc, hiểu và đồng ý tuân theo các Điều Khoản Dịch Vụ này; (2) bạn đủ tuổi để tạo lập hợp đồng ràng buộc với chúng tôi; và (3) bạn có thẩm quyền để tham gia vào các Điều Khoản Dịch Vụ này.
+        本サービスをいかなる方法でアクセスまたは使用することにより、あなたは以下を確認したことになります：(1) 本利用規約を読み、理解し、遵守することに同意したこと；(2) 当社との法的拘束力のある契約を締結する年齢に達していること；および (3) 本利用規約に参加する権限を有していること。
       </p>
 
       <p className="font-bold mb-4">
-        NẾU BẠN KHÔNG ĐỒNG Ý TUÂN THEO CÁC ĐIỀU KHOẢN DỊCH VỤ, BẠN KHÔNG ĐƯỢC PHÉP TRUY CẬP HOẶC SỬ DỤNG CÁC DỊCH VỤ.
+        本利用規約に同意しない場合、本サービスにアクセスまたは使用することはできません。
       </p>
 
       <p className="mb-4">
-Việc sử dụng và tham gia vào một số Dịch vụ nhất định có thể phải tuân theo các Điều Khoản Bổ Sung, sẽ được liệt kê trong Điều Khoản Dịch Vụ hoặc sẽ được trình bày cho bạn để chấp nhận khi bạn đăng ký sử dụng Dịch vụ bổ sung. Nếu Điều Khoản Dịch Vụ không nhất quán với Điều Khoản Bổ Sung, Điều Khoản Bổ Sung sẽ được ưu tiên áp dụng đối với Dịch vụ đó.
+一部のサービスの使用および参加は、追加の規約の対象となる場合があります。これらの規約は本利用規約に記載されるか、追加サービスに登録する際に提示されます。本利用規約と追加規約が矛盾する場合、当該サービスについては追加規約が優先されます。
       </p>
 
       <p className="mb-4">
-Dịch vụ cho phép người dùng khám phá, theo dõi và tương tác với dữ liệu được tạo bởi các ứng dụng blockchain tương thích của bên thứ ba.
+本サービスにより、ユーザーはサードパーティのブロックチェーンアプリケーションによって生成されたデータを探索、追跡、および操作することができます。
       </p>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">TỪ CHỐI TRÁCH NHIỆM QUAN TRỌNG:</h2>
+        <h2 className="text-xl font-bold mb-3">重要な免責事項：</h2>
         <p className="mb-3">
-BẰNG VIỆC SỬ DỤNG CÁC DỊCH VỤ DO MEMEPUMP CUNG CẤP, BẠN KHÔNG NÊN KỲ VỌNG KIẾM LỢI NHUẬN HOẶC TẠO RA LỢI NHUẬN TỪ VIỆC GIAO DỊCH, NHẬN HOẶC SỞ HỮU CÁC TÀI SẢN SỐ ĐƯỢC NIÊM YẾT TRÊN MEMEPUMP. BẠN CŨNG KHÔNG NÊN KỲ VỌNG BẤT KỲ NGƯỜI NÀO PHẢI NỖ LỰC HOẶC CUNG CẤP HỖ TRỢ ĐỂ ĐẠT ĐƯỢC LỢI NHUẬN HOẶC LỢI NHUẬN TỪ CÁC TÀI SẢN SỐ MÀ BẠN NẮM GIỮ HOẶC GIAO DỊCH.
+MEMEPUMPが提供するサービスを使用することにより、MEMEPUMPに掲載されているデジタル資産の取引、受領、または保有から利益または収益を得ることを期待すべきではありません。また、あなたが保有または取引するデジタル資産から利益または収益を得るために、誰かが努力またはサポートを提供することを期待すべきではありません。
         </p>
         <p className="mb-3">
-CÁC TÀI SẢN SỐ ĐƯỢC NIÊM YẾT TRÊN MEMEPUMP KHÔNG CÓ CÔNG DỤNG HOẶC CHỨC NĂNG THỰC TẾ, VÌ CHÚNG CHỈ DÀNH CHO MỤC ĐÍCH GIẢI TRÍ. VUI LÒNG LƯU Ý RẰNG BẠN CÓ THỂ MẤT TẤT CẢ SỐ TIỀN BẠN SỬ DỤNG ĐỂ MUA CÁC TÀI SẢN SỐ NÀY.
+MEMEPUMPに掲載されているデジタル資産は、エンターテイメント目的のみであり、実用的な機能や目的はありません。これらのデジタル資産を購入するために使用した資金をすべて失う可能性があることにご注意ください。
         </p>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">TỪ CHỐI TRÁCH NHIỆM PHÁP LÝ:</h2>
+        <h2 className="text-xl font-bold mb-3">法的免責事項：</h2>
         <p className="mb-3">
-MEMEPUMP KHÔNG PHẢI LÀ MÔI GIỚI, TỔ CHỨC TÀI CHÍNH HOẶC TRUNG GIAN VÀ KHÔNG PHẢI LÀ ĐẠI LÝ, CỐ VẤN HOẶC NGƯỜI GIÁM HỘ CỦA BẠN. MEMEPUMP KHÔNG THỂ KHỞI TẠO CHUYỂN KHOẢN BẤT KỲ LOẠI TIỀN ĐIỆN TỬ HOẶC TÀI SẢN SỐ NÀO CỦA BẠN HOẶC TRUY CẬP TÀI SẢN SỐ CỦA BẠN TRONG VÍ WEB3 CỦA RIÊNG BẠN.
+MEMEPUMPはブローカー、金融機関、または仲介業者ではなく、あなたの代理人、アドバイザー、または受託者ではありません。MEMEPUMPはあなたの暗号通貨またはデジタル資産のいかなる種類の送金を開始することも、あなた自身のWeb3ウォレット内のデジタル資産にアクセスすることもできません。
         </p>
         <p className="mb-3">
-MEMEPUMP KHÔNG CÓ MỐI QUAN HỆ HOẶC NGHĨA VỤ ỦY THÁC ĐỐI VỚI BẠN LIÊN QUAN ĐẾN BẤT KỲ QUYẾT ĐỊNH HOẶC HOẠT ĐỘNG NÀO MÀ BẠN THỰC HIỆN TRONG KẾT NỐI VỚI VIỆC SỬ DỤNG DỊCH VỤ CỦA BẠN.
+MEMEPUMPは、あなたのサービス使用に関連して行う決定または活動に関して、あなたとの信託関係または義務を負いません。
         </p>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">1. ĐỊNH NGHĨA</h2>
+        <h2 className="text-xl font-bold mb-3">1. 定義</h2>
         <dl className="space-y-2">
           <div>
-            <dt className="font-semibold">1.1 "Adapter"</dt>
-            <dd>có nghĩa là công cụ phần mềm cho phép và tạo điều kiện cho khả năng tương tác của một dự án DeFi cụ thể với Dịch vụ.</dd>
+            <dt className="font-semibold">1.1 「アダプター」</dt>
+            <dd>とは、特定のDeFiプロジェクトとサービスの相互運用性を可能にし、促進するソフトウェアツールを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.2 "Điều Khoản Giới Thiệu Bổ Sung"</dt>
-            <dd>có nghĩa là bất kỳ công cụ bổ sung nào được xuất bản trong lời mời giới thiệu hoặc được liên kết với bất kỳ chương trình giới thiệu cụ thể hoặc mã khuyến mãi.</dd>
+            <dt className="font-semibold">1.2 「追加紹介規約」</dt>
+            <dd>とは、紹介プログラムまたはプロモーションコードに関連する追加のツールを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.3 "Thỏa Thuận"</dt>
-            <dd>có nghĩa là Điều Khoản Dịch Vụ này và bất kỳ Điều Khoản Bổ Sung nào áp dụng cho việc sử dụng Dịch vụ của bạn.</dd>
+            <dt className="font-semibold">1.3 「契約」</dt>
+            <dd>とは、本利用規約およびあなたのサービス使用に適用される追加規約を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.4 "Thỏa Thuận Trọng Tài"</dt>
-            <dd>có nghĩa là cơ chế giải quyết tranh chấp trong Phần 16.</dd>
+            <dt className="font-semibold">1.4 「仲裁契約」</dt>
+            <dd>とは、第16条に規定される紛争解決メカニズムを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.5 "Thương Hiệu"</dt>
-            <dd>có nghĩa là, đối với bất kỳ Adapter nào, nhãn hiệu, logo hoặc dấu hiệu nhận dạng khác của dự án DeFi hoặc thực thể bên thứ ba khác mà khả năng tương tác được tạo điều kiện bởi Adapter đó.</dd>
+            <dt className="font-semibold">1.5 「ブランド」</dt>
+            <dd>とは、アダプターに関して、当該アダプターが相互運用性を促進するDeFiプロジェクトまたはその他のサードパーティエンティティの商標、ロゴ、またはその他の識別子を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.6 "Nội Dung Đã Kết Nối"</dt>
-            <dd>có nghĩa là bất kỳ Nội Dung hoặc dữ liệu tài chính cá nhân nào mà bạn đã cung cấp và lưu trữ trong Ví của bạn.</dd>
+            <dt className="font-semibold">1.6 「接続コンテンツ」</dt>
+            <dd>とは、あなたが提供し、ウォレットに保存したコンテンツまたは個人財務データを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.7 "Nội Dung"</dt>
-            <dd>có nghĩa là bất kỳ thông tin, dữ liệu, văn bản, phần mềm, âm nhạc, âm thanh, hình ảnh, đồ họa, video, tin nhắn, thẻ và/hoặc các tài liệu khác.</dd>
+            <dt className="font-semibold">1.7 「コンテンツ」</dt>
+            <dd>とは、情報、データ、テキスト、ソフトウェア、音楽、音声、画像、グラフィック、ビデオ、メッセージ、タグ、および/またはその他の資料を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.8 "Tài Sản Số"</dt>
-            <dd>có nghĩa là bất kỳ loại tiền điện tử, tài sản tiền điện tử, token dựa trên blockchain hoặc tài sản số khác được Dịch vụ hỗ trợ.</dd>
+            <dt className="font-semibold">1.8 「デジタル資産」</dt>
+            <dd>とは、サービスがサポートする暗号通貨、暗号資産、ブロックチェーンベースのトークン、またはその他のデジタル資産を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.9 "Đối Tác Hệ Sinh Thái"</dt>
-            <dd>có nghĩa là các ứng dụng và dự án DeFi được hỗ trợ.</dd>
+            <dt className="font-semibold">1.9 「エコシステムパートナー」</dt>
+            <dd>とは、サポートされているDeFiアプリケーションおよびプロジェクトを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.10 "Phản Hồi"</dt>
-            <dd>có nghĩa là bất kỳ ý tưởng, đề xuất, tài liệu và/hoặc đề xuất mà bạn gửi cho MEMEPUMP thông qua Discord hoặc thông qua Dịch vụ.</dd>
+            <dt className="font-semibold">1.10 「フィードバック」</dt>
+            <dd>とは、Discordまたはサービスを通じてMEMEPUMPに送信するアイデア、提案、文書、および/または提案を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.11 "Bạn Bè"</dt>
-            <dd>có nghĩa là cá nhân được biết đến bởi người giới thiệu.</dd>
+            <dt className="font-semibold">1.11 「友人」</dt>
+            <dd>とは、紹介者によって知られている個人を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.12 "Khuyến Khích"</dt>
-            <dd>có nghĩa là bất kỳ lợi ích nào mà người giới thiệu có thể nhận được do tham gia vào Chương Trình Giới Thiệu.</dd>
+            <dt className="font-semibold">1.12 「インセンティブ」</dt>
+            <dd>とは、紹介プログラムへの参加により紹介者が受け取る可能性のある利益を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.13 "Cung Cấp"</dt>
-            <dd>có nghĩa là tải lên, đăng, gửi email, truyền tải hoặc cung cấp thông qua Dịch vụ.</dd>
+            <dt className="font-semibold">1.13 「投稿」</dt>
+            <dd>とは、サービスを通じてアップロード、投稿、電子メール送信、送信、または提供することを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.14 "OSS" hoặc "Phần Mềm Mã Nguồn Mở"</dt>
-            <dd>có nghĩa là bất kỳ phần mềm hoặc thành phần của nó phải tuân theo giấy phép "mã nguồn mở" hoặc "phần mềm miễn phí".</dd>
+            <dt className="font-semibold">1.14 「OSS」または「オープンソースソフトウェア」</dt>
+            <dd>とは、「オープンソース」または「フリーソフトウェア」ライセンスの対象となるソフトウェアまたはそのコンポーネントを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.15 "Liên Kết Giới Thiệu"</dt>
-            <dd>có nghĩa là liên kết cá nhân hoặc mã được sử dụng bởi người giới thiệu để giới thiệu bạn bè đến Dịch vụ thông qua Chương Trình Giới Thiệu.</dd>
+            <dt className="font-semibold">1.15 「紹介リンク」</dt>
+            <dd>とは、紹介者が紹介プログラムを通じて友人をサービスに紹介するために使用する個人リンクまたはコードを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.16 "Chương Trình Giới Thiệu"</dt>
-            <dd>có nghĩa là chương trình phần thưởng giới thiệu do MEMEPUMP cung cấp theo các điều khoản của Phần 18 của Thỏa thuận này.</dd>
+            <dt className="font-semibold">1.16 「紹介プログラム」</dt>
+            <dd>とは、本契約第18条の条件に基づいてMEMEPUMPが提供する紹介報酬プログラムを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.17 "Người Giới Thiệu"</dt>
-            <dd>có nghĩa là Người Dùng Đã Đăng Ký tham gia vào Chương Trình Giới Thiệu.</dd>
+            <dt className="font-semibold">1.17 「紹介者」</dt>
+            <dd>とは、紹介プログラムに参加する登録ユーザーを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.18 "Người Dùng Đã Đăng Ký"</dt>
-            <dd>là người dùng có Tài Khoản Bên Thứ Ba hợp lệ, bao gồm nhưng không giới hạn ở Ví, thông qua đó người dùng đã kết nối với Dịch vụ.</dd>
+            <dt className="font-semibold">1.18 「登録ユーザー」</dt>
+            <dd>とは、ウォレットを含むがこれに限定されない有効なサードパーティアカウントを持ち、サービスに接続したユーザーを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.19 "Dịch Vụ"</dt>
-            <dd>có nghĩa là bất kỳ sản phẩm và dịch vụ nào được cung cấp bởi MEMEPUMP.GG</dd>
+            <dt className="font-semibold">1.19 「サービス」</dt>
+            <dd>とは、MEMEPUMP.GGが提供する製品およびサービスを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.20 "Điều Khoản Bổ Sung"</dt>
-            <dd>có nghĩa là bất kỳ điều khoản hoặc chính sách nào áp dụng cho bất kỳ sản phẩm hoặc dịch vụ nào được cung cấp bởi MEMEPUMP mà không được đề cập trong Điều Khoản Dịch Vụ này.</dd>
+            <dt className="font-semibold">1.20 「追加規約」</dt>
+            <dd>とは、本利用規約に記載されていないMEMEPUMPが提供する製品またはサービスに適用される規約またはポリシーを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.21 "Bot Telegram"</dt>
-            <dd>có nghĩa là chương trình tự động chạy trên nền tảng nhắn tin Telegram, có khả năng tương tác với người dùng thông qua tin nhắn và lệnh để thực hiện các tác vụ khác nhau.</dd>
+            <dt className="font-semibold">1.21 「Telegramボット」</dt>
+            <dd>とは、メッセージングプラットフォームTelegram上で自動的に実行され、メッセージやコマンドを通じてユーザーと対話し、様々なタスクを実行できるプログラムを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.22 "Điều Khoản Dịch Vụ"</dt>
-            <dd>có nghĩa là Thỏa thuận Điều Khoản Dịch Vụ MEMEPUMP này điều chỉnh việc truy cập và sử dụng Dịch vụ của bạn.</dd>
+            <dt className="font-semibold">1.22 「利用規約」</dt>
+            <dd>とは、あなたのサービスへのアクセスおよび使用を規制する本MEMEPUMP利用規約契約を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.23 "Tài Khoản Bên Thứ Ba"</dt>
-            <dd>có nghĩa là tài khoản hợp lệ trên nhà cung cấp dịch vụ bên thứ ba hoặc dịch vụ mạng xã hội được Dịch vụ hỗ trợ, chẳng hạn như Facebook, Twitter hoặc GitHub, hoặc Ví bên thứ ba hợp lệ tương thích với Dịch vụ.</dd>
+            <dt className="font-semibold">1.23 「サードパーティアカウント」</dt>
+            <dd>とは、Facebook、Twitter、GitHubなどのサービスがサポートする有効なサードパーティサービスプロバイダーまたはソーシャルネットワークサービス上のアカウント、またはサービスと互換性のある有効なサードパーティウォレットを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.24 "Dịch Vụ Bên Thứ Ba"</dt>
-            <dd>có nghĩa là bất kỳ trang web, ứng dụng và quảng cáo bên thứ ba nào có thể truy cập hoặc được kết nối với Dịch vụ nhưng không được cung cấp bởi MEMEPUMP.</dd>
+            <dt className="font-semibold">1.24 「サードパーティサービス」</dt>
+            <dd>とは、サービスにアクセスまたは接続される可能性のあるが、MEMEPUMPによって提供されていないサードパーティのウェブサイト、アプリケーション、および広告を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.25 "Nội Dung Người Dùng"</dt>
-            <dd>có nghĩa là bất kỳ Nội Dung nào được Cung Cấp bởi Người Dùng Đã Đăng Ký trên hoặc thông qua Dịch vụ.</dd>
+            <dt className="font-semibold">1.25 「ユーザーコンテンツ」</dt>
+            <dd>とは、登録ユーザーがサービス上またはサービスを通じて投稿するコンテンツを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.26 "Ví"</dt>
-            <dd>có nghĩa là hệ thống dựa trên phần mềm để lưu trữ an toàn tiền điện tử, tài sản tiền điện tử và thông tin thanh toán liên quan.</dd>
+            <dt className="font-semibold">1.26 「ウォレット」</dt>
+            <dd>とは、暗号通貨、暗号資産、および関連する支払い情報を安全に保管するためのソフトウェアベースのシステムを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.27 "Trang Web"</dt>
-            <dd>có nghĩa là https://www.memepump.gg</dd>
+            <dt className="font-semibold">1.27 「ウェブサイト」</dt>
+            <dd>とは、https://www.memepump.ggを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.28 "Bạn"</dt>
-            <dd>có nghĩa là cá nhân hoặc pháp nhân, tùy theo trường hợp, đang sử dụng hoặc truy cập Dịch vụ, hoặc được xác định là người dùng khi bạn đăng ký trên Dịch vụ.</dd>
+            <dt className="font-semibold">1.28 「あなた」</dt>
+            <dd>とは、サービスを使用またはアクセスする個人または法人、またはサービスに登録する際にユーザーとして識別される者を意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.29 "MEMEPUMP", "chúng tôi", "chúng tôi", "của chúng tôi"</dt>
-            <dd>có nghĩa là memepump.gg</dd>
+            <dt className="font-semibold">1.29 「MEMEPUMP」、「当社」、「私たち」、「当社の」</dt>
+            <dd>とは、memepump.ggを意味します。</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.30 "Các Bên MEMEPUMP"</dt>
-            <dd>có nghĩa là MEMEPUMP, công ty mẹ, công ty con, công ty liên kết, cán bộ, nhân viên, đại lý, đối tác, nhà cung cấp và người cấp phép của MEMEPUMP.</dd>
+            <dt className="font-semibold">1.30 「MEMEPUMP関係者」</dt>
+            <dd>とは、MEMEPUMP、その親会社、子会社、関連会社、役員、従業員、代理人、パートナー、サプライヤー、およびライセンサーを意味します。</dd>
           </div>
         </dl>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">2. SỬ DỤNG DỊCH VỤ</h2>
+        <h2 className="text-xl font-bold mb-3">2. サービスの使用</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">2.1 Giấy phép sử dụng Dịch vụ</h3>
-            <p>Dịch vụ được bảo vệ bởi luật bản quyền trên toàn thế giới. Theo Thỏa thuận, MEMEPUMP cấp cho bạn giấy phép hạn chế để sao chép các phần của Dịch vụ chỉ nhằm mục đích sử dụng Dịch vụ cho mục đích cá nhân hoặc kinh doanh nội bộ của bạn.</p>
+            <h3 className="font-semibold mb-2">2.1 サービスの使用許可</h3>
+            <p>本サービスは、世界的な著作権法によって保護されています。本利用規約に基づき、MEMEPUMPは、あなたに対して使用許可を付与します。使用許可は、あなたが個人的または事業目的で本サービスを使用することを目的としています。</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">2.2 Cập nhật</h3>
-            <p>Bạn hiểu rằng Dịch vụ đang phát triển. Bạn thừa nhận và đồng ý rằng MEMEPUMP có thể cập nhật Dịch vụ mà không cần thông báo cho bạn.</p>
+            <h3 className="font-semibold mb-2">2.2 更新</h3>
+            <p>あなたは、本サービスが開発中であることを理解し、同意します。MEMEPUMPは、必要に応じて本サービスを更新する場合がありますが、事前に通知する必要はありません。</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">3. BOT TELEGRAM VÀ DỊCH VỤ</h2>
+        <h2 className="text-xl font-bold mb-3">3. Telegramボットとサービス</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">3.1 Dịch Vụ Chung</h3>
-            <p>MEMEPUMP là một công cụ tiên tiến được thiết kế cho các nhà giao dịch tài sản số, cung cấp khả năng toàn diện để quét và phân tích dữ liệu blockchain. MEMEPUMP chuyển đổi dữ liệu on-chain phức tạp thành các thông tin chi tiết dễ hiểu và có thể hành động, giúp người dùng đưa ra quyết định nhanh hơn và sáng suốt hơn. Bằng cách giám sát hiệu quả các hoạt động liên quan đến hợp đồng thông minh blockchain và địa chỉ ví, MEMEPUMP giúp người dùng duy trì sự giám sát cẩn thận đối với các tài sản số khác nhau và địa chỉ "smart money".</p>
-            <p className="mt-2">Để tránh hiểu nhầm, thông tin được trình bày trên MEMEPUMP chỉ là sự phản ánh các hoạt động blockchain được giám sát bởi nền tảng; không có thông tin nào được tạo ra hoặc thay đổi bởi MEMEPUMP. Hơn nữa, MEMEPUMP sẽ không chịu bất kỳ trách nhiệm nào về tính chính xác, độ tin cậy hoặc tính đầy đủ của thông tin đó, cũng như bất kỳ tổn thất hoặc thiệt hại nào phát sinh từ việc sử dụng nó.</p>
-            <p className="mt-2">Người dùng được khuyến khích thực hiện thẩm định của riêng họ và tham khảo ý kiến của các chuyên gia có trình độ trước khi đưa ra bất kỳ quyết định tài chính nào dựa trên thông tin chi tiết do MEMEPUMP cung cấp. Bằng cách sử dụng dịch vụ này, người dùng thừa nhận và chấp nhận các điều khoản và điều kiện này, bao gồm các giới hạn trách nhiệm được nêu ở đây.</p>
+            <h3 className="font-semibold mb-2">3.1 サービスの概要</h3>
+            <p>MEMEPUMPは、暗号資産のトレーダー向けに設計された最先端のツールであり、ブロックチェーンデータを分析し、包括的な分析を行います。MEMEPUMPは、オンチェーンデータを複雑な形式から分かりやすい形式に変換し、ユーザーが迅速かつ合理的に判断できるようにすることで、ユーザーの利便性を向上させます。MEMEPUMPは、スマートマネーの動向を監視することで、ユーザーが異なる暗号資産を保有する際に、異なる暗号資産の間での取引を可能にします。</p>
+            <p className="mt-2">誤解を避けるために、MEMEPUMPが提示する情報は、ブロックチェーンの監視に基づくものであり、MEMEPUMPによって作成または変更された情報はありません。さらに、MEMEPUMPは、あなたが使用する際に、あなたの責任を負いません。</p>
+            <p className="mt-2">ユーザーは、自分の判断と専門家の意見を参考にして、必要に応じて、金融取引に関する意思決定を行うことを奨励します。MEMEPUMPが提供するサービスを使用することで、ユーザーは、これらの条件に同意し、ここに記載された責任の範囲を認識します。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.2 Chức Năng Sao Chép Giao Dịch</h3>
-            <p>Bạn có thể sử dụng bảng điều khiển dữ liệu của MEMEPUMP để xác định các địa chỉ "smart money", từ đó tạo điều kiện cho việc sao chép giao dịch một cú nhấp chuột. Tính năng này đơn giản hóa quá trình sao chép các giao dịch thành công được thực hiện bởi các nhà đầu tư có kinh nghiệm, cho phép bạn hưởng lợi từ chuyên môn của họ.</p>
-            <p className="mt-2">Bạn thừa nhận và đồng ý rằng mặc dù Bot TG tạo điều kiện cho việc sao chép giao dịch, nó hoạt động độc quyền dựa trên các tham số mà bạn thiết lập. Bạn phải chọn rõ ràng địa chỉ nào để theo dõi và đặt các tiêu chí được xác định trước cho việc sao chép tự động. Tất cả các hoạt động giao dịch được bắt đầu dựa trên hướng dẫn và tùy chọn rõ ràng của bạn.</p>
+            <h3 className="font-semibold mb-2">3.2 取引コピー機能</h3>
+            <p>MEMEPUMPのデータボードを使用して、スマートマネーのアドレスを特定し、取引を自動的にコピーするための条件を設定できます。この機能は、経験豊富な投資家による成功した取引の自動化を容易にし、ユーザーが専門的な知識を利用できるようにします。</p>
+            <p className="mt-2">あなたは、Bot TGが取引を自動化する条件を設定していることを認め、同意します。あなたは、明確にアドレスを選択して、自動的にコピーするための基準を設定する必要があります。すべての取引は、あなたの指示と明確なオプションに基づいて開始されます。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.3 Quản Lý Tài Khoản</h3>
-            <p>Bot TG cho phép quản lý liền mạch các ví blockchain thông qua giao diện của nó, bao gồm việc tạo và quản lý địa chỉ ví và khóa truy cập. Bạn có thể thực hiện các hoạt động khác nhau, bao gồm xem số dư và thực hiện giao dịch, đồng thời duy trì quyền kiểm soát khóa riêng của bạn.</p>
-            <p className="mt-2">Bot TG hoạt động như một giao diện cho phép bạn tương tác với ví riêng của bạn được tạo bởi MEMEPUMP. Khi bạn chuyển tiền vào ví này, bạn vẫn giữ quyền kiểm soát khóa riêng và tài sản của mình. Bot tạo điều kiện cho giao dịch tự động thay mặt bạn.</p>
-            <p className="mt-2">MEMEPUMP sẽ giám sát điều kiện thị trường và thông báo cho bạn khi đáp ứng các tiêu chí nhất định. Tuy nhiên, việc thực hiện giao dịch vẫn nằm dưới sự kiểm soát của bạn, đảm bảo rằng bạn có tiếng nói cuối cùng trong tất cả các hoạt động giao dịch. Bạn hoàn toàn chịu trách nhiệm bảo mật thông tin đăng nhập tài khoản và khóa riêng của mình, và bạn đồng ý tuân theo các phương pháp hay nhất để bảo vệ thông tin của mình.</p>
+            <h3 className="font-semibold mb-2">3.3 アカウント管理</h3>
+            <p>Bot TGを使用することで、ブロックチェーンウォレットを通じて連続的にアドレスを管理できます。これには、アドレスの作成と管理、およびアクセスキーの管理が含まれます。あなたは、異なるアクションを実行でき、アカウントの管理と同時に、独自のキーを管理できます。</p>
+            <p className="mt-2">Bot TGは、あなたのウォレットを作成するためにMEMEPUMPが提供するインターフェイスを使用します。あなたがこのウォレットに送金すると、あなたは依然として独自のキーを管理し、自身の資産を保持します。Bot TGは、あなたの代わりに自動的に取引を行います。</p>
+            <p className="mt-2">MEMEPUMPは、市場条件とともに、必要な基準に応じて通知を行います。ただし、取引の実行は依然としてあなたの管理下にあり、あなたが最終的な意思決定者であることを保証します。あなたは、あなたのログイン情報とキーを管理するための最善の方法に同意します。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.4 Tích Hợp Và Phân Tích Dữ Liệu</h3>
-            <p>Bot TG cho phép bạn truy xuất dữ liệu từ các ứng dụng phi tập trung khác nhau, bao gồm các sàn giao dịch phi tập trung ("DApps"). Chức năng này cung cấp cho bạn thông tin chi tiết cần thiết để đưa ra quyết định giao dịch chiến lược dựa trên dữ liệu thời gian thực.</p>
+            <h3 className="font-semibold mb-2">3.4 統合とデータ分析</h3>
+            <p>Bot TGを使用することで、異なる非中央集権アプリケーションからデータを取得できます。これには、非中央集権取引所（DApps）が含まれます。この機能は、時間の経過に伴う取引戦略の意思決定に必要な詳細情報を提供します。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.5 Hoán Đổi Ngang Hàng</h3>
-            <p>Bạn có thể bắt đầu hoán đổi Tài Sản Số trực tiếp thông qua giao diện Bot TG, sử dụng công nghệ tích hợp từ các DApp bên thứ ba. MEMEPUMP không xác nhận hoặc chịu trách nhiệm về bất kỳ DApp hoặc dịch vụ bên thứ ba nào được truy cập thông qua Bot TG. Bạn được khuyến nghị xem xét các điều khoản, điều kiện và chính sách bảo mật của bất kỳ dịch vụ bên thứ ba nào trước khi sử dụng chúng.</p>
+            <h3 className="font-semibold mb-2">3.5 ブロックチェーン間取引</h3>
+            <p>Bot TGを使用することで、異なるDAppからの取引を直接行うことができます。MEMEPUMPは、異なるDAppからの取引を承認または責任を負いません。あなたは、異なる規約、条件、およびセキュリティポリシーを考慮して、異なるDAppを使用する前に、それらを確認することをお勧めします。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.6 Phát Sóng Giao Dịch</h3>
-            <p>Bot TG có thể cho phép bạn xem các địa chỉ và thông tin liên quan trong mạng Tài Sản Số và phát sóng giao dịch sử dụng các DApp khác hoặc nguồn dữ liệu tập trung. Chức năng này cho phép thực hiện giao dịch hiệu quả dựa trên dữ liệu mạng hiện tại.</p>
+            <h3 className="font-semibold mb-2">3.6 取引放送</h3>
+            <p>Bot TGは、ブロックチェーン上のアドレスと関連する情報を表示し、ブロックチェーン上の他のDAppからの取引を使用して放送することができます。この機能は、現在のネットワークデータに基づいて効果的な取引を実現します。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.7 Tham Số Giao Dịch Có Thể Tùy Chỉnh</h3>
-            <p>Bạn giữ toàn quyền kiểm soát chiến lược giao dịch của mình. Bạn có thể đặt và sửa đổi các tham số giao dịch để đảm bảo rằng tất cả các hoạt động của Bot TG phù hợp với tùy chọn giao dịch cụ thể của bạn.</p>
+            <h3 className="font-semibold mb-2">3.7 取引パラメータの調整</h3>
+            <p>あなたは、自分の取引戦略を完全に制御できます。あなたは、取引パラメータを調整して、Bot TGのすべてのアクションがあなたの特定の取引オプションに適合するようにする必要があります。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.8 Từ Chối Trách Nhiệm Và Giới Hạn Trách Nhiệm</h3>
-            <p>Bạn thừa nhận và đồng ý rằng Bot TG hoạt động độc quyền dựa trên các tham số mà bạn thiết lập và không thực hiện bất kỳ quyết định nào liên quan đến giao dịch mà không có đầu vào rõ ràng từ bạn. MEMEPUMP sẽ không chịu trách nhiệm về bất kỳ tổn thất, thiệt hại hoặc trách nhiệm pháp lý nào phát sinh do việc sử dụng Bot TG của bạn.</p>
-            <p className="mt-2">Bạn chịu trách nhiệm hoàn toàn về bất kỳ lợi nhuận hoặc tổn thất nào phát sinh từ hoạt động giao dịch của bạn. Bạn có thể chấm dứt hoạt động của Bot TG vào bất kỳ lúc nào và rút Tài Sản Số của bạn theo ý của bạn.</p>
-            <p className="mt-2">Khi nhận được hướng dẫn như vậy, Bot TG sẽ ngừng hoạt động ngay lập tức hoặc trong khung thời gian hợp lý, tùy thuộc vào loại Bot đang được sử dụng. Bạn thừa nhận rằng bất kỳ giao dịch đang chờ xử lý nào có thể cần được hoàn thành hoặc hủy trước khi chấm dứt hoàn toàn.</p>
+            <h3 className="font-semibold mb-2">3.8 拒否責任と責任の制限</h3>
+            <p>あなたは、Bot TGが設定したパラメータに基づいて動作することを認め、同意します。あなたがBot TGを使用することで生じる可能性のある損失、損害、または法的責任について、あなたは責任を負いません。</p>
+            <p className="mt-2">あなたは、あなたが行う取引から生じる可能性のある利益または損失について完全に責任を負います。あなたは、いつでもBot TGの活動を停止し、自身のブロックチェーン資産を引き出すことができます。</p>
+            <p className="mt-2">あなたがこのような指示を受け取った場合、Bot TGは直ちに動作を停止するか、適切な時間内に停止することがあります。あなたは、あなたが使用しているBotの種類に応じて、そのような停止が行われる可能性があることを認めます。あなたは、あなたが行う取引が完了する前に、完了またはキャンセルされる可能性があることを認めます。</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">4. PHÍ</h2>
+        <h2 className="text-xl font-bold mb-3">4. 料金</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">4.1 Phí Dịch Vụ</h3>
-            <p>Bằng cách thực hiện giao dịch thông qua Dịch vụ của chúng tôi, bạn đồng ý trả bất kỳ phí áp dụng nào được nêu trong biểu phí MEMEPUMP, có sẵn trên Trang Web của chúng tôi. Bạn cho phép chúng tôi tự động khấu trừ các phí này trực tiếp từ Ví của bạn cho mỗi giao dịch.</p>
-            <p className="mt-2">Chúng tôi bảo lưu quyền thay đổi hoặc sửa đổi biểu phí của chúng tôi hoặc tăng phí dịch vụ của chúng tôi vào bất kỳ lúc nào. Bất kỳ thay đổi nào sẽ có hiệu lực khi được đăng trên Trang Web hoặc Ứng dụng của chúng tôi. Việc sử dụng Dịch vụ MEMEPUMP đầu tiên của bạn sau bất kỳ thay đổi phí nào sẽ cấu thành sự chấp nhận của bạn đối với những thay đổi đó. Nếu bạn không đồng ý với phí đã cập nhật, bạn có thể ngừng sử dụng Dịch vụ như được nêu trong Thỏa thuận này.</p>
+            <h3 className="font-semibold mb-2">4.1 サービス料金</h3>
+            <p>MEMEPUMPの提供するサービスを通じて取引を行うことにより、あなたは、MEMEPUMPの提供する料金表に記載されている料金を承諾します。MEMEPUMPの提供する料金は、いつでも変更または変更される場合があります。変更が行われた場合、その効果は、当社のウェブサイトまたはアプリケーションに掲載された時点で生じます。あなたがMEMEPUMPの最初のサービスを使用した後、いずれかの料金が変更された場合、それはあなたがそれらの変更に同意したことを意味します。あなたが新しい料金に同意しない場合、あなたは、当社の提供するサービスを停止することができます。</p>
+            <p className="mt-2">MEMEPUMPの提供する料金は、追加料金が適用される場合があります。これらの料金は、MEMEPUMPが提供するサービスに関連して発生する可能性があります。これらの料金は、MEMEPUMPが提供するサービスに関連して発生する可能性があります。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">4.2 Phí Bổ Sung</h3>
-            <p>Vui lòng lưu ý rằng ngoài phí dịch vụ của chúng tôi, các phí khác có thể áp dụng cho giao dịch của bạn, bao gồm phí gas, trượt giá, phí ưu tiên và phí nền tảng phát hành token, được tính bởi người xác thực mạng, nền tảng phát hành token và các bên thứ ba khác bên ngoài MEMEPUMP. Để rõ ràng, MEMEPUMP chỉ tính phí dịch vụ được mô tả ở đây cho Dịch vụ của mình.</p>
+            <h3 className="font-semibold mb-2">4.2 追加料金</h3>
+            <p>ご注意ください。MEMEPUMPが提供するサービスに加えて、他の料金が適用される場合があります。これらの料金には、ガス料金、スプレッド、プレミアム料金、トークン発行プラットフォームによって発生する料金、およびMEMEPUMP以外の第三者が発生する料金が含まれます。これらの料金は、MEMEPUMPが提供するサービスに関連して発生する可能性があります。</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">5. ĐĂNG KÝ</h2>
+        <h2 className="text-xl font-bold mb-3">5. 登録</h2>
         <div className="space-y-3">
           <div>
+            <h3 className="font-semibold mb-2">5.1 代表者</h3>
             <h3 className="font-semibold mb-2">5.1 Đại Diện</h3>
             <p>Bạn đại diện rằng bạn không phải là người bị cấm sử dụng Dịch vụ theo luật của nơi cư trú của bạn hoặc bất kỳ khu vực pháp lý áp dụng nào khác. Bạn chịu trách nhiệm cho tất cả các hoạt động xảy ra trong quá trình sử dụng Dịch vụ của bạn.</p>
             <p className="mt-2">Bạn đồng ý rằng bạn sẽ giám sát việc sử dụng Dịch vụ của mình để hạn chế việc sử dụng bởi trẻ vị thành niên, và bạn sẽ chấp nhận trách nhiệm đầy đủ cho bất kỳ việc sử dụng trái phép Dịch vụ nào bởi trẻ vị thành niên.</p>
