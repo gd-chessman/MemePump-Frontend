@@ -30,7 +30,7 @@ import PumpFun from './pump-fun';
 
 
 const Header = () => {
-    const { t } = useLang();
+    const { t, lang } = useLang();
     const router = useRouter();
     const pathname = usePathname();
     const { isAuthenticated, logout, updateToken } = useAuth();
@@ -268,9 +268,19 @@ const Header = () => {
                                                     currentWalletAddress={walletInfor.solana_address}
                                                 />
                                             </div>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/tos/${lang}`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.tos')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/privacypolicy/${lang}`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.privacypolicy')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
-                                                <span>Logout</span>
+                                                <span>{t('header.wallet.logout')}</span>
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -339,6 +349,16 @@ const Header = () => {
                                             >
                                                 <Wallet2 className="mr-2 h-4 w-4" />
                                                 <span>{t('header.wallet.selectWallet')}</span>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/tos/${lang}`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.tos')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/privacypolicy/${lang}`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.privacypolicy')}</span>
+                                                </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />

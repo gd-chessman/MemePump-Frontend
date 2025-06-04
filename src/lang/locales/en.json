@@ -660,8 +660,10 @@
     "wallet": {
       "selectWallet": "Select Wallet",
       "logout": "Logout",
+      "loading": "Loading...",
       "connecting": "Connecting...",
-      "loading": "Loading..."
+      "tos": "Terms of Service",
+      "privacypolicy": "Privacy Policy"
     },
     "notifications": {
       "switchWalletSuccess": "Wallet switched successfully!",

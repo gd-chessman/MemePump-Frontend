@@ -720,10 +720,12 @@
       "loading": "Đang tải..."
     },
     "wallet": {
-      "selectWallet": "Chọn Ví",
+      "selectWallet": "Chọn ví",
       "logout": "Đăng xuất",
+      "loading": "Đang tải...",
       "connecting": "Đang kết nối...",
-      "loading": "Đang tải..."
+      "tos": "Điều khoản dịch vụ",
+      "privacypolicy": "Chính sách bảo mật"
     },
     "notifications": {
       "switchWalletSuccess": "Chuyển đổi ví thành công!",
