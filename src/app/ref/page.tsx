@@ -16,118 +16,48 @@ import {
   DollarSign,
   Activity,
 } from "lucide-react"
-
-// Sample data for referred users with level information
-const referredUsers = [
-  {
-    id: "user1",
-    name: "Alex Johnson",
-    joinDate: "2023-05-12",
-    earnings: 125.75,
-    status: "active",
-    level: 1,
-  },
-  {
-    id: "user2",
-    name: "Sarah Williams",
-    joinDate: "2023-06-23",
-    earnings: 87.3,
-    status: "active",
-    level: 1,
-  },
-  {
-    id: "user3",
-    name: "Michael Brown",
-    joinDate: "2023-07-05",
-    earnings: 42.15,
-    status: "inactive",
-    level: 2,
-  },
-  {
-    id: "user4",
-    name: "Emma Davis",
-    joinDate: "2023-08-17",
-    earnings: 63.9,
-    status: "active",
-    level: 2,
-  },
-  {
-    id: "user5",
-    name: "James Wilson",
-    joinDate: "2023-09-03",
-    earnings: 31.45,
-    status: "active",
-    level: 3,
-  },
-  {
-    id: "user6",
-    name: "Olivia Martinez",
-    joinDate: "2023-09-15",
-    earnings: 18.2,
-    status: "inactive",
-    level: 3,
-  },
-  {
-    id: "user7",
-    name: "William Taylor",
-    joinDate: "2023-10-07",
-    earnings: 9.75,
-    status: "active",
-    level: 4,
-  },
-  {
-    id: "user8",
-    name: "Sophia Anderson",
-    joinDate: "2023-10-22",
-    earnings: 5.3,
-    status: "active",
-    level: 5,
-  },
-  {
-    id: "user9",
-    name: "Benjamin Thomas",
-    joinDate: "2023-11-05",
-    earnings: 12.8,
-    status: "active",
-    level: 1,
-  },
-  {
-    id: "user10",
-    name: "Isabella Garcia",
-    joinDate: "2023-11-18",
-    earnings: 7.45,
-    status: "inactive",
-    level: 2,
-  },
-  {
-    id: "user11",
-    name: "Lucas Rodriguez",
-    joinDate: "2023-12-01",
-    earnings: 22.6,
-    status: "active",
-    level: 3,
-  },
-  {
-    id: "user12",
-    name: "Mia Lee",
-    joinDate: "2023-12-14",
-    earnings: 15.9,
-    status: "active",
-    level: 4,
-  },
-]
+import { useQuery } from "@tanstack/react-query";
+import { getListMembers, getRewards } from "@/services/api/RefService";
 
 export default function ReferralPage() {
+    const { data: rewards = [] } = useQuery({
+        queryKey: ["rewards"],
+        queryFn: getRewards,
+    });
+
+    const { data: listMembers = [] } = useQuery({
+        queryKey: ["listMembers"],
+        queryFn: getListMembers,
+    });
+
   const [isTreeVisible, setIsTreeVisible] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
-  const [totalEarnings] = useState(15.5) // Simulated earnings - can be changed to test
+  const [totalEarnings] = useState(rewards.data?.total?.amount_available || 0) // Use amount_available from API
   const [activeTab, setActiveTab] = useState("users") // 'layers', 'users'
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [selectedLevel, setSelectedLevel] = useState("all")
 
+  // Transform listMembers data into the format we need
+  const transformedMembers = listMembers.data?.members ? Object.entries(listMembers.data.members).flatMap(([level, members]) => {
+    const levelNumber = parseInt(level.split('_')[1]);
+    return (members as Array<{
+        wallet_id: number;
+        wallet_solana_address: string;
+        wallet_nick_name: string;
+        amount_reward: number;
+    }>).map((member) => ({
+        id: member.wallet_id.toString(),
+        name: member.wallet_nick_name || 'Unknown',
+        joinDate: new Date().toISOString(), // Since join date is not provided in the API
+        earnings: member.amount_reward || 0,
+        status: "active", // Since status is not provided in the API
+        level: levelNumber,
+    }));
+  }) : [];
+
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText("https://mevx.io/@")
+    await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_API_URL}/?ref=${rewards.data?.referent_code || ''}`)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -149,8 +79,8 @@ export default function ReferralPage() {
   // Filter users based on selected level
   const filteredUsers =
     selectedLevel === "all"
-      ? referredUsers
-      : referredUsers.filter((user) => user.level === Number.parseInt(selectedLevel.replace("level", "")))
+      ? transformedMembers
+      : transformedMembers.filter((user) => user.level === Number.parseInt(selectedLevel.replace("level", "")))
 
   // Draw connections between nodes
   const drawConnections = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
@@ -358,7 +288,7 @@ export default function ReferralPage() {
           </div>
 
           <div className="flex items-center bg-gray-100/80 dark:bg-gray-900/80 rounded-md p-2 border border-gray-300/50 dark:border-gray-700/50 hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-all duration-300 mb-3">
-            <span className="flex-1 text-gray-900 dark:text-white font-mono text-xs">https://mevx.io/@</span>
+            <span className="flex-1 text-gray-900 dark:text-white font-mono text-xs">{process.env.NEXT_PUBLIC_API_URL}/?ref={rewards.data?.referent_code || ''}</span>
             <button
               onClick={copyToClipboard}
               className="ml-2 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white px-2 py-1 rounded-md transition-all duration-300 flex items-center gap-1 shadow-md hover:shadow-lg text-xs"
@@ -380,12 +310,12 @@ export default function ReferralPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
           <div className="bg-green-100/60 dark:bg-green-900/40 backdrop-blur-sm rounded-md p-3 border border-green-300/50 dark:border-green-700/50 shadow-md">
             <h3 className="text-green-600 dark:text-green-400 font-semibold mb-1 text-xs">Total Referrals</h3>
-            <p className="text-xl font-bold text-gray-900 dark:text-white">{referredUsers.length}</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-white">{rewards.data?.total?.member_num || 0}</p>
           </div>
           <div className="bg-blue-100/60 dark:bg-blue-900/40 backdrop-blur-sm rounded-md p-3 border border-blue-300/50 dark:border-blue-700/50 shadow-md">
             <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">Total Earnings</h3>
             <div className="flex items-center justify-between">
-              <p className="text-xl font-bold text-gray-900 dark:text-white">${totalEarnings.toFixed(2)}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}</p>
               <button
                 onClick={() => setShowWithdrawModal(true)}
                 className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-2 py-1 rounded-md transition-all duration-300 flex items-center gap-1 shadow-md hover:shadow-lg text-xs font-medium"
@@ -398,7 +328,7 @@ export default function ReferralPage() {
           <div className="bg-purple-100/60 dark:bg-purple-900/40 backdrop-blur-sm rounded-md p-3 border border-purple-300/50 dark:border-purple-700/50 shadow-md">
             <h3 className="text-purple-600 dark:text-purple-400 font-semibold mb-1 text-xs">Active Referrals</h3>
             <p className="text-xl font-bold text-gray-900 dark:text-white">
-              {referredUsers.filter((user) => user.status === "active").length}
+              {rewards.data?.total?.member_num || 0}
             </p>
           </div>
         </div>
@@ -573,7 +503,7 @@ export default function ReferralPage() {
 
                 {/* Table Rows */}
                 <div className="space-y-2">
-                  {[1, 2, 3, 4, 5].map((layer) => (
+                  {[1, 2, 3, 4, 5, 6, 7].map((layer) => (
                     <div key={layer} className="grid grid-cols-4 gap-2 items-center">
                       <div>
                         <div className="bg-blue-600 dark:bg-blue-500 text-white px-2 py-1 rounded-md text-[10px] font-medium text-center">
@@ -583,30 +513,21 @@ export default function ReferralPage() {
                       <div className="text-center">
                         <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
                           <span className="text-gray-900 dark:text-white font-bold text-sm">
-                            {referredUsers.filter((user) => user.level === layer).length}
+                            {rewards.data?.by_level?.[`level_${layer}`]?.member_num || 0}
                           </span>
                         </div>
                       </div>
                       <div className="text-center">
                         <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
                           <span className="text-green-600 dark:text-green-400 font-bold text-sm">
-                            $
-                            {referredUsers
-                              .filter((user) => user.level === layer)
-                              .reduce((sum, user) => sum + user.earnings, 0)
-                              .toFixed(2)}
+                            ${rewards.data?.by_level?.[`level_${layer}`]?.amount_available?.toFixed(2) || '0.00'}
                           </span>
                         </div>
                       </div>
                       <div className="text-center">
                         <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
                           <span className="text-green-600 dark:text-green-400 font-bold text-sm">
-                            $
-                            {(
-                              referredUsers
-                                .filter((user) => user.level === layer)
-                                .reduce((sum, user) => sum + user.earnings, 0) * 1.5
-                            ).toFixed(2)}
+                            ${rewards.data?.by_level?.[`level_${layer}`]?.amount_total?.toFixed(2) || '0.00'}
                           </span>
                         </div>
                       </div>
@@ -632,7 +553,7 @@ export default function ReferralPage() {
                 >
                   All
                 </button>
-                {[1, 2, 3, 4, 5].map((level) => (
+                {[1, 2, 3, 4, 5, 6, 7].map((level) => (
                   <button
                     key={level}
                     onClick={() => setSelectedLevel(`level${level}`)}
@@ -763,21 +684,21 @@ export default function ReferralPage() {
               <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-lg p-4 border border-blue-300/30 dark:border-blue-700/30 mb-4">
                 <div className="text-center">
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">Available Balance</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">${totalEarnings.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}</p>
                 </div>
               </div>
 
-              {totalEarnings < 20 ? (
+              {rewards.data?.total?.amount_available < 20 ? (
                 <div className="bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700/30 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <AlertCircle className="text-red-500" size={16} />
                     <p className="text-sm font-semibold text-red-700 dark:text-red-400">Minimum Withdrawal Required</p>
                   </div>
                   <p className="text-sm text-red-600 dark:text-red-300">
-                    You need at least $20.00 to withdraw rewards. Current balance: ${totalEarnings.toFixed(2)}
+                    You need at least $20.00 to withdraw rewards. Current balance: ${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}
                   </p>
                   <p className="text-sm text-red-600 dark:text-red-300 mt-1">
-                    Required: ${(20 - totalEarnings).toFixed(2)} more
+                    Required: ${(20 - rewards.data?.total?.amount_available).toFixed(2)} more
                   </p>
                 </div>
               ) : (
@@ -802,9 +723,9 @@ export default function ReferralPage() {
               </button>
               <button
                 onClick={handleWithdraw}
-                disabled={totalEarnings < 20}
+                disabled={rewards.data?.total?.amount_available < 20}
                 className={`flex-1 px-4 py-2 rounded-lg transition-all duration-300 font-medium flex items-center justify-center gap-2 ${
-                  totalEarnings >= 20
+                  rewards.data?.total?.amount_available >= 20
                     ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg hover:shadow-xl"
                     : "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                 }`}
