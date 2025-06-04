@@ -1,12 +1,22 @@
 import axiosClient from "@/utils/axiosClient";
 
 
-export const createTokenMemePump = async (item: any)=>{
+export const getListMembers = async ()=>{
     try {
-        const temp = await axiosClient.post("/telegram-wallets/create-token-memepump", item, { headers : {'Content-Type': 'multipart/form-data',}})
+        const temp = await axiosClient.get("/referent/get-list-members")
         return temp.data;
     } catch (error) {
         console.log(error)
-        throw error;
+        return {};
+    }
+}
+
+export const getRewards = async ()=>{
+    try {
+        const temp = await axiosClient.get("/referent/rewards")
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        return {};
     }
 }
