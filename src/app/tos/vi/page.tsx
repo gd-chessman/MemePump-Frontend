@@ -87,7 +87,7 @@ MEMEPUMP KHÔNG CÓ MỐI QUAN HỆ HOẶC NGHĨA VỤ ỦY THÁC ĐỐI VỚI B
           </div>
           <div>
             <dt className="font-semibold">1.10 "Phản Hồi"</dt>
-            <dd>có nghĩa là bất kỳ ý tưởng, đề xuất, tài liệu và/hoặc đề xuất mà bạn gửi cho GMGN thông qua Discord hoặc thông qua Dịch vụ.</dd>
+            <dd>có nghĩa là bất kỳ ý tưởng, đề xuất, tài liệu và/hoặc đề xuất mà bạn gửi cho MEMEPUMP thông qua Discord hoặc thông qua Dịch vụ.</dd>
           </div>
           <div>
             <dt className="font-semibold">1.11 "Bạn Bè"</dt>
@@ -111,7 +111,7 @@ MEMEPUMP KHÔNG CÓ MỐI QUAN HỆ HOẶC NGHĨA VỤ ỦY THÁC ĐỐI VỚI B
           </div>
           <div>
             <dt className="font-semibold">1.16 "Chương Trình Giới Thiệu"</dt>
-            <dd>có nghĩa là chương trình phần thưởng giới thiệu do GMGN cung cấp theo các điều khoản của Phần 18 của Thỏa thuận này.</dd>
+            <dd>có nghĩa là chương trình phần thưởng giới thiệu do MEMEPUMP cung cấp theo các điều khoản của Phần 18 của Thỏa thuận này.</dd>
           </div>
           <div>
             <dt className="font-semibold">1.17 "Người Giới Thiệu"</dt>
@@ -378,7 +378,7 @@ MEMEPUMP KHÔNG CÓ MỐI QUAN HỆ HOẶC NGHĨA VỤ ỦY THÁC ĐỐI VỚI B
           </div>
           <div>
             <h3 className="font-semibold mb-2">10.2 Trách Nhiệm Đối Với Nội Dung Đã Kết Nối</h3>
-            <p>MEMEPUMP không chịu trách nhiệm pháp lý đối với bạn trong kết nối với việc sử dụng Dịch vụ của MEMEPUMP hoặc bất kỳ bên thứ ba nào để xem Nội Dung Đã Kết Nối mà bạn đã công khai. GMGN TỪ CHỐI MỌI TRÁCH NHIỆM PHÁP LÝ ĐỐI VỚI NỘI DUNG ĐÃ KẾT NỐI, BAO GỒM NHƯNG KHÔNG GIỚI HẠN Ở THÔNG TIN ĐỊNH DANH CÁ NHÂN, CÓ THỂ ĐƯỢC CUNG CẤP CHO NÓ BỞI CÁC NHÀ CUNG CẤP DỊCH VỤ BÊN THỨ BA NÀY VI PHẠM CÁC CÀI ĐẶT QUYỀN RIÊNG TƯ MÀ BẠN ĐÃ THIẾT LẬP.</p>
+            <p>MEMEPUMP không chịu trách nhiệm pháp lý đối với bạn trong kết nối với việc sử dụng Dịch vụ của MEMEPUMP hoặc bất kỳ bên thứ ba nào để xem Nội Dung Đã Kết Nối mà bạn đã công khai. MEMEPUMP TỪ CHỐI MỌI TRÁCH NHIỆM PHÁP LÝ ĐỐI VỚI NỘI DUNG ĐÃ KẾT NỐI, BAO GỒM NHƯNG KHÔNG GIỚI HẠN Ở THÔNG TIN ĐỊNH DANH CÁ NHÂN, CÓ THỂ ĐƯỢC CUNG CẤP CHO NÓ BỞI CÁC NHÀ CUNG CẤP DỊCH VỤ BÊN THỨ BA NÀY VI PHẠM CÁC CÀI ĐẶT QUYỀN RIÊNG TƯ MÀ BẠN ĐÃ THIẾT LẬP.</p>
             <p className="mt-2">MEMEPUMP không nỗ lực xem xét bất kỳ Nội Dung Đã Kết Nối nào cho bất kỳ mục đích nào, bao gồm nhưng không giới hạn ở, độ chính xác, tính hợp pháp hoặc không vi phạm, và MEMEPUMP không chịu trách nhiệm về bất kỳ Nội Dung Đã Kết Nối nào.</p>
           </div>
         </div>
