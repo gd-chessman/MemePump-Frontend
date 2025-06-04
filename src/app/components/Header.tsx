@@ -147,13 +147,13 @@ const Header = () => {
             logoPump: true,
             dropdown: [
                 {
+                    name: 'PumpFun',
+                    href: '/create-coin/pumpfun',
+                },
+                {
                     name: 'MemePump',
                     href: '/create-coin/memepump',
                 },
-                {
-                    name: 'PumpFun',
-                    href: '/create-coin/pumpfun',
-                }
             ]
         },
         {
@@ -431,9 +431,10 @@ const Header = () => {
                                                             href={subItem.href}
                                                             key={subIndex}
                                                             onClick={() => setIsMobileMenuOpen(false)}
-                                                            className="block hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-1 flex items-center gap-2"
+                                                            className="hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-1 flex items-center gap-2"
                                                         >
                                                             {subItem.name === 'MemePump' && <img src="/logo.png" alt="MemePump" className="h-4 w-4" />}
+                                                            {subItem.name === 'PumpFun' && <PumpFun />}
                                                             {subItem.name}
                                                         </Link>
                                                     ))}
@@ -451,6 +452,34 @@ const Header = () => {
                                             </Link>
                                         );
                                     })}
+
+                                    {/* Additional Mobile Links */}
+                                    <div className="pt-4 border-t border-gray-200 dark:border-neutral-800">
+                                        <Link
+                                            href={`/tos/${lang}`}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-2 flex items-center gap-3"
+                                        >
+                                            <FileCheck className="h-5 w-5" />
+                                            {t('header.wallet.tos')}
+                                        </Link>
+                                        <Link
+                                            href={`/privacypolicy/${lang}`}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-2 flex items-center gap-3"
+                                        >
+                                            <ShieldCheck className="h-5 w-5" />
+                                            {t('header.wallet.privacypolicy')}
+                                        </Link>
+                                        <Link
+                                            href="/ref"
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-2 flex items-center gap-3"
+                                        >
+                                            <LinkIcon className="h-5 w-5" />
+                                            {t('header.wallet.ref')}
+                                        </Link>
+                                    </div>
                                 </nav>
                                 <LangToggle className='!bg-transparent border-none !pl-5' showArrow={true} />
                                
