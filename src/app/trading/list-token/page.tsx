@@ -14,6 +14,7 @@ import { useLang } from '@/lang/useLang'
 import PumpFun from '@/app/components/pump-fun'
 import { getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaTokenService'
 import { useWsSubscribeTokens } from "@/hooks/useWsSubscribeTokens";
+import notify from "@/app/components/notify"
 
 const ListToken = () => {
     const { t } = useLang()
@@ -79,7 +80,7 @@ const ListToken = () => {
             case "new":
                 filteredList = newCoins?.map(token => ({
                     ...token,
-                    volume_24h_usd: token.marketCap,
+                    volume_24h_usd: token.marketCap * 100,
                     volume_24h_change_percent: 0,
                     volume_1h_change_percent: 0,
                     volume_4h_change_percent: 0,
@@ -187,8 +188,31 @@ const ListToken = () => {
             }
         }
 
-        // Call API in background without waiting
-        SolonaTokenService.toggleWishlist(data).catch(console.error);
+        try {
+            // Call API
+            await SolonaTokenService.toggleWishlist(data);
+            
+            // Show success notification
+            notify({ 
+                message: isAdding 
+                    ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}` 
+                    : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}`, 
+                type: 'success' 
+            });
+        } catch (error) {
+            // Show error notification
+            notify({ 
+                message: isAdding 
+                    ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}` 
+                    : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}`, 
+                type: 'error' 
+            });
+            
+            // Revert optimistic update
+            if (myWishlist) {
+                queryClient.setQueryData(["myWishlist"], myWishlist);
+            }
+        }
 
         // Clear pending state after a very short delay
         setTimeout(() => {

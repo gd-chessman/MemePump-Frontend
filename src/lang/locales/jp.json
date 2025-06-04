@@ -687,8 +687,11 @@
     "wallet": {
       "selectWallet": "ウォレットを選択",
       "logout": "ログアウト",
+      "loading": "読み込み中...",
       "connecting": "接続中...",
-      "loading": "読み込み中..."
+      "tos": "利用規約",
+      "privacypolicy": "プライバシーポリシー",
+      "ref": "紹介"
     },
     "notifications": {
       "switchWalletSuccess": "ウォレットの切り替えに成功しました！",
@@ -795,7 +798,8 @@
     "copy": {
       "copyAddress": "アドレスをコピー",
       "copied": "コピーしました！"
-    }
+    },
+    "close": "閉じる"
   },
   "universal_account": {
     "deposit": "入金",
@@ -871,5 +875,45 @@
       "connect": "接続",
       "connecting": "接続中..."
     }
+  },
+  "ref": {
+    "title": "紹介追跡",
+    "yourReferralLink": "あなたの紹介リンク",
+    "copy": "コピーする",
+    "copied": "コピーしました！",
+    "earlyAccessReferral": "早期アクセス紹介",
+    "earlyAccessDescription": "あなたの紹介は早期アクセスを受け取り、あなたはその取引手数料からコミッションを受け取ります。",
+    "totalReferrals": "総紹介数",
+    "totalEarnings": "総収益",
+    "activeReferrals": "アクティブな紹介",
+    "withdraw": "出金",
+    "referralStructure": "紹介構造",
+    "show": "表示",
+    "hide": "非表示",
+    "yourReferrals": "あなたの紹介",
+    "referredUsers": "紹介されたユーザー",
+    "layersReferral": "5レベル紹介",
+    "referralCount": "紹介数",
+    "claimableVolume": "請求可能な量",
+    "lifetimeVolume": "ライフタイムボリューム",
+    "user": "ユーザー",
+    "joinDate": "参加日",
+    "level": "レベル",
+    "earnings": "収益",
+    "noReferredUsers": "このレベルに紹介されたユーザーはいません。",
+    "availableBalance": "利用可能な残高",
+    "minimumWithdrawalRequired": "最小出金額",
+    "minimumWithdrawalDescription": "出金するには、少なくとも$20.00が必要です。現在の残高: ${{amount}}",
+    "requiredMore": "必要: ${{amount}} もっと必要です",
+    "readyToWithdraw": "出金可能",
+    "readyToWithdrawDescription": "残高が最小出金額の要件を満たしています ($20.00)",
+    "cancel": "キャンセル",
+    "withdrawAction": "出金",
+    "withdrawalSuccess": "出金要求が正常に送信されました！",
+    "you": "あなた",
+    "receivePercent": "友達 {friend}の取引手数料の {percent}% を受け取る",
+    "id": "ID",
+    "unknown": "不明",
+    "all": "すべて"
   }
 }

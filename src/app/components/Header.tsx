@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link';
-import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun } from 'lucide-react';
+import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun, EyeOff, ShieldCheck, FileCheck, LinkIcon } from 'lucide-react';
 import { useLang } from '@/lang/useLang';
 import Display from '@/app/components/Display';
 import {
@@ -26,9 +26,11 @@ import MobileWalletSelector from './mobile-wallet-selector';
 import { useWallets } from '@/hooks/useWallets';
 import { LangToggle } from './LanguageSelect';
 import { useTheme } from 'next-themes';
+import PumpFun from './pump-fun';
+
 
 const Header = () => {
-    const { t } = useLang();
+    const { t, lang } = useLang();
     const router = useRouter();
     const pathname = usePathname();
     const { isAuthenticated, logout, updateToken } = useAuth();
@@ -189,8 +191,10 @@ const Header = () => {
                                                     <Link
                                                         key={subIndex}
                                                         href={subItem.href}
-                                                        className="block px-4 py-2 text-sm text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer"
+                                                        className="px-4 py-2 text-sm text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer flex items-center gap-2"
                                                     >
+                                                        {subItem.name === 'MemePump' && <img src="/logo.png" alt="MemePump" className="h-4 w-4" />}
+                                                        {subItem.name === 'PumpFun' && <PumpFun />}
                                                         {subItem.name}
                                                     </Link>
                                                 ))}
@@ -240,7 +244,7 @@ const Header = () => {
                             <>
                                 {!isAuthenticated ? (
                                     <button
-                                        onClick={() => window.open(process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL, "_blank")}
+                                        onClick={() => window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank")}
                                         className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-3 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
                                     >
                                         {t('connect')}
@@ -264,9 +268,24 @@ const Header = () => {
                                                     currentWalletAddress={walletInfor.solana_address}
                                                 />
                                             </div>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/tos/${lang}`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.tos')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/privacypolicy/${lang}`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.privacypolicy')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/ref`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.ref')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
-                                                <span>Logout</span>
+                                                <span>{t('header.wallet.logout')}</span>
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -314,7 +333,7 @@ const Header = () => {
                             <>
                                 {!isAuthenticated ? (
                                     <button
-                                        onClick={() => window.open(process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL, "_blank")}
+                                        onClick={() => window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank")}
                                         className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap flex items-center gap-1"
                                     >
                                         {t('connect')}
@@ -335,6 +354,24 @@ const Header = () => {
                                             >
                                                 <Wallet2 className="mr-2 h-4 w-4" />
                                                 <span>{t('header.wallet.selectWallet')}</span>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/tos/${lang}`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <FileCheck className="mr-2 h-4 w-4" />
+                                                    <span>{t('header.wallet.tos')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/privacypolicy/${lang}`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <ShieldCheck className="mr-2 h-4 w-4" />
+                                                    <span>{t('header.wallet.privacypolicy')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/ref`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <LinkIcon className="mr-2 h-4 w-4" />
+                                                    <span>{t('header.wallet.ref')}</span>
+                                                </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
@@ -394,8 +431,9 @@ const Header = () => {
                                                             href={subItem.href}
                                                             key={subIndex}
                                                             onClick={() => setIsMobileMenuOpen(false)}
-                                                            className="block hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-1"
+                                                            className="block hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-1 flex items-center gap-2"
                                                         >
+                                                            {subItem.name === 'MemePump' && <img src="/logo.png" alt="MemePump" className="h-4 w-4" />}
                                                             {subItem.name}
                                                         </Link>
                                                     ))}
@@ -446,7 +484,7 @@ const Header = () => {
                                                 {!isAuthenticated ? (
                                                     <button
                                                         onClick={() => {
-                                                            window.open(process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL, "_blank");
+                                                            window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank");
                                                             setIsMobileMenuOpen(false);
                                                         }}
                                                         className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-6 py-3 rounded-full transition-colors"
