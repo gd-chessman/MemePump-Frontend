@@ -53,13 +53,13 @@ export default function Trading() {
   const { data: topCoins, isLoading: isLoadingTopCoins } = useQuery({
     queryKey: ["topCoins"],
     queryFn: () => getTopCoins({ offset: 3, limit: 50 }),
-    refetchInterval: 30000,
+    refetchInterval: 15000,
   });
 
   const { data: newCoins, isLoading: isLoadingNewCoins } = useQuery({
     queryKey: ["newCoins"],
     queryFn: () => getNewCoins({ offset: 3, limit: 50 }),
-    refetchInterval: 30000,
+    refetchInterval: 15000,
   });
 
   const [tokens, setTokens] = useState<Token[]>([]);
