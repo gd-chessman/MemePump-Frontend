@@ -3,594 +3,594 @@ import React from 'react'
 export default function TosPage() {
   return (
     <div className="w-full mx-auto px-8 py-4">
-      <h1 className="text-2xl font-bold mb-4">Điều Khoản Dịch Vụ Memepump.gg</h1>
-      <p className="text-sm text-gray-600 mb-4">Cập nhật lần cuối: 4 tháng 6 năm 2025</p>
+      <h1 className="text-2xl font-bold mb-4">Memepump.gg 서비스 이용약관</h1>
+      <p className="text-sm text-gray-600 mb-4">최종 업데이트: 2025년 6월 4일</p>
 
       <p className="mb-4">
-Chào mừng đến với Memepump.gg! Những điều khoản dịch vụ này, cùng với bất kỳ tài liệu và điều khoản bổ sung nào được tham chiếu (gọi chung là "Điều Khoản Dịch Vụ"), được ký kết giữa Memepump.gg (gọi chung là "Memepump", "chúng tôi", "chúng tôi" và "của chúng tôi") và bạn, hoặc công ty hoặc pháp nhân khác mà bạn đại diện ("bạn" hoặc "của bạn").
+Memepump.gg에 오신 것을 환영합니다! 본 서비스 이용약관(이하 "이용약관")은 참조된 모든 문서 및 추가 약관과 함께 Memepump.gg(이하 "Memepump", "당사", "저희" 및 "우리의")와 귀하 또는 귀하가 대표하는 회사 또는 기타 법인(이하 "귀하" 또는 "귀사의") 간에 체결됩니다.
       </p>
 
       <p className="mb-4">
-        Bằng việc truy cập hoặc sử dụng Dịch vụ theo bất kỳ cách nào, bạn xác nhận rằng (1) bạn đã đọc, hiểu và đồng ý tuân theo các Điều Khoản Dịch Vụ này; (2) bạn đủ tuổi để tạo lập hợp đồng ràng buộc với chúng tôi; và (3) bạn có thẩm quyền để tham gia vào các Điều Khoản Dịch Vụ này.
+        본 서비스를 어떠한 방식으로든 접근하거나 이용함으로써 귀하는 (1) 본 이용약관을 읽고 이해하였으며 이에 동의함을 확인하고; (2) 당사와 법적 구속력이 있는 계약을 체결할 수 있는 연령임을 확인하며; (3) 본 이용약관에 동의할 권한이 있음을 확인합니다.
       </p>
 
       <p className="font-bold mb-4">
-        NẾU BẠN KHÔNG ĐỒNG Ý TUÂN THEO CÁC ĐIỀU KHOẢN DỊCH VỤ, BẠN KHÔNG ĐƯỢC PHÉP TRUY CẬP HOẶC SỬ DỤNG CÁC DỊCH VỤ.
+        만약 귀하가 본 이용약관에 동의하지 않는 경우, 귀하는 서비스를 이용하거나 접근할 수 없습니다.
       </p>
 
       <p className="mb-4">
-Việc sử dụng và tham gia vào một số Dịch vụ nhất định có thể phải tuân theo các Điều Khoản Bổ Sung, sẽ được liệt kê trong Điều Khoản Dịch Vụ hoặc sẽ được trình bày cho bạn để chấp nhận khi bạn đăng ký sử dụng Dịch vụ bổ sung. Nếu Điều Khoản Dịch Vụ không nhất quán với Điều Khoản Bổ Sung, Điều Khoản Bổ Sung sẽ được ưu tiên áp dụng đối với Dịch vụ đó.
+일부 서비스의 이용 및 참여는 본 이용약관에 명시되거나 추가 서비스 등록 시 제시되는 추가 약관의 적용을 받을 수 있습니다. 이용약관과 추가 약관이 상충하는 경우, 해당 서비스에 대해서는 추가 약관이 우선 적용됩니다.
       </p>
 
       <p className="mb-4">
-Dịch vụ cho phép người dùng khám phá, theo dõi và tương tác với dữ liệu được tạo bởi các ứng dụng blockchain tương thích của bên thứ ba.
+본 서비스는 사용자가 호환되는 제3자 블록체인 애플리케이션에서 생성된 데이터를 탐색, 추적 및 상호작용할 수 있도록 합니다.
       </p>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">TỪ CHỐI TRÁCH NHIỆM QUAN TRỌNG:</h2>
+        <h2 className="text-xl font-bold mb-3">중요한 면책조항:</h2>
         <p className="mb-3">
-BẰNG VIỆC SỬ DỤNG CÁC DỊCH VỤ DO MEMEPUMP CUNG CẤP, BẠN KHÔNG NÊN KỲ VỌNG KIẾM LỢI NHUẬN HOẶC TẠO RA LỢI NHUẬN TỪ VIỆC GIAO DỊCH, NHẬN HOẶC SỞ HỮU CÁC TÀI SẢN SỐ ĐƯỢC NIÊM YẾT TRÊN MEMEPUMP. BẠN CŨNG KHÔNG NÊN KỲ VỌNG BẤT KỲ NGƯỜI NÀO PHẢI NỖ LỰC HOẶC CUNG CẤP HỖ TRỢ ĐỂ ĐẠT ĐƯỢC LỢI NHUẬN HOẶC LỢI NHUẬN TỪ CÁC TÀI SẢN SỐ MÀ BẠN NẮM GIỮ HOẶC GIAO DỊCH.
+MEMEPUMP에서 제공하는 서비스를 이용함으로써 귀하는 MEMEPUMP에 상장된 디지털 자산의 거래, 수령 또는 보유를 통해 이익을 얻거나 수익을 창출할 것으로 기대해서는 안 됩니다. 또한 귀하는 귀하가 보유하거나 거래하는 디지털 자산에서 이익이나 수익을 얻기 위해 누구도 노력하거나 지원을 제공해야 한다고 기대해서는 안 됩니다.
         </p>
         <p className="mb-3">
-CÁC TÀI SẢN SỐ ĐƯỢC NIÊM YẾT TRÊN MEMEPUMP KHÔNG CÓ CÔNG DỤNG HOẶC CHỨC NĂNG THỰC TẾ, VÌ CHÚNG CHỈ DÀNH CHO MỤC ĐÍCH GIẢI TRÍ. VUI LÒNG LƯU Ý RẰNG BẠN CÓ THỂ MẤT TẤT CẢ SỐ TIỀN BẠN SỬ DỤNG ĐỂ MUA CÁC TÀI SẢN SỐ NÀY.
+MEMEPUMP에 상장된 디지털 자산은 실제 용도나 기능이 없으며, 오로지 오락 목적으로만 제공됩니다. 귀하가 이러한 디지털 자산을 구매하는 데 사용한 모든 금액을 잃을 수 있음을 유의하시기 바랍니다.
         </p>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">TỪ CHỐI TRÁCH NHIỆM PHÁP LÝ:</h2>
+        <h2 className="text-xl font-bold mb-3">법적 면책조항:</h2>
         <p className="mb-3">
-MEMEPUMP KHÔNG PHẢI LÀ MÔI GIỚI, TỔ CHỨC TÀI CHÍNH HOẶC TRUNG GIAN VÀ KHÔNG PHẢI LÀ ĐẠI LÝ, CỐ VẤN HOẶC NGƯỜI GIÁM HỘ CỦA BẠN. MEMEPUMP KHÔNG THỂ KHỞI TẠO CHUYỂN KHOẢN BẤT KỲ LOẠI TIỀN ĐIỆN TỬ HOẶC TÀI SẢN SỐ NÀO CỦA BẠN HOẶC TRUY CẬP TÀI SẢN SỐ CỦA BẠN TRONG VÍ WEB3 CỦA RIÊNG BẠN.
+MEMEPUMP는 중개인, 금융기관 또는 대리인이 아니며 귀하의 대리인, 고문 또는 수탁자가 아닙니다. MEMEPUMP는 귀하의 어떠한 암호화폐 또는 디지털 자산의 이체를 시작하거나 귀하의 개인 Web3 지갑에 접근할 수 없습니다.
         </p>
         <p className="mb-3">
-MEMEPUMP KHÔNG CÓ MỐI QUAN HỆ HOẶC NGHĨA VỤ ỦY THÁC ĐỐI VỚI BẠN LIÊN QUAN ĐẾN BẤT KỲ QUYẾT ĐỊNH HOẶC HOẠT ĐỘNG NÀO MÀ BẠN THỰC HIỆN TRONG KẾT NỐI VỚI VIỆC SỬ DỤNG DỊCH VỤ CỦA BẠN.
+MEMEPUMP는 귀하가 서비스 이용과 관련하여 내리는 어떠한 결정이나 활동에 대해서도 신탁 관계나 의무가 없습니다.
         </p>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">1. ĐỊNH NGHĨA</h2>
+        <h2 className="text-xl font-bold mb-3">1. 정의</h2>
         <dl className="space-y-2">
           <div>
-            <dt className="font-semibold">1.1 "Adapter"</dt>
-            <dd>có nghĩa là công cụ phần mềm cho phép và tạo điều kiện cho khả năng tương tác của một dự án DeFi cụ thể với Dịch vụ.</dd>
+            <dt className="font-semibold">1.1 "어댑터"</dt>
+            <dd>특정 DeFi 프로젝트의 서비스와의 상호운용성을 가능하게 하고 촉진하는 소프트웨어 도구를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.2 "Điều Khoản Giới Thiệu Bổ Sung"</dt>
-            <dd>có nghĩa là bất kỳ công cụ bổ sung nào được xuất bản trong lời mời giới thiệu hoặc được liên kết với bất kỳ chương trình giới thiệu cụ thể hoặc mã khuyến mãi.</dd>
+            <dt className="font-semibold">1.2 "추가 추천 약관"</dt>
+            <dd>추천 초대장에 게시되었거나 특정 추천 프로그램 또는 프로모션 코드와 연결된 모든 추가 도구를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.3 "Thỏa Thuận"</dt>
-            <dd>có nghĩa là Điều Khoản Dịch Vụ này và bất kỳ Điều Khoản Bổ Sung nào áp dụng cho việc sử dụng Dịch vụ của bạn.</dd>
+            <dt className="font-semibold">1.3 "계약"</dt>
+            <dd>본 이용약관 및 귀하의 서비스 이용에 적용되는 모든 추가 약관을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.4 "Thỏa Thuận Trọng Tài"</dt>
-            <dd>có nghĩa là cơ chế giải quyết tranh chấp trong Phần 16.</dd>
+            <dt className="font-semibold">1.4 "중재 합의"</dt>
+            <dd>제16조에 명시된 분쟁 해결 메커니즘을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.5 "Thương Hiệu"</dt>
-            <dd>có nghĩa là, đối với bất kỳ Adapter nào, nhãn hiệu, logo hoặc dấu hiệu nhận dạng khác của dự án DeFi hoặc thực thể bên thứ ba khác mà khả năng tương tác được tạo điều kiện bởi Adapter đó.</dd>
+            <dt className="font-semibold">1.5 "브랜드"</dt>
+            <dd>어댑터가 촉진하는 DeFi 프로젝트 또는 기타 제3자 실체의 상호, 로고 또는 기타 식별 표시를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.6 "Nội Dung Đã Kết Nối"</dt>
-            <dd>có nghĩa là bất kỳ Nội Dung hoặc dữ liệu tài chính cá nhân nào mà bạn đã cung cấp và lưu trữ trong Ví của bạn.</dd>
+            <dt className="font-semibold">1.6 "연결된 콘텐츠"</dt>
+            <dd>귀하가 귀하의 지갑에 제공 및 저장한 모든 콘텐츠 또는 개인 금융 데이터를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.7 "Nội Dung"</dt>
-            <dd>có nghĩa là bất kỳ thông tin, dữ liệu, văn bản, phần mềm, âm nhạc, âm thanh, hình ảnh, đồ họa, video, tin nhắn, thẻ và/hoặc các tài liệu khác.</dd>
+            <dt className="font-semibold">1.7 "콘텐츠"</dt>
+            <dd>모든 정보, 데이터, 텍스트, 소프트웨어, 음악, 오디오, 이미지, 그래픽, 비디오, 메시지, 태그 및/또는 기타 자료를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.8 "Tài Sản Số"</dt>
-            <dd>có nghĩa là bất kỳ loại tiền điện tử, tài sản tiền điện tử, token dựa trên blockchain hoặc tài sản số khác được Dịch vụ hỗ trợ.</dd>
+            <dt className="font-semibold">1.8 "디지털 자산"</dt>
+            <dd>서비스에서 지원하는 모든 암호화폐, 블록체인 기반 토큰 또는 기타 디지털 자산을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.9 "Đối Tác Hệ Sinh Thái"</dt>
-            <dd>có nghĩa là các ứng dụng và dự án DeFi được hỗ trợ.</dd>
+            <dt className="font-semibold">1.9 "생태계 파트너"</dt>
+            <dd>지원되는 DeFi 애플리케이션 및 프로젝트를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.10 "Phản Hồi"</dt>
-            <dd>có nghĩa là bất kỳ ý tưởng, đề xuất, tài liệu và/hoặc đề xuất mà bạn gửi cho MEMEPUMP thông qua Discord hoặc thông qua Dịch vụ.</dd>
+            <dt className="font-semibold">1.10 "피드백"</dt>
+            <dd>귀하가 Discord 또는 서비스를 통해 MEMEPUMP에 제출하는 모든 아이디어, 제안, 자료 및/또는 제안을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.11 "Bạn Bè"</dt>
-            <dd>có nghĩa là cá nhân được biết đến bởi người giới thiệu.</dd>
+            <dt className="font-semibold">1.11 "친구"</dt>
+            <dd>추천인에 의해 알려진 개인을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.12 "Khuyến Khích"</dt>
-            <dd>có nghĩa là bất kỳ lợi ích nào mà người giới thiệu có thể nhận được do tham gia vào Chương Trình Giới Thiệu.</dd>
+            <dt className="font-semibold">1.12 "인센티브"</dt>
+            <dd>추천 프로그램에 참여함으로써 추천인이 받을 수 있는 모든 혜택을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.13 "Cung Cấp"</dt>
-            <dd>có nghĩa là tải lên, đăng, gửi email, truyền tải hoặc cung cấp thông qua Dịch vụ.</dd>
+            <dt className="font-semibold">1.13 "제공"</dt>
+            <dd>서비스를 통해 업로드, 게시, 이메일 전송, 전송 또는 제공하는 것을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.14 "OSS" hoặc "Phần Mềm Mã Nguồn Mở"</dt>
-            <dd>có nghĩa là bất kỳ phần mềm hoặc thành phần của nó phải tuân theo giấy phép "mã nguồn mở" hoặc "phần mềm miễn phí".</dd>
+            <dt className="font-semibold">1.14 "OSS" 또는 "오픈소스 소프트웨어"</dt>
+            <dd>"오픈소스" 또는 "프리 소프트웨어" 라이선스를 따르는 모든 소프트웨어 또는 그 구성요소를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.15 "Liên Kết Giới Thiệu"</dt>
-            <dd>có nghĩa là liên kết cá nhân hoặc mã được sử dụng bởi người giới thiệu để giới thiệu bạn bè đến Dịch vụ thông qua Chương Trình Giới Thiệu.</dd>
+            <dt className="font-semibold">1.15 "추천 링크"</dt>
+            <dd>추천인이 추천 프로그램을 통해 친구를 서비스로 초대하는 데 사용하는 개인 링크 또는 코드를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.16 "Chương Trình Giới Thiệu"</dt>
-            <dd>có nghĩa là chương trình phần thưởng giới thiệu do MEMEPUMP cung cấp theo các điều khoản của Phần 18 của Thỏa thuận này.</dd>
+            <dt className="font-semibold">1.16 "추천 프로그램"</dt>
+            <dd>본 계약 제18조에 따라 MEMEPUMP가 제공하는 추천 보상 프로그램을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.17 "Người Giới Thiệu"</dt>
-            <dd>có nghĩa là Người Dùng Đã Đăng Ký tham gia vào Chương Trình Giới Thiệu.</dd>
+            <dt className="font-semibold">1.17 "추천인"</dt>
+            <dd>추천 프로그램에 참여하는 등록 사용자를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.18 "Người Dùng Đã Đăng Ký"</dt>
-            <dd>là người dùng có Tài Khoản Bên Thứ Ba hợp lệ, bao gồm nhưng không giới hạn ở Ví, thông qua đó người dùng đã kết nối với Dịch vụ.</dd>
+            <dt className="font-semibold">1.18 "등록 사용자"</dt>
+            <dd>서비스와 연결된 유효한 제3자 계정(지갑 포함)을 가진 사용자를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.19 "Dịch Vụ"</dt>
-            <dd>có nghĩa là bất kỳ sản phẩm và dịch vụ nào được cung cấp bởi MEMEPUMP.GG</dd>
+            <dt className="font-semibold">1.19 "서비스"</dt>
+            <dd>MEMEPUMP.GG가 제공하는 모든 제품 및 서비스를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.20 "Điều Khoản Bổ Sung"</dt>
-            <dd>có nghĩa là bất kỳ điều khoản hoặc chính sách nào áp dụng cho bất kỳ sản phẩm hoặc dịch vụ nào được cung cấp bởi MEMEPUMP mà không được đề cập trong Điều Khoản Dịch Vụ này.</dd>
+            <dt className="font-semibold">1.20 "추가 약관"</dt>
+            <dd>본 이용약관에 언급되지 않은 MEMEPUMP가 제공하는 모든 제품 또는 서비스에 적용되는 약관 또는 정책을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.21 "Bot Telegram"</dt>
-            <dd>có nghĩa là chương trình tự động chạy trên nền tảng nhắn tin Telegram, có khả năng tương tác với người dùng thông qua tin nhắn và lệnh để thực hiện các tác vụ khác nhau.</dd>
+            <dt className="font-semibold">1.21 "텔레그램 봇"</dt>
+            <dd>텔레그램 메신저 플랫폼에서 실행되며, 다양한 작업을 수행하기 위해 메시지와 명령을 통해 사용자와 상호작용할 수 있는 자동화 프로그램을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.22 "Điều Khoản Dịch Vụ"</dt>
-            <dd>có nghĩa là Thỏa thuận Điều Khoản Dịch Vụ MEMEPUMP này điều chỉnh việc truy cập và sử dụng Dịch vụ của bạn.</dd>
+            <dt className="font-semibold">1.22 "이용약관"</dt>
+            <dd>귀하의 서비스 접근 및 이용을 규정하는 본 MEMEPUMP 서비스 이용약관을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.23 "Tài Khoản Bên Thứ Ba"</dt>
-            <dd>có nghĩa là tài khoản hợp lệ trên nhà cung cấp dịch vụ bên thứ ba hoặc dịch vụ mạng xã hội được Dịch vụ hỗ trợ, chẳng hạn như Facebook, Twitter hoặc GitHub, hoặc Ví bên thứ ba hợp lệ tương thích với Dịch vụ.</dd>
+            <dt className="font-semibold">1.23 "제3자 계정"</dt>
+            <dd>Facebook, Twitter, GitHub 등 서비스에서 지원하는 제3자 서비스 제공자 또는 소셜 네트워크의 유효한 계정, 또는 서비스와 호환되는 유효한 제3자 지갑을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.24 "Dịch Vụ Bên Thứ Ba"</dt>
-            <dd>có nghĩa là bất kỳ trang web, ứng dụng và quảng cáo bên thứ ba nào có thể truy cập hoặc được kết nối với Dịch vụ nhưng không được cung cấp bởi MEMEPUMP.</dd>
+            <dt className="font-semibold">1.24 "제3자 서비스"</dt>
+            <dd>MEMEPUMP가 제공하지 않는 서비스에 접근하거나 연결될 수 있는 모든 웹사이트, 애플리케이션 및 광고를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.25 "Nội Dung Người Dùng"</dt>
-            <dd>có nghĩa là bất kỳ Nội Dung nào được Cung Cấp bởi Người Dùng Đã Đăng Ký trên hoặc thông qua Dịch vụ.</dd>
+            <dt className="font-semibold">1.25 "사용자 콘텐츠"</dt>
+            <dd>등록 사용자가 서비스 내 또는 서비스를 통해 제공하는 모든 콘텐츠를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.26 "Ví"</dt>
-            <dd>có nghĩa là hệ thống dựa trên phần mềm để lưu trữ an toàn tiền điện tử, tài sản tiền điện tử và thông tin thanh toán liên quan.</dd>
+            <dt className="font-semibold">1.26 "지갑"</dt>
+            <dd>암호화폐, 디지털 자산 및 관련 결제 정보를 안전하게 저장하는 소프트웨어 기반 시스템을 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.27 "Trang Web"</dt>
-            <dd>có nghĩa là https://www.memepump.gg</dd>
+            <dt className="font-semibold">1.27 "웹사이트"</dt>
+            <dd>https://www.memepump.gg를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.28 "Bạn"</dt>
-            <dd>có nghĩa là cá nhân hoặc pháp nhân, tùy theo trường hợp, đang sử dụng hoặc truy cập Dịch vụ, hoặc được xác định là người dùng khi bạn đăng ký trên Dịch vụ.</dd>
+            <dt className="font-semibold">1.28 "귀하"</dt>
+            <dd>서비스를 이용하거나 접근하는 개인 또는 법인을 의미하며, 서비스에 등록할 때 사용자로 식별되는 경우를 포함합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.29 "MEMEPUMP", "chúng tôi", "chúng tôi", "của chúng tôi"</dt>
-            <dd>có nghĩa là memepump.gg</dd>
+            <dt className="font-semibold">1.29 "MEMEPUMP", "당사", "저희", "우리의"</dt>
+            <dd>memepump.gg를 의미합니다.</dd>
           </div>
           <div>
-            <dt className="font-semibold">1.30 "Các Bên MEMEPUMP"</dt>
-            <dd>có nghĩa là MEMEPUMP, công ty mẹ, công ty con, công ty liên kết, cán bộ, nhân viên, đại lý, đối tác, nhà cung cấp và người cấp phép của MEMEPUMP.</dd>
+            <dt className="font-semibold">1.30 "MEMEPUMP 당사자"</dt>
+            <dd>MEMEPUMP, 모회사, 자회사, 계열사, 임원, 직원, 대리인, 파트너, 공급업체 및 MEMEPUMP의 라이선스 제공자를 의미합니다.</dd>
           </div>
         </dl>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">2. SỬ DỤNG DỊCH VỤ</h2>
+        <h2 className="text-xl font-bold mb-3">2. 서비스 이용</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">2.1 Giấy phép sử dụng Dịch vụ</h3>
-            <p>Dịch vụ được bảo vệ bởi luật bản quyền trên toàn thế giới. Theo Thỏa thuận, MEMEPUMP cấp cho bạn giấy phép hạn chế để sao chép các phần của Dịch vụ chỉ nhằm mục đích sử dụng Dịch vụ cho mục đích cá nhân hoặc kinh doanh nội bộ của bạn.</p>
+            <h3 className="font-semibold mb-2">2.1 서비스 이용 라이선스</h3>
+            <p>서비스는 전 세계 저작권법의 보호를 받습니다. 본 계약에 따라 MEMEPUMP는 귀하에게 개인적 또는 내부 비즈니스 목적으로만 서비스를 이용하기 위해 서비스의 일부를 복사할 수 있는 제한적 라이선스를 부여합니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">2.2 Cập nhật</h3>
-            <p>Bạn hiểu rằng Dịch vụ đang phát triển. Bạn thừa nhận và đồng ý rằng MEMEPUMP có thể cập nhật Dịch vụ mà không cần thông báo cho bạn.</p>
+            <h3 className="font-semibold mb-2">2.2 업데이트</h3>
+            <p>귀하는 서비스가 개발 중임을 이해합니다. 귀하는 MEMEPUMP가 귀하에게 별도의 통지 없이 서비스를 업데이트할 수 있음에 동의합니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">3. BOT TELEGRAM VÀ DỊCH VỤ</h2>
+        <h2 className="text-xl font-bold mb-3">3. 텔레그램 봇 및 서비스</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">3.1 Dịch Vụ Chung</h3>
-            <p>MEMEPUMP là một công cụ tiên tiến được thiết kế cho các nhà giao dịch tài sản số, cung cấp khả năng toàn diện để quét và phân tích dữ liệu blockchain. MEMEPUMP chuyển đổi dữ liệu on-chain phức tạp thành các thông tin chi tiết dễ hiểu và có thể hành động, giúp người dùng đưa ra quyết định nhanh hơn và sáng suốt hơn. Bằng cách giám sát hiệu quả các hoạt động liên quan đến hợp đồng thông minh blockchain và địa chỉ ví, MEMEPUMP giúp người dùng duy trì sự giám sát cẩn thận đối với các tài sản số khác nhau và địa chỉ "smart money".</p>
-            <p className="mt-2">Để tránh hiểu nhầm, thông tin được trình bày trên MEMEPUMP chỉ là sự phản ánh các hoạt động blockchain được giám sát bởi nền tảng; không có thông tin nào được tạo ra hoặc thay đổi bởi MEMEPUMP. Hơn nữa, MEMEPUMP sẽ không chịu bất kỳ trách nhiệm nào về tính chính xác, độ tin cậy hoặc tính đầy đủ của thông tin đó, cũng như bất kỳ tổn thất hoặc thiệt hại nào phát sinh từ việc sử dụng nó.</p>
-            <p className="mt-2">Người dùng được khuyến khích thực hiện thẩm định của riêng họ và tham khảo ý kiến của các chuyên gia có trình độ trước khi đưa ra bất kỳ quyết định tài chính nào dựa trên thông tin chi tiết do MEMEPUMP cung cấp. Bằng cách sử dụng dịch vụ này, người dùng thừa nhận và chấp nhận các điều khoản và điều kiện này, bao gồm các giới hạn trách nhiệm được nêu ở đây.</p>
+            <h3 className="font-semibold mb-2">3.1 일반 서비스</h3>
+            <p>MEMEPUMP는 디지털 자산 트레이더를 위해 설계된 고급 도구로, 블록체인 데이터를 포괄적으로 스캔하고 분석할 수 있는 기능을 제공합니다. MEMEPUMP는 복잡한 온체인 데이터를 이해하기 쉽고 실행 가능한 인사이트로 변환하여 사용자가 더 빠르고 현명한 결정을 내릴 수 있도록 돕습니다. 스마트 컨트랙트 및 지갑 주소와 관련된 블록체인 활동을 효과적으로 모니터링함으로써, MEMEPUMP는 사용자가 다양한 디지털 자산과 "스마트 머니" 주소를 신중하게 관리할 수 있도록 지원합니다.</p>
+            <p className="mt-2">오해를 방지하기 위해, MEMEPUMP에 표시되는 정보는 플랫폼이 모니터링하는 블록체인 활동의 반영일 뿐이며, MEMEPUMP가 정보를 생성하거나 변경하지 않습니다. 또한 MEMEPUMP는 해당 정보의 정확성, 신뢰성 또는 완전성, 그리고 그 사용으로 인해 발생하는 손실이나 피해에 대해 어떠한 책임도 지지 않습니다.</p>
+            <p className="mt-2">사용자는 MEMEPUMP가 제공하는 인사이트를 바탕으로 재정적 결정을 내리기 전에 스스로 실사를 수행하고 자격을 갖춘 전문가와 상담할 것을 권장합니다. 본 서비스를 이용함으로써 사용자는 본 약관에 명시된 책임 제한을 포함한 조건에 동의하고 수락합니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.2 Chức Năng Sao Chép Giao Dịch</h3>
-            <p>Bạn có thể sử dụng bảng điều khiển dữ liệu của MEMEPUMP để xác định các địa chỉ "smart money", từ đó tạo điều kiện cho việc sao chép giao dịch một cú nhấp chuột. Tính năng này đơn giản hóa quá trình sao chép các giao dịch thành công được thực hiện bởi các nhà đầu tư có kinh nghiệm, cho phép bạn hưởng lợi từ chuyên môn của họ.</p>
-            <p className="mt-2">Bạn thừa nhận và đồng ý rằng mặc dù Bot TG tạo điều kiện cho việc sao chép giao dịch, nó hoạt động độc quyền dựa trên các tham số mà bạn thiết lập. Bạn phải chọn rõ ràng địa chỉ nào để theo dõi và đặt các tiêu chí được xác định trước cho việc sao chép tự động. Tất cả các hoạt động giao dịch được bắt đầu dựa trên hướng dẫn và tùy chọn rõ ràng của bạn.</p>
+            <h3 className="font-semibold mb-2">3.2 거래 복사 기능</h3>
+            <p>귀하는 MEMEPUMP의 데이터 대시보드를 사용하여 "스마트 머니" 주소를 식별하고, 원클릭 거래 복사를 할 수 있습니다. 이 기능은 숙련된 투자자가 수행한 성공적인 거래를 쉽게 복사할 수 있도록 하여, 귀하가 그들의 전문성으로부터 이익을 얻을 수 있게 합니다.</p>
+            <p className="mt-2">귀하는 거래 복사를 가능하게 하는 TG 봇이 귀하가 설정한 매개변수에만 따라 작동함을 인정하고 동의합니다. 귀하는 추적할 주소를 명확히 선택하고, 자동 복사를 위한 사전 정의된 기준을 설정해야 합니다. 모든 거래 활동은 귀하의 명확한 지시와 선택에 따라 시작됩니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.3 Quản Lý Tài Khoản</h3>
-            <p>Bot TG cho phép quản lý liền mạch các ví blockchain thông qua giao diện của nó, bao gồm việc tạo và quản lý địa chỉ ví và khóa truy cập. Bạn có thể thực hiện các hoạt động khác nhau, bao gồm xem số dư và thực hiện giao dịch, đồng thời duy trì quyền kiểm soát khóa riêng của bạn.</p>
-            <p className="mt-2">Bot TG hoạt động như một giao diện cho phép bạn tương tác với ví riêng của bạn được tạo bởi MEMEPUMP. Khi bạn chuyển tiền vào ví này, bạn vẫn giữ quyền kiểm soát khóa riêng và tài sản của mình. Bot tạo điều kiện cho giao dịch tự động thay mặt bạn.</p>
-            <p className="mt-2">MEMEPUMP sẽ giám sát điều kiện thị trường và thông báo cho bạn khi đáp ứng các tiêu chí nhất định. Tuy nhiên, việc thực hiện giao dịch vẫn nằm dưới sự kiểm soát của bạn, đảm bảo rằng bạn có tiếng nói cuối cùng trong tất cả các hoạt động giao dịch. Bạn hoàn toàn chịu trách nhiệm bảo mật thông tin đăng nhập tài khoản và khóa riêng của mình, và bạn đồng ý tuân theo các phương pháp hay nhất để bảo vệ thông tin của mình.</p>
+            <h3 className="font-semibold mb-2">3.3 계정 관리</h3>
+            <p>TG 봇은 지갑 주소 및 액세스 키의 생성과 관리를 포함하여 블록체인 지갑을 원활하게 관리할 수 있는 인터페이스를 제공합니다. 귀하는 잔액 확인, 거래 실행 등 다양한 작업을 수행할 수 있으며, 개인 키에 대한 통제권을 유지합니다.</p>
+            <p className="mt-2">TG 봇은 귀하가 MEMEPUMP에서 생성한 개인 지갑과 상호작용할 수 있도록 하는 인터페이스 역할을 합니다. 귀하가 이 지갑으로 자금을 이체할 경우, 귀하는 여전히 개인 키와 자산에 대한 통제권을 유지합니다. 봇은 귀하를 대신하여 자동 거래를 지원합니다.</p>
+            <p className="mt-2">MEMEPUMP는 시장 상황을 모니터링하고 특정 기준이 충족되면 귀하에게 알림을 제공합니다. 그러나 거래 실행은 여전히 귀하의 통제 하에 이루어지며, 모든 거래 활동에 대해 최종 결정을 내릴 수 있습니다. 귀하는 계정 로그인 정보와 개인 키의 보안에 대해 전적으로 책임지며, 정보를 보호하기 위한 최선의 방법을 준수할 것에 동의합니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.4 Tích Hợp Và Phân Tích Dữ Liệu</h3>
-            <p>Bot TG cho phép bạn truy xuất dữ liệu từ các ứng dụng phi tập trung khác nhau, bao gồm các sàn giao dịch phi tập trung ("DApps"). Chức năng này cung cấp cho bạn thông tin chi tiết cần thiết để đưa ra quyết định giao dịch chiến lược dựa trên dữ liệu thời gian thực.</p>
+            <h3 className="font-semibold mb-2">3.4 데이터 통합 및 분석</h3>
+            <p>TG 봇은 다양한 탈중앙화 애플리케이션(DApp)에서 데이터를 조회할 수 있도록 하며, 이 기능을 통해 실시간 데이터 기반의 전략적 거래 결정을 내리는 데 필요한 인사이트를 제공합니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.5 Hoán Đổi Ngang Hàng</h3>
-            <p>Bạn có thể bắt đầu hoán đổi Tài Sản Số trực tiếp thông qua giao diện Bot TG, sử dụng công nghệ tích hợp từ các DApp bên thứ ba. MEMEPUMP không xác nhận hoặc chịu trách nhiệm về bất kỳ DApp hoặc dịch vụ bên thứ ba nào được truy cập thông qua Bot TG. Bạn được khuyến nghị xem xét các điều khoản, điều kiện và chính sách bảo mật của bất kỳ dịch vụ bên thứ ba nào trước khi sử dụng chúng.</p>
+            <h3 className="font-semibold mb-2">3.5 P2P 스왑</h3>
+            <p>귀하는 TG 봇 인터페이스를 통해 제3자 DApp의 통합 기술을 활용하여 디지털 자산을 직접 교환할 수 있습니다. MEMEPUMP는 TG 봇을 통해 접근하는 어떠한 DApp 또는 제3자 서비스도 보증하거나 책임지지 않습니다. 귀하는 제3자 서비스 이용 전 해당 서비스의 약관, 조건 및 개인정보 보호정책을 검토할 것을 권장합니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.6 Phát Sóng Giao Dịch</h3>
-            <p>Bot TG có thể cho phép bạn xem các địa chỉ và thông tin liên quan trong mạng Tài Sản Số và phát sóng giao dịch sử dụng các DApp khác hoặc nguồn dữ liệu tập trung. Chức năng này cho phép thực hiện giao dịch hiệu quả dựa trên dữ liệu mạng hiện tại.</p>
+            <h3 className="font-semibold mb-2">3.6 거래 브로드캐스트</h3>
+            <p>TG 봇은 디지털 자산 네트워크 내 주소 및 관련 정보를 확인하고, 다른 DApp 또는 중앙화 데이터 소스를 활용하여 거래를 브로드캐스트할 수 있도록 지원할 수 있습니다. 이 기능은 현재 네트워크 데이터를 기반으로 효율적인 거래 실행을 가능하게 합니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.7 Tham Số Giao Dịch Có Thể Tùy Chỉnh</h3>
-            <p>Bạn giữ toàn quyền kiểm soát chiến lược giao dịch của mình. Bạn có thể đặt và sửa đổi các tham số giao dịch để đảm bảo rằng tất cả các hoạt động của Bot TG phù hợp với tùy chọn giao dịch cụ thể của bạn.</p>
+            <h3 className="font-semibold mb-2">3.7 맞춤형 거래 매개변수</h3>
+            <p>귀하는 자신의 거래 전략에 대한 완전한 통제권을 가집니다. 귀하는 모든 TG 봇 활동이 귀하의 특정 거래 선호도에 맞도록 거래 매개변수를 설정 및 수정할 수 있습니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">3.8 Từ Chối Trách Nhiệm Và Giới Hạn Trách Nhiệm</h3>
-            <p>Bạn thừa nhận và đồng ý rằng Bot TG hoạt động độc quyền dựa trên các tham số mà bạn thiết lập và không thực hiện bất kỳ quyết định nào liên quan đến giao dịch mà không có đầu vào rõ ràng từ bạn. MEMEPUMP sẽ không chịu trách nhiệm về bất kỳ tổn thất, thiệt hại hoặc trách nhiệm pháp lý nào phát sinh do việc sử dụng Bot TG của bạn.</p>
-            <p className="mt-2">Bạn chịu trách nhiệm hoàn toàn về bất kỳ lợi nhuận hoặc tổn thất nào phát sinh từ hoạt động giao dịch của bạn. Bạn có thể chấm dứt hoạt động của Bot TG vào bất kỳ lúc nào và rút Tài Sản Số của bạn theo ý của bạn.</p>
-            <p className="mt-2">Khi nhận được hướng dẫn như vậy, Bot TG sẽ ngừng hoạt động ngay lập tức hoặc trong khung thời gian hợp lý, tùy thuộc vào loại Bot đang được sử dụng. Bạn thừa nhận rằng bất kỳ giao dịch đang chờ xử lý nào có thể cần được hoàn thành hoặc hủy trước khi chấm dứt hoàn toàn.</p>
+            <h3 className="font-semibold mb-2">3.8 면책 및 책임 제한</h3>
+            <p>귀하는 TG 봇이 귀하가 설정한 매개변수에만 따라 작동하며, 귀하의 명확한 입력 없이 어떠한 거래 결정도 내리지 않음을 인정하고 동의합니다. MEMEPUMP는 TG 봇 사용으로 인해 발생하는 손실, 피해 또는 법적 책임에 대해 어떠한 책임도 지지 않습니다.</p>
+            <p className="mt-2">귀하는 거래 활동에서 발생하는 모든 이익 또는 손실에 대해 전적으로 책임을 집니다. 귀하는 언제든지 TG 봇의 활동을 중단하고 디지털 자산을 자유롭게 인출할 수 있습니다.</p>
+            <p className="mt-2">이러한 지시를 받으면, TG 봇은 즉시 또는 사용 중인 봇 유형에 따라 합리적인 시간 내에 활동을 중단합니다. 귀하는 모든 미결 거래가 완전히 종료되거나 취소되어야만 완전한 종료가 이루어질 수 있음을 인정합니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">4. PHÍ</h2>
+        <h2 className="text-xl font-bold mb-3">4. 수수료</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">4.1 Phí Dịch Vụ</h3>
-            <p>Bằng cách thực hiện giao dịch thông qua Dịch vụ của chúng tôi, bạn đồng ý trả bất kỳ phí áp dụng nào được nêu trong biểu phí MEMEPUMP, có sẵn trên Trang Web của chúng tôi. Bạn cho phép chúng tôi tự động khấu trừ các phí này trực tiếp từ Ví của bạn cho mỗi giao dịch.</p>
-            <p className="mt-2">Chúng tôi bảo lưu quyền thay đổi hoặc sửa đổi biểu phí của chúng tôi hoặc tăng phí dịch vụ của chúng tôi vào bất kỳ lúc nào. Bất kỳ thay đổi nào sẽ có hiệu lực khi được đăng trên Trang Web hoặc Ứng dụng của chúng tôi. Việc sử dụng Dịch vụ MEMEPUMP đầu tiên của bạn sau bất kỳ thay đổi phí nào sẽ cấu thành sự chấp nhận của bạn đối với những thay đổi đó. Nếu bạn không đồng ý với phí đã cập nhật, bạn có thể ngừng sử dụng Dịch vụ như được nêu trong Thỏa thuận này.</p>
+            <h3 className="font-semibold mb-2">4.1 서비스 수수료</h3>
+            <p>당사 서비스를 통해 거래를 수행함으로써 귀하는 당사 웹사이트에 명시된 MEMEPUMP 수수료표에 따라 적용되는 모든 수수료를 지불하는 데 동의합니다. 귀하는 각 거래 시 이러한 수수료가 귀하의 지갑에서 자동으로 차감되는 것에 동의합니다.</p>
+            <p className="mt-2">당사는 언제든지 수수료표를 변경하거나 서비스 수수료를 인상할 권리를 보유합니다. 모든 변경 사항은 당사 웹사이트 또는 애플리케이션에 게시되는 즉시 효력이 발생합니다. 수수료 변경 후 MEMEPUMP 서비스를 처음 이용하는 것은 귀하가 해당 변경 사항을 수락한 것으로 간주됩니다. 변경된 수수료에 동의하지 않는 경우, 본 계약에 명시된 대로 서비스를 중단할 수 있습니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">4.2 Phí Bổ Sung</h3>
-            <p>Vui lòng lưu ý rằng ngoài phí dịch vụ của chúng tôi, các phí khác có thể áp dụng cho giao dịch của bạn, bao gồm phí gas, trượt giá, phí ưu tiên và phí nền tảng phát hành token, được tính bởi người xác thực mạng, nền tảng phát hành token và các bên thứ ba khác bên ngoài MEMEPUMP. Để rõ ràng, MEMEPUMP chỉ tính phí dịch vụ được mô tả ở đây cho Dịch vụ của mình.</p>
+            <h3 className="font-semibold mb-2">4.2 추가 수수료</h3>
+            <p>당사 서비스 수수료 외에도 귀하의 거래에는 가스비, 슬리피지, 우선순위 수수료, 토큰 발행 플랫폼 수수료 등 네트워크 검증자, 토큰 발행 플랫폼 및 MEMEPUMP 외부 제3자가 부과하는 기타 수수료가 적용될 수 있습니다. 명확히 하기 위해, MEMEPUMP는 본 서비스에 대해 여기서 설명된 서비스 수수료만 부과합니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">5. ĐĂNG KÝ</h2>
+        <h2 className="text-xl font-bold mb-3">5. 등록</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">5.1 Đại Diện</h3>
-            <p>Bạn đại diện rằng bạn không phải là người bị cấm sử dụng Dịch vụ theo luật của nơi cư trú của bạn hoặc bất kỳ khu vực pháp lý áp dụng nào khác. Bạn chịu trách nhiệm cho tất cả các hoạt động xảy ra trong quá trình sử dụng Dịch vụ của bạn.</p>
-            <p className="mt-2">Bạn đồng ý rằng bạn sẽ giám sát việc sử dụng Dịch vụ của mình để hạn chế việc sử dụng bởi trẻ vị thành niên, và bạn sẽ chấp nhận trách nhiệm đầy đủ cho bất kỳ việc sử dụng trái phép Dịch vụ nào bởi trẻ vị thành niên.</p>
+            <h3 className="font-semibold mb-2">5.1 진술</h3>
+            <p>귀하는 귀하의 거주지 또는 기타 적용 가능한 관할권의 법률에 따라 서비스 이용이 금지된 자가 아님을 진술합니다. 귀하는 서비스 이용 중 발생하는 모든 활동에 대해 책임을 집니다.</p>
+            <p className="mt-2">귀하는 미성년자의 서비스 이용을 제한하기 위해 서비스 이용을 감독할 것에 동의하며, 미성년자의 무단 서비스 이용에 대해 전적인 책임을 집니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">5.2 Đại Diện Thêm</h3>
-            <p>Bạn đại diện rằng bạn ít nhất 18 tuổi và bạn hiểu đầy đủ về Dịch vụ trước khi thực hiện bất kỳ giao dịch nào thông qua MEMEPUMP. Đồng thời, bạn đại diện rằng bạn không ở trong, dưới sự kiểm soát của, hoặc là công dân hoặc cư dân của Afghanistan, Cuba, Iran, Bắc Triều Tiên và Syria (mỗi nơi là "Khu Vực Pháp Lý Bị Cấm").</p>
-            <p className="mt-2">Ngoài ra, bạn không phải là người nằm trong danh sách trừng phạt kinh tế được công bố định kỳ bởi UN, US OFAC hoặc EU. Bạn sẽ không cung cấp bất kỳ tài sản số đã mua hoặc lưu trữ hoặc Dịch vụ nào cho Khu Vực Pháp Lý Bị Cấm, công dân hoặc cư dân của Khu Vực Pháp Lý Bị Cấm, hoặc Người Bị Cấm.</p>
+            <h3 className="font-semibold mb-2">5.2 추가 진술</h3>
+            <p>귀하는 만 18세 이상이며, MEMEPUMP를 통해 거래를 수행하기 전에 서비스를 충분히 이해하고 있음을 진술합니다. 또한 귀하는 아프가니스탄, 쿠바, 이란, 북한, 시리아(각각 "금지 관할지역")에 거주하거나, 그 통제 하에 있거나, 시민 또는 거주자가 아님을 진술합니다.</p>
+            <p className="mt-2">또한 귀하는 UN, 미국 OFAC 또는 EU가 정기적으로 발표하는 경제 제재 명단에 포함된 자가 아님을 진술합니다. 귀하는 금지 관할지역, 그 시민 또는 거주자, 또는 금지된 자에게 구매, 보관 또는 서비스 이용을 위한 어떠한 디지털 자산도 제공하지 않을 것에 동의합니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">5.3 Thiết Bị Và Phần Mềm Cần Thiết</h3>
-            <p>Bạn phải chuẩn bị tất cả thiết bị, phần mềm và phần cứng cần thiết để kết nối với Dịch vụ. Bạn hoàn toàn chịu trách nhiệm về bất kỳ phí nào, bao gồm phí kết nối Internet hoặc di động, mà bạn phát sinh khi truy cập Dịch vụ.</p>
-            <p className="mt-2">Bạn hoàn toàn chịu trách nhiệm giữ an toàn cho các thiết bị phần cứng của mình. MEMEPUMP sẽ không chịu trách nhiệm nếu người khác truy cập thiết bị của bạn và ủy quyền giao dịch khi nhận được chuyển khoản hợp lệ được bắt đầu từ Dịch vụ.</p>
+            <h3 className="font-semibold mb-2">5.3 필요한 장치 및 소프트웨어</h3>
+            <p>귀하는 서비스에 연결하는 데 필요한 모든 장치, 소프트웨어 및 하드웨어를 준비해야 합니다. 귀하는 서비스에 접근하는 데 발생하는 모든 비용(인터넷 또는 모바일 연결 비용 포함)에 대해 전적으로 책임을 집니다.</p>
+            <p className="mt-2">귀하는 자신의 하드웨어 장치를 안전하게 보관할 전적인 책임이 있습니다. MEMEPUMP는 귀하의 장치에 타인이 접근하여 서비스에서 시작된 유효한 이체를 승인하는 경우 어떠한 책임도 지지 않습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">6. TRÁCH NHIỆM VỀ NỘI DUNG</h2>
+        <h2 className="text-xl font-bold mb-3">6. 콘텐츠 책임</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">6.1 Các Loại Nội Dung</h3>
-            <p>Bạn thừa nhận rằng tất cả Nội Dung, bao gồm cả Dịch vụ, là trách nhiệm duy nhất của bên mà Nội Dung đó phát sinh. Điều này có nghĩa là bạn và các Người Dùng Đã Đăng Ký khác của Dịch vụ, chứ không phải MEMEPUMP, chịu trách nhiệm cho tất cả Nội Dung Người Dùng.</p>
+            <h3 className="font-semibold mb-2">6.1 콘텐츠 유형</h3>
+            <p>귀하는 모든 콘텐츠(서비스 포함)가 해당 콘텐츠를 생성한 당사자의 전적인 책임임을 인정합니다. 즉, 귀하와 서비스의 다른 등록 사용자(그리고 MEMEPUMP가 아님)가 모든 사용자 콘텐츠에 대해 책임을 집니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">6.2 Adapter</h3>
-            <p>Bạn hoàn toàn chịu trách nhiệm cho bất kỳ Adapter nào mà bạn Cung Cấp trên hoặc thông qua Dịch vụ, bao gồm nhưng không giới hạn ở việc đảm bảo bất kỳ quyền hoặc giấy phép nào liên quan đến Adapter đó và việc sử dụng của MEMEPUMP.</p>
-            <p className="mt-2">Bạn thừa nhận và đồng ý rằng MEMEPUMP không có nghĩa vụ xuất bản hoặc cung cấp Adapter của bạn trên hoặc thông qua Dịch vụ. Bạn thừa nhận và đồng ý rằng bạn không có quyền đối với bất kỳ nâng cấp, sửa đổi, cải tiến hoặc sửa đổi nào mà MEMEPUMP có thể thực hiện đối với Adapter của bạn.</p>
-            <p className="mt-2">Bạn đồng ý rằng chúng tôi không có nghĩa vụ cung cấp bất kỳ hỗ trợ hoặc hỗ trợ kỹ thuật nào liên quan đến Adapter của bạn trừ khi chúng tôi đồng ý bằng văn bản.</p>
+            <h3 className="font-semibold mb-2">6.2 어댑터</h3>
+            <p>귀하는 서비스 내 또는 서비스를 통해 귀하가 제공하는 모든 어댑터에 대해 전적으로 책임을 집니다. 여기에는 해당 어댑터와 관련된 모든 권리 또는 라이선스의 확보 및 MEMEPUMP의 사용에 대한 책임이 포함됩니다.</p>
+            <p className="mt-2">귀하는 MEMEPUMP가 귀하의 어댑터를 서비스 내 또는 서비스를 통해 게시하거나 제공할 의무가 없음을 인정하고 동의합니다. 또한 MEMEPUMP가 귀하의 어댑터에 대해 수행할 수 있는 모든 업그레이드, 수정, 개선 또는 변경에 대해 귀하가 권리를 갖지 않음을 인정하고 동의합니다.</p>
+            <p className="mt-2">서면으로 별도 합의하지 않는 한, 당사는 귀하의 어댑터와 관련하여 어떠한 지원이나 기술 지원을 제공할 의무가 없습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">7. QUYỀN SỞ HỮU</h2>
+        <h2 className="text-xl font-bold mb-3">7. 소유권</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">7.1 Dịch Vụ</h3>
-            <p>Ngoại trừ đối với bất kỳ OSS nào, Ví của bạn và bất kỳ Nội Dung Người Dùng nào mà bạn Cung Cấp, bạn đồng ý rằng MEMEPUMP và người cấp phép của nó sở hữu tất cả các quyền, quyền sở hữu và lợi ích trong và đối với Dịch vụ. Bạn sẽ không xóa, thay đổi hoặc che giấu bất kỳ thông báo bản quyền, nhãn hiệu, nhãn hiệu dịch vụ hoặc thông báo quyền sở hữu khác được kết hợp trong hoặc kèm theo bất kỳ Dịch vụ nào.</p>
+            <h3 className="font-semibold mb-2">7.1 서비스</h3>
+            <p>OSS(오픈소스 소프트웨어), 귀하의 지갑 및 귀하가 제공한 사용자 콘텐츠를 제외하고, 귀하는 MEMEPUMP와 그 라이선스 제공자가 서비스에 대한 모든 권리, 소유권 및 이익을 보유함을 인정합니다. 귀하는 어떠한 서비스에도 포함되거나 첨부된 저작권, 상표, 서비스 마크 또는 기타 소유권 고지를 삭제, 변경 또는 숨길 수 없습니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">7.2 Phần Mềm Mã Nguồn Mở</h3>
-            <p>Bạn thừa nhận rằng Dịch vụ có thể sử dụng, kết hợp hoặc liên kết với một số OSS nhất định và việc sử dụng Dịch vụ của bạn phải tuân theo, và bạn sẽ tuân thủ bất kỳ giấy phép OSS nào áp dụng. Mỗi mục OSS được cấp phép theo các điều khoản của giấy phép người dùng cuối đi kèm với OSS đó.</p>
-            <p className="mt-2">Không có điều gì trong Thỏa thuận này giới hạn quyền của bạn theo, hoặc cấp cho bạn quyền vượt quá, các điều khoản và điều kiện của bất kỳ giấy phép người dùng cuối áp dụng cho OSS. Nếu được yêu cầu bởi bất kỳ giấy phép nào cho OSS cụ thể, MEMEPUMP sẽ cung cấp OSS đó và các sửa đổi của MEMEPUMP đối với nó theo yêu cầu bằng văn bản tại địa chỉ thông báo được chỉ định bên dưới.</p>
+            <h3 className="font-semibold mb-2">7.2 오픈소스 소프트웨어</h3>
+            <p>귀하는 서비스가 일부 OSS(오픈소스 소프트웨어)를 사용, 결합 또는 연동할 수 있으며, 귀하의 서비스 이용은 해당 OSS 라이선스의 적용을 받으며, 귀하는 모든 OSS 라이선스를 준수해야 함을 인정합니다. 각 OSS 항목은 해당 OSS와 함께 제공되는 최종 사용자 라이선스 조건에 따라 라이선스가 부여됩니다.</p>
+            <p className="mt-2">본 계약의 어떠한 내용도 귀하의 OSS 라이선스에 따른 권리를 제한하거나, 해당 최종 사용자 라이선스의 조건을 초과하는 권리를 부여하지 않습니다. 특정 OSS 라이선스에서 요구하는 경우, MEMEPUMP는 서면 요청 시 해당 OSS 및 MEMEPUMP의 수정본을 제공할 것입니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">7.3 Nhãn Hiệu</h3>
-            <p>MEMEPUMP, và tất cả các đồ họa, logo, nhãn hiệu dịch vụ và tên thương mại liên quan được sử dụng trên hoặc trong kết nối với bất kỳ Dịch vụ nào hoặc trong kết nối với Dịch vụ là nhãn hiệu của MEMEPUMP và không thể được sử dụng mà không được phép trong kết nối với sản phẩm hoặc dịch vụ của bạn, hoặc của bất kỳ bên thứ ba nào.</p>
-            <p className="mt-2">Các nhãn hiệu, nhãn hiệu dịch vụ và tên thương mại khác có thể xuất hiện trên hoặc trong Dịch vụ là tài sản của chủ sở hữu tương ứng của chúng.</p>
+            <h3 className="font-semibold mb-2">7.3 상표</h3>
+            <p>MEMEPUMP 및 모든 관련 그래픽, 로고, 서비스 마크, 상호는 서비스 또는 서비스와 관련하여 사용되는 MEMEPUMP의 상표이며, 귀하 또는 제3자의 제품 또는 서비스와 관련하여 허가 없이 사용할 수 없습니다.</p>
+            <p className="mt-2">서비스 내 또는 서비스와 관련하여 나타날 수 있는 기타 상표, 서비스 마크 및 상호는 각 소유자의 자산입니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">7.4 Nội Dung Người Dùng Của Bạn</h3>
-            <p>MEMEPUMP không tuyên bố quyền sở hữu đối với Nội Dung Người Dùng của bạn. Tuy nhiên, khi bạn với tư cách là Người Dùng Đã Đăng Ký đăng hoặc xuất bản Nội Dung Người Dùng của bạn (bao gồm nhưng không giới hạn ở bất kỳ Adapter nào) trên hoặc trong Dịch vụ, bạn đại diện rằng bạn sở hữu và/hoặc có, và có tất cả các quyền cần thiết để cấp cho MEMEPUMP và từ đây cấp cho MEMEPUMP, quyền không độc quyền, toàn cầu, miễn phí bản quyền, vĩnh viễn, không thể hủy ngang (bao gồm bất kỳ quyền đạo đức nào) và giấy phép để sử dụng, cấp phép, sao chép, sửa đổi, điều chỉnh, xuất bản, dịch, tạo các tác phẩm phái sinh từ, phân phối, thu lợi nhuận hoặc khoản bồi thường khác từ, và truyền đạt cho công chúng, biểu diễn và hiển thị Nội Dung Người Dùng của bạn (toàn bộ hoặc một phần) trên toàn cầu và/hoặc kết hợp nó trong các tác phẩm khác dưới bất kỳ hình thức, phương tiện hoặc công nghệ nào hiện đã biết hoặc sau này được phát triển, cho toàn bộ thời hạn của bất kỳ quyền sở hữu trí tuệ toàn cầu nào có thể tồn tại trong Nội Dung Người Dùng của bạn.</p>
-            <p className="mt-2">Nếu bạn Cung Cấp Adapter trong kết nối với bất kỳ Thương Hiệu nào, bạn đại diện và đảm bảo rằng bạn có tất cả các quyền cần thiết trong và đối với Thương Hiệu đó để cấp cho MEMEPUMP các giấy phép được cấp theo đây.</p>
+            <h3 className="font-semibold mb-2">7.4 귀하의 사용자 콘텐츠</h3>
+            <p>MEMEPUMP는 귀하의 사용자 콘텐츠에 대한 소유권을 주장하지 않습니다. 그러나 귀하가 등록 사용자로서 귀하의 사용자 콘텐츠(어댑터 포함)를 서비스 내 또는 서비스에 게시하거나 공개할 경우, 귀하는 MEMEPUMP에 전 세계적으로 비독점적, 로열티 프리, 영구적, 취소 불가능한(도덕적 권리 포함) 권리 및 라이선스를 부여하며, MEMEPUMP는 이를 사용, 라이선스, 복제, 수정, 각색, 출판, 번역, 2차적 저작물 작성, 배포, 수익 창출, 기타 보상, 공중 송신, 공연 및 전시(전체 또는 일부)할 수 있습니다. 또한, 현재 또는 향후 개발될 수 있는 모든 형태, 매체 또는 기술로 전 세계적으로 귀하의 사용자 콘텐츠에 존재할 수 있는 모든 지적 재산권의 전체 기간 동안 이를 결합할 수 있습니다.</p>
+            <p className="mt-2">귀하가 어댑터를 특정 브랜드와 연계하여 제공하는 경우, 귀하는 MEMEPUMP에 본 계약에 따라 부여된 라이선스를 부여할 수 있는 모든 권리를 보유하고 있음을 진술하고 보증합니다.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">7.5 Phản Hồi</h3>
-            <p>Bạn đồng ý rằng việc gửi Phản Hồi là rủi ro của riêng bạn và MEMEPUMP không có nghĩa vụ đối với Phản Hồi đó. Bạn đại diện và đảm bảo rằng bạn có tất cả các quyền cần thiết để gửi Phản Hồi.</p>
-            <p className="mt-2">Bạn từ đây cấp cho MEMEPUMP quyền và giấy phép hoàn toàn trả phí, miễn phí bản quyền, vĩnh viễn, không thể hủy ngang, toàn cầu, không độc quyền và có thể cấp phép lại đầy đủ để sử dụng, sao chép, biểu diễn, hiển thị, phân phối, điều chỉnh, sửa đổi, định dạng lại, tạo các tác phẩm phái sinh từ và khai thác thương mại hoặc phi thương mại theo bất kỳ cách nào, bất kỳ và tất cả Phản Hồi, cho bất kỳ mục đích nào.</p>
+            <h3 className="font-semibold mb-2">7.5 피드백</h3>
+            <p>귀하는 피드백 제출이 귀하의 책임임을 동의하며, MEMEPUMP는 해당 피드백에 대해 어떠한 의무도 지지 않습니다. 귀하는 피드백을 제출할 모든 권리를 보유하고 있음을 진술하고 보증합니다.</p>
+            <p className="mt-2">귀하는 MEMEPUMP에 대해 전액 지급, 로열티 프리, 영구적, 취소 불가능, 전 세계적, 비독점적, 완전 양도 가능한 권리 및 라이선스를 부여하며, MEMEPUMP는 이를 사용, 복제, 공연, 전시, 배포, 각색, 수정, 재포맷, 2차적 저작물 작성 및 상업적 또는 비상업적으로 활용할 수 있습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">8. HÀNH VI NGƯỜI DÙNG BỊ CẤM</h2>
+        <h2 className="text-xl font-bold mb-3">8. 금지된 사용자 행위</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">8.1 Trách Nhiệm Hành Vi</h3>
-            <p>Bạn đồng ý rằng bạn hoàn toàn chịu trách nhiệm về hành vi của mình trong kết nối với Dịch vụ. Bạn đồng ý rằng bạn sẽ tuân theo Thỏa thuận này và sẽ không (và sẽ không cố gắng):</p>
+            <h3 className="font-semibold mb-2">8.1 행위 책임</h3>
+            <p>귀하는 서비스 이용과 관련된 자신의 행위에 대해 전적으로 책임을 집니다. 귀하는 본 계약을 준수할 것에 동의하며, 다음과 같은 행위를 하지 않을 것(또는 시도하지 않을 것)에 동의합니다:</p>
           </div>
           <ul className="list-decimal list-inside space-y-1 ml-4 text-sm">
-            <li>8.2 Cung cấp thông tin sai lệch hoặc gây hiểu nhầm cho MEMEPUMP;</li>
-            <li>8.3 Sử dụng hoặc cố gắng sử dụng Ví của Người Dùng Đã Đăng Ký khác mà không được sự cho phép của Người Dùng Đã Đăng Ký đó;</li>
-            <li>8.4 Giả mạo là người hoặc tổ chức khác;</li>
-            <li>8.5 Sử dụng Dịch vụ theo bất kỳ cách nào có thể gây trở ngại, gián đoạn, ảnh hưởng tiêu cực hoặc ức chế các Người Dùng Đã Đăng Ký khác tận hưởng đầy đủ Dịch vụ, hoặc có thể làm hỏng, vô hiệu hóa, quá tải hoặc làm suy giảm chức năng của Dịch vụ theo bất kỳ cách nào;</li>
-            <li>8.6 Phát triển, sử dụng hoặc phổ biến bất kỳ phần mềm nào, hoặc tương tác với bất kỳ API nào theo bất kỳ cách nào, có thể làm hỏng, gây hại hoặc làm suy giảm Dịch vụ;</li>
-            <li>8.7 Bỏ qua hoặc vượt qua các biện pháp được sử dụng để ngăn chặn hoặc giới hạn quyền truy cập vào bất kỳ dịch vụ, khu vực hoặc mã nào của Dịch vụ;</li>
-            <li>8.8 Cố gắng vượt qua bất kỳ kỹ thuật lọc nội dung nào mà chúng tôi sử dụng;</li>
-            <li>8.9 Sử dụng bất kỳ robot, nhện, trình thu thập dữ liệu, công cụ trích xuất, tập lệnh, tiện ích mở rộng trình duyệt, trình đọc ngoại tuyến hoặc phương tiện hoặc giao diện tự động khác không được chúng tôi cho phép để truy cập Dịch vụ, trích xuất dữ liệu hoặc can thiệp hoặc sửa đổi việc hiển thị các trang Dịch vụ hoặc chức năng;</li>
-            <li>8.10 Thu thập hoặc thu thập dữ liệu từ Dịch vụ của chúng tôi cho phép bạn liên hệ với cá nhân, công ty hoặc người hoặc tổ chức khác, hoặc sử dụng bất kỳ dữ liệu nào như vậy để liên hệ với các tổ chức đó;</li>
-            <li>8.11 Sử dụng dữ liệu thu thập từ Dịch vụ của chúng tôi cho bất kỳ hoạt động tiếp thị trực tiếp nào (bao gồm nhưng không giới hạn ở tiếp thị qua email, tiếp thị SMS, tiếp thị qua điện thoại và tiếp thị trực tiếp);</li>
-            <li>8.12 Bỏ qua hoặc bỏ qua các hướng dẫn kiểm soát tất cả quyền truy cập tự động vào Dịch vụ;</li>
-            <li>8.13 Sử dụng Dịch vụ cho bất kỳ mục đích bất hợp pháp hoặc trái phép nào, hoặc tham gia, khuyến khích hoặc thúc đẩy bất kỳ hoạt động nào vi phạm bất kỳ luật áp dụng hoặc Thỏa thuận này;</li>
-            <li>8.14 Sử dụng Ví của bạn để thực hiện bất kỳ hoạt động bất hợp pháp nào trong kết nối với hoặc bất kỳ cách nào liên quan đến việc truy cập và sử dụng Dịch vụ của bạn, bao gồm nhưng không giới hạn ở rửa tiền, tài trợ khủng bố hoặc cố ý tham gia vào các hoạt động được thiết kế để ảnh hưởng bất lợi đến hiệu suất của Dịch vụ;</li>
-            <li>8.15 Tham gia hoặc cố ý tạo điều kiện cho bất kỳ hoạt động "front-running", "wash trading", "pump and dump trading", "ramping", "cornering" hoặc các hoạt động giao dịch gian lận, lừa đảo hoặc thao túng;</li>
-            <li>8.16 Sử dụng Dịch vụ để thực hiện bất kỳ hoạt động tài chính nào phải đăng ký hoặc cấp phép, bao gồm nhưng không giới hạn ở việc sử dụng Dịch vụ để giao dịch chứng khoán, tài trợ nợ, tài trợ vốn cổ phần hoặc các giao dịch tương tự khác;</li>
-            <li>8.17 Sử dụng Dịch vụ để tham gia vào việc gây quỹ cho một doanh nghiệp, giao thức hoặc nền tảng, bao gồm nhưng không giới hạn ở việc tạo, niêm yết hoặc mua tài sản (i) có thể đổi lấy công cụ tài chính, (ii) cho chủ sở hữu quyền tham gia vào ICO hoặc bất kỳ đợt chào bán chứng khoán nào, hoặc (iii) cho phép chủ sở hữu nhận phần thưởng tài chính, bao gồm nhưng không giới hạn ở, phần thưởng lợi nhuận DeFi, phần thưởng staking và giảm giá burn;</li>
-            <li>8.18 Cung Cấp bất kỳ Nội Dung nào vi phạm bất kỳ bằng sáng chế, nhãn hiệu, bí mật thương mại, bản quyền, quyền công khai hoặc quyền khác của bất kỳ người hoặc tổ chức nào;</li>
-            <li>8.19 Cố gắng truy cập bất kỳ Ví nào mà bạn không có quyền pháp lý để truy cập.</li>
+            <li>8.2 MEMEPUMP에 허위 또는 오해의 소지가 있는 정보를 제공하는 행위;</li>
+            <li>8.3 다른 등록 사용자의 지갑을 허가 없이 사용하거나 사용을 시도하는 행위;</li>
+            <li>8.4 다른 사람이나 조직을 사칭하는 행위;</li>
+            <li>8.5 서비스의 다른 등록 사용자가 서비스를 온전히 즐기는 것을 방해, 중단, 부정적 영향을 주거나, 서비스를 손상, 무효화, 과부하 또는 기능 저하시키는 방식으로 서비스를 이용하는 행위;</li>
+            <li>8.6 서비스를 손상, 해를 끼치거나 기능 저하시킬 수 있는 소프트웨어를 개발, 사용 또는 배포하거나, 어떠한 방식으로든 API와 상호작용하는 행위;</li>
+            <li>8.7 서비스의 접근을 방지하거나 제한하기 위해 사용되는 조치를 우회하거나 무력화하는 행위;</li>
+            <li>8.8 당사가 사용하는 콘텐츠 필터링 기술을 우회하려 시도하는 행위;</li>
+            <li>8.9 당사의 허가 없이 로봇, 크롤러, 스크래퍼, 데이터 추출 도구, 스크립트, 브라우저 확장, 오프라인 리더 또는 기타 자동화된 수단이나 인터페이스를 사용하여 서비스에 접근, 데이터 추출, 페이지 표시 또는 기능에 간섭 또는 변경하는 행위;</li>
+            <li>8.10 서비스를 통해 수집한 데이터를 이용해 개인, 회사, 기타 조직에 연락하거나, 그러한 데이터를 이용해 해당 조직에 연락하는 행위;</li>
+            <li>8.11 서비스를 통해 수집한 데이터를 직접 마케팅 활동(이메일, SMS, 전화, 직접 마케팅 등)에 사용하는 행위;</li>
+            <li>8.12 서비스에 대한 모든 자동 접근 권한 제어 지침을 우회하거나 무시하는 행위;</li>
+            <li>8.13 불법적이거나 무단의 목적으로 서비스를 이용하거나, 관련 법률 또는 본 계약을 위반하는 활동에 참여, 조장 또는 촉진하는 행위;</li>
+            <li>8.14 서비스를 이용하여 자금세탁, 테러자금 지원 또는 서비스 성능에 부정적 영향을 주도록 설계된 활동 등 불법 행위를 위해 지갑을 사용하는 행위;</li>
+            <li>8.15 "프론트러닝", "워시 트레이딩", "펌프 앤 덤프", "램핑", "코너링" 또는 기타 사기, 조작, 부정 거래 활동에 참여하거나 이를 조장하는 행위;</li>
+            <li>8.16 서비스를 통해 증권 거래, 부채 또는 지분 자금 조달 등 등록 또는 인가가 필요한 금융 활동을 수행하는 행위;</li>
+            <li>8.17 서비스를 이용해 기업, 프로토콜, 플랫폼을 위한 자금 조달에 참여하거나, (i) 금융 상품으로 교환 가능한 자산, (ii) ICO 또는 증권 공모에 참여할 권리를 부여하는 자산, (iii) DeFi 수익, 스테이킹 보상, 소각 할인 등 재정적 보상을 받을 수 있는 자산을 생성, 상장 또는 구매하는 행위;</li>
+            <li>8.18 특허, 상표, 영업비밀, 저작권, 퍼블리시티권 또는 타인의 권리를 침해하는 콘텐츠를 제공하는 행위;</li>
+            <li>8.19 귀하가 법적으로 접근 권한이 없는 지갑에 접근을 시도하는 행위.</li>
           </ul>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">9. ĐIỀU TRA</h2>
+        <h2 className="text-xl font-bold mb-3">9. 조사</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">9.1 Quyền Điều Tra và Giám Sát</h3>
-            <p>MEMEPUMP có thể, nhưng không bắt buộc phải, giám sát hoặc xem xét Dịch vụ và Nội Dung vào bất kỳ lúc nào. Không giới hạn điều trên, MEMEPUMP có quyền, theo quyết định riêng của mình, xóa bất kỳ Nội Dung nào vì bất kỳ lý do nào (hoặc không có lý do), bao gồm nếu Nội Dung đó vi phạm Thỏa thuận hoặc bất kỳ luật áp dụng nào.</p>
-            <p className="mt-2">Mặc dù MEMEPUMP không thường xuyên giám sát hoạt động người dùng xảy ra trong kết nối với Dịch vụ hoặc Nội Dung, nếu MEMEPUMP biết về bất kỳ vi phạm có thể xảy ra bởi bạn đối với bất kỳ điều khoản nào của Thỏa thuận, MEMEPUMP có quyền điều tra các vi phạm đó, và MEMEPUMP có thể, theo quyết định riêng của mình, chấm dứt ngay lập tức giấy phép sử dụng Dịch vụ của bạn, hoặc thay đổi, thay đổi hoặc xóa Nội Dung Người Dùng của bạn, toàn bộ hoặc một phần, mà không cần thông báo trước cho bạn.</p>
+            <h3 className="font-semibold mb-2">9.1 조사 및 모니터링 권한</h3>
+            <p>MEMEPUMP는 언제든지 서비스 및 콘텐츠를 모니터링하거나 검토할 수 있지만, 반드시 그렇게 해야 할 의무는 없습니다. 위의 내용에 제한되지 않고, MEMEPUMP는 단독 재량에 따라 본 계약 또는 관련 법률을 위반하는 콘텐츠를 포함하여 어떠한 이유(또는 이유 없이)로든 콘텐츠를 삭제할 권리가 있습니다.</p>
+            <p className="mt-2">MEMEPUMP는 일반적으로 서비스 또는 콘텐츠와 관련된 사용자 활동을 정기적으로 모니터링하지 않지만, 귀하가 본 계약의 조항을 위반할 가능성이 있는 경우 이를 인지하면, MEMEPUMP는 해당 위반을 조사할 권리가 있으며, 단독 재량에 따라 귀하의 서비스 이용 라이선스를 즉시 종료하거나, 귀하의 사용자 콘텐츠를 전부 또는 일부 변경, 수정 또는 삭제할 수 있습니다. 이 경우 사전 통지 없이 조치가 이루어질 수 있습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">10. TƯƠNG TÁC VỚI NGƯỜI DÙNG KHÁC</h2>
+        <h2 className="text-xl font-bold mb-3">10. 다른 사용자와의 상호작용</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">10.1 Trách Nhiệm Người Dùng</h3>
-            <p>Bạn hoàn toàn chịu trách nhiệm về các tương tác của mình với các Người Dùng Đã Đăng Ký khác và bất kỳ bên nào khác mà bạn tương tác; tuy nhiên, MEMEPUMP có quyền, nhưng không có nghĩa vụ, can thiệp vào các tranh chấp đó. Bạn đồng ý rằng MEMEPUMP sẽ không chịu trách nhiệm về bất kỳ trách nhiệm pháp lý nào phát sinh do các tương tác đó.</p>
+            <h3 className="font-semibold mb-2">10.1 사용자 책임</h3>
+            <p>귀하는 다른 등록 사용자 및 귀하가 상호작용하는 모든 제3자와의 상호작용에 대해 전적으로 책임을 집니다. 단, MEMEPUMP는 해당 분쟁에 개입할 권리는 있으나 의무는 없습니다. 귀하는 이러한 상호작용에서 발생하는 어떠한 법적 책임에 대해서도 MEMEPUMP가 책임지지 않음을 동의합니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">10.2 Trách Nhiệm Đối Với Nội Dung Đã Kết Nối</h3>
-            <p>MEMEPUMP không chịu trách nhiệm pháp lý đối với bạn trong kết nối với việc sử dụng Dịch vụ của MEMEPUMP hoặc bất kỳ bên thứ ba nào để xem Nội Dung Đã Kết Nối mà bạn đã công khai. MEMEPUMP TỪ CHỐI MỌI TRÁCH NHIỆM PHÁP LÝ ĐỐI VỚI NỘI DUNG ĐÃ KẾT NỐI, BAO GỒM NHƯNG KHÔNG GIỚI HẠN Ở THÔNG TIN ĐỊNH DANH CÁ NHÂN, CÓ THỂ ĐƯỢC CUNG CẤP CHO NÓ BỞI CÁC NHÀ CUNG CẤP DỊCH VỤ BÊN THỨ BA NÀY VI PHẠM CÁC CÀI ĐẶT QUYỀN RIÊNG TƯ MÀ BẠN ĐÃ THIẾT LẬP.</p>
-            <p className="mt-2">MEMEPUMP không nỗ lực xem xét bất kỳ Nội Dung Đã Kết Nối nào cho bất kỳ mục đích nào, bao gồm nhưng không giới hạn ở, độ chính xác, tính hợp pháp hoặc không vi phạm, và MEMEPUMP không chịu trách nhiệm về bất kỳ Nội Dung Đã Kết Nối nào.</p>
+            <h3 className="font-semibold mb-2">10.2 연결된 콘텐츠에 대한 책임</h3>
+            <p>MEMEPUMP는 귀하가 공개한 연결된 콘텐츠를 제3자가 서비스 또는 MEMEPUMP를 통해 열람하는 것과 관련하여 귀하에게 어떠한 법적 책임도 지지 않습니다. MEMEPUMP는 연결된 콘텐츠(개인 식별 정보 포함)에 대해 모든 법적 책임을 명시적으로 부인하며, 이는 제3자 서비스 제공자가 귀하가 설정한 개인정보 보호 설정을 위반하여 제공한 경우도 포함됩니다.</p>
+            <p className="mt-2">MEMEPUMP는 연결된 콘텐츠의 정확성, 적법성 또는 비침해성 등 어떠한 목적으로도 해당 콘텐츠를 검토하지 않으며, 연결된 콘텐츠에 대해 어떠한 책임도 지지 않습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">11. BỒI THƯỜNG</h2>
+        <h2 className="text-xl font-bold mb-3">11. 면책 및 배상</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">11.1 Nghĩa Vụ Bồi Thường</h3>
-            <p>Bạn đồng ý bồi thường và giữ cho các Bên MEMEPUMP vô hại khỏi bất kỳ tổn thất, chi phí, trách nhiệm pháp lý và chi phí nào (bao gồm phí luật sư hợp lý) liên quan đến hoặc phát sinh từ bất kỳ và tất cả những điều sau đây: (a) Nội Dung Người Dùng của bạn; (b) việc sử dụng, hoặc không thể sử dụng, bất kỳ Dịch vụ nào của bạn; (c) vi phạm Thỏa thuận của bạn; (d) vi phạm bất kỳ quyền của bên khác của bạn, bao gồm bất kỳ Người Dùng Đã Đăng Ký nào; hoặc (e) vi phạm bất kỳ luật, quy tắc hoặc quy định áp dụng nào của bạn.</p>
-            <p className="mt-2">MEMEPUMP có quyền, với chi phí của riêng mình, đảm nhận việc bảo vệ và kiểm soát độc quyền đối với bất kỳ vấn đề nào khác phải chịu bồi thường bởi bạn, trong trường hợp đó bạn sẽ hợp tác đầy đủ với MEMEPUMP trong việc khẳng định bất kỳ biện pháp bảo vệ có sẵn nào.</p>
-            <p className="mt-2">Điều khoản này không yêu cầu bạn bồi thường cho bất kỳ Bên nào về bất kỳ thực hành thương mại không hợp lý nào của bên đó hoặc về hành vi gian lận, lừa dối, hứa hẹn sai, trình bày sai hoặc che giấu, hoặc đàn áp hoặc bỏ sót bất kỳ sự kiện vật chất nào trong kết nối với Trang Web hoặc bất kỳ Dịch vụ nào được cung cấp theo đây.</p>
-            <p className="mt-2">Bạn đồng ý rằng các điều khoản trong phần này sẽ tồn tại sau bất kỳ việc chấm dứt Thỏa thuận và/hoặc quyền truy cập của bạn vào Dịch vụ.</p>
+            <h3 className="font-semibold mb-2">11.1 배상 의무</h3>
+            <p>귀하는 다음 각 호에 해당하는 모든 손실, 비용, 법적 책임 및 비용(합리적인 변호사 비용 포함)에 대해 MEMEPUMP 당사자를 면책하고 보호할 것에 동의합니다: (a) 귀하의 사용자 콘텐츠; (b) 귀하의 서비스 이용 또는 이용 불가; (c) 본 계약 위반; (d) 귀하에 의한 타인의 권리(다른 등록 사용자 포함) 침해; (e) 귀하의 관련 법률, 규칙 또는 규정 위반.</p>
+            <p className="mt-2">MEMEPUMP는 자체 비용으로 귀하가 배상해야 하는 모든 사안에 대해 단독으로 방어 및 통제권을 가질 권리가 있으며, 이 경우 귀하는 MEMEPUMP가 이용 가능한 모든 방어 수단을 주장하는 데 전적으로 협력해야 합니다.</p>
+            <p className="mt-2">본 조항은 MEMEPUMP 당사자의 불합리한 상업적 관행, 사기, 기망, 허위 진술, 사실 은폐 또는 누락 등과 관련된 배상 의무를 귀하에게 요구하지 않습니다.</p>
+            <p className="mt-2">귀하는 본 조항의 조건이 본 계약 및/또는 귀하의 서비스 접근 종료 후에도 유효함에 동의합니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">12. CHẤP NHẬN RỦI RO LIÊN QUAN ĐẾN CÔNG NGHỆ BLOCKCHAIN</h2>
+        <h2 className="text-xl font-bold mb-3">12. 블록체인 기술 관련 위험 수용</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">12.1 Rủi Ro Giao Dịch và Blockchain</h3>
-            <p>Để được hoàn thành thành công, bất kỳ giao dịch nào liên quan đến Tài Sản Số được khởi tạo bởi hoặc gửi đến Ví của bạn phải được xác nhận bởi và ghi lại trên blockchain hỗ trợ Tài Sản Số đó. MEMEPUMP không có quyền kiểm soát đối với bất kỳ blockchain nào và do đó không thể và không đảm bảo rằng bất kỳ chi tiết giao dịch nào mà bạn gửi hoặc nhận thông qua Dịch vụ của chúng tôi sẽ được xác thực bởi hoặc xác nhận trên blockchain liên quan và không có khả năng tạo điều kiện cho bất kỳ yêu cầu hủy hoặc sửa đổi nào.</p>
-            <p className="mt-2">Ngoài ra, một số Đối Tác Hệ Sinh Thái có thể hỗ trợ các giao dịch tài chính phức tạp đòi hỏi mức độ rủi ro cao. Bạn chấp nhận và thừa nhận rằng bạn chịu trách nhiệm hoàn toàn cho tất cả các hoạt động mà bạn thực hiện thông qua Ví của bạn và chấp nhận tất cả rủi ro mất mát, bao gồm mất mát do bất kỳ quyền truy cập được ủy quyền hoặc không được ủy quyền nào vào Ví của bạn, đến mức tối đa được phép bởi luật pháp.</p>
-            <p className="mt-2">Bạn tiếp tục chấp nhận và thừa nhận rằng: (a) bạn có chuyên môn kỹ thuật và khả năng cần thiết để xem xét và đánh giá bảo mật, tính toàn vẹn và hoạt động của Ví của bạn; (b) có kiến thức, kinh nghiệm, hiểu biết, tư vấn chuyên môn và thông tin để tự đánh giá về giá trị, rủi ro và yêu cầu tuân thủ áp dụng theo luật áp dụng của bất kỳ việc sử dụng Ví của bạn; (c) biết, hiểu và chấp nhận các rủi ro liên quan đến Ví của bạn; và (d) chấp nhận các rủi ro liên quan đến công nghệ blockchain nói chung, và chịu trách nhiệm tiến hành phân tích độc lập của riêng bạn về các rủi ro cụ thể đối với bất kỳ Tài Sản Số nào bạn mua hoặc bán. Bạn tiếp tục đồng ý rằng MEMEPUMP sẽ không chịu trách nhiệm hoặc trách nhiệm pháp lý đối với các rủi ro đó.</p>
+            <h3 className="font-semibold mb-2">12.1 거래 및 블록체인 위험</h3>
+            <p>디지털 자산과 관련된 모든 거래가 성공적으로 완료되기 위해서는 귀하의 지갑에서 시작되거나 수신된 거래가 해당 디지털 자산을 지원하는 블록체인에 의해 확인 및 기록되어야 합니다. MEMEPUMP는 어떠한 블록체인도 통제하지 않으므로, 귀하가 당사 서비스를 통해 전송하거나 수신하는 거래 내역이 관련 블록체인에서 확인 또는 인증될 것임을 보장할 수 없으며, 거래 취소 또는 수정 요청을 지원할 수 없습니다.</p>
+            <p className="mt-2">또한 일부 생태계 파트너는 높은 수준의 위험이 수반되는 복잡한 금융 거래를 지원할 수 있습니다. 귀하는 귀하의 지갑을 통해 수행하는 모든 활동에 대해 전적으로 책임을 지며, 승인 또는 미승인 접근으로 인한 손실을 포함하여 모든 손실 위험을 최대한도로 수용함을 인정합니다.</p>
+            <p className="mt-2">귀하는 (a) 귀하의 지갑의 보안, 무결성 및 작동을 검토하고 평가할 기술적 전문성과 능력을 보유하고 있으며; (b) 관련 법률에 따라 귀하의 지갑 사용에 적용되는 가치, 위험 및 준수 요건을 스스로 평가할 지식, 경험, 이해, 전문가 자문 및 정보를 보유하고 있으며; (c) 귀하의 지갑과 관련된 위험을 알고, 이해하며 수용하고; (d) 블록체인 기술 전반에 내재된 위험을 수용하며, 구매 또는 판매하는 모든 디지털 자산에 대한 특정 위험을 독립적으로 분석할 책임이 있음을 추가로 인정합니다. 귀하는 MEMEPUMP가 이러한 위험에 대해 어떠한 책임도 지지 않음을 동의합니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">12.2 Biến Động Giá</h3>
-            <p>Giá của Tài Sản Số có thể cực kỳ biến động. MEMEPUMP không đưa ra bất kỳ bảo đảm nào về các thị trường mà Tài Sản Số được chuyển, mua hoặc giao dịch.</p>
+            <h3 className="font-semibold mb-2">12.2 가격 변동성</h3>
+            <p>디지털 자산의 가격은 극도로 변동될 수 있습니다. MEMEPUMP는 디지털 자산이 거래, 구매 또는 이전되는 시장에 대해 어떠한 보증도 하지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">12.3 Trách Nhiệm Thuế</h3>
-            <p>Bạn hoàn toàn chịu trách nhiệm xác định thuế, nếu có, áp dụng cho các giao dịch Tài Sản Số của bạn. MEMEPUMP không chịu trách nhiệm xác định thuế áp dụng cho các giao dịch Tài Sản Số.</p>
+            <h3 className="font-semibold mb-2">12.3 세금 책임</h3>
+            <p>귀하는 귀하의 디지털 자산 거래에 적용되는 세금을 스스로 결정할 전적인 책임이 있습니다. MEMEPUMP는 귀하의 디지털 자산 거래에 적용되는 세금을 결정하지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">12.4 Lưu Trữ và Giao Dịch Tài Sản Số</h3>
-            <p>MEMEPUMP không lưu trữ, gửi hoặc nhận Tài Sản Số. Điều này là do Tài Sản Số chỉ tồn tại nhờ vào hồ sơ quyền sở hữu được duy trì trên blockchain hỗ trợ của nó, và do đó bất kỳ chuyển giao Tài Sản Số nào xảy ra trong blockchain hỗ trợ và không phải trong Dịch vụ.</p>
-            <p className="mt-2">Các chi tiết giao dịch bạn gửi thông qua Dịch vụ có thể không được hoàn thành, hoặc có thể bị trì hoãn đáng kể, do hoạt động hoặc thiếu hoạt động trên blockchain được sử dụng để xử lý giao dịch. Khi chi tiết giao dịch đã được gửi thông qua Ví của bạn, MEMEPUMP không thể hỗ trợ bạn hủy hoặc sửa đổi giao dịch hoặc chi tiết giao dịch của bạn.</p>
-            <p className="mt-2">MEMEPUMP không đưa ra bất kỳ bảo đảm hoặc đảm bảo nào rằng một chuyển giao được khởi tạo trên Dịch vụ sẽ chuyển quyền sở hữu hoặc quyền trong bất kỳ Tài Sản Số nào. Có những rủi ro liên quan đến việc sử dụng tiền tệ dựa trên Internet, bao gồm nhưng không giới hạn ở, rủi ro về phần cứng, phần mềm và kết nối Internet; rủi ro về việc giới thiệu phần mềm độc hại; rủi ro rằng bên thứ ba có thể có được quyền truy cập trái phép vào thông tin được lưu trữ trong Ví của bạn; và rủi ro về tài sản giả, tài sản được dán nhãn sai, tài sản dễ bị suy giảm siêu dữ liệu, tài sản trên hợp đồng thông minh có lỗi, và tài sản có thể trở nên không thể chuyển giao.</p>
-            <p className="mt-2">Bạn chấp nhận và thừa nhận rằng MEMEPUMP sẽ không chịu trách nhiệm về bất kỳ lỗi giao tiếp, gián đoạn, lỗi, biến dạng hoặc trì hoãn hoặc mất mát nào bạn có thể gặp phải khi sử dụng công nghệ blockchain, bất kể nguyên nhân.</p>
+            <h3 className="font-semibold mb-2">12.4 디지털 자산의 보관 및 거래</h3>
+            <p>MEMEPUMP는 디지털 자산을 보관, 송금 또는 수신하지 않습니다. 디지털 자산은 해당 블록체인에 의해 유지되는 소유권 기록에만 존재하므로, 모든 디지털 자산의 이전은 지원 블록체인 내에서만 발생하며 서비스 내에서 발생하지 않습니다.</p>
+            <p className="mt-2">귀하가 서비스를 통해 제출한 거래 내역은 블록체인 활동 또는 비활동으로 인해 완료되지 않거나 상당히 지연될 수 있습니다. 귀하의 지갑을 통해 거래 내역이 제출된 후에는 MEMEPUMP가 해당 거래 또는 거래 내역의 취소 또는 수정을 지원할 수 없습니다.</p>
+            <p className="mt-2">MEMEPUMP는 서비스에서 시작된 이전이 어떠한 디지털 자산의 소유권 또는 권리를 이전할 것임을 보장하지 않습니다. 인터넷 기반 통화 사용에는 하드웨어, 소프트웨어, 인터넷 연결 위험, 악성 소프트웨어 도입 위험, 제3자가 귀하의 지갑에 저장된 정보에 무단 접근할 위험, 위조 자산, 잘못 라벨링된 자산, 메타데이터 취약 자산, 결함이 있는 스마트 컨트랙트 자산, 이전이 불가능해질 수 있는 자산 등 다양한 위험이 존재합니다.</p>
+            <p className="mt-2">귀하는 MEMEPUMP가 블록체인 기술 사용 중 발생할 수 있는 모든 통신 오류, 중단, 오류, 왜곡, 지연 또는 손실에 대해 어떠한 책임도 지지 않음을 인정하고 수용합니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">12.5 Rủi Ro Pháp Lý và Chính Sách</h3>
-            <p>Chế độ quản lý điều chỉnh công nghệ blockchain, tiền điện tử và token là không chắc chắn, và các quy định hoặc chính sách mới có thể ảnh hưởng bất lợi đến sự phát triển của Dịch vụ và tính hữu ích của Tài Sản Số.</p>
+            <h3 className="font-semibold mb-2">12.5 법적 및 정책적 위험</h3>
+            <p>블록체인, 암호화폐 및 토큰을 규제하는 정책은 불확실하며, 새로운 규정 또는 정책이 서비스 개발 및 디지털 자산의 유용성에 부정적인 영향을 미칠 수 있습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">12.6 Quản Trị Phi Tập Trung và Thay Đổi Giao Thức</h3>
-            <p>MEMEPUMP không đảm bảo về chức năng quản trị phi tập trung của bất kỳ blockchain nào, điều này có thể, trong số những điều khác, dẫn đến sự chậm trễ, xung đột lợi ích, hoặc quyết định hoạt động không thuận lợi cho một số chủ sở hữu của một số Tài Sản Số.</p>
-            <p className="mt-2">Bạn thừa nhận và chấp nhận rằng các giao thức điều chỉnh hoạt động của blockchain có thể phải chịu những thay đổi đột ngột trong quy tắc hoạt động có thể thay đổi đáng kể blockchain và ảnh hưởng đến giá trị và chức năng của Tài Sản Số được hỗ trợ bởi blockchain đó.</p>
+            <h3 className="font-semibold mb-2">12.6 탈중앙화 거버넌스 및 프로토콜 변경</h3>
+            <p>MEMEPUMP는 어떠한 블록체인의 탈중앙화 거버넌스 기능에 대해 보장하지 않으며, 이는 지연, 이해 상충, 일부 디지털 자산 보유자에게 불리한 운영 결정 등으로 이어질 수 있습니다.</p>
+            <p className="mt-2">귀하는 블록체인 운영을 규정하는 프로토콜이 갑작스러운 규칙 변경의 영향을 받을 수 있으며, 이는 해당 블록체인에서 지원되는 디지털 자산의 가치와 기능에 중대한 변화를 초래할 수 있음을 인정하고 수용합니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">12.7 Bảo Mật Blockchain</h3>
-            <p>MEMEPUMP không đảm bảo về bảo mật của bất kỳ blockchain nào. MEMEPUMP không chịu trách nhiệm về bất kỳ vụ hack, chi tiêu kép, Tài Sản Số bị đánh cắp, hoặc bất kỳ cuộc tấn công nào khác vào blockchain.</p>
+            <h3 className="font-semibold mb-2">12.7 블록체인 보안</h3>
+            <p>MEMEPUMP는 어떠한 블록체인의 보안에 대해서도 보장하지 않습니다. MEMEPUMP는 해킹, 이중 지출, 디지털 자산 도난 또는 기타 블록체인 공격에 대해 책임지지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">12.8 Phụ Thuộc Vào Ví Bên Thứ Ba và Đối Tác Hệ Sinh Thái</h3>
-            <p>Dịch vụ dựa vào, và MEMEPUMP không đảm bảo hoặc bảo đảm về chức năng hoặc quyền truy cập vào, bất kỳ Ví bên thứ ba nào (như MetaMask và Ledger) và Đối Tác Hệ Sinh Thái để thực hiện bất kỳ giao dịch nào. MEMEPUMP không đảm bảo về chức năng quản trị phi tập trung của bất kỳ blockchain nào, điều này có thể, trong số những điều khác, dẫn đến sự chậm trễ, xung đột lợi ích, hoặc quyết định hoạt động không thuận lợi cho một số chủ sở hữu của một số Tài Sản Số. Bạn thừa nhận và chấp nhận rằng các giao thức điều chỉnh hoạt động của blockchain có thể phải chịu những thay đổi đột ngột trong quy tắc hoạt động có thể thay đổi đáng kể blockchain và ảnh hưởng đến giá trị và chức năng của Tài Sản Số được hỗ trợ bởi blockchain đó.</p>
+            <h3 className="font-semibold mb-2">12.8 제3자 지갑 및 생태계 파트너 의존성</h3>
+            <p>서비스는 MetaMask, Ledger 등 제3자 지갑 및 생태계 파트너의 기능 또는 접근성에 의존하며, MEMEPUMP는 이들에 대해 어떠한 보장도 하지 않습니다. MEMEPUMP는 어떠한 블록체인의 탈중앙화 거버넌스 기능에 대해 보장하지 않으며, 이는 지연, 이해 상충, 일부 디지털 자산 보유자에게 불리한 운영 결정 등으로 이어질 수 있습니다. 귀하는 블록체인 운영을 규정하는 프로토콜이 갑작스러운 규칙 변경의 영향을 받을 수 있으며, 이는 해당 블록체인에서 지원되는 디지털 자산의 가치와 기능에 중대한 변화를 초래할 수 있음을 인정하고 수용합니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">12.9 Lặp Lại Rủi Ro Bảo Mật</h3>
-            <p>MEMEPUMP không đảm bảo về bảo mật của bất kỳ blockchain nào. MEMEPUMP không chịu trách nhiệm về bất kỳ vụ hack, chi tiêu kép, Tài Sản Số bị đánh cắp, hoặc bất kỳ cuộc tấn công nào khác vào blockchain.</p>
+            <h3 className="font-semibold mb-2">12.9 보안 위험 반복</h3>
+            <p>MEMEPUMP는 어떠한 블록체인의 보안에 대해서도 보장하지 않습니다. MEMEPUMP는 해킹, 이중 지출, 디지털 자산 도난 또는 기타 블록체인 공격에 대해 책임지지 않습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">13. TỪ CHỐI BẢO ĐẢM VÀ ĐIỀU KIỆN</h2>
+        <h2 className="text-xl font-bold mb-3">13. 보증 및 조건의 부인</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">13.1 Như Hiện Có</h3>
-            <p><span className="font-bold">BẠN HIỂU RÕ VÀ ĐỒNG Ý RẰNG TRONG PHẠM VI ĐƯỢC PHÉP BỞI LUẬT ÁP DỤNG, VIỆC SỬ DỤNG DỊCH VỤ CỦA BẠN LÀ RỦI RO CỦA RIÊNG BẠN, VÀ DỊCH VỤ ĐƯỢC CUNG CẤP TRÊN CƠ SỞ "NHƯ HIỆN CÓ" VÀ "NHƯ CÓ SẴN", VỚI TẤT CẢ CÁC LỖI.</span> Các Bên MEMEPUMP từ chối rõ ràng tất cả các bảo đảm, đại diện và điều kiện của bất kỳ loại nào, cho dù được thể hiện hay ngụ ý, bao gồm, nhưng không giới hạn ở, các bảo đảm hoặc điều kiện ngụ ý về khả năng thương mại, phù hợp cho một mục đích cụ thể và không vi phạm phát sinh từ việc sử dụng Trang Web.</p>
-            <p className="mt-2">Các Bên MEMEPUMP không đưa ra bất kỳ bảo đảm, đại diện hoặc điều kiện nào rằng: (1) Dịch vụ sẽ đáp ứng yêu cầu của bạn; (2) việc sử dụng Dịch vụ của bạn sẽ không bị gián đoạn, đúng thời hạn, an toàn hoặc không có lỗi; hoặc (3) các kết quả có thể đạt được từ việc sử dụng Dịch vụ sẽ chính xác hoặc đáng tin cậy. Bất kỳ nội dung nào được tải xuống từ hoặc truy cập thông qua Dịch vụ được truy cập với rủi ro của riêng bạn, và bạn sẽ hoàn toàn chịu trách nhiệm về bất kỳ thiệt hại nào đối với tài sản của bạn, bao gồm, nhưng không giới hạn ở, hệ thống máy tính của bạn và bất kỳ thiết bị nào bạn sử dụng để truy cập Dịch vụ, hoặc bất kỳ mất mát nào khác phát sinh từ việc truy cập nội dung như vậy.</p>
-            <p className="mt-2">Dịch vụ có thể phải chịu sự chậm trễ, hủy bỏ và các gián đoạn khác. MEMEPUMP không đưa ra bất kỳ bảo đảm, đại diện hoặc điều kiện nào đối với Dịch vụ, bao gồm nhưng không giới hạn ở, chất lượng, hiệu quả, danh tiếng và các đặc điểm khác của Dịch vụ. Không có lời khuyên hoặc thông tin nào, cho dù bằng miệng hay bằng văn bản, được lấy từ MEMEPUMP hoặc thông qua Dịch vụ sẽ tạo ra bất kỳ bảo đảm nào không được thể hiện rõ ràng ở đây.</p>
+            <h3 className="font-semibold mb-2">13.1 현 상태로 제공</h3>
+            <p><span className="font-bold">귀하는 관련 법률이 허용하는 범위 내에서, 서비스 이용이 전적으로 귀하의 책임임을 이해하고 동의하며, 서비스는 "있는 그대로" 및 "제공 가능한 상태로" 모든 결함과 함께 제공됨을 인정합니다.</span> MEMEPUMP 당사자는 명시적이든 묵시적이든, 상품성, 특정 목적에의 적합성, 비침해성 등 웹사이트 이용에서 발생하는 모든 보증, 진술 및 조건을 명시적으로 부인합니다.</p>
+            <p className="mt-2">MEMEPUMP 당사자는 (1) 서비스가 귀하의 요구를 충족할 것, (2) 서비스 이용이 중단되지 않고, 적시에, 안전하게 또는 오류 없이 제공될 것, (3) 서비스 이용을 통해 얻을 수 있는 결과가 정확하거나 신뢰할 수 있을 것이라는 어떠한 보증, 진술 또는 조건도 제공하지 않습니다. 서비스에서 다운로드되거나 접근한 모든 콘텐츠는 귀하의 책임 하에 이루어지며, 귀하는 귀하의 자산(컴퓨터 시스템 및 서비스 접근에 사용하는 모든 장치 포함) 또는 해당 콘텐츠 접근으로 인해 발생하는 기타 손실에 대해 전적으로 책임을 집니다.</p>
+            <p className="mt-2">서비스는 지연, 취소 및 기타 중단이 발생할 수 있습니다. MEMEPUMP는 서비스의 품질, 효율성, 평판 및 기타 특성에 대해 어떠한 보증, 진술 또는 조건도 제공하지 않습니다. MEMEPUMP 또는 서비스를 통해 구두 또는 서면으로 얻은 조언이나 정보는 본 약관에 명시적으로 기재되지 않은 추가 보증을 생성하지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">13.2 Không Chịu Trách Nhiệm Về Hành Vi Của Bên Thứ Ba</h3>
-            <p>Bạn thừa nhận và đồng ý rằng các Bên MEMEPUMP không chịu trách nhiệm pháp lý, và bạn đồng ý không tìm kiếm để giữ các Bên MEMEPUMP chịu trách nhiệm pháp lý, về hành vi của bên thứ ba, bao gồm các nhà điều hành của các trang web bên ngoài, và rằng rủi ro bị thương từ các bên thứ ba này hoàn toàn thuộc về bạn.</p>
-            <p className="mt-2">MEMEPUMP không đưa ra bất kỳ bảo đảm nào rằng hàng hóa hoặc dịch vụ được cung cấp bởi bên thứ ba sẽ đáp ứng yêu cầu của bạn hoặc có sẵn trên cơ sở không bị gián đoạn, an toàn, hoặc không có lỗi. MEMEPUMP không đưa ra bất kỳ bảo đảm nào về chất lượng của bất kỳ hàng hóa hoặc dịch vụ nào, hoặc độ chính xác, đúng thời hạn, chân thực, đầy đủ hoặc đáng tin cậy của bất kỳ Nội Dung Đã Kết Nối nào được lấy thông qua Dịch vụ.</p>
+            <h3 className="font-semibold mb-2">13.2 제3자 행위에 대한 책임 부인</h3>
+            <p>귀하는 MEMEPUMP 당사자가 제3자의 행위(외부 웹사이트 운영자 포함)에 대해 어떠한 법적 책임도 지지 않으며, 귀하가 MEMEPUMP 당사자에게 법적 책임을 묻지 않을 것에 동의함을 인정합니다. 제3자로 인한 손해의 위험은 전적으로 귀하에게 있습니다.</p>
+            <p className="mt-2">MEMEPUMP는 제3자가 제공하는 상품 또는 서비스가 귀하의 요구를 충족하거나 중단 없이, 안전하게, 오류 없이 제공될 것이라는 어떠한 보증도 하지 않습니다. MEMEPUMP는 어떠한 상품 또는 서비스의 품질, 또는 서비스를 통해 얻은 연결된 콘텐츠의 정확성, 적시성, 진실성, 완전성 또는 신뢰성에 대해 보증하지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">13.3 Miễn Trừ Trách Nhiệm Điều Tra và Thiệt Hại</h3>
-            <p>Bất chấp bất kỳ điều gì trái ngược trong các Điều Khoản Dịch Vụ này, MEMEPUMP sẽ không có nghĩa vụ điều tra và sẽ không chịu trách nhiệm về bất kỳ thiệt hại, trách nhiệm pháp lý khác hoặc tổn hại cho bất kỳ người hoặc thực thể nào liên quan đến (i) quyền sở hữu, tính hợp lệ hoặc tính xác thực của bất kỳ Tài Sản Số nào; (ii) khả năng thu thập, khả năng bảo hiểm, hiệu quả, khả năng tiếp thị hoặc tính phù hợp của bất kỳ Tài Sản Số nào; hoặc (iii) bất kỳ mất mát, chậm trễ, thất bại, lỗi, gián đoạn hoặc mất dữ liệu nào xảy ra trực tiếp hoặc gián tiếp do các tình huống nằm ngoài tầm kiểm soát của MEMEPUMP, bao gồm nhưng không giới hạn ở sự thất bại của blockchain, nhà cung cấp dịch vụ bên thứ ba, hoặc Đối Tác Hệ Sinh Thái.</p>
+            <h3 className="font-semibold mb-2">13.3 조사 및 손해에 대한 면책</h3>
+            <p>본 약관의 어떠한 내용에도 불구하고, MEMEPUMP는 (i) 디지털 자산의 소유권, 유효성 또는 진위, (ii) 디지털 자산의 회수 가능성, 보험 가능성, 효율성, 시장성 또는 적합성, (iii) 블록체인, 제3자 서비스 제공자 또는 생태계 파트너의 실패 등 MEMEPUMP의 통제를 벗어난 상황으로 인해 직접 또는 간접적으로 발생하는 손실, 지연, 실패, 오류, 중단 또는 데이터 손실과 관련하여 어떠한 조사 의무도 없으며, 어떠한 손해나 법적 책임도 지지 않습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">14. GIỚI HẠN TRÁCH NHIỆM PHÁP LÝ</h2>
+        <h2 className="text-xl font-bold mb-3">14. 책임의 한계</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">14.1 Từ Chối Trách Nhiệm Đối Với Một Số Thiệt Hại</h3>
-            <p>Bạn hiểu và đồng ý rằng, trong phạm vi được phép bởi luật, trong mọi trường hợp các Bên MEMEPUMP sẽ không chịu trách nhiệm về bất kỳ tổn thất lợi nhuận, Ethereum hoặc tiền ảo khác, doanh thu hoặc dữ liệu, thiệt hại gián tiếp, ngẫu nhiên, đặc biệt, hoặc hậu quả, hoặc thiệt hại hoặc chi phí do mất sản xuất hoặc sử dụng, gián đoạn kinh doanh, hoặc mua sắm hàng hóa hoặc dịch vụ thay thế, trong mỗi trường hợp cho dù MEMEPUMP có được thông báo về khả năng xảy ra các thiệt hại như vậy hay không, phát sinh từ hoặc liên quan đến Thỏa thuận hoặc bất kỳ giao tiếp, tương tác hoặc cuộc họp nào với các người dùng khác của Dịch vụ, trên bất kỳ lý thuyết trách nhiệm pháp lý nào, do: (a) việc sử dụng hoặc không thể sử dụng Dịch vụ; (b) chi phí mua sắm hàng hóa hoặc dịch vụ thay thế phát sinh từ bất kỳ hàng hóa, dữ liệu, thông tin hoặc dịch vụ nào được mua hoặc lấy; hoặc tin nhắn nhận được cho các giao dịch được thực hiện thông qua Dịch vụ; (c) truy cập trái phép hoặc thay đổi dữ liệu hoặc truyền tải của bạn; (d) từ ngữ hoặc hành vi của bất kỳ bên thứ ba nào trên Dịch vụ; hoặc (e) bất kỳ vấn đề nào khác liên quan đến Dịch vụ, cho dù dựa trên bảo đảm, bản quyền, hợp đồng, lỗi (bao gồm sơ suất), trách nhiệm sản phẩm hoặc bất kỳ lý thuyết pháp lý nào khác.</p>
-            <p className="mt-2">Giới hạn trách nhiệm pháp lý nêu trên sẽ không áp dụng cho trách nhiệm pháp lý của một Bên MEMEPUMP đối với (i) tử vong hoặc thương tích cá nhân do sơ suất của một Bên MEMEPUMP; hoặc đối với (ii) bất kỳ thương tích nào do gian lận hoặc trình bày sai gian lận của một Bên MEMEPUMP.</p>
+            <h3 className="font-semibold mb-2">14.1 특정 손해에 대한 책임 부인</h3>
+            <p>귀하는 관련 법률이 허용하는 범위 내에서, 어떠한 경우에도 MEMEPUMP 당사자가 이익, 이더리움 또는 기타 가상화폐, 수익, 데이터의 손실, 간접적, 우발적, 특별, 결과적 손해, 생산 또는 사용의 상실, 영업 중단, 대체 상품 또는 서비스의 구매로 인한 손해 또는 비용 등(이하에 국한되지 않음)에 대해, MEMEPUMP가 그러한 손해의 가능성을 통지받았는지 여부와 관계없이, 본 계약 또는 서비스 내 다른 사용자와의 모든 소통, 상호작용, 회의 등에서 발생하거나 관련된 모든 법적 이론에 따라 책임을 지지 않음을 이해하고 동의합니다. 이는 (a) 서비스의 이용 또는 이용 불가, (b) 서비스에서 구매 또는 획득한 상품, 데이터, 정보, 서비스 또는 거래로 인한 대체 상품 또는 서비스의 구매 비용, (c) 귀하의 데이터 또는 전송의 무단 접근 또는 변경, (d) 서비스 내 제3자의 언행, (e) 기타 서비스와 관련된 모든 문제에 적용됩니다. 이는 보증, 저작권, 계약, 불법행위(과실 포함), 제조물 책임 또는 기타 법적 이론에 근거한 경우에도 마찬가지입니다.</p>
+            <p className="mt-2">위의 책임 제한은 MEMEPUMP 당사자의 과실로 인한 사망 또는 신체 상해, 또는 MEMEPUMP 당사자의 사기 또는 사기적 허위 진술로 인한 손해에는 적용되지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">14.2 Giới Hạn Trách Nhiệm Pháp Lý</h3>
-            <p>Trong phạm vi được phép bởi luật, các Bên MEMEPUMP sẽ không chịu trách nhiệm pháp lý đối với bạn vượt quá giá trị lớn hơn của (a) $1000; hoặc (b) biện pháp khắc phục hoặc hình phạt được áp đặt bởi đạo luật mà yêu cầu đó phát sinh.</p>
-            <p className="mt-2">Giới hạn trách nhiệm pháp lý nêu trên sẽ không áp dụng cho trách nhiệm pháp lý của một Bên MEMEPUMP đối với (i) tử vong hoặc thương tích cá nhân do sơ suất của một Bên MEMEPUMP; hoặc đối với (ii) bất kỳ thương tích nào do gian lận hoặc trình bày sai gian lận của một Bên MEMEPUMP.</p>
+            <h3 className="font-semibold mb-2">14.2 책임 한도</h3>
+            <p>관련 법률이 허용하는 범위 내에서, MEMEPUMP 당사자의 귀하에 대한 총 책임은 (a) 미화 1,000달러 또는 (b) 해당 청구가 발생한 법률에 의해 부과된 구제 또는 벌금 중 더 큰 금액을 초과하지 않습니다.</p>
+            <p className="mt-2">위의 책임 제한은 MEMEPUMP 당사자의 과실로 인한 사망 또는 신체 상해, 또는 MEMEPUMP 당사자의 사기 또는 사기적 허위 진술로 인한 손해에는 적용되지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">14.3 Loại Trừ Thiệt Hại</h3>
-            <p>Một số khu vực pháp lý không cho phép loại trừ hoặc giới hạn một số thiệt hại. Nếu các luật này áp dụng cho bạn, một số hoặc tất cả các loại trừ hoặc giới hạn nêu trên có thể không áp dụng cho bạn, và bạn có thể có thêm quyền.</p>
+            <h3 className="font-semibold mb-2">14.3 손해 배제</h3>
+            <p>일부 관할권에서는 특정 손해의 배제 또는 제한을 허용하지 않을 수 있습니다. 해당 법률이 귀하에게 적용되는 경우, 위의 일부 또는 전부의 배제 또는 제한이 적용되지 않을 수 있으며, 귀하는 추가적인 권리를 가질 수 있습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">14.4 Cơ Sở Của Thỏa Thuận</h3>
-            <p>Các giới hạn thiệt hại được nêu ở trên là các yếu tố cơ bản của cơ sở thỏa thuận giữa MEMEPUMP và bạn.</p>
+            <h3 className="font-semibold mb-2">14.4 계약의 기초</h3>
+            <p>위에서 명시된 손해 제한은 MEMEPUMP와 귀하 간 계약의 기본 요소입니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">15. THỜI HẠN VÀ CHẤM DỨT</h2>
+        <h2 className="text-xl font-bold mb-3">15. 기간 및 해지</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">15.1 Thời Hạn</h3>
-            <p>Thỏa thuận bắt đầu vào ngày bạn chấp nhận chúng (như được mô tả trong phần mở đầu ở trên) và vẫn có hiệu lực đầy đủ trong khi bạn sử dụng Dịch vụ, trừ khi bị chấm dứt sớm hơn theo Thỏa thuận.</p>
+            <h3 className="font-semibold mb-2">15.1 기간</h3>
+            <p>본 계약은 귀하가 이를 수락한 날(위 서문에 명시된 바와 같이)부터 시작되며, 귀하가 서비스를 이용하는 동안 유효하며, 본 계약에 따라 조기 해지되지 않는 한 계속 효력을 가집니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">15.2 Chấm Dứt Dịch Vụ Bởi MEMEPUMP</h3>
-            <p>MEMEPUMP có quyền tự do chấm dứt (hoặc đình chỉ quyền truy cập) việc sử dụng Dịch vụ của bạn vì bất kỳ lý do nào theo quyết định của chúng tôi, bao gồm việc bạn vi phạm Thỏa thuận này. MEMEPUMP có quyền duy nhất quyết định liệu bạn có vi phạm bất kỳ hạn chế nào được quy định trong Thỏa thuận này hay không.</p>
-            <p className="mt-2">Nếu chúng tôi đình chỉ việc sử dụng Dịch vụ của bạn, bạn có thể tiếp tục truy cập Ví của mình trực tiếp hoặc thông qua các dịch vụ khác không được lưu trữ bởi chúng tôi. MEMEPUMP sẽ không chịu bất kỳ trách nhiệm pháp lý nào đối với bạn về bất kỳ việc đình chỉ hoặc chấm dứt nào.</p>
+            <h3 className="font-semibold mb-2">15.2 MEMEPUMP에 의한 서비스 해지</h3>
+            <p>MEMEPUMP는 단독 재량에 따라 귀하가 본 계약을 위반한 경우를 포함하여 어떠한 이유로든 귀하의 서비스 이용(또는 접근 권한)을 해지(또는 일시 중지)할 수 있는 권리를 가집니다. MEMEPUMP는 귀하가 본 계약의 어떠한 제한을 위반했는지 여부를 단독으로 결정할 권리가 있습니다.</p>
+            <p className="mt-2">저희가 귀하의 서비스 이용을 일시 중지하는 경우, 귀하는 여전히 직접 또는 당사가 호스팅하지 않는 기타 서비스를 통해 귀하의 지갑에 접근할 수 있습니다. MEMEPUMP는 이러한 일시 중지 또는 해지에 대해 귀하에게 어떠한 법적 책임도 지지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">15.3 Chấm Dứt Dịch Vụ Bởi Bạn</h3>
-            <p>Nếu bạn muốn chấm dứt Dịch vụ được cung cấp bởi MEMEPUMP, bạn có thể làm như vậy bằng cách ngừng sử dụng Dịch vụ. Bạn có thể tiếp tục truy cập Ví của mình trực tiếp hoặc thông qua các dịch vụ khác không được lưu trữ bởi chúng tôi.</p>
+            <h3 className="font-semibold mb-2">15.3 귀하에 의한 서비스 해지</h3>
+            <p>귀하가 MEMEPUMP가 제공하는 서비스를 해지하고자 하는 경우, 서비스 이용을 중단함으로써 해지할 수 있습니다. 귀하는 여전히 직접 또는 당사가 호스팅하지 않는 기타 서비스를 통해 귀하의 지갑에 접근할 수 있습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">15.4 Tồn Tại</h3>
-            <p>Tất cả các điều khoản của Thỏa thuận mà theo bản chất của chúng nên tồn tại, sẽ tồn tại sau khi chấm dứt Dịch vụ, bao gồm nhưng không giới hạn ở, các điều khoản về quyền sở hữu, từ chối bảo đảm, và giới hạn trách nhiệm pháp lý.</p>
+            <h3 className="font-semibold mb-2">15.4 존속</h3>
+            <p>그 성격상 해지 후에도 존속해야 하는 본 계약의 모든 조항(소유권, 보증의 부인, 책임의 한계 등 포함)은 서비스 해지 후에도 계속 유효합니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">15.5 Không Sử Dụng Tiếp Theo</h3>
-            <p>Nếu khả năng truy cập Dịch vụ hoặc bất kỳ cộng đồng MEMEPUMP nào khác của bạn bị MEMEPUMP chấm dứt, thì bạn đồng ý rằng bạn sẽ không cố gắng truy cập Dịch vụ hoặc bất kỳ cộng đồng MEMEPUMP nào thông qua việc sử dụng một Ví khác, Tài Khoản Bên Thứ Ba, tên thành viên hoặc cách khác.</p>
-            <p className="mt-2">Trong trường hợp bạn vi phạm câu ngay trước đó, MEMEPUMP có quyền, theo quyết định riêng của mình, ngay lập tức thực hiện bất kỳ hoặc tất cả các hành động được quy định ở đây mà không cần thông báo hoặc cảnh báo cho bạn.</p>
+            <h3 className="font-semibold mb-2">15.5 재접근 금지</h3>
+            <p>귀하의 서비스 또는 MEMEPUMP 커뮤니티에 대한 접근이 MEMEPUMP에 의해 해지된 경우, 귀하는 다른 지갑, 제3자 계정, 사용자명 또는 기타 방법을 통해 서비스 또는 MEMEPUMP 커뮤니티에 재접근을 시도하지 않을 것에 동의합니다.</p>
+            <p className="mt-2">귀하가 전 항을 위반하는 경우, MEMEPUMP는 단독 재량에 따라 사전 통지나 경고 없이 본 계약에 명시된 모든 조치를 즉시 취할 수 있습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">16. LUẬT ĐIỀU CHỈNH VÀ GIẢI QUYẾT TRANH CHẤP</h2>
+        <h2 className="text-xl font-bold mb-3">16. 준거법 및 분쟁 해결</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">16.1 Từ Bỏ Giải Quyết Tập Thể Hoặc Không Cá Nhân</h3>
-            <p>TẤT CẢ CÁC TRANH CHẤP, YÊU CẦU VÀ YÊU CẦU GIẢI QUYẾT TRONG PHẠM VI CỦA THỎA THUẬN TRỌNG TÀI NÀY PHẢI ĐƯỢC GIẢI QUYẾT BẰNG TRỌNG TÀI TRÊN CƠ SỞ CÁ NHÂN VÀ KHÔNG PHẢI TRÊN CƠ SỞ TẬP THỂ HOẶC TẬP THỂ, CHỈ CÓ BIỆN PHÁP GIẢI QUYẾT CÁ NHÂN LÀ CÓ SẴN, VÀ CÁC YÊU CẦU CỦA HƠN MỘT KHÁCH HÀNG HOẶC NGƯỜI DÙNG KHÔNG THỂ ĐƯỢC GIẢI QUYẾT BẰNG TRỌNG TÀI HOẶC HỢP NHẤT VỚI CÁC YÊU CẦU CỦA BẤT KỲ KHÁCH HÀNG HOẶC NGƯỜI DÙNG NÀO KHÁC.</p>
+            <h3 className="font-semibold mb-2">16.1 집단 또는 비개인적 분쟁 해결의 포기</h3>
+            <p>본 중재 합의의 범위 내 모든 분쟁, 청구 및 구제 요청은 개별적으로 중재를 통해 해결되어야 하며, 집단 또는 단체의 근거로 해결될 수 없습니다. 오직 개별적 구제만이 허용되며, 둘 이상의 고객 또는 사용자의 청구는 중재 또는 기타 절차에서 병합될 수 없습니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">17. DỊCH VỤ BÊN THỨ BA</h2>
+        <h2 className="text-xl font-bold mb-3">17. 제3자 서비스</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">17.1 Dịch Vụ Bên Thứ Ba</h3>
-            <p>Dịch vụ có thể chứa hoặc trong một số trường hợp, tích hợp với Dịch vụ của chúng tôi, một số Dịch Vụ Bên Thứ Ba. Khi bạn nhấp vào liên kết đến hoặc truy cập hoặc sử dụng Dịch Vụ Bên Thứ Ba, chúng tôi sẽ không cảnh báo bạn rằng bạn đã rời khỏi Dịch vụ và phải tuân theo các điều khoản và điều kiện (bao gồm chính sách bảo mật) của trang web hoặc đích đến khác.</p>
-            <p className="mt-2">Các Dịch Vụ Bên Thứ Ba như vậy không nằm dưới sự kiểm soát của MEMEPUMP. MEMEPUMP không chịu trách nhiệm về bất kỳ Dịch Vụ Bên Thứ Ba nào. MEMEPUMP cung cấp các Dịch Vụ Bên Thứ Ba này chỉ như một sự tiện lợi và không xem xét, phê duyệt, giám sát, chứng thực, bảo đảm hoặc đưa ra bất kỳ tuyên bố nào đối với Dịch Vụ Bên Thứ Ba, hoặc bất kỳ sản phẩm hoặc dịch vụ nào được cung cấp trong kết nối với chúng. Bạn sử dụng tất cả các liên kết trong Dịch Vụ Bên Thứ Ba với rủi ro của riêng bạn.</p>
-            <p className="mt-2">Khi bạn rời khỏi Dịch vụ của chúng tôi, Thỏa thuận này và chính sách của chúng tôi không còn điều chỉnh. Bạn nên xem xét các điều khoản và chính sách áp dụng, bao gồm các hoạt động thu thập dữ liệu và bảo mật, của bất kỳ Dịch Vụ Bên Thứ Ba nào, và thực hiện bất kỳ cuộc điều tra nào mà bạn cảm thấy cần thiết hoặc phù hợp trước khi tiến hành bất kỳ giao dịch nào với bất kỳ bên thứ ba nào.</p>
+            <h3 className="font-semibold mb-2">17.1 제3자 서비스</h3>
+            <p>서비스에는 당사 서비스와 통합되거나 별도로 제공되는 다양한 제3자 서비스가 포함될 수 있습니다. 귀하가 제3자 서비스로 연결되는 링크를 클릭하거나 해당 서비스를 이용할 경우, 당사는 귀하가 서비스를 떠났음을 별도로 알리지 않으며, 귀하는 해당 웹사이트 또는 목적지의 약관(개인정보 처리방침 포함)을 준수해야 합니다.</p>
+            <p className="mt-2">이러한 제3자 서비스는 MEMEPUMP의 통제 하에 있지 않습니다. MEMEPUMP는 어떠한 제3자 서비스에 대해서도 책임을 지지 않습니다. MEMEPUMP는 이러한 제3자 서비스를 단순히 편의를 위해 제공하며, 이를 검토, 승인, 모니터링, 보증 또는 어떠한 진술도 하지 않습니다. 귀하는 모든 제3자 서비스 링크를 자신의 책임 하에 이용합니다.</p>
+            <p className="mt-2">귀하가 당사 서비스를 떠날 때, 본 계약 및 당사의 정책은 더 이상 적용되지 않습니다. 귀하는 제3자 서비스의 약관 및 정책(데이터 수집 및 보안 관련 포함)을 반드시 검토하고, 거래를 진행하기 전에 필요하다고 판단되는 모든 조사를 직접 수행해야 합니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">18. CHƯƠNG TRÌNH GIỚI THIỆU</h2>
+        <h2 className="text-xl font-bold mb-3">18. 추천 프로그램</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">18.1 Chia Sẻ Liên Kết Giới Thiệu</h3>
-            <p>Chia Sẻ Liên Kết Giới Thiệu.</p>
+            <h3 className="font-semibold mb-2">18.1 추천 링크 공유</h3>
+            <p>추천 링크 공유.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">18.2 Bảo Lưu Quyền</h3>
-            <p>MEMEPUMP có thể đình chỉ hoặc chấm dứt Chương Trình Giới Thiệu hoặc khả năng tham gia của bạn vào chương trình này vào bất kỳ lúc nào vì bất kỳ lý do nào. Ví dụ, chúng tôi bảo lưu quyền xem xét và điều tra tất cả các hoạt động giới thiệu, và đình chỉ quyền truy cập vào Dịch vụ hoặc thu hồi hoặc vô hiệu hóa các Khuyến Khích đã kiếm được theo quyết định riêng của chúng tôi nếu chúng tôi nhận thấy bất kỳ hoạt động nào mà chúng tôi tin là lạm dụng, gian lận, vi phạm Thỏa thuận này hoặc bất kỳ Điều Khoản Giới Thiệu Bổ Sung nào, hoặc theo cách khác mà chúng tôi cho là công bằng và phù hợp.</p>
-            <p className="mt-2">Chúng tôi cũng bảo lưu quyền vô hiệu hóa Liên Kết Giới Thiệu hoặc thay đổi các Khuyến Khích liên quan đến việc sử dụng bất kỳ Liên Kết Giới Thiệu hoặc đề nghị Chương Trình Giới Thiệu nào vào bất kỳ lúc nào vì bất kỳ lý do nào. Không giới hạn điều trên, MEMEPUMP bảo lưu quyền, theo quyết định riêng của mình, thu hồi hoặc vô hiệu hóa bất kỳ Khuyến Khích nào mà nó cho là, theo quyết định riêng của mình, được thu thập (i) vi phạm Thỏa thuận này, bao gồm nhưng không giới hạn ở, (1) không tuân theo các yêu cầu đủ điều kiện và (2) thông qua phân phối qua các kênh không được phép hoặc vi phạm bất kỳ luật, quy tắc hoặc quy định áp dụng nào; hoặc (ii) liên quan đến nội dung mà MEMEPUMP cho là xúc phạm hoặc không phù hợp theo quyết định riêng của mình.</p>
-            <p className="mt-2">Không giới hạn điều trên, nội dung như vậy bao gồm tất cả các hình thức khiêu dâm, tục tĩu, ngôn ngữ và nội dung không đứng đắn kích động hoặc ủng hộ thù địch hoặc bạo lực, làm mất phẩm giá, phỉ báng hoặc làm tổn hại đến thiện chí, danh tiếng hoặc hình ảnh thương hiệu của MEMEPUMP, hoặc kích động hoặc ủng hộ phân biệt đối xử dưới bất kỳ hình thức nào.</p>
+            <h3 className="font-semibold mb-2">18.2 권리 보유</h3>
+            <p>MEMEPUMP는 언제든지 어떠한 이유로든 추천 프로그램 또는 귀하의 프로그램 참여를 일시 중지하거나 종료할 수 있습니다. 예를 들어, 당사는 모든 추천 활동을 검토 및 조사할 권리를 보유하며, 남용, 사기, 본 계약 또는 추가 추천 약관 위반, 또는 당사가 공정하고 적절하다고 판단하는 기타 사유가 있다고 판단되는 경우, 서비스 접근을 중단하거나 획득한 인센티브를 회수 또는 무효화할 수 있습니다.</p>
+            <p className="mt-2">또한 당사는 언제든지 어떠한 이유로든 추천 링크를 비활성화하거나, 추천 링크 또는 추천 프로그램 제안과 관련된 인센티브를 변경할 권리를 보유합니다. 위에 제한되지 않고, MEMEPUMP는 단독 재량에 따라 (i) 자격 요건을 충족하지 않거나 (ii) 허용되지 않은 채널을 통한 배포 또는 관련 법률, 규칙, 규정 위반 등 본 계약을 위반하여 획득한 인센티브를 회수 또는 무효화할 수 있습니다. 또한, MEMEPUMP가 부적절하거나 부적합하다고 판단하는 콘텐츠와 관련된 인센티브도 회수 또는 무효화할 수 있습니다.</p>
+            <p className="mt-2">위에 제한되지 않고, 부적절한 콘텐츠에는 모든 형태의 음란물, 외설, 부적절한 언어 및 내용, 적대감 또는 폭력을 조장하거나 옹호하는 내용, 명예훼손, MEMEPUMP의 명성 또는 브랜드 이미지를 훼손하는 내용, 차별을 조장하거나 옹호하는 모든 형태의 내용이 포함됩니다.</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">19. QUY ĐỊNH CHUNG</h2>
+        <h2 className="text-xl font-bold mb-3">19. 일반 조항</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">19.1 Giao Tiếp Điện Tử</h3>
-            <p>Vì mục đích hợp đồng, bạn (a) đồng ý nhận thông tin liên lạc từ MEMEPUMP dưới dạng điện tử; và (b) đồng ý rằng tất cả các điều khoản và điều kiện, thỏa thuận, thông báo, tiết lộ và các thông tin liên lạc khác mà MEMEPUMP cung cấp cho bạn dưới dạng điện tử đáp ứng bất kỳ yêu cầu pháp lý nào mà các thông tin liên lạc như vậy sẽ đáp ứng nếu nó được viết ra.</p>
+            <h3 className="font-semibold mb-2">19.1 전자적 소통</h3>
+            <p>계약 목적상, 귀하는 (a) MEMEPUMP로부터 전자적 형태로 정보를 수신하는 데 동의하며, (b) MEMEPUMP가 전자적으로 제공하는 모든 약관, 계약, 통지, 공개 및 기타 소통이 서면으로 제공되는 경우와 동일한 법적 요건을 충족함에 동의합니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">19.2 Miễn Trừ</h3>
-            <p>Bạn từ đây miễn trừ cho các Bên MEMEPUMP và người kế nhiệm của họ khỏi các khiếu nại, yêu cầu, bất kỳ và tất cả các tổn thất, thiệt hại, quyền và hành động thuộc bất kỳ loại nào, bao gồm thương tích cá nhân, tử vong và thiệt hại tài sản, liên quan trực tiếp hoặc gián tiếp đến hoặc phát sinh từ việc sử dụng Dịch vụ của bạn, bao gồm nhưng không giới hạn ở, bất kỳ tương tác nào với hoặc hành vi của các Người Dùng Đã Đăng Ký khác hoặc trang web bên thứ ba thuộc bất kỳ loại nào phát sinh trong kết nối với hoặc do kết quả của Thỏa thuận hoặc việc sử dụng Dịch vụ của bạn.</p>
+            <h3 className="font-semibold mb-2">19.2 면책</h3>
+            <p>귀하는 이로써 MEMEPUMP 당사자 및 그 승계인에 대해, 귀하의 서비스 이용과 직접적 또는 간접적으로 관련되거나 발생하는 모든 청구, 요구, 손실, 손해, 권리 및 행위(개인 상해, 사망, 재산 피해 포함)에 대해 면책함에 동의합니다. 여기에는 다른 등록 사용자 또는 제3자 웹사이트와의 상호작용 또는 행위로 인해 본 계약 또는 서비스 이용과 관련하여 발생하는 모든 사항이 포함됩니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">19.3 Chuyển Nhượng</h3>
-            <p>Thỏa thuận, và các quyền và nghĩa vụ của bạn theo đây, không thể được chuyển nhượng, phân công, ủy quyền hoặc chuyển giao theo cách khác bởi bạn mà không có sự đồng ý trước bằng văn bản của MEMEPUMP, và bất kỳ nỗ lực chuyển nhượng, phân công, ủy quyền hoặc chuyển giao nào vi phạm điều trên sẽ vô hiệu.</p>
+            <h3 className="font-semibold mb-2">19.3 양도 금지</h3>
+            <p>본 계약 및 귀하의 권리와 의무는 MEMEPUMP의 사전 서면 동의 없이 양도, 이전, 위임 또는 양도될 수 없으며, 이를 위반한 모든 시도는 무효입니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">19.4 Sự Kiện Bất Khả Kháng</h3>
-            <p>MEMEPUMP sẽ không chịu trách nhiệm về bất kỳ sự chậm trễ hoặc thất bại nào trong việc thực hiện do các nguyên nhân nằm ngoài tầm kiểm soát hợp lý của mình, bao gồm, nhưng không giới hạn ở, các hành động của thiên nhiên, chiến tranh, khủng bố, bạo loạn, cấm vận, hành động của chính quyền dân sự hoặc quân sự, hỏa hoạn, lũ lụt, tai nạn, đình công hoặc thiếu phương tiện vận chuyển, nhiên liệu, năng lượng, lao động hoặc vật liệu.</p>
+            <h3 className="font-semibold mb-2">19.4 불가항력</h3>
+            <p>MEMEPUMP는 천재지변, 전쟁, 테러, 폭동, 금수조치, 민간 또는 군 당국의 조치, 화재, 홍수, 사고, 파업, 운송, 연료, 에너지, 노동력 또는 자재의 부족 등 합리적 통제를 벗어난 사유로 인한 이행 지연 또는 실패에 대해 책임지지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">19.5 Câu Hỏi, Khiếu Nại, Yêu Cầu</h3>
-            <p>Nếu bạn có bất kỳ câu hỏi, khiếu nại hoặc yêu cầu nào liên quan đến Dịch vụ, vui lòng liên hệ với chúng tôi tại <a href="https://t.me/MemePumpOfficial" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://t.me/MemePumpOfficial</a> hoặc <a href="https://x.com/MemePump7" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://x.com/MemePump7</a>.</p>
-            <p className="mt-2">Chúng tôi sẽ cố gắng hết sức để giải quyết mối quan tâm của bạn. Nếu bạn cảm thấy rằng mối quan tâm của bạn chưa được giải quyết đầy đủ, chúng tôi mời bạn cho chúng tôi biết để điều tra thêm.</p>
+            <h3 className="font-semibold mb-2">19.5 문의 및 불만</h3>
+            <p>서비스와 관련된 문의, 불만 또는 요청이 있는 경우 <a href="https://t.me/MemePumpOfficial" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://t.me/MemePumpOfficial</a> 또는 <a href="https://x.com/MemePump7" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://x.com/MemePump7</a>로 연락해 주시기 바랍니다.</p>
+            <p className="mt-2">저희는 귀하의 우려 사항을 해결하기 위해 최선을 다하겠습니다. 만약 귀하의 우려가 충분히 해결되지 않았다고 느끼신다면, 추가 조사를 위해 저희에게 알려주시기 바랍니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">19.6 Từ Bỏ</h3>
-            <p>Bất kỳ sự từ bỏ hoặc thất bại nào trong việc thực thi bất kỳ điều khoản nào của Thỏa thuận trong một trường hợp sẽ không được coi là sự từ bỏ bất kỳ điều khoản nào khác hoặc của điều khoản đó trong bất kỳ trường hợp nào khác.</p>
+            <h3 className="font-semibold mb-2">19.6 권리 포기 없음</h3>
+            <p>본 계약의 조항을 특정 경우에 포기하거나 이행하지 않은 경우, 이는 다른 조항 또는 동일 조항을 다른 경우에 포기한 것으로 간주되지 않습니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">19.7 Tính Độc Lập</h3>
-            <p>Nếu bất kỳ phần nào của Thỏa thuận này được coi là không hợp lệ hoặc không thể thực thi, phần đó sẽ được giải thích theo cách phản ánh, càng gần càng tốt, ý định ban đầu của các bên, và các phần còn lại sẽ vẫn có hiệu lực đầy đủ.</p>
+            <h3 className="font-semibold mb-2">19.7 분리 가능성</h3>
+            <p>본 계약의 일부가 무효이거나 집행 불가능한 경우, 해당 부분은 당사자들의 원래 의도를 최대한 반영하는 방식으로 해석되며, 나머지 조항은 계속 완전한 효력을 가집니다.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">19.8 Thỏa Thuận Toàn Bộ</h3>
-            <p>Thỏa thuận là thỏa thuận cuối cùng, đầy đủ và độc quyền của các bên liên quan đến chủ đề này và thay thế và hợp nhất tất cả các thảo luận trước đó giữa các bên liên quan đến chủ đề đó.</p>
+            <h3 className="font-semibold mb-2">19.8 완전 합의</h3>
+            <p>본 계약은 본 주제에 관한 당사자 간의 최종적이고 완전하며 독점적인 합의로, 이전의 모든 논의를 대체하고 통합합니다.</p>
           </div>
         </div>
       </div>
