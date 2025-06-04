@@ -279,7 +279,7 @@ const Header = () => {
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem asChild>
-                                                <Link href={`/ref/${lang}`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                <Link href={`/ref`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
                                                     <span>{t('header.wallet.ref')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
@@ -368,7 +368,7 @@ const Header = () => {
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem asChild>
-                                                <Link href={`/ref/${lang}`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                <Link href={`/ref`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
                                                     <LinkIcon className="mr-2 h-4 w-4" />
                                                     <span>{t('header.wallet.ref')}</span>
                                                 </Link>

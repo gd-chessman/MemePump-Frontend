@@ -1,14 +1,130 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Copy, ChevronUp, ChevronDown, User, Check, ExternalLink, Link2, Gift, X, AlertCircle } from "lucide-react"
+import {
+  Copy,
+  ChevronUp,
+  ChevronDown,
+  User,
+  Check,
+  ExternalLink,
+  Link2,
+  Gift,
+  X,
+  AlertCircle,
+  Calendar,
+  DollarSign,
+  Activity,
+} from "lucide-react"
+
+// Sample data for referred users with level information
+const referredUsers = [
+  {
+    id: "user1",
+    name: "Alex Johnson",
+    joinDate: "2023-05-12",
+    earnings: 125.75,
+    status: "active",
+    level: 1,
+  },
+  {
+    id: "user2",
+    name: "Sarah Williams",
+    joinDate: "2023-06-23",
+    earnings: 87.3,
+    status: "active",
+    level: 1,
+  },
+  {
+    id: "user3",
+    name: "Michael Brown",
+    joinDate: "2023-07-05",
+    earnings: 42.15,
+    status: "inactive",
+    level: 2,
+  },
+  {
+    id: "user4",
+    name: "Emma Davis",
+    joinDate: "2023-08-17",
+    earnings: 63.9,
+    status: "active",
+    level: 2,
+  },
+  {
+    id: "user5",
+    name: "James Wilson",
+    joinDate: "2023-09-03",
+    earnings: 31.45,
+    status: "active",
+    level: 3,
+  },
+  {
+    id: "user6",
+    name: "Olivia Martinez",
+    joinDate: "2023-09-15",
+    earnings: 18.2,
+    status: "inactive",
+    level: 3,
+  },
+  {
+    id: "user7",
+    name: "William Taylor",
+    joinDate: "2023-10-07",
+    earnings: 9.75,
+    status: "active",
+    level: 4,
+  },
+  {
+    id: "user8",
+    name: "Sophia Anderson",
+    joinDate: "2023-10-22",
+    earnings: 5.3,
+    status: "active",
+    level: 5,
+  },
+  {
+    id: "user9",
+    name: "Benjamin Thomas",
+    joinDate: "2023-11-05",
+    earnings: 12.8,
+    status: "active",
+    level: 1,
+  },
+  {
+    id: "user10",
+    name: "Isabella Garcia",
+    joinDate: "2023-11-18",
+    earnings: 7.45,
+    status: "inactive",
+    level: 2,
+  },
+  {
+    id: "user11",
+    name: "Lucas Rodriguez",
+    joinDate: "2023-12-01",
+    earnings: 22.6,
+    status: "active",
+    level: 3,
+  },
+  {
+    id: "user12",
+    name: "Mia Lee",
+    joinDate: "2023-12-14",
+    earnings: 15.9,
+    status: "active",
+    level: 4,
+  },
+]
 
 export default function ReferralPage() {
   const [isTreeVisible, setIsTreeVisible] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const [totalEarnings] = useState(15.5) // Simulated earnings - can be changed to test
+  const [activeTab, setActiveTab] = useState("users") // 'layers', 'users'
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [selectedLevel, setSelectedLevel] = useState("all")
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText("https://mevx.io/@")
@@ -23,6 +139,18 @@ export default function ReferralPage() {
       setShowWithdrawModal(false)
     }
   }
+
+  // Format date to display in a more readable format
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+  }
+
+  // Filter users based on selected level
+  const filteredUsers =
+    selectedLevel === "all"
+      ? referredUsers
+      : referredUsers.filter((user) => user.level === Number.parseInt(selectedLevel.replace("level", "")))
 
   // Draw connections between nodes
   const drawConnections = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
@@ -156,6 +284,43 @@ export default function ReferralPage() {
 
   return (
     <div className="bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-black dark:to-gray-900 text-gray-900 dark:text-white min-h-screen transition-colors duration-300">
+      <style jsx>{`
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: #4f46e5 #1f2937;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: linear-gradient(to bottom, #1f2937, #111827);
+          border-radius: 10px;
+          margin: 4px 0;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #6366f1, #4f46e5);
+          border-radius: 10px;
+          border: 1px solid #374151;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(to bottom, #7c3aed, #6366f1);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:active {
+          background: linear-gradient(to bottom, #8b5cf6, #7c3aed);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-corner {
+          background: #1f2937;
+        }
+      `}</style>
+
       <div className="max-w-4xl mx-auto p-3">
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-600 dark:from-purple-600 dark:via-purple-700 dark:to-indigo-700 p-3 rounded-md shadow-lg border border-purple-400/30 dark:border-purple-500/20 mb-4">
@@ -197,7 +362,7 @@ export default function ReferralPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
           <div className="bg-green-100/60 dark:bg-green-900/40 backdrop-blur-sm rounded-md p-3 border border-green-300/50 dark:border-green-700/50 shadow-md">
             <h3 className="text-green-600 dark:text-green-400 font-semibold mb-1 text-xs">Total Referrals</h3>
-            <p className="text-xl font-bold text-gray-900 dark:text-white">0</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-white">{referredUsers.length}</p>
           </div>
           <div className="bg-blue-100/60 dark:bg-blue-900/40 backdrop-blur-sm rounded-md p-3 border border-blue-300/50 dark:border-blue-700/50 shadow-md">
             <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">Total Earnings</h3>
@@ -214,7 +379,9 @@ export default function ReferralPage() {
           </div>
           <div className="bg-purple-100/60 dark:bg-purple-900/40 backdrop-blur-sm rounded-md p-3 border border-purple-300/50 dark:border-purple-700/50 shadow-md">
             <h3 className="text-purple-600 dark:text-purple-400 font-semibold mb-1 text-xs">Active Referrals</h3>
-            <p className="text-xl font-bold text-gray-900 dark:text-white">0</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
+              {referredUsers.filter((user) => user.status === "active").length}
+            </p>
           </div>
         </div>
 
@@ -333,125 +500,223 @@ export default function ReferralPage() {
 
         {/* YOUR REFERRALS Section */}
         <div className="bg-white/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-md p-3 border border-gray-300/50 dark:border-gray-700/50 shadow-md">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-1.5">
-              <Link2 size={14} className="text-blue-600 dark:text-blue-400" />
-              <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">YOUR REFERRALS</h2>
-            </div>
-            <div className="relative">
-              <button className="flex items-center gap-1 bg-gray-800 dark:bg-gray-700 text-white px-2 py-1 rounded-md transition-all duration-300 border border-gray-600 dark:border-gray-600 hover:bg-gray-700 dark:hover:bg-gray-600 text-xs">
-                <span className="flex items-center gap-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                  </svg>
-                  All Chains
-                </span>
-                <ChevronDown size={12} />
-              </button>
-            </div>
+          <div className="flex items-center gap-1.5 mb-3">
+            <Link2 size={14} className="text-blue-600 dark:text-blue-400" />
+            <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">YOUR REFERRALS</h2>
           </div>
 
-          {/* 5 LAYERS REFERRAL */}
-          <div className="mb-4">
-            <div className="flex items-center gap-1.5 mb-3">
-              <div className="bg-blue-600 dark:bg-blue-500 text-white px-2 py-0.5 rounded-full text-[10px] font-medium">
-                5 LAYERS REFERRAL
+          {/* Tabs */}
+          <div className="flex border-b border-gray-300 dark:border-gray-700 mb-3">
+            <button
+              onClick={() => setActiveTab("users")}
+              className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors ${
+                activeTab === "users"
+                  ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              REFERRED USERS
+            </button>
+            <button
+              onClick={() => setActiveTab("layers")}
+              className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors ${
+                activeTab === "layers"
+                  ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              5 LAYERS REFERRAL
+            </button>
+          </div>
+
+          {/* 5 LAYERS REFERRAL Tab Content */}
+          {activeTab === "layers" && (
+            <div className="mb-4">
+              <div className="bg-gray-900 dark:bg-gray-800 rounded-md p-3 border border-gray-700">
+                {/* Table Headers */}
+                <div className="grid grid-cols-4 gap-2 mb-3">
+                  <div></div>
+                  <div className="text-center">
+                    <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
+                      <span className="text-blue-400 font-medium text-[10px]">REFERRAL COUNT</span>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
+                      <span className="text-blue-400 font-medium text-[10px]">CLAIMABLE VOLUME</span>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
+                      <span className="text-blue-400 font-medium text-[10px]">LIFETIME VOLUME</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Table Rows */}
+                <div className="space-y-2">
+                  {[1, 2, 3, 4, 5].map((layer) => (
+                    <div key={layer} className="grid grid-cols-4 gap-2 items-center">
+                      <div>
+                        <div className="bg-blue-600 dark:bg-blue-500 text-white px-2 py-1 rounded-md text-[10px] font-medium text-center">
+                          LAYER {layer}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
+                          <span className="text-white font-bold text-sm">
+                            {referredUsers.filter((user) => user.level === layer).length}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
+                          <span className="text-green-400 font-bold text-sm">
+                            $
+                            {referredUsers
+                              .filter((user) => user.level === layer)
+                              .reduce((sum, user) => sum + user.earnings, 0)
+                              .toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
+                          <span className="text-green-400 font-bold text-sm">
+                            $
+                            {(
+                              referredUsers
+                                .filter((user) => user.level === layer)
+                                .reduce((sum, user) => sum + user.earnings, 0) * 1.5
+                            ).toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
+          )}
 
-            <div className="bg-gray-900 dark:bg-gray-800 rounded-md p-3 border border-gray-700">
-              {/* Table Headers */}
-              <div className="grid grid-cols-4 gap-2 mb-3">
-                <div></div>
-                <div className="text-center">
-                  <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
-                    <span className="text-blue-400 font-medium text-[10px]">REFERRAL COUNT</span>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
-                    <span className="text-blue-400 font-medium text-[10px]">CLAIMABLE VOLUME</span>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
-                    <span className="text-blue-400 font-medium text-[10px]">LIFETIME VOLUME</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Table Rows */}
-              <div className="space-y-2">
-                {[1, 2, 3, 4, 5].map((layer) => (
-                  <div key={layer} className="grid grid-cols-4 gap-2 items-center">
-                    <div>
-                      <div className="bg-blue-600 dark:bg-blue-500 text-white px-2 py-1 rounded-md text-[10px] font-medium text-center">
-                        LAYER {layer}
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
-                        <span className="text-white font-bold text-sm">0</span>
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
-                        <span className="text-green-400 font-bold text-sm">$0</span>
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
-                        <span className="text-green-400 font-bold text-sm">$0</span>
-                      </div>
-                    </div>
-                  </div>
+          {/* REFERRED USERS Tab Content */}
+          {activeTab === "users" && (
+            <div>
+              {/* Level Filter Tabs */}
+              <div className="flex flex-wrap gap-1 mb-3 p-2 bg-gray-800/30 dark:bg-gray-900/30 rounded-md border border-gray-600/30">
+                <button
+                  onClick={() => setSelectedLevel("all")}
+                  className={`px-2 py-1 text-xs font-medium rounded-md transition-colors ${
+                    selectedLevel === "all"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white"
+                  }`}
+                >
+                  All
+                </button>
+                {[1, 2, 3, 4, 5].map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => setSelectedLevel(`level${level}`)}
+                    className={`px-2 py-1 text-xs font-medium rounded-md transition-colors ${
+                      selectedLevel === `level${level}`
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white"
+                    }`}
+                  >
+                    Level {level}
+                  </button>
                 ))}
               </div>
-            </div>
-          </div>
 
-          {/* QUICK BUY REFERRAL */}
-          <div>
-            <div className="flex items-center gap-1.5 mb-3">
-              <div className="bg-blue-600 dark:bg-blue-500 text-white px-2 py-0.5 rounded-full text-[10px] font-medium">
-                QUICK BUY REFERRAL
+              <div className="bg-gray-900 dark:bg-gray-800 rounded-md border border-gray-700 overflow-hidden">
+                {/* Table Headers - Fixed */}
+                <div className="grid grid-cols-6 gap-2 p-3 text-[10px] font-medium text-blue-400 bg-gray-900 dark:bg-gray-800 border-b border-gray-700">
+                  <div className="px-2 py-1">USER</div>
+                  <div className="px-2 py-1 text-center">
+                    <div className="flex items-center justify-center gap-1">
+                      <Calendar size={10} />
+                      JOIN DATE
+                    </div>
+                  </div>
+                  <div className="px-2 py-1 text-center">LEVEL</div>
+                  <div className="px-2 py-1 text-center">
+                    <div className="flex items-center justify-center gap-1">
+                      <DollarSign size={10} />
+                      EARNINGS
+                    </div>
+                  </div>
+                  <div className="px-2 py-1 text-center">
+                    <div className="flex items-center justify-center gap-1">
+                      <Activity size={10} />
+                      STATUS
+                    </div>
+                  </div>
+                  <div className="px-2 py-1 text-center">ACTIONS</div>
+                </div>
+
+                {/* Table Rows - Scrollable */}
+                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
+                  <div className="p-3 pt-0">
+                    <div className="space-y-2">
+                      {filteredUsers.length > 0 ? (
+                        filteredUsers.map((user) => (
+                          <div
+                            key={user.id}
+                            className="grid grid-cols-6 gap-2 items-center bg-gray-800/50 rounded-md p-2 hover:bg-gray-800/70 transition-colors duration-200"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                                <User size={12} className="text-white" />
+                              </div>
+                              <div>
+                                <p className="text-white text-xs font-medium">{user.name}</p>
+                                <p className="text-gray-400 text-[10px]">ID: {user.id}</p>
+                              </div>
+                            </div>
+                            <div className="text-center text-xs text-gray-300">{formatDate(user.joinDate)}</div>
+                            <div className="text-center">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
+                                Level {user.level}
+                              </span>
+                            </div>
+                            <div className="text-center text-xs font-bold text-green-400">
+                              ${user.earnings.toFixed(2)}
+                            </div>
+                            <div className="text-center">
+                              <span
+                                className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                                  user.status === "active"
+                                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                                    : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                                }`}
+                              >
+                                {user.status === "active" ? (
+                                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>
+                                ) : (
+                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-1"></span>
+                                )}
+                                {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                              </span>
+                            </div>
+                            <div className="text-center">
+                              <button className="text-blue-400 hover:text-blue-300 text-xs transition-colors">
+                                Details
+                              </button>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-center py-6">
+                          <p className="text-gray-400 text-sm">No referred users found at this level</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className="bg-gray-900 dark:bg-gray-800 rounded-md p-3 border border-gray-700">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="text-center">
-                  <div className="bg-gray-800 dark:bg-gray-700 rounded-md p-2 border border-gray-600">
-                    <p className="text-blue-400 text-[10px] font-medium mb-1">CLAIMABLE VOLUME</p>
-                    <p className="text-green-400 font-bold text-base">$0</p>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="bg-gray-800 dark:bg-gray-700 rounded-md p-2 border border-gray-600">
-                    <p className="text-blue-400 text-[10px] font-medium mb-1">LIFETIME VOLUME</p>
-                    <p className="text-green-400 font-bold text-base">$0</p>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="bg-gray-800 dark:bg-gray-700 rounded-md p-2 border border-gray-600">
-                    <p className="text-blue-400 text-[10px] font-medium mb-1">TOTAL QUICK BUY CLAIMED</p>
-                    <p className="text-green-400 font-bold text-base">$0</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
