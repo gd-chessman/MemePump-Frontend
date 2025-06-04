@@ -230,6 +230,10 @@ Memepumpは、お客様のサービス使用に関連して行われる決定ま
           </div>
 
           <div>
+            <h3 className="font-semibold mb-2">3.8 免責事項および責任の制限</h3>
+            <p>お客様は、Telegramボットがご自身で設定したパラメータのみに基づいて動作し、お客様からの明確な入力なしに取引に関するいかなる決定も行わないことを認識し、同意します。MEMEPUMPは、お客様によるTelegramボットの利用に起因するいかなる損失、損害、または法的責任についても責任を負いません。</p>
+            <p className="mt-2">お客様は、ご自身の取引活動から生じるいかなる利益または損失についても全責任を負います。お客様は、いつでもTelegramボットの運用を停止し、ご自身のデジタル資産を自由に引き出すことができます。</p>
+            <p className="mt-2">そのような指示を受けた場合、Telegramボットは直ちに、または使用中のボットの種類に応じて合理的な期間内に運用を停止します。お客様は、保留中の取引が完全に終了またはキャンセルされる必要がある場合があることを認識します。</p>
             <h3 className="font-semibold mb-2">3.8 Từ Chối Trách Nhiệm Và Giới Hạn Trách Nhiệm</h3>
             <p>Bạn thừa nhận và đồng ý rằng Bot TG hoạt động độc quyền dựa trên các tham số mà bạn thiết lập và không thực hiện bất kỳ quyết định nào liên quan đến giao dịch mà không có đầu vào rõ ràng từ bạn. MEMEPUMP sẽ không chịu trách nhiệm về bất kỳ tổn thất, thiệt hại hoặc trách nhiệm pháp lý nào phát sinh do việc sử dụng Bot TG của bạn.</p>
             <p className="mt-2">Bạn chịu trách nhiệm hoàn toàn về bất kỳ lợi nhuận hoặc tổn thất nào phát sinh từ hoạt động giao dịch của bạn. Bạn có thể chấm dứt hoạt động của Bot TG vào bất kỳ lúc nào và rút Tài Sản Số của bạn theo ý của bạn.</p>

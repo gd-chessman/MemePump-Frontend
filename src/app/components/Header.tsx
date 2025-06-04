@@ -147,13 +147,13 @@ const Header = () => {
             logoPump: true,
             dropdown: [
                 {
+                    name: 'PumpFun',
+                    href: '/create-coin/pumpfun',
+                },
+                {
                     name: 'MemePump',
                     href: '/create-coin/memepump',
                 },
-                {
-                    name: 'PumpFun',
-                    href: '/create-coin/pumpfun',
-                }
             ]
         },
         {
