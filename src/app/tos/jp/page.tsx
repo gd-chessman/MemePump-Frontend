@@ -239,57 +239,57 @@ Memepumpは、お客様のサービス使用に関連して行われる決定ま
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">4. PHÍ</h2>
+        <h2 className="text-xl font-bold mb-3">4. 料金</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">4.1 Phí Dịch Vụ</h3>
-            <p>Bằng cách thực hiện giao dịch thông qua Dịch vụ của chúng tôi, bạn đồng ý trả bất kỳ phí áp dụng nào được nêu trong biểu phí MEMEPUMP, có sẵn trên Trang Web của chúng tôi. Bạn cho phép chúng tôi tự động khấu trừ các phí này trực tiếp từ Ví của bạn cho mỗi giao dịch.</p>
-            <p className="mt-2">Chúng tôi bảo lưu quyền thay đổi hoặc sửa đổi biểu phí của chúng tôi hoặc tăng phí dịch vụ của chúng tôi vào bất kỳ lúc nào. Bất kỳ thay đổi nào sẽ có hiệu lực khi được đăng trên Trang Web hoặc Ứng dụng của chúng tôi. Việc sử dụng Dịch vụ MEMEPUMP đầu tiên của bạn sau bất kỳ thay đổi phí nào sẽ cấu thành sự chấp nhận của bạn đối với những thay đổi đó. Nếu bạn không đồng ý với phí đã cập nhật, bạn có thể ngừng sử dụng Dịch vụ như được nêu trong Thỏa thuận này.</p>
+            <h3 className="font-semibold mb-2">4.1 サービス料金</h3>
+            <p>当社のサービスを通じて取引を行うことにより、お客様は当社のウェブサイトで利用可能なMEMEPUMPの料金表に記載されている適用料金を支払うことに同意します。お客様は、各取引に対して、これらの料金を直接お客様のウォレットから自動的に差し引くことを許可します。</p>
+            <p className="mt-2">当社は、料金表を変更または修正する権利、またはサービス料金をいつでも引き上げる権利を留保します。いかなる変更も、当社のウェブサイトまたはアプリケーションに掲載された時点で有効となります。料金の変更後、MEMEPUMPサービスを初めて使用することは、その変更の受諾を構成します。更新された料金に同意されない場合は、本契約に記載されているようにサービスの使用を停止することができます。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">4.2 Phí Bổ Sung</h3>
-            <p>Vui lòng lưu ý rằng ngoài phí dịch vụ của chúng tôi, các phí khác có thể áp dụng cho giao dịch của bạn, bao gồm phí gas, trượt giá, phí ưu tiên và phí nền tảng phát hành token, được tính bởi người xác thực mạng, nền tảng phát hành token và các bên thứ ba khác bên ngoài MEMEPUMP. Để rõ ràng, MEMEPUMP chỉ tính phí dịch vụ được mô tả ở đây cho Dịch vụ của mình.</p>
+            <h3 className="font-semibold mb-2">4.2 追加料金</h3>
+            <p>当社のサービス料金に加えて、ガス代、スリッページ、優先料金、トークン発行プラットフォーム料金など、ネットワークバリデーター、トークン発行プラットフォーム、およびMEMEPUMP以外の第三者によって計算される他の料金がお客様の取引に適用される場合があることにご注意ください。明確にするために、MEMEPUMPは本サービスに対して、ここで説明されているサービス料金のみを請求します。</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">5. ĐĂNG KÝ</h2>
+        <h2 className="text-xl font-bold mb-3">5. 登録</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">5.1 Đại Diện</h3>
-            <p>Bạn đại diện rằng bạn không phải là người bị cấm sử dụng Dịch vụ theo luật của nơi cư trú của bạn hoặc bất kỳ khu vực pháp lý áp dụng nào khác. Bạn chịu trách nhiệm cho tất cả các hoạt động xảy ra trong quá trình sử dụng Dịch vụ của bạn.</p>
-            <p className="mt-2">Bạn đồng ý rằng bạn sẽ giám sát việc sử dụng Dịch vụ của mình để hạn chế việc sử dụng bởi trẻ vị thành niên, và bạn sẽ chấp nhận trách nhiệm đầy đủ cho bất kỳ việc sử dụng trái phép Dịch vụ nào bởi trẻ vị thành niên.</p>
+            <h3 className="font-semibold mb-2">5.1 表明</h3>
+            <p>お客様は、お客様の居住地またはその他の適用される法域の法律に基づいてサービスの使用が禁止されていないことを表明します。お客様は、サービスの使用中に発生するすべての活動に対して責任を負います。</p>
+            <p className="mt-2">お客様は、未成年者によるサービスの使用を制限するためにサービスの使用を監視し、未成年者によるサービスの不正使用に対して完全な責任を負うことに同意します。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">5.2 Đại Diện Thêm</h3>
-            <p>Bạn đại diện rằng bạn ít nhất 18 tuổi và bạn hiểu đầy đủ về Dịch vụ trước khi thực hiện bất kỳ giao dịch nào thông qua MEMEPUMP. Đồng thời, bạn đại diện rằng bạn không ở trong, dưới sự kiểm soát của, hoặc là công dân hoặc cư dân của Afghanistan, Cuba, Iran, Bắc Triều Tiên và Syria (mỗi nơi là "Khu Vực Pháp Lý Bị Cấm").</p>
-            <p className="mt-2">Ngoài ra, bạn không phải là người nằm trong danh sách trừng phạt kinh tế được công bố định kỳ bởi UN, US OFAC hoặc EU. Bạn sẽ không cung cấp bất kỳ tài sản số đã mua hoặc lưu trữ hoặc Dịch vụ nào cho Khu Vực Pháp Lý Bị Cấm, công dân hoặc cư dân của Khu Vực Pháp Lý Bị Cấm, hoặc Người Bị Cấm.</p>
+            <h3 className="font-semibold mb-2">5.2 追加の表明</h3>
+            <p>お客様は、少なくとも18歳であり、MEMEPUMPを通じて取引を行う前にサービスを完全に理解していることを表明します。また、お客様は、アフガニスタン、キューバ、イラン、北朝鮮、シリア（以下「禁止法域」）のいずれにも所在、支配下、またはそれらの市民または居住者ではないことを表明します。</p>
+            <p className="mt-2">さらに、お客様は国連、米国OFACまたはEUによって定期的に公表される経済制裁リストに含まれていないことを表明します。お客様は、購入または保管したデジタル資産またはサービスを禁止法域、禁止法域の市民または居住者、または禁止対象者に提供することはありません。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">5.3 Thiết Bị Và Phần Mềm Cần Thiết</h3>
-            <p>Bạn phải chuẩn bị tất cả thiết bị, phần mềm và phần cứng cần thiết để kết nối với Dịch vụ. Bạn hoàn toàn chịu trách nhiệm về bất kỳ phí nào, bao gồm phí kết nối Internet hoặc di động, mà bạn phát sinh khi truy cập Dịch vụ.</p>
-            <p className="mt-2">Bạn hoàn toàn chịu trách nhiệm giữ an toàn cho các thiết bị phần cứng của mình. MEMEPUMP sẽ không chịu trách nhiệm nếu người khác truy cập thiết bị của bạn và ủy quyền giao dịch khi nhận được chuyển khoản hợp lệ được bắt đầu từ Dịch vụ.</p>
+            <h3 className="font-semibold mb-2">5.3 必要な機器とソフトウェア</h3>
+            <p>お客様は、サービスに接続するために必要なすべての機器、ソフトウェア、およびハードウェアを準備する必要があります。お客様は、サービスにアクセスする際に発生するインターネットまたはモバイル接続料金を含むすべての料金に対して完全に責任を負います。</p>
+            <p className="mt-2">お客様は、ハードウェア機器の安全を維持することに完全に責任を負います。他の人がお客様の機器にアクセスし、サービスから開始された有効な送金を受け取った場合に取引を承認した場合、MEMEPUMPは責任を負いません。</p>
           </div>
         </div>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-3">6. TRÁCH NHIỆM VỀ NỘI DUNG</h2>
+        <h2 className="text-xl font-bold mb-3">6. コンテンツの責任</h2>
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold mb-2">6.1 Các Loại Nội Dung</h3>
-            <p>Bạn thừa nhận rằng tất cả Nội Dung, bao gồm cả Dịch vụ, là trách nhiệm duy nhất của bên mà Nội Dung đó phát sinh. Điều này có nghĩa là bạn và các Người Dùng Đã Đăng Ký khác của Dịch vụ, chứ không phải MEMEPUMP, chịu trách nhiệm cho tất cả Nội Dung Người Dùng.</p>
+            <h3 className="font-semibold mb-2">6.1 コンテンツの種類</h3>
+            <p>お客様は、すべてのコンテンツ（サービスを含む）が、そのコンテンツが発生した当事者の唯一の責任であることを認めます。これは、MEMEPUMPではなく、お客様とサービスの他の登録ユーザーが、すべてのユーザーコンテンツに対して責任を負うことを意味します。</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">6.2 Adapter</h3>
-            <p>Bạn hoàn toàn chịu trách nhiệm cho bất kỳ Adapter nào mà bạn Cung Cấp trên hoặc thông qua Dịch vụ, bao gồm nhưng không giới hạn ở việc đảm bảo bất kỳ quyền hoặc giấy phép nào liên quan đến Adapter đó và việc sử dụng của MEMEPUMP.</p>
-            <p className="mt-2">Bạn thừa nhận và đồng ý rằng MEMEPUMP không có nghĩa vụ xuất bản hoặc cung cấp Adapter của bạn trên hoặc thông qua Dịch vụ. Bạn thừa nhận và đồng ý rằng bạn không có quyền đối với bất kỳ nâng cấp, sửa đổi, cải tiến hoặc sửa đổi nào mà MEMEPUMP có thể thực hiện đối với Adapter của bạn.</p>
-            <p className="mt-2">Bạn đồng ý rằng chúng tôi không có nghĩa vụ cung cấp bất kỳ hỗ trợ hoặc hỗ trợ kỹ thuật nào liên quan đến Adapter của bạn trừ khi chúng tôi đồng ý bằng văn bản.</p>
+            <h3 className="font-semibold mb-2">6.2 アダプター</h3>
+            <p>お客様は、サービス上またはサービスを通じて提供するアダプターに対して完全に責任を負い、そのアダプターに関連する権利またはライセンス、およびMEMEPUMPによるその使用を確保することを含みますが、これに限定されません。</p>
+            <p className="mt-2">お客様は、MEMEPUMPがサービス上またはサービスを通じてお客様のアダプターを公開または提供する義務を負わないことを認め、同意します。お客様は、MEMEPUMPがお客様のアダプターに対して行う可能性のあるアップグレード、修正、改善、または変更に対する権利を持たないことを認め、同意します。</p>
+            <p className="mt-2">お客様は、当社が書面で同意しない限り、お客様のアダプターに関連するサポートまたは技術的支援を提供する義務を負わないことに同意します。</p>
           </div>
         </div>
       </div>

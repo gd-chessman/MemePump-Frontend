@@ -295,7 +295,7 @@ export default function ReferralPage() {
         }
         
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: linear-gradient(to bottom, #1f2937, #111827);
+          background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
           border-radius: 10px;
           margin: 4px 0;
         }
@@ -303,13 +303,13 @@ export default function ReferralPage() {
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: linear-gradient(to bottom, #6366f1, #4f46e5);
           border-radius: 10px;
-          border: 1px solid #374151;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          border: 1px solid #d1d5db;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
         
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(to bottom, #7c3aed, #6366f1);
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
         
         .custom-scrollbar::-webkit-scrollbar-thumb:active {
@@ -317,6 +317,24 @@ export default function ReferralPage() {
         }
         
         .custom-scrollbar::-webkit-scrollbar-corner {
+          background: #f3f4f6;
+        }
+
+        /* Dark mode scrollbar */
+        .dark .custom-scrollbar::-webkit-scrollbar-track {
+          background: linear-gradient(to bottom, #1f2937, #111827);
+        }
+        
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+          border: 1px solid #374151;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .custom-scrollbar::-webkit-scrollbar-corner {
           background: #1f2937;
         }
       `}</style>
@@ -532,23 +550,23 @@ export default function ReferralPage() {
           {/* 5 LAYERS REFERRAL Tab Content */}
           {activeTab === "layers" && (
             <div className="mb-4">
-              <div className="bg-gray-900 dark:bg-gray-800 rounded-md p-3 border border-gray-700">
+              <div className="bg-white/50 dark:bg-gray-900 rounded-md p-3 border border-gray-300 dark:border-gray-700">
                 {/* Table Headers */}
                 <div className="grid grid-cols-4 gap-2 mb-3">
                   <div></div>
                   <div className="text-center">
-                    <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
-                      <span className="text-blue-400 font-medium text-[10px]">REFERRAL COUNT</span>
+                    <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
+                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">REFERRAL COUNT</span>
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
-                      <span className="text-blue-400 font-medium text-[10px]">CLAIMABLE VOLUME</span>
+                    <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
+                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">CLAIMABLE VOLUME</span>
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1">
-                      <span className="text-blue-400 font-medium text-[10px]">LIFETIME VOLUME</span>
+                    <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
+                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">LIFETIME VOLUME</span>
                     </div>
                   </div>
                 </div>
@@ -563,15 +581,15 @@ export default function ReferralPage() {
                         </div>
                       </div>
                       <div className="text-center">
-                        <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
-                          <span className="text-white font-bold text-sm">
+                        <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
+                          <span className="text-gray-900 dark:text-white font-bold text-sm">
                             {referredUsers.filter((user) => user.level === layer).length}
                           </span>
                         </div>
                       </div>
                       <div className="text-center">
-                        <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
-                          <span className="text-green-400 font-bold text-sm">
+                        <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
+                          <span className="text-green-600 dark:text-green-400 font-bold text-sm">
                             $
                             {referredUsers
                               .filter((user) => user.level === layer)
@@ -581,8 +599,8 @@ export default function ReferralPage() {
                         </div>
                       </div>
                       <div className="text-center">
-                        <div className="bg-gray-800 dark:bg-gray-700 rounded-md px-2 py-1 border border-gray-600">
-                          <span className="text-green-400 font-bold text-sm">
+                        <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
+                          <span className="text-green-600 dark:text-green-400 font-bold text-sm">
                             $
                             {(
                               referredUsers
@@ -603,13 +621,13 @@ export default function ReferralPage() {
           {activeTab === "users" && (
             <div>
               {/* Level Filter Tabs */}
-              <div className="flex flex-wrap gap-1 mb-3 p-2 bg-gray-800/30 dark:bg-gray-900/30 rounded-md border border-gray-600/30">
+              <div className="flex flex-wrap gap-1 mb-3 p-2 bg-gray-200/50 dark:bg-gray-800/30 rounded-md border border-gray-300/50 dark:border-gray-600/30">
                 <button
                   onClick={() => setSelectedLevel("all")}
                   className={`px-2 py-1 text-xs font-medium rounded-md transition-colors ${
                     selectedLevel === "all"
                       ? "bg-blue-600 text-white"
-                      : "bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white"
+                      : "bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
                   All
@@ -621,7 +639,7 @@ export default function ReferralPage() {
                     className={`px-2 py-1 text-xs font-medium rounded-md transition-colors ${
                       selectedLevel === `level${level}`
                         ? "bg-blue-600 text-white"
-                        : "bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white"
+                        : "bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                     }`}
                   >
                     Level {level}
@@ -629,9 +647,9 @@ export default function ReferralPage() {
                 ))}
               </div>
 
-              <div className="bg-gray-900 dark:bg-gray-800 rounded-md border border-gray-700 overflow-hidden">
+              <div className="bg-white/50 dark:bg-gray-900 rounded-md border border-gray-300 dark:border-gray-700 overflow-hidden">
                 {/* Table Headers - Fixed */}
-                <div className="grid grid-cols-6 gap-2 p-3 text-[10px] font-medium text-blue-400 bg-gray-900 dark:bg-gray-800 border-b border-gray-700">
+                <div className="grid grid-cols-6 gap-2 p-3 text-[10px] font-medium text-blue-600 dark:text-blue-400 bg-gray-50 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700">
                   <div className="px-2 py-1">USER</div>
                   <div className="px-2 py-1 text-center">
                     <div className="flex items-center justify-center gap-1">
@@ -663,24 +681,26 @@ export default function ReferralPage() {
                         filteredUsers.map((user) => (
                           <div
                             key={user.id}
-                            className="grid grid-cols-6 gap-2 items-center bg-gray-800/50 rounded-md p-2 hover:bg-gray-800/70 transition-colors duration-200"
+                            className="grid grid-cols-6 gap-2 items-center bg-gray-100/50 dark:bg-gray-800/50 rounded-md p-2 hover:bg-gray-200/70 dark:hover:bg-gray-800/70 transition-colors duration-200"
                           >
                             <div className="flex items-center gap-2">
                               <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
                                 <User size={12} className="text-white" />
                               </div>
                               <div>
-                                <p className="text-white text-xs font-medium">{user.name}</p>
-                                <p className="text-gray-400 text-[10px]">ID: {user.id}</p>
+                                <p className="text-gray-900 dark:text-white text-xs font-medium">{user.name}</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-[10px]">ID: {user.id}</p>
                               </div>
                             </div>
-                            <div className="text-center text-xs text-gray-300">{formatDate(user.joinDate)}</div>
+                            <div className="text-center text-xs text-gray-700 dark:text-gray-300">
+                              {formatDate(user.joinDate)}
+                            </div>
                             <div className="text-center">
                               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
                                 Level {user.level}
                               </span>
                             </div>
-                            <div className="text-center text-xs font-bold text-green-400">
+                            <div className="text-center text-xs font-bold text-green-600 dark:text-green-400">
                               ${user.earnings.toFixed(2)}
                             </div>
                             <div className="text-center">
@@ -700,7 +720,7 @@ export default function ReferralPage() {
                               </span>
                             </div>
                             <div className="text-center">
-                              <button className="text-blue-400 hover:text-blue-300 text-xs transition-colors">
+                              <button className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs transition-colors">
                                 Details
                               </button>
                             </div>
@@ -708,7 +728,9 @@ export default function ReferralPage() {
                         ))
                       ) : (
                         <div className="text-center py-6">
-                          <p className="text-gray-400 text-sm">No referred users found at this level</p>
+                          <p className="text-gray-500 dark:text-gray-400 text-sm">
+                            No referred users found at this level
+                          </p>
                         </div>
                       )}
                     </div>
