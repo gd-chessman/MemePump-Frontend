@@ -18,8 +18,10 @@ import {
 } from "lucide-react"
 import { useQuery } from "@tanstack/react-query";
 import { getListMembers, getRewards } from "@/services/api/RefService";
+import { useLang } from "@/lang";
 
 export default function ReferralPage() {
+    const { t } = useLang();
     const { data: rewards = [] } = useQuery({
         queryKey: ["rewards"],
         queryFn: getRewards,
@@ -274,7 +276,7 @@ export default function ReferralPage() {
         <div className="bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-600 dark:from-purple-600 dark:via-purple-700 dark:to-indigo-700 p-3 rounded-md shadow-lg border border-purple-400/30 dark:border-purple-500/20 mb-4">
           <div className="flex items-center justify-between">
             <h1 className="text-base font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-              REFERRAL TRACKING
+              {t('ref.title')}
             </h1>
             <div className="w-10 h-1 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full"></div>
           </div>
@@ -284,7 +286,7 @@ export default function ReferralPage() {
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-md p-3 border border-gray-300/50 dark:border-gray-700/50 shadow-md mb-4">
           <div className="flex items-center gap-1.5 mb-2">
             <ExternalLink size={14} className="text-blue-600 dark:text-blue-400" />
-            <h2 className="text-base font-semibold text-blue-600 dark:text-blue-400">YOUR REFERRAL LINK</h2>
+            <h2 className="text-base font-semibold text-blue-600 dark:text-blue-400">{t('ref.yourReferralLink')}</h2>
           </div>
 
           <div className="flex items-center bg-gray-100/80 dark:bg-gray-900/80 rounded-md p-2 border border-gray-300/50 dark:border-gray-700/50 hover:border-blue-400/50 dark:hover:border-blue-500/50 transition-all duration-300 mb-3">
@@ -294,14 +296,14 @@ export default function ReferralPage() {
               className="ml-2 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white px-2 py-1 rounded-md transition-all duration-300 flex items-center gap-1 shadow-md hover:shadow-lg text-xs"
             >
               {copied ? <Check size={12} /> : <Copy size={12} />}
-              <span className="hidden sm:inline">{copied ? "Copied!" : "Copy"}</span>
+              <span className="hidden sm:inline">{copied ? t('ref.copied') : t('ref.copy')}</span>
             </button>
           </div>
 
           <div className="bg-gradient-to-r from-blue-100/50 to-purple-100/50 dark:from-blue-900/30 dark:to-purple-900/30 rounded-md p-2 border border-blue-300/30 dark:border-blue-700/30">
-            <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">EARLY ACCESS REFERRAL</h3>
+            <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">{t('ref.earlyAccessReferral')}</h3>
             <p className="text-gray-600 dark:text-gray-300 text-xs">
-              Friends you refer get early access to MevX and you earn commissions from their trading fees.
+              {t('ref.earlyAccessDescription')}
             </p>
           </div>
         </div>
@@ -309,11 +311,11 @@ export default function ReferralPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
           <div className="bg-green-100/60 dark:bg-green-900/40 backdrop-blur-sm rounded-md p-3 border border-green-300/50 dark:border-green-700/50 shadow-md">
-            <h3 className="text-green-600 dark:text-green-400 font-semibold mb-1 text-xs">Total Referrals</h3>
+            <h3 className="text-green-600 dark:text-green-400 font-semibold mb-1 text-xs">{t('ref.totalReferrals')}</h3>
             <p className="text-xl font-bold text-gray-900 dark:text-white">{rewards.data?.total?.member_num || 0}</p>
           </div>
           <div className="bg-blue-100/60 dark:bg-blue-900/40 backdrop-blur-sm rounded-md p-3 border border-blue-300/50 dark:border-blue-700/50 shadow-md">
-            <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">Total Earnings</h3>
+            <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">{t('ref.totalEarnings')}</h3>
             <div className="flex items-center justify-between">
               <p className="text-xl font-bold text-gray-900 dark:text-white">${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}</p>
               <button
@@ -321,12 +323,12 @@ export default function ReferralPage() {
                 className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-2 py-1 rounded-md transition-all duration-300 flex items-center gap-1 shadow-md hover:shadow-lg text-xs font-medium"
               >
                 <Gift size={12} />
-                <span className="hidden sm:inline">Withdraw</span>
+                <span className="hidden sm:inline">{t('ref.withdraw')}</span>
               </button>
             </div>
           </div>
           <div className="bg-purple-100/60 dark:bg-purple-900/40 backdrop-blur-sm rounded-md p-3 border border-purple-300/50 dark:border-purple-700/50 shadow-md">
-            <h3 className="text-purple-600 dark:text-purple-400 font-semibold mb-1 text-xs">Active Referrals</h3>
+            <h3 className="text-purple-600 dark:text-purple-400 font-semibold mb-1 text-xs">{t('ref.activeReferrals')}</h3>
             <p className="text-xl font-bold text-gray-900 dark:text-white">
               {rewards.data?.total?.member_num || 0}
             </p>
@@ -336,18 +338,18 @@ export default function ReferralPage() {
         {/* MLM Tree Structure */}
         <div className="bg-white/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-md p-3 border border-gray-300/50 dark:border-gray-700/50 shadow-md mb-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">REFERRAL STRUCTURE</h2>
+            <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">{t('ref.referralStructure')}</h2>
             <button
               onClick={() => setIsTreeVisible(!isTreeVisible)}
               className="flex items-center gap-1 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 dark:from-blue-600 dark:to-purple-600 dark:hover:from-blue-500 dark:hover:to-purple-500 text-white px-2 py-1 rounded-md transition-all duration-300 shadow-md hover:shadow-lg font-medium text-xs"
             >
               {isTreeVisible ? (
                 <>
-                  Hide <ChevronUp size={12} />
+                  {t('ref.hide')} <ChevronUp size={12} />
                 </>
               ) : (
                 <>
-                  Show <ChevronDown size={12} />
+                  {t('ref.show')} <ChevronDown size={12} />
                 </>
               )}
             </button>
@@ -364,19 +366,19 @@ export default function ReferralPage() {
 
               {/* Level indicators */}
               <div className="absolute left-0 top-6 flex flex-col gap-[25px] z-10">
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">#1</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">#2</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">#3</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">#4</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">#5</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 1</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 2</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 3</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 4</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 5</div>
               </div>
 
               {/* Percentage indicators */}
               <div className="absolute right-0 top-6 flex flex-col gap-[25px] z-10">
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">25%</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">3.5%</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">3%</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">2%</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '25', friend: '1' })}</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '3.5', friend: '2' })}</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '3', friend: '3' })}</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '2', friend: '4' })}</div>
                 <div className="text-green-600 dark:text-green-400 font-bold text-sm">1%</div>
               </div>
 
@@ -384,10 +386,10 @@ export default function ReferralPage() {
               <div className="flex justify-center mb-4 relative z-10 pt-2">
                 <div className="flex flex-col items-center">
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-0.5 rounded-full mb-1 font-semibold shadow-md text-xs">
-                    YOU
+                    {t('ref.you')}
                   </div>
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    Receive 25% of Friend 1's Fees
+                    {t('ref.receivePercent', { percent: '25', friend: '1' })}
                   </div>
                   <UserNode size="lg" />
                 </div>
@@ -397,13 +399,13 @@ export default function ReferralPage() {
               <div className="flex justify-between mb-4 px-10 relative z-10">
                 <div className="flex flex-col items-center">
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    Receive 3.5% of Friend 2's Fees
+                    {t('ref.receivePercent', { percent: '3.5', friend: '2' })}
                   </div>
                   <UserNode size="md" />
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    Receive 3.5% of Friend 2's Fees
+                    {t('ref.receivePercent', { percent: '3.5', friend: '2' })}
                   </div>
                   <UserNode size="md" />
                 </div>
@@ -414,7 +416,7 @@ export default function ReferralPage() {
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="flex flex-col items-center">
                     <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                      3% of Friend 3's
+                      {t('ref.receivePercent', { percent: '3', friend: '3' })}
                     </div>
                     <UserNode size="md" />
                   </div>
@@ -426,7 +428,7 @@ export default function ReferralPage() {
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                   <div key={i} className="flex flex-col items-center">
                     <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                      2% of Friend 4's
+                      {t('ref.receivePercent', { percent: '2', friend: '4' })}
                     </div>
                     <UserNode size="sm" />
                   </div>
@@ -450,7 +452,7 @@ export default function ReferralPage() {
         <div className="bg-white/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-md p-3 border border-gray-300/50 dark:border-gray-700/50 shadow-md">
           <div className="flex items-center gap-1.5 mb-3">
             <Link2 size={14} className="text-blue-600 dark:text-blue-400" />
-            <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">YOUR REFERRALS</h2>
+            <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">{t('ref.yourReferrals')}</h2>
           </div>
 
           {/* Tabs */}
@@ -463,7 +465,7 @@ export default function ReferralPage() {
                   : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
             >
-              REFERRED USERS
+              {t('ref.referredUsers')}
             </button>
             <button
               onClick={() => setActiveTab("layers")}
@@ -473,7 +475,7 @@ export default function ReferralPage() {
                   : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
             >
-              5 LAYERS REFERRAL
+              {t('ref.layersReferral')}
             </button>
           </div>
 
@@ -486,17 +488,17 @@ export default function ReferralPage() {
                   <div></div>
                   <div className="text-center">
                     <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
-                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">REFERRAL COUNT</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">{t('ref.referralCount')}</span>
                     </div>
                   </div>
                   <div className="text-center">
                     <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
-                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">CLAIMABLE VOLUME</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">{t('ref.claimableVolume')}</span>
                     </div>
                   </div>
                   <div className="text-center">
                     <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
-                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">LIFETIME VOLUME</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-medium text-[10px]">{t('ref.lifetimeVolume')}</span>
                     </div>
                   </div>
                 </div>
@@ -507,7 +509,7 @@ export default function ReferralPage() {
                     <div key={layer} className="grid grid-cols-4 gap-2 items-center">
                       <div>
                         <div className="bg-blue-600 dark:bg-blue-500 text-white px-2 py-1 rounded-md text-[10px] font-medium text-center">
-                          LAYER {layer}
+                          {t('ref.layersReferral')} {layer}
                         </div>
                       </div>
                       <div className="text-center">
@@ -551,7 +553,7 @@ export default function ReferralPage() {
                       : "bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
-                  All
+                  {t('ref.all')}
                 </button>
                 {[1, 2, 3, 4, 5, 6, 7].map((level) => (
                   <button
@@ -563,7 +565,7 @@ export default function ReferralPage() {
                         : "bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                     }`}
                   >
-                    Level {level}
+                    {t('ref.level')} {level}
                   </button>
                 ))}
               </div>
@@ -571,18 +573,18 @@ export default function ReferralPage() {
               <div className="bg-white/50 dark:bg-gray-900 rounded-md border border-gray-300 dark:border-gray-700 overflow-hidden">
                 {/* Table Headers - Fixed */}
                 <div className="grid grid-cols-4 gap-2 p-3 text-[10px] font-medium text-blue-600 dark:text-blue-400 bg-gray-50 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700">
-                  <div className="px-2 py-1">USER</div>
+                  <div className="px-2 py-1">{t('ref.user')}</div>
                   <div className="px-2 py-1 text-center">
                     <div className="flex items-center justify-center gap-1">
                       <Calendar size={10} />
-                      JOIN DATE
+                      {t('ref.joinDate')}
                     </div>
                   </div>
-                  <div className="px-2 py-1 text-center">LEVEL</div>
+                  <div className="px-2 py-1 text-center">{t('ref.level')}</div>
                   <div className="px-2 py-1 text-center">
                     <div className="flex items-center justify-center gap-1">
                       <DollarSign size={10} />
-                      EARNINGS
+                      {t('ref.earnings')}
                     </div>
                   </div>
                 </div>
@@ -602,8 +604,8 @@ export default function ReferralPage() {
                                 <User size={12} className="text-white" />
                               </div>
                               <div>
-                                <p className="text-gray-900 dark:text-white text-xs font-medium">{user.name}</p>
-                                <p className="text-gray-500 dark:text-gray-400 text-[10px]">ID: {user.id}</p>
+                                <p className="text-gray-900 dark:text-white text-xs font-medium">{user.name === 'Unknown' ? t('ref.unknown') : user.name}</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-[10px]">{t('ref.id')}: {user.id}</p>
                               </div>
                             </div>
                             <div className="text-center text-xs text-gray-700 dark:text-gray-300">
@@ -611,7 +613,7 @@ export default function ReferralPage() {
                             </div>
                             <div className="text-center">
                               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
-                                Level {user.level}
+                                {t('ref.level')} {user.level}
                               </span>
                             </div>
                             <div className="text-center text-xs font-bold text-green-600 dark:text-green-400">
@@ -622,7 +624,7 @@ export default function ReferralPage() {
                       ) : (
                         <div className="text-center py-6">
                           <p className="text-gray-500 dark:text-gray-400 text-sm">
-                            No referred users found at this level
+                            {t('ref.noReferredUsers')}
                           </p>
                         </div>
                       )}
@@ -642,7 +644,7 @@ export default function ReferralPage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Gift className="text-green-500" size={20} />
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Withdraw Rewards</h3>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('ref.withdraw')}</h3>
               </div>
               <button
                 onClick={() => setShowWithdrawModal(false)}
@@ -655,7 +657,7 @@ export default function ReferralPage() {
             <div className="mb-6">
               <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-lg p-4 border border-blue-300/30 dark:border-blue-700/30 mb-4">
                 <div className="text-center">
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">Available Balance</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">{t('ref.availableBalance')}</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}</p>
                 </div>
               </div>
@@ -664,23 +666,23 @@ export default function ReferralPage() {
                 <div className="bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700/30 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <AlertCircle className="text-red-500" size={16} />
-                    <p className="text-sm font-semibold text-red-700 dark:text-red-400">Minimum Withdrawal Required</p>
+                    <p className="text-sm font-semibold text-red-700 dark:text-red-400">{t('ref.minimumWithdrawalRequired')}</p>
                   </div>
                   <p className="text-sm text-red-600 dark:text-red-300">
-                    You need at least $20.00 to withdraw rewards. Current balance: ${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}
+                    {t('ref.minimumWithdrawalDescription', { amount: rewards.data?.total?.amount_available?.toFixed(2) || '0.00' })}
                   </p>
                   <p className="text-sm text-red-600 dark:text-red-300 mt-1">
-                    Required: ${(20 - rewards.data?.total?.amount_available).toFixed(2)} more
+                    {t('ref.requiredMore', { amount: (20 - rewards.data?.total?.amount_available).toFixed(2) })}
                   </p>
                 </div>
               ) : (
                 <div className="bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700/30 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Check className="text-green-500" size={16} />
-                    <p className="text-sm font-semibold text-green-700 dark:text-green-400">Ready to Withdraw</p>
+                    <p className="text-sm font-semibold text-green-700 dark:text-green-400">{t('ref.readyToWithdraw')}</p>
                   </div>
                   <p className="text-sm text-green-600 dark:text-green-300">
-                    Your balance meets the minimum withdrawal requirement of $20.00
+                    {t('ref.readyToWithdrawDescription')}
                   </p>
                 </div>
               )}
@@ -691,7 +693,7 @@ export default function ReferralPage() {
                 onClick={() => setShowWithdrawModal(false)}
                 className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg transition-all duration-300 font-medium"
               >
-                Cancel
+                {t('ref.cancel')}
               </button>
               <button
                 onClick={handleWithdraw}
@@ -703,7 +705,7 @@ export default function ReferralPage() {
                 }`}
               >
                 <Gift size={16} />
-                Withdraw
+                {t('ref.withdrawAction')}
               </button>
             </div>
           </div>
