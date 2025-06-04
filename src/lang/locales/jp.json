@@ -795,7 +795,8 @@
     "copy": {
       "copyAddress": "アドレスをコピー",
       "copied": "コピーしました！"
-    }
+    },
+    "close": "閉じる"
   },
   "universal_account": {
     "deposit": "入金",

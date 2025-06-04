@@ -835,7 +835,9 @@
     "copy": {
       "copyAddress": "Sao chép địa chỉ",
       "copied": "Đã sao chép!"
-    }
+    },
+    "actions": "Thao tác",
+    "close": "Đóng"
   },
   "universal_account": {
     "deposit": "Nạp tiền",

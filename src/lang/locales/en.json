@@ -746,7 +746,9 @@
     "copy": {
       "copyAddress": "Copy address",
       "copied": "Copied!"
-    }
+    },
+    "actions": "Actions",
+    "close": "Close"
   },
   "universal_account": {
     "deposit": "Deposit",
