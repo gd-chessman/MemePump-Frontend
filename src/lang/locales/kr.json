@@ -710,7 +710,8 @@
         "loading": "로딩 중...",
         "connecting": "연결 중...",
         "tos": "서비스 이용약관",
-        "privacypolicy": "개인정보 처리방침"
+        "privacypolicy": "개인정보 처리방침",
+        "ref": "추천"
       },
       "notifications": {
         "switchWalletSuccess": "지갑 전환이 성공했습니다!",

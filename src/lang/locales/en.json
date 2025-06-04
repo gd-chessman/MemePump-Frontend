@@ -663,7 +663,8 @@
       "loading": "Loading...",
       "connecting": "Connecting...",
       "tos": "Terms of Service",
-      "privacypolicy": "Privacy Policy"
+      "privacypolicy": "Privacy Policy",
+      "ref": "Referral"
     },
     "notifications": {
       "switchWalletSuccess": "Wallet switched successfully!",

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link';
-import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun } from 'lucide-react';
+import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun, EyeOff, ShieldCheck, FileCheck, LinkIcon } from 'lucide-react';
 import { useLang } from '@/lang/useLang';
 import Display from '@/app/components/Display';
 import {
@@ -278,6 +278,11 @@ const Header = () => {
                                                     <span>{t('header.wallet.privacypolicy')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/ref/${lang}`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.ref')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
                                                 <span>{t('header.wallet.logout')}</span>
@@ -352,12 +357,20 @@ const Header = () => {
                                             </DropdownMenuItem>
                                             <DropdownMenuItem asChild>
                                                 <Link href={`/tos/${lang}`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <FileCheck className="mr-2 h-4 w-4" />
                                                     <span>{t('header.wallet.tos')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem asChild>
                                                 <Link href={`/privacypolicy/${lang}`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <ShieldCheck className="mr-2 h-4 w-4" />
                                                     <span>{t('header.wallet.privacypolicy')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/ref/${lang}`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <LinkIcon className="mr-2 h-4 w-4" />
+                                                    <span>{t('header.wallet.ref')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>

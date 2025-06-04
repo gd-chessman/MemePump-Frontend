@@ -725,7 +725,8 @@
       "loading": "Đang tải...",
       "connecting": "Đang kết nối...",
       "tos": "Điều khoản dịch vụ",
-      "privacypolicy": "Chính sách bảo mật"
+      "privacypolicy": "Chính sách bảo mật",
+      "ref": "Giới thiệu"
     },
     "notifications": {
       "switchWalletSuccess": "Chuyển đổi ví thành công!",
