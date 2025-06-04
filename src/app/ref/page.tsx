@@ -570,7 +570,7 @@ export default function ReferralPage() {
 
               <div className="bg-white/50 dark:bg-gray-900 rounded-md border border-gray-300 dark:border-gray-700 overflow-hidden">
                 {/* Table Headers - Fixed */}
-                <div className="grid grid-cols-6 gap-2 p-3 text-[10px] font-medium text-blue-600 dark:text-blue-400 bg-gray-50 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700">
+                <div className="grid grid-cols-4 gap-2 p-3 text-[10px] font-medium text-blue-600 dark:text-blue-400 bg-gray-50 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700">
                   <div className="px-2 py-1">USER</div>
                   <div className="px-2 py-1 text-center">
                     <div className="flex items-center justify-center gap-1">
@@ -585,13 +585,6 @@ export default function ReferralPage() {
                       EARNINGS
                     </div>
                   </div>
-                  <div className="px-2 py-1 text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <Activity size={10} />
-                      STATUS
-                    </div>
-                  </div>
-                  <div className="px-2 py-1 text-center">ACTIONS</div>
                 </div>
 
                 {/* Table Rows - Scrollable */}
@@ -602,7 +595,7 @@ export default function ReferralPage() {
                         filteredUsers.map((user) => (
                           <div
                             key={user.id}
-                            className="grid grid-cols-6 gap-2 items-center bg-gray-100/50 dark:bg-gray-800/50 rounded-md p-2 hover:bg-gray-200/70 dark:hover:bg-gray-800/70 transition-colors duration-200"
+                            className="grid grid-cols-4 gap-2 items-center bg-gray-100/50 dark:bg-gray-800/50 rounded-md p-2 hover:bg-gray-200/70 dark:hover:bg-gray-800/70 transition-colors duration-200"
                           >
                             <div className="flex items-center gap-2">
                               <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
@@ -623,27 +616,6 @@ export default function ReferralPage() {
                             </div>
                             <div className="text-center text-xs font-bold text-green-600 dark:text-green-400">
                               ${user.earnings.toFixed(2)}
-                            </div>
-                            <div className="text-center">
-                              <span
-                                className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${
-                                  user.status === "active"
-                                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                                }`}
-                              >
-                                {user.status === "active" ? (
-                                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>
-                                ) : (
-                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-1"></span>
-                                )}
-                                {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-                              </span>
-                            </div>
-                            <div className="text-center">
-                              <button className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs transition-colors">
-                                Details
-                              </button>
                             </div>
                           </div>
                         ))
