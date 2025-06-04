@@ -300,12 +300,12 @@ export default function ReferralPage() {
             </button>
           </div>
 
-          <div className="bg-gradient-to-r from-blue-100/50 to-purple-100/50 dark:from-blue-900/30 dark:to-purple-900/30 rounded-md p-2 border border-blue-300/30 dark:border-blue-700/30">
+          {/* <div className="bg-gradient-to-r from-blue-100/50 to-purple-100/50 dark:from-blue-900/30 dark:to-purple-900/30 rounded-md p-2 border border-blue-300/30 dark:border-blue-700/30">
             <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">{t('ref.earlyAccessReferral')}</h3>
             <p className="text-gray-600 dark:text-gray-300 text-xs">
               {t('ref.earlyAccessDescription')}
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* Stats Cards */}
