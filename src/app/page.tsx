@@ -1,10 +1,10 @@
 'use client'; 
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLang } from '@/lang';
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { t } = useLang();
@@ -28,5 +28,13 @@ export default function Home() {
     <div>
       {t('common.redirecting')}
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
