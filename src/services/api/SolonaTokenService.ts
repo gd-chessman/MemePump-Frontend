@@ -79,3 +79,13 @@ export const getTokenByCategory = async (category: any) => {
   }
 };
 
+
+export const getListTokenOnByCategory = async (category: any) => {
+  try {
+    const temp = await axiosClient.get(`/solana-tokens/list-token-on?category=${category}`);
+    return temp.data.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};

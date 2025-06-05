@@ -77,7 +77,7 @@ export default function CompleteProfile() {
                     onClose={() => setShowToast(false)}
                 />
             )}
-            <Card className="w-[25rem]">
+            <Card className="w-[25rem] p-4">
                 <CardHeader>
                     <h2 className="text-2xl font-bold text-center">{t("tglogin.title")}</h2>
                 </CardHeader>

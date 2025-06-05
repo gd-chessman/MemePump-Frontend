@@ -257,7 +257,7 @@ export function TableTokenList({
                 sortedTokens.map((token: any, index: any) => (
                   <TableRow
                     key={index}
-                    className="hover:dark:bg-neutral-500 group hover:bg-theme-blue-300 ease-linear cursor-pointer transition-all duration-300 pl-[14px] group"
+                    className={`hover:dark:bg-neutral-500 group hover:bg-theme-blue-300 ease-linear cursor-pointer transition-all duration-300 pl-[14px] group ${index % 2 === 0 ? 'bg-white dark:bg-neutral-900' : 'bg-gray-50 dark:bg-neutral-800'}`}
                     onClick={() =>
                       router.push(`trading?address=${token.address}`)
                     }

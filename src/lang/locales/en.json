@@ -664,7 +664,12 @@
       "connecting": "Connecting...",
       "tos": "Terms of Service",
       "privacypolicy": "Privacy Policy",
-      "ref": "Referral"
+      "ref": "Referral",
+      "connect": "Connect",
+      "welcome": "Welcome to our platform",
+      "connect_with_us": "Connect with us through multiple flexible login methods",
+      "security": "Security",
+      "disconnectPhantom": "Disconnect Phantom"
     },
     "notifications": {
       "switchWalletSuccess": "Wallet switched successfully!",
@@ -878,5 +883,40 @@
     "id": "ID",
     "unknown": "Unknown",
     "all": "All"
+  },
+  "tglogin": {
+    "title": "Complete Profile",
+    "name": "Name",
+    "nickname": "Nickname",
+    "country": "Country",
+    "namePlaceholder": "Enter your name",
+    "nicknamePlaceholder": "Enter your nickname",
+    "submit": "Submit"
+  },
+  "security": {
+    "enter_password": "Enter your password",
+    "password_placeholder": "Enter your password",
+    "gg_auth_linked": "Google Authenticator linked",
+    "gg_auth_linked_desc": "Google Authenticator has been linked to your account",
+    "remove_gg_auth": "Remove Google Authenticator",
+    "bind_google_authenticator": "Bind Google Authenticator",
+    "remove_gg_auth_title": "Remove Google Authenticator",
+    "token_placeholder": "Enter Google Authenticator token",
+    "step1": {
+      "title": "Step 1: Install Google Authenticator",
+      "description": "iOS users log in to the App Store and search for 'Authenticator' to download. Android users log in to the app store or use a mobile browser to search for 'Google Authenticator' to download",
+      "app_store": "App Store",
+      "google_play": "Google Play",
+      "next_step": "Installed, Next Step"
+    },
+    "step2": {
+      "title": "Step 2: Import and enter the verification code",
+      "description": "1. Open Google Authenticator, tap the icon in the bottom right corner, then tap to scan the QR code",
+      "rescan_note": "(Please rescan after refreshing the page)",
+      "user": "User",
+      "key": "Key",
+      "enter_code": "2. Please enter verification code",
+      "submit": "SUBMIT"
+    }
   }
 }

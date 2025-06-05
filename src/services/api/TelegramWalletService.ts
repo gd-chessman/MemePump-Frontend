@@ -175,3 +175,35 @@ export const sendVerificationCode = async ()=>{
         throw error;
     }
 }
+
+export const addGoogleAuthenticator = async (password: string)=>{
+    try {
+        const body = password ? { password } : {};
+        const temp = await axiosClient.post("/telegram-wallets/add-gg-auth", body)
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}   
+
+export const verifyGoogleAuthenticator = async (token: string)=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/verify-gg-auth", {token})
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export const removeGoogleAuthenticator = async (token: string, password?: string)=>{
+    try {
+        const body = password ? { token, password } : { token };
+        const temp = await axiosClient.post("/telegram-wallets/remove-gg-auth", body)
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}

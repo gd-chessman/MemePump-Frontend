@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link';
-import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun, EyeOff, ShieldCheck, FileCheck, LinkIcon } from 'lucide-react';
+import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun, EyeOff, ShieldCheck, FileCheck, LinkIcon, Shield } from 'lucide-react';
 import { useLang } from '@/lang/useLang';
 import Display from '@/app/components/Display';
 import {
@@ -27,6 +27,7 @@ import { useWallets } from '@/hooks/useWallets';
 import { LangToggle } from './LanguageSelect';
 import { useTheme } from 'next-themes';
 import PumpFun from './pump-fun';
+import ModalSignin from './ModalSignin';
 
 
 const Header = () => {
@@ -40,11 +41,31 @@ const Header = () => {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [isSigninModalOpen, setIsSigninModalOpen] = useState(false);
     const { theme, setTheme } = useTheme();
     const [isDark, setIsDark] = useState(theme);
+    const [phantomConnected, setPhantomConnected] = useState(false);
+    const [phantomPublicKey, setPhantomPublicKey] = useState<string | null>(null);
+
     useEffect(() => {
         setIsDark(theme);
     }, [theme]);
+
+    useEffect(() => {
+        // Check Phantom connection status from localStorage
+        const isPhantomConnected = localStorage.getItem('phantomConnected') === 'true';
+        const phantomKey = localStorage.getItem('phantomPublicKey');
+        setPhantomConnected(isPhantomConnected);
+        setPhantomPublicKey(phantomKey);
+    }, []);
+
+    const handlePhantomDisconnect = () => {
+        localStorage.removeItem('phantomConnected');
+        localStorage.removeItem('phantomPublicKey');
+        setPhantomConnected(false);
+        setPhantomPublicKey(null);
+        window.location.reload();
+    };
 
     // Add wallets query
     const { wallets: myWallets } = useWallets();
@@ -244,7 +265,7 @@ const Header = () => {
                             <>
                                 {!isAuthenticated ? (
                                     <button
-                                        onClick={() => window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank")}
+                                        onClick={() => setIsSigninModalOpen(true)}
                                         className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-3 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
                                     >
                                         {t('connect')}
@@ -279,11 +300,16 @@ const Header = () => {
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem asChild>
-                                                <Link href={`/ref`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                <Link href={`/ref`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
                                                     <span>{t('header.wallet.ref')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/security`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.security')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
                                                 <span>{t('header.wallet.logout')}</span>
                                             </DropdownMenuItem>
@@ -331,9 +357,12 @@ const Header = () => {
 
                         {mounted ? (
                             <>
-                                {!isAuthenticated ? (
+                                {!isAuthenticated && !phantomConnected ? (
                                     <button
-                                        onClick={() => window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank")}
+                                        onClick={() => {
+                                            setIsSigninModalOpen(true);
+                                            setIsMobileMenuOpen(false);
+                                        }}
                                         className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap flex items-center gap-1"
                                     >
                                         {t('connect')}
@@ -373,9 +402,31 @@ const Header = () => {
                                                     <span>{t('header.wallet.ref')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/security`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <Shield className="mr-2 h-4 w-4" />
+                                                    <span>{t('header.wallet.security')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
                                                 <span>{t('header.wallet.logout')}</span>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                ) : phantomConnected && phantomPublicKey ? (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <button className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap flex items-center gap-1">
+                                                <Wallet2 className="h-4 w-4 mr-1" />
+                                                <span className="text-sm hidden md:inline">{truncateString(phantomPublicKey, 12)}</span>
+                                                <ChevronDown size={16} className="ml-1" />
+                                            </button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800">
+                                            <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={handlePhantomDisconnect}>
+                                                <LogOut className="mr-2 h-4 w-4" />
+                                                <span>{t('header.wallet.disconnectPhantom')}</span>
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -479,6 +530,14 @@ const Header = () => {
                                             <LinkIcon className="h-5 w-5" />
                                             {t('header.wallet.ref')}
                                         </Link>
+                                        <Link
+                                            href="/security"
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-2 flex items-center gap-3"
+                                        >
+                                            <Shield className="h-5 w-5" />
+                                            {t('header.wallet.security')}
+                                        </Link>
                                     </div>
                                 </nav>
                                 <LangToggle className='!bg-transparent border-none !pl-5' showArrow={true} />
@@ -510,10 +569,10 @@ const Header = () => {
                                         <Display />
                                         {mounted && (
                                             <>
-                                                {!isAuthenticated ? (
+                                                {!isAuthenticated && !phantomConnected ? (
                                                     <button
                                                         onClick={() => {
-                                                            window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank");
+                                                            setIsSigninModalOpen(true);
                                                             setIsMobileMenuOpen(false);
                                                         }}
                                                         className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-6 py-3 rounded-full transition-colors"
@@ -553,6 +612,7 @@ const Header = () => {
                     </DialogContent>
                 </Dialog>
             </header>
+            <ModalSignin isOpen={isSigninModalOpen} onClose={() => setIsSigninModalOpen(false)} />
         </>
     )
 }

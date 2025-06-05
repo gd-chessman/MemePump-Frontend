@@ -691,7 +691,9 @@
       "connecting": "接続中...",
       "tos": "利用規約",
       "privacypolicy": "プライバシーポリシー",
-      "ref": "紹介"
+      "ref": "紹介",
+      "security": "セキュリティ",
+      "disconnectPhantom": "Phantomの切断"
     },
     "notifications": {
       "switchWalletSuccess": "ウォレットの切り替えに成功しました！",
@@ -915,5 +917,40 @@
     "id": "ID",
     "unknown": "不明",
     "all": "すべて"
+  },
+  "tglogin": {
+    "title": "初期設定",
+    "name": "名前",
+    "nicknamePlaceholder": "ニックネームを入力",
+    "namePlaceholder": "名前を入力",
+    "country": "国",
+    "nickname": "ニックネーム",
+    "submit": "送信"
+  },
+  "security": {
+    "enter_password": "パスワードを入力してください",
+    "password_placeholder": "パスワードを入力してください",
+    "gg_auth_linked": "Google Authenticator 連携",
+    "gg_auth_linked_desc": "Google Authenticator がアカウントに連携されました",
+    "remove_gg_auth": "Google Authenticator を削除",
+    "bind_google_authenticator": "Google認証システムを連携",
+    "remove_gg_auth_title": "Google認証システムの連携解除",
+    "token_placeholder": "Google認証システムの認証コードを入力",
+    "step1": {
+      "title": "ステップ1: Google認証システムをインストール",
+      "description": "iOSユーザーはApp Storeにログインして「Authenticator」を検索してダウンロードしてください。Androidユーザーはアプリストアにログインするか、モバイルブラウザで「Google Authenticator」を検索してダウンロードしてください",
+      "app_store": "App Store",
+      "google_play": "Google Play",
+      "next_step": "インストール完了、次のステップへ"
+    },
+    "step2": {
+      "title": "ステップ2: 認証コードをインポートして入力",
+      "description": "1. Google認証システムを開き、右下のアイコンをタップして、QRコードをスキャンしてください",
+      "rescan_note": "（ページを更新した後、再度スキャンしてください）",
+      "user": "ユーザー",
+      "key": "キー",
+      "enter_code": "2. 認証コードを入力してください",
+      "submit": "送信"
+    }
   }
 }
