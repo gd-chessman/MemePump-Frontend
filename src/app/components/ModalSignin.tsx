@@ -11,7 +11,7 @@ export default function ModalSignin({ isOpen, onClose }: ModalSigninProps) {
 const { t } = useLang();
   if (!isOpen) return null;
   const handleGoogleSignIn = async () => {
-    window.open(`https://accounts.google.com/o/oauth2/v2/auth?client_id=214595661213-52ivc65dikoagd03qmu0eup83qjvq1l7.apps.googleusercontent.com&redirect_uri=https://memepump.vip/login-email&response_type=code&scope=email%20profile&access_type=offline`)
+    window.open(`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile&access_type=offline`)
     console.log("handleGoogleSignIn")
   }
 

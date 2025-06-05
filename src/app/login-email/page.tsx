@@ -31,6 +31,8 @@ const {isAuthenticated, login: loginAuth } = useAuth();
     handleLogin()
   }, [searchParams, router])
 
+  console.log("TEST code", searchParams.get('code'))
+
   return (
     <div className="flex items-center justify-center min-h-screen">
     </div>
