@@ -155,7 +155,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
       // Create initial stats buttons
       const buttons = [
-        { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}` },
+        { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}`, isMarketCap: true },
         { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}` },
         { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}` },
         { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0) }
@@ -164,7 +164,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         statButton.innerHTML = `
           <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
             <span style="font-size: 10px; color: ${theme === 'dark' ? '#9CA3AF' : '#6B7280'};">${stat.label}</span>
-            <span style="font-size: 11px; font-weight: 500; color: ${theme === 'dark' ? '#FFFFFF' : '#000000'};">${stat.value}</span>
+            <span style="font-size: 11px; font-weight: 500; color: ${stat.isMarketCap ? '#ef5350' : (theme === 'dark' ? '#FFFFFF' : '#000000')};">${stat.value}</span>
           </div>
         `;
         statButton.style.padding = '3px 6px';
@@ -197,7 +197,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     if (!widgetRef.current || statsButtons.length === 0) return;
 
     const stats = [
-      { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}` },
+      { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}`, isMarketCap: true },
       { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}` },
       { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}` },
       { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0) }
@@ -209,7 +209,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         button.innerHTML = `
           <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
             <span style="font-size: 10px; color: ${theme === 'dark' ? '#9CA3AF' : '#6B7280'};">${stat.label}</span>
-            <span style="font-size: 11px; font-weight: 500; color: ${theme === 'dark' ? '#FFFFFF' : '#000000'};">${stat.value}</span>
+            <span style="font-size: 11px; font-weight: 500; color: ${stat.isMarketCap ? '#ef5350' : (theme === 'dark' ? '#FFFFFF' : '#000000')};">${stat.value}</span>
           </div>
         `;
       }

@@ -253,7 +253,7 @@ function TransactionHistoryContent() {
   const renderTransactionCard = (order: any, index: number) => {
     const { t } = useLang();
     return (
-      <div key={index} className="p-3 border-b border-theme-neutral-800/40 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30">
+      <div key={index} className={`p-3 border-b border-theme-neutral-800/40 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30 ${index % 2 === 0 ? 'bg-gray-50 dark:bg-[#1A1A1A]' : 'bg-white dark:bg-[#0F0F0F]'}`}>
         <div className="flex justify-between items-start mb-2">
           <div className="flex items-center gap-2">
             <span className={`text-xs font-medium px-2 py-1 rounded ${order.type === "buy" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"}`}>
@@ -334,7 +334,7 @@ function TransactionHistoryContent() {
             </thead>
             <tbody>
               {allTransactions?.map((order: any, index: number) => (
-                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50">
+                <tr key={index} className={`hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50 ${index % 2 === 0 ? 'bg-gray-50 dark:bg-[#1A1A1A]' : 'bg-white dark:bg-[#0F0F0F]'}`}>
                   <td className="px-4 py-2 truncate text-gray-600 dark:text-neutral-300">
                     {new Date(order.time).toLocaleString()}
                   </td>
@@ -409,7 +409,7 @@ function TransactionHistoryContent() {
             </thead>
             <tbody>
               {allTransactionsMy?.map((order: any, index: number) => (
-                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50">
+                <tr key={index} className={`hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50 ${index % 2 === 0 ? 'bg-gray-50 dark:bg-[#1A1A1A]' : 'bg-white dark:bg-[#0F0F0F]'}`}>
                   <td className="px-4 py-2 truncate text-gray-600 dark:text-neutral-300">
                     {new Date(order.time).toLocaleString()}
                   </td>
@@ -483,7 +483,7 @@ function TransactionHistoryContent() {
             <tbody>
               {holders?.accounts.map((holder: any, index: number) => {
                 return (
-                  <tr key={index} className="hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50">
+                  <tr key={index} className={`hover:bg-gray-100 dark:hover:bg-neutral-800/30 border-b border-gray-100 dark:border-neutral-800/50 ${index % 2 === 0 ? 'bg-gray-50 dark:bg-[#1A1A1A]' : 'bg-white dark:bg-[#0F0F0F]'}`}>
                     <td className="px-4 text-gray-600 dark:text-neutral-300 text-xs py-2 font-medium flex items-center truncate">
                       <span className="text-[#FFB300] dark:text-[#FFB300]">{truncateString(holder.wallet, 9)}</span>
                       <button className="ml-1 text-gray-400 hover:text-gray-600 dark:text-neutral-500 dark:hover:text-neutral-300">
@@ -522,7 +522,7 @@ function TransactionHistoryContent() {
           {holders?.accounts.map((holder: any, index: number) => {
             const ownerPercentage = marketCap > 0 ? (holder.value.usd / marketCap) * 100 : 0;
             return (
-              <div key={index} className="p-3 border-b border-theme-neutral-800/40 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30">
+              <div key={index} className={`p-3 border-b border-theme-neutral-800/40 dark:border-neutral-800/50 hover:bg-gray-50 dark:hover:bg-neutral-800/30 ${index % 2 === 0 ? 'bg-gray-50 dark:bg-[#1A1A1A]' : 'bg-white dark:bg-[#0F0F0F]'}`}>
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] text-gray-500 dark:text-neutral-400">
