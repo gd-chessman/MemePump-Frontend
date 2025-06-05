@@ -891,5 +891,24 @@
     "namePlaceholder": "Enter your name",
     "nicknamePlaceholder": "Enter your nickname",
     "submit": "Submit"
+  },
+  "security": {
+    "bind_google_authenticator": "Bind Google Authenticator",
+    "step1": {
+      "title": "Step 1: Install Google Authenticator",
+      "description": "iOS users log in to the App Store and search for 'Authenticator' to download. Android users log in to the app store or use a mobile browser to search for 'Google Authenticator' to download",
+      "app_store": "App Store",
+      "google_play": "Google Play",
+      "next_step": "Installed, Next Step"
+    },
+    "step2": {
+      "title": "Step 2: Import and enter the verification code",
+      "description": "1. Open Google Authenticator, tap the icon in the bottom right corner, then tap to scan the QR code",
+      "rescan_note": "(Please rescan after refreshing the page)",
+      "user": "User",
+      "key": "Key",
+      "enter_code": "2. Please enter verification code",
+      "submit": "SUBMIT"
+    }
   }
 }

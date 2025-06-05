@@ -969,5 +969,24 @@
     "namePlaceholder": "Nhập tên của bạn",
     "nicknamePlaceholder": "Nhập biệt danh của bạn",
     "submit": "Gửi"
+  },
+  "security": {
+    "bind_google_authenticator": "Liên kết Google Authenticator",
+    "step1": {
+      "title": "Bước 1: Cài đặt Google Authenticator",
+      "description": "Người dùng iOS đăng nhập vào App Store và tìm kiếm 'Authenticator' để tải xuống. Người dùng Android đăng nhập vào cửa hàng ứng dụng hoặc sử dụng trình duyệt di động để tìm kiếm 'Google Authenticator' để tải xuống",
+      "app_store": "App Store",
+      "google_play": "Google Play",
+      "next_step": "Đã cài đặt, Bước tiếp theo"
+    },
+    "step2": {
+      "title": "Bước 2: Nhập và nhập mã xác minh",
+      "description": "1. Mở Google Authenticator, nhấn vào biểu tượng ở góc dưới bên phải, sau đó nhấn để quét mã QR",
+      "rescan_note": "(Vui lòng quét lại sau khi làm mới trang)",
+      "user": "Người dùng",
+      "key": "Khóa",
+      "enter_code": "2. Vui lòng nhập mã xác minh",
+      "submit": "GỬI"
+    }
   }
 }

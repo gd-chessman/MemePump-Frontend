@@ -956,5 +956,24 @@
         "namePlaceholder": "이름을 입력하세요",
         "nicknamePlaceholder": "닉네임을 입력하세요",
         "submit": "제출"
+    },
+    "security": {
+      "bind_google_authenticator": "Google 인증기 연동",
+      "step1": {
+        "title": "1단계: Google 인증기 설치",
+        "description": "iOS 사용자는 App Store에 로그인하여 'Authenticator'를 검색하여 다운로드하세요. Android 사용자는 앱 스토어에 로그인하거나 모바일 브라우저에서 'Google Authenticator'를 검색하여 다운로드하세요",
+        "app_store": "앱 스토어",
+        "google_play": "Google Play",
+        "next_step": "설치 완료, 다음 단계"
+      },
+      "step2": {
+        "title": "2단계: 인증 코드 가져오기 및 입력",
+        "description": "1. Google 인증기를 열고 오른쪽 하단 모서리의 아이콘을 탭한 다음 QR 코드를 스캔하세요",
+        "rescan_note": "(페이지를 새로고침한 후 다시 스캔해주세요)",
+        "user": "사용자",
+        "key": "키",
+        "enter_code": "2. 인증 코드를 입력하세요",
+        "submit": "제출"
+      }
     }
   }
