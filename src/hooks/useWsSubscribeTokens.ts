@@ -65,7 +65,12 @@ export function useWsSubscribeTokens(params?: SubscribeParams) {
   const pathname = usePathname();
   const isTradingPage = pathname?.startsWith('/trading');
   const isDashboardPage = pathname?.startsWith('/dashboard');
+  const tokenStackRef = useRef<Token[]>([]);
+  const updateIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isInitialLoadRef = useRef(true);
+  const MAX_STACK_SIZE = 50;
+  const DISPLAY_INTERVAL = 2000;
+  const TOKENS_PER_UPDATE = 1;
 
   const { data: tokens = [], isLoading } = useQuery<Token[]>({
     queryKey: ['wsTokens', params],
@@ -99,6 +104,24 @@ export function useWsSubscribeTokens(params?: SubscribeParams) {
     };
   };
 
+  const updateTokens = () => {
+    if (!mountedRef.current || tokenStackRef.current.length === 0) return;
+
+    const newTokens = tokenStackRef.current.slice(0, TOKENS_PER_UPDATE);
+    tokenStackRef.current = tokenStackRef.current.slice(TOKENS_PER_UPDATE);
+    
+    if (newTokens.length > 0) {
+      queryClient.setQueryData(['wsTokens', params], (oldData: Token[] = []) => {
+        const updatedTokens = [...newTokens, ...oldData].slice(0, params?.limit || 24);
+        return updatedTokens;
+      });
+
+      setTimeout(() => {
+        preloadImages(newTokens, true).catch(console.error);
+      }, 0);
+    }
+  };
+
   const connect = () => {
     if (!mountedRef.current) return;
 
@@ -115,6 +138,7 @@ export function useWsSubscribeTokens(params?: SubscribeParams) {
         console.log("✅ Connected to Socket.IO server - useWsSubscribeTokens");
         setIsConnected(true);
         setError(null);
+        tokenStackRef.current = [];
         newSocket.emit('subscribeTokens', params || {});
       });
 
@@ -142,6 +166,7 @@ export function useWsSubscribeTokens(params?: SubscribeParams) {
             if (isInitialLoadRef.current) {
               const initialTokens = convertedTokens.slice(0, params?.limit || 24);
               queryClient.setQueryData(['wsTokens', params], initialTokens);
+              tokenStackRef.current = convertedTokens.slice(params?.limit || 24);
               isInitialLoadRef.current = false;
               console.log('Initial load:', convertedTokens.length, 'tokens');
 
@@ -149,15 +174,14 @@ export function useWsSubscribeTokens(params?: SubscribeParams) {
                 preloadImages(initialTokens, false).catch(console.error);
               }, 0);
             } else {
-              queryClient.setQueryData(['wsTokens', params], (oldData: Token[] = []) => {
-                const existingAddresses = new Set(oldData.map(token => token.address));
-                const uniqueNewTokens = convertedTokens.filter((token: Token) => !existingAddresses.has(token.address));
-                const updatedTokens = [...uniqueNewTokens, ...oldData].slice(0, params?.limit || 24);
-                return updatedTokens;
-              });
+              const existingAddresses = new Set(tokenStackRef.current.map(token => token.address));
+              const uniqueNewTokens = convertedTokens.filter((token: Token) => !existingAddresses.has(token.address));
+              
+              tokenStackRef.current = [...tokenStackRef.current, ...uniqueNewTokens]
+                .slice(-MAX_STACK_SIZE);
 
               setTimeout(() => {
-                preloadImages(convertedTokens, true).catch(console.error);
+                preloadImages(uniqueNewTokens, true).catch(console.error);
               }, 0);
             }
           } catch (error) {
@@ -182,6 +206,7 @@ export function useWsSubscribeTokens(params?: SubscribeParams) {
   useEffect(() => {
     if (isTradingPage || isDashboardPage) {
       isInitialLoadRef.current = true;
+      tokenStackRef.current = [];
       connect();
     } else {
       if (socket) {
@@ -196,11 +221,16 @@ export function useWsSubscribeTokens(params?: SubscribeParams) {
   useEffect(() => {
     mountedRef.current = true;
     
+    updateIntervalRef.current = setInterval(updateTokens, DISPLAY_INTERVAL);
+    
     return () => {
       mountedRef.current = false;
       if (socket) {
         socket.emit('unSubscribeTokens');
         socket.disconnect();
+      }
+      if (updateIntervalRef.current) {
+        clearInterval(updateIntervalRef.current);
       }
     };
   }, []);

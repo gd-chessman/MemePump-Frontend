@@ -53,9 +53,9 @@ export default function TokenList() {
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {wsTokens?.map((token) => (
+      {wsTokens?.map((token, index) => (
         <SingleTokenCard 
-          key={token.id} 
+          key={index} 
           token={{
             id: token.id.toString(),
             name: token.symbol,
@@ -143,7 +143,6 @@ function SingleTokenCard({ token }: any) {
     router.push(`/trading?address=${token.address}`);
   };
 
-  console.log("token", token);
   return (
     <div className="border border-zinc-200 dark:border-zinc-800 p-3 bg-white dark:bg-neutral-900 transition-colors duration-200 hover:border-green-500/30 hover:bg-zinc-100 dark:hover:bg-zinc-800/30 cursor-pointer">
       <div className="flex items-stretch gap-3">
