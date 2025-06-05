@@ -664,7 +664,10 @@
       "connecting": "Connecting...",
       "tos": "Terms of Service",
       "privacypolicy": "Privacy Policy",
-      "ref": "Referral"
+      "ref": "Referral",
+      "connect": "Connect",
+      "welcome": "Welcome to our platform",
+      "connect_with_us": "Connect with us through multiple flexible login methods"
     },
     "notifications": {
       "switchWalletSuccess": "Wallet switched successfully!",

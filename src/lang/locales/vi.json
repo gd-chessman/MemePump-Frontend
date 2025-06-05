@@ -726,7 +726,10 @@
       "connecting": "Đang kết nối...",
       "tos": "Điều khoản dịch vụ",
       "privacypolicy": "Chính sách bảo mật",
-      "ref": "Giới thiệu"
+      "ref": "Giới thiệu",
+      "connect": "Kết nối",
+      "welcome": "Chào mừng đến với nền tảng của chúng tôi",
+      "connect_with_us": "Kết nối với chúng tôi thông qua nhiều phương thức đăng nhập linh hoạt"
     },
     "notifications": {
       "switchWalletSuccess": "Chuyển đổi ví thành công!",

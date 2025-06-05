@@ -1,30 +1,43 @@
-
+"use client"
+import { useLang } from "@/lang";
 import React from "react";
 
 interface ModalSigninProps {
   isOpen: boolean;
+  onClose: () => void;
 }
 
-export default function ModalSignin({ isOpen }: ModalSigninProps) {
+export default function ModalSignin({ isOpen, onClose }: ModalSigninProps) {
+const { t } = useLang();
   if (!isOpen) return null;
   const handleGoogleSignIn = async () => {
     console.log("handleGoogleSignIn")
   }
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div 
+      className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+      onClick={handleOverlayClick}
+    >
       <div className="p-5 bg-white dark:bg-stone-950 rounded-lg shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] dark:shadow-[0px_0px_4px_0px_rgba(0,0,0,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
         <div className="w-96 inline-flex flex-col justify-start items-center gap-4">
           <div className="self-stretch inline-flex justify-between items-center">
             <div className="justify-start text-indigo-500 dark:text-indigo-400 text-lg font-semibold uppercase leading-relaxed">
-              Connect
+              {t('header.wallet.connect')}
             </div>
           </div>
           <div className="flex flex-col justify-start items-center gap-1.5">
             <div className="justify-start text-gray-900 dark:text-white text-lg font-medium uppercase leading-relaxed">
-              Welcome to our platform
+              {t('header.wallet.welcome')}
             </div>
             <div className="justify-start text-gray-600 dark:text-gray-300 text-sm font-normal leading-tight">
-              Connect with us through multiple flexible login methods
+              {t('header.wallet.connect_with_us')}
             </div>
           </div>
           <div className="inline-flex justify-start items-center gap-20">

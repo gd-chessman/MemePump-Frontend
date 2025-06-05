@@ -691,7 +691,10 @@
       "connecting": "接続中...",
       "tos": "利用規約",
       "privacypolicy": "プライバシーポリシー",
-      "ref": "紹介"
+      "ref": "紹介",
+      "connect": "接続",
+      "welcome": "プラットフォームへようこそ",
+      "connect_with_us": "複数の柔軟なログイン方法で接続"
     },
     "notifications": {
       "switchWalletSuccess": "ウォレットの切り替えに成功しました！",

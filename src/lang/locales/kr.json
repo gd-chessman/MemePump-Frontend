@@ -711,7 +711,10 @@
         "connecting": "연결 중...",
         "tos": "서비스 이용약관",
         "privacypolicy": "개인정보 처리방침",
-        "ref": "추천"
+        "ref": "추천",
+        "connect": "연결",
+        "welcome": "우리 플랫폼에 오신 것을 환영합니다",
+        "connect_with_us": "다양한 로그인 방법으로 연결하세요"
       },
       "notifications": {
         "switchWalletSuccess": "지갑 전환이 성공했습니다!",

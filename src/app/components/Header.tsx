@@ -27,6 +27,7 @@ import { useWallets } from '@/hooks/useWallets';
 import { LangToggle } from './LanguageSelect';
 import { useTheme } from 'next-themes';
 import PumpFun from './pump-fun';
+import ModalSignin from './ModalSignin';
 
 
 const Header = () => {
@@ -40,6 +41,7 @@ const Header = () => {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [isSigninModalOpen, setIsSigninModalOpen] = useState(false);
     const { theme, setTheme } = useTheme();
     const [isDark, setIsDark] = useState(theme);
     useEffect(() => {
@@ -244,7 +246,7 @@ const Header = () => {
                             <>
                                 {!isAuthenticated ? (
                                     <button
-                                        onClick={() => window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank")}
+                                        onClick={() => setIsSigninModalOpen(true)}
                                         className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-3 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
                                     >
                                         {t('connect')}
@@ -333,7 +335,10 @@ const Header = () => {
                             <>
                                 {!isAuthenticated ? (
                                     <button
-                                        onClick={() => window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank")}
+                                        onClick={() => {
+                                            setIsSigninModalOpen(true);
+                                            setIsMobileMenuOpen(false);
+                                        }}
                                         className="bg-gradient-to-t dark:bg-gradient-to-t dark:from-theme-primary-500 dark:to-theme-secondary-400 text-sm linear-gradient-blue text-theme-neutral-100 dark:text-neutral-100 font-medium px-3 md:px-4 py-[6px] rounded-full transition-colors whitespace-nowrap flex items-center gap-1"
                                     >
                                         {t('connect')}
@@ -513,7 +518,7 @@ const Header = () => {
                                                 {!isAuthenticated ? (
                                                     <button
                                                         onClick={() => {
-                                                            window.open(`${process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL}=${sessionStorage.getItem('ref')}`, "_blank");
+                                                            setIsSigninModalOpen(true);
                                                             setIsMobileMenuOpen(false);
                                                         }}
                                                         className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-6 py-3 rounded-full transition-colors"
@@ -553,6 +558,7 @@ const Header = () => {
                     </DialogContent>
                 </Dialog>
             </header>
+            <ModalSignin isOpen={isSigninModalOpen} onClose={() => setIsSigninModalOpen(false)} />
         </>
     )
 }
