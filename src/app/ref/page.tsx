@@ -366,19 +366,19 @@ export default function ReferralPage() {
 
               {/* Level indicators */}
               <div className="absolute left-0 top-6 flex flex-col gap-[25px] z-10">
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 1</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 2</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 3</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 4</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 5</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L1</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L2</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L3</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L4</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L5</div>
               </div>
 
               {/* Percentage indicators */}
               <div className="absolute right-0 top-6 flex flex-col gap-[25px] z-10">
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '25', friend: '1' })}</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '3.5', friend: '2' })}</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '3', friend: '3' })}</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '2', friend: '4' })}</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">25%</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">3.5%</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">3%</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">2%</div>
                 <div className="text-green-600 dark:text-green-400 font-bold text-sm">1%</div>
               </div>
 
@@ -386,10 +386,10 @@ export default function ReferralPage() {
               <div className="flex justify-center mb-4 relative z-10 pt-2">
                 <div className="flex flex-col items-center">
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-0.5 rounded-full mb-1 font-semibold shadow-md text-xs">
-                    {t('ref.you')}
+                    YOU
                   </div>
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    {t('ref.receivePercent', { percent: '25', friend: '1' })}
+                    25%
                   </div>
                   <UserNode size="lg" />
                 </div>
@@ -399,13 +399,13 @@ export default function ReferralPage() {
               <div className="flex justify-between mb-4 px-10 relative z-10">
                 <div className="flex flex-col items-center">
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    {t('ref.receivePercent', { percent: '3.5', friend: '2' })}
+                    3.5%
                   </div>
                   <UserNode size="md" />
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    {t('ref.receivePercent', { percent: '3.5', friend: '2' })}
+                    3.5%
                   </div>
                   <UserNode size="md" />
                 </div>
@@ -416,7 +416,7 @@ export default function ReferralPage() {
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="flex flex-col items-center">
                     <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                      {t('ref.receivePercent', { percent: '3', friend: '3' })}
+                      3%
                     </div>
                     <UserNode size="md" />
                   </div>
@@ -428,7 +428,7 @@ export default function ReferralPage() {
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                   <div key={i} className="flex flex-col items-center">
                     <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                      {t('ref.receivePercent', { percent: '2', friend: '4' })}
+                      2%
                     </div>
                     <UserNode size="sm" />
                   </div>
