@@ -915,5 +915,14 @@
     "id": "ID",
     "unknown": "不明",
     "all": "すべて"
+  },
+  "tglogin": {
+    "title": "初期設定",
+    "name": "名前",
+    "nicknamePlaceholder": "ニックネームを入力",
+    "namePlaceholder": "名前を入力",
+    "country": "国",
+    "nickname": "ニックネーム",
+    "submit": "送信"
   }
 }
