@@ -63,7 +63,7 @@ export default function SearchModal({ isOpen, onClose, onSelectToken, searchQuer
   const router = useRouter();
 
   // Add debounced search input with consistent delay
-  const debouncedSearchInput = useDebounce(searchInput, 300)
+  const debouncedSearchInput = useDebounce(searchInput, 1000)
 
   // Add paste handler
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
