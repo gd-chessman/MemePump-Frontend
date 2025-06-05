@@ -959,5 +959,14 @@
     "id": "ID",
     "unknown": "Không xác định",
     "all": "Tất cả"
+  },
+  "tglogin": {
+    "title": "Hoàn Thành Hồ Sơ",
+    "name": "Tên",
+    "nickname": "Biệt Danh",
+    "country": "Quốc Gia",
+    "namePlaceholder": "Nhập tên của bạn",
+    "nicknamePlaceholder": "Nhập biệt danh của bạn",
+    "submit": "Gửi"
   }
 }

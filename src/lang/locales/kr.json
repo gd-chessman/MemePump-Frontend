@@ -946,5 +946,14 @@
       "id": "ID",
       "unknown": "알 수 없음",
       "all": "전체"
+    },
+    "tglogin": {
+        "title": "프로필 완성",
+        "name": "이름",
+        "nickname": "닉네임",
+        "country": "국가",
+        "namePlaceholder": "이름을 입력하세요",
+        "nicknamePlaceholder": "닉네임을 입력하세요",
+        "submit": "제출"
     }
   }

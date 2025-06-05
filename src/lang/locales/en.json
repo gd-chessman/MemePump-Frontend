@@ -881,5 +881,14 @@
     "id": "ID",
     "unknown": "Unknown",
     "all": "All"
+  },
+  "tglogin": {
+    "title": "Complete Profile",
+    "name": "Name",
+    "nickname": "Nickname",
+    "country": "Country",
+    "namePlaceholder": "Enter your name",
+    "nicknamePlaceholder": "Enter your nickname",
+    "submit": "Submit"
   }
 }
