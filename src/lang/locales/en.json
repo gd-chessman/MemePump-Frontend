@@ -667,7 +667,8 @@
       "ref": "Referral",
       "connect": "Connect",
       "welcome": "Welcome to our platform",
-      "connect_with_us": "Connect with us through multiple flexible login methods"
+      "connect_with_us": "Connect with us through multiple flexible login methods",
+      "security": "Security"
     },
     "notifications": {
       "switchWalletSuccess": "Wallet switched successfully!",

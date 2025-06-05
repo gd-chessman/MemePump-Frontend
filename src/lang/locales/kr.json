@@ -714,7 +714,8 @@
         "ref": "추천",
         "connect": "연결",
         "welcome": "우리 플랫폼에 오신 것을 환영합니다",
-        "connect_with_us": "다양한 로그인 방법으로 연결하세요"
+        "connect_with_us": "다양한 로그인 방법으로 연결하세요",
+        "security": "보안"
       },
       "notifications": {
         "switchWalletSuccess": "지갑 전환이 성공했습니다!",

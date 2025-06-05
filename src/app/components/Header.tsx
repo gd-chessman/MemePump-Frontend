@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link';
-import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun, EyeOff, ShieldCheck, FileCheck, LinkIcon } from 'lucide-react';
+import { ChevronDown, LogOut, Search, Wallet2, Menu, X, LayoutDashboard, Coins, LineChart, Wallet as WalletIcon, Moon, Sun, EyeOff, ShieldCheck, FileCheck, LinkIcon, Shield } from 'lucide-react';
 import { useLang } from '@/lang/useLang';
 import Display from '@/app/components/Display';
 import {
@@ -281,11 +281,16 @@ const Header = () => {
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem asChild>
-                                                <Link href={`/ref`} className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                <Link href={`/ref`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
                                                     <span>{t('header.wallet.ref')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem className="dropdown-item lg:pl-3 lg:pb-[10px] cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/security`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <span>{t('header.wallet.security')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
                                                 <LogOut className="mr-2 h-4 w-4" />
                                                 <span>{t('header.wallet.logout')}</span>
                                             </DropdownMenuItem>
@@ -376,6 +381,12 @@ const Header = () => {
                                                 <Link href={`/ref`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
                                                     <LinkIcon className="mr-2 h-4 w-4" />
                                                     <span>{t('header.wallet.ref')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/security`} className="dropdown-item cursor-pointer text-gray-700 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                                    <Shield className="mr-2 h-4 w-4" />
+                                                    <span>{t('header.wallet.security')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={logout}>
@@ -483,6 +494,14 @@ const Header = () => {
                                         >
                                             <LinkIcon className="h-5 w-5" />
                                             {t('header.wallet.ref')}
+                                        </Link>
+                                        <Link
+                                            href="/security"
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="hover:gradient-hover dark:text-theme-neutral-100 text-theme-neutral-800 md:dark:text-theme-neutral-300 capitalize transition-colors text-base py-2 flex items-center gap-3"
+                                        >
+                                            <Shield className="h-5 w-5" />
+                                            {t('header.wallet.security')}
                                         </Link>
                                     </div>
                                 </nav>

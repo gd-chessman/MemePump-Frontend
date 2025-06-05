@@ -691,7 +691,8 @@
       "connecting": "接続中...",
       "tos": "利用規約",
       "privacypolicy": "プライバシーポリシー",
-      "ref": "紹介"
+      "ref": "紹介",
+      "security": "セキュリティ"
     },
     "notifications": {
       "switchWalletSuccess": "ウォレットの切り替えに成功しました！",
