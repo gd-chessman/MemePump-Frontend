@@ -35,7 +35,7 @@ export default function ReferralPage() {
   const [isTreeVisible, setIsTreeVisible] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
-  const [totalEarnings] = useState(rewards.data?.total?.amount_available || 0) // Use amount_available from API
+  const [totalEarnings] = useState(typeof rewards.data?.total?.amount_available === 'number' ? rewards.data.total.amount_available : 0)
   const [activeTab, setActiveTab] = useState("users") // 'layers', 'users'
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [selectedLevel, setSelectedLevel] = useState("all")
@@ -317,7 +317,7 @@ export default function ReferralPage() {
           <div className="bg-blue-100/60 dark:bg-blue-900/40 backdrop-blur-sm rounded-md p-3 border border-blue-300/50 dark:border-blue-700/50 shadow-md">
             <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">{t('ref.totalEarnings')}</h3>
             <div className="flex items-center justify-between">
-              <p className="text-xl font-bold text-gray-900 dark:text-white">${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">${typeof rewards.data?.total?.amount_available === 'number' ? rewards.data.total.amount_available.toFixed(5) : '0.00'}</p>
               <button
                 onClick={() => setShowWithdrawModal(true)}
                 className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-2 py-1 rounded-md transition-all duration-300 flex items-center gap-1 shadow-md hover:shadow-lg text-xs font-medium"
@@ -522,14 +522,14 @@ export default function ReferralPage() {
                       <div className="text-center">
                         <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
                           <span className="text-green-600 dark:text-green-400 font-bold text-sm">
-                            ${rewards.data?.by_level?.[`level_${layer}`]?.amount_available?.toFixed(2) || '0.00'}
+                            ${typeof rewards.data?.by_level?.[`level_${layer}`]?.amount_available === 'number' ? rewards.data.by_level[`level_${layer}`].amount_available.toFixed(5) : '0.00'}
                           </span>
                         </div>
                       </div>
                       <div className="text-center">
                         <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
                           <span className="text-green-600 dark:text-green-400 font-bold text-sm">
-                            ${rewards.data?.by_level?.[`level_${layer}`]?.amount_total?.toFixed(2) || '0.00'}
+                            ${typeof rewards.data?.by_level?.[`level_${layer}`]?.amount_total === 'number' ? rewards.data.by_level[`level_${layer}`].amount_total.toFixed(5) : '0.00'}
                           </span>
                         </div>
                       </div>
@@ -617,7 +617,7 @@ export default function ReferralPage() {
                               </span>
                             </div>
                             <div className="text-center text-xs font-bold text-green-600 dark:text-green-400">
-                              ${user.earnings.toFixed(2)}
+                              ${typeof user.earnings === 'number' ? user.earnings.toFixed(5) : '0.00'}
                             </div>
                           </div>
                         ))
@@ -658,7 +658,7 @@ export default function ReferralPage() {
               <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-lg p-4 border border-blue-300/30 dark:border-blue-700/30 mb-4">
                 <div className="text-center">
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">{t('ref.availableBalance')}</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">${typeof rewards.data?.total?.amount_available === 'number' ? rewards.data.total.amount_available.toFixed(5) : '0.00'}</p>
                 </div>
               </div>
 
@@ -669,10 +669,10 @@ export default function ReferralPage() {
                     <p className="text-sm font-semibold text-red-700 dark:text-red-400">{t('ref.minimumWithdrawalRequired')}</p>
                   </div>
                   <p className="text-sm text-red-600 dark:text-red-300">
-                    {t('ref.minimumWithdrawalDescription', { amount: rewards.data?.total?.amount_available?.toFixed(2) || '0.00' })}
+                    {t('ref.minimumWithdrawalDescription', { amount: typeof rewards.data?.total?.amount_available === 'number' ? rewards.data.total.amount_available.toFixed(5) : '0.00' })}
                   </p>
                   <p className="text-sm text-red-600 dark:text-red-300 mt-1">
-                    {t('ref.requiredMore', { amount: (20 - rewards.data?.total?.amount_available).toFixed(2) })}
+                    {t('ref.requiredMore', { amount: typeof rewards.data?.total?.amount_available === 'number' ? (20 - rewards.data.total.amount_available).toFixed(5) : '20.00' })}
                   </p>
                 </div>
               ) : (
