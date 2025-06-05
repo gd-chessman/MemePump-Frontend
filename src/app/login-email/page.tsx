@@ -3,8 +3,10 @@ import React, { useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { login } from '@/services/api/GoogleService'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function LoginEmail() {
+const {isAuthenticated, login: loginAuth } = useAuth();
   const searchParams = useSearchParams()
   const router = useRouter()
   const isProcessing = useRef(false)
@@ -17,10 +19,8 @@ export default function LoginEmail() {
         try {
           const response = await login(code)
           // Handle successful login here
-          console.log('Login successful:', response)
-          // Redirect to home page or dashboard after successful login
-          console.log(response)
-        //   router.push('/dashboard')
+          loginAuth(response.data.token)
+          router.push('/dashboard')
         } catch (error) {
           console.error('Login failed:', error)
           // Handle login error here
