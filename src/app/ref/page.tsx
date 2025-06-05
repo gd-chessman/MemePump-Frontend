@@ -35,7 +35,7 @@ export default function ReferralPage() {
   const [isTreeVisible, setIsTreeVisible] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
-  const [totalEarnings] = useState(rewards.data?.total?.amount_available || 0) // Use amount_available from API
+  const [totalEarnings] = useState(typeof rewards.data?.total?.amount_available === 'number' ? rewards.data.total.amount_available : 0)
   const [activeTab, setActiveTab] = useState("users") // 'layers', 'users'
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [selectedLevel, setSelectedLevel] = useState("all")
@@ -317,7 +317,7 @@ export default function ReferralPage() {
           <div className="bg-blue-100/60 dark:bg-blue-900/40 backdrop-blur-sm rounded-md p-3 border border-blue-300/50 dark:border-blue-700/50 shadow-md">
             <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-1 text-xs">{t('ref.totalEarnings')}</h3>
             <div className="flex items-center justify-between">
-              <p className="text-xl font-bold text-gray-900 dark:text-white">${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">${typeof rewards.data?.total?.amount_available === 'number' ? rewards.data.total.amount_available.toFixed(5) : '0.00'}</p>
               <button
                 onClick={() => setShowWithdrawModal(true)}
                 className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-2 py-1 rounded-md transition-all duration-300 flex items-center gap-1 shadow-md hover:shadow-lg text-xs font-medium"
@@ -366,19 +366,19 @@ export default function ReferralPage() {
 
               {/* Level indicators */}
               <div className="absolute left-0 top-6 flex flex-col gap-[25px] z-10">
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 1</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 2</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 3</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 4</div>
-                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">{t('ref.level')} 5</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L1</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L2</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L3</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L4</div>
+                <div className="text-green-600 dark:text-green-400 font-mono font-bold text-xs">L5</div>
               </div>
 
               {/* Percentage indicators */}
               <div className="absolute right-0 top-6 flex flex-col gap-[25px] z-10">
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '25', friend: '1' })}</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '3.5', friend: '2' })}</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '3', friend: '3' })}</div>
-                <div className="text-green-600 dark:text-green-400 font-bold text-sm">{t('ref.receivePercent', { percent: '2', friend: '4' })}</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">25%</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">3.5%</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">3%</div>
+                <div className="text-green-600 dark:text-green-400 font-bold text-sm">2%</div>
                 <div className="text-green-600 dark:text-green-400 font-bold text-sm">1%</div>
               </div>
 
@@ -386,10 +386,10 @@ export default function ReferralPage() {
               <div className="flex justify-center mb-4 relative z-10 pt-2">
                 <div className="flex flex-col items-center">
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-0.5 rounded-full mb-1 font-semibold shadow-md text-xs">
-                    {t('ref.you')}
+                    YOU
                   </div>
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    {t('ref.receivePercent', { percent: '25', friend: '1' })}
+                    25%
                   </div>
                   <UserNode size="lg" />
                 </div>
@@ -399,13 +399,13 @@ export default function ReferralPage() {
               <div className="flex justify-between mb-4 px-10 relative z-10">
                 <div className="flex flex-col items-center">
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    {t('ref.receivePercent', { percent: '3.5', friend: '2' })}
+                    3.5%
                   </div>
                   <UserNode size="md" />
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                    {t('ref.receivePercent', { percent: '3.5', friend: '2' })}
+                    3.5%
                   </div>
                   <UserNode size="md" />
                 </div>
@@ -416,7 +416,7 @@ export default function ReferralPage() {
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="flex flex-col items-center">
                     <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                      {t('ref.receivePercent', { percent: '3', friend: '3' })}
+                      3%
                     </div>
                     <UserNode size="md" />
                   </div>
@@ -428,7 +428,7 @@ export default function ReferralPage() {
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                   <div key={i} className="flex flex-col items-center">
                     <div className="text-[10px] text-blue-600 dark:text-blue-300 mb-1 text-center">
-                      {t('ref.receivePercent', { percent: '2', friend: '4' })}
+                      2%
                     </div>
                     <UserNode size="sm" />
                   </div>
@@ -522,14 +522,14 @@ export default function ReferralPage() {
                       <div className="text-center">
                         <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
                           <span className="text-green-600 dark:text-green-400 font-bold text-sm">
-                            ${rewards.data?.by_level?.[`level_${layer}`]?.amount_available?.toFixed(2) || '0.00'}
+                            ${typeof rewards.data?.by_level?.[`level_${layer}`]?.amount_available === 'number' ? rewards.data.by_level[`level_${layer}`].amount_available.toFixed(5) : '0.00'}
                           </span>
                         </div>
                       </div>
                       <div className="text-center">
                         <div className="bg-gray-100 dark:bg-gray-800 rounded-md px-2 py-1 border border-gray-300 dark:border-gray-600">
                           <span className="text-green-600 dark:text-green-400 font-bold text-sm">
-                            ${rewards.data?.by_level?.[`level_${layer}`]?.amount_total?.toFixed(2) || '0.00'}
+                            ${typeof rewards.data?.by_level?.[`level_${layer}`]?.amount_total === 'number' ? rewards.data.by_level[`level_${layer}`].amount_total.toFixed(5) : '0.00'}
                           </span>
                         </div>
                       </div>
@@ -617,7 +617,7 @@ export default function ReferralPage() {
                               </span>
                             </div>
                             <div className="text-center text-xs font-bold text-green-600 dark:text-green-400">
-                              ${user.earnings.toFixed(2)}
+                              ${typeof user.earnings === 'number' ? user.earnings.toFixed(5) : '0.00'}
                             </div>
                           </div>
                         ))
@@ -658,7 +658,7 @@ export default function ReferralPage() {
               <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-lg p-4 border border-blue-300/30 dark:border-blue-700/30 mb-4">
                 <div className="text-center">
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">{t('ref.availableBalance')}</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">${rewards.data?.total?.amount_available?.toFixed(2) || '0.00'}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">${typeof rewards.data?.total?.amount_available === 'number' ? rewards.data.total.amount_available.toFixed(5) : '0.00'}</p>
                 </div>
               </div>
 
@@ -669,10 +669,10 @@ export default function ReferralPage() {
                     <p className="text-sm font-semibold text-red-700 dark:text-red-400">{t('ref.minimumWithdrawalRequired')}</p>
                   </div>
                   <p className="text-sm text-red-600 dark:text-red-300">
-                    {t('ref.minimumWithdrawalDescription', { amount: rewards.data?.total?.amount_available?.toFixed(2) || '0.00' })}
+                    {t('ref.minimumWithdrawalDescription', { amount: typeof rewards.data?.total?.amount_available === 'number' ? rewards.data.total.amount_available.toFixed(5) : '0.00' })}
                   </p>
                   <p className="text-sm text-red-600 dark:text-red-300 mt-1">
-                    {t('ref.requiredMore', { amount: (20 - rewards.data?.total?.amount_available).toFixed(2) })}
+                    {t('ref.requiredMore', { amount: typeof rewards.data?.total?.amount_available === 'number' ? (20 - rewards.data.total.amount_available).toFixed(5) : '20.00' })}
                   </p>
                 </div>
               ) : (
