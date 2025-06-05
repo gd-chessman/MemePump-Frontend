@@ -194,53 +194,67 @@ export default function MasterTradeTable() {
         enabled: masterTraders.length > 0,
     });
 
-    // Combine masterTraders and masterDetails data
+    // Handle initial data from masterTraders
     useEffect(() => {
-        if (masterTraders.length > 0 && masterDetails.length > 0) {
-            const combined = masterTraders.map((trader: Trader) => {
-                const traderAddress = trader.solana_address || trader.eth_address;
-                const details = masterDetails.find((detail: MasterDetail) => detail.address === traderAddress);
+        if (!masterTraders?.length) return;
 
-                if (details) {
-                    return {
-                        ...trader,
-                        ...details,
-                        // Ensure we keep the connection_status from trader
-                        connection_status: trader.connection_status,
-                    };
-                }
-                return trader;
-            }).filter(Boolean); // Remove any null entries
+        const initialData = masterTraders.map((trader: Trader) => ({
+            ...trader,
+            address: trader.solana_address || trader.eth_address,
+            "7d": { totalChange: 0, percentageChange: 0, winPercentage: 0, wins: 0, losses: 0 },
+            "30d": { totalChange: 0, percentageChange: 0 },
+            lastTime: null,
+            info: null
+        }));
 
-            setCombinedMasterData(combined);
-            setIsLoading(false);
-        }
-    }, [masterTraders, masterDetails]);
+        setCombinedMasterData(initialData);
+        setIsLoading(false);
+    }, [masterTraders]);
 
-    // Update loading state when either query is loading
+    // Update with masterDetails when available
     useEffect(() => {
-        if (isLoadingMasters || isLoadingDetails) {
-            setIsLoading(true);
-        }
-    }, [isLoadingMasters, isLoadingDetails]);
+        if (!masterDetails?.length || !combinedMasterData.length) return;
 
-    // Update tradeData to use combinedMasterData instead of masterDetails
+        const updateData = () => {
+            const updatedData = combinedMasterData.map(trader => {
+                const details = masterDetails.find(detail => detail?.address === trader.address);
+                if (!details) return trader;
+
+                return {
+                    ...trader,
+                    ...details,
+                    address: trader.address,
+                    connection_status: trader.connection_status
+                };
+            });
+
+            setCombinedMasterData(updatedData);
+        };
+
+        // Use setTimeout to avoid React state update conflicts
+        setTimeout(updateData, 0);
+    }, [masterDetails]);
+
+    // Update tradeData to use combinedMasterData
     const tradeData = useMemo(() => {
         return combinedMasterData.map((trader) => {
+            const sevenDayData = trader["7d"] || { totalChange: 0, percentageChange: 0, winPercentage: 0, wins: 0, losses: 0 };
+            const thirtyDayData = trader["30d"] || { totalChange: 0, percentageChange: 0 };
+
             return {
                 id: trader.id,
                 address: trader.address,
-                pnl7d: roundToTwoDecimals(trader["7d"]?.totalChange),
-                pnlPercent7d: roundToTwoDecimals(trader["7d"]?.percentageChange),
-                pnl30d: roundToTwoDecimals(trader["30d"]?.totalChange),
-                pnlPercent30d: roundToTwoDecimals(trader["30d"]?.percentageChange),
-                winRate7d: roundToTwoDecimals(trader["7d"]?.winPercentage),
+                pnl7d: roundToTwoDecimals(sevenDayData.totalChange),
+                pnlPercent7d: roundToTwoDecimals(sevenDayData.percentageChange),
+                pnl30d: roundToTwoDecimals(thirtyDayData.totalChange),
+                pnlPercent30d: roundToTwoDecimals(thirtyDayData.percentageChange),
+                winRate7d: roundToTwoDecimals(sevenDayData.winPercentage),
                 transactions7d: {
-                    wins: trader["7d"]?.wins ?? 0,
-                    losses: trader["7d"]?.losses ?? 0
+                    wins: sevenDayData.wins,
+                    losses: sevenDayData.losses
                 },
                 lastTime: formatLastTime(trader.lastTime),
-                info: trader?.info,
+                info: trader.info,
                 type: trader.type || "NORMAL" as TradeType,
                 status: (trader.connection_status ?? "Not Connected") as TradeStatus
             };
