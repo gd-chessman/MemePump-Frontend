@@ -1,12 +1,12 @@
 "use client"
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { login } from '@/services/api/GoogleService'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 
-export default function LoginEmail() {
-const {isAuthenticated, login: loginAuth } = useAuth();
+function LoginEmailContent() {
+  const {isAuthenticated, login: loginAuth } = useAuth();
   const searchParams = useSearchParams()
   const router = useRouter()
   const isProcessing = useRef(false)
@@ -36,5 +36,13 @@ const {isAuthenticated, login: loginAuth } = useAuth();
   return (
     <div className="flex items-center justify-center min-h-screen">
     </div>
+  )
+}
+
+export default function LoginEmail() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"></div>}>
+      <LoginEmailContent />
+    </Suspense>
   )
 }
