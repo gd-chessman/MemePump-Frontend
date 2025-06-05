@@ -156,20 +156,20 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
       // Create initial stats buttons
       const buttons = [
         { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}`, isMarketCap: true },
-        { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}` },
-        { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}` },
-        { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0) }
+        { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}`, isPurple: true },
+        { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}`, isPurple: true },
+        { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0), isPurple: true }
       ].map(stat => {
         const statButton = widget.createButton();
         statButton.innerHTML = `
-          <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
-            <span style="font-size: 10px; color: ${theme === 'dark' ? '#9CA3AF' : '#6B7280'};">${stat.label}</span>
-            <span style="font-size: 11px; font-weight: 500; color: ${stat.isMarketCap ? '#ef5350' : (theme === 'dark' ? '#FFFFFF' : '#000000')};">${stat.value}</span>
+          <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2;">
+            <span style="font-size: 12px; color: ${theme === 'dark' ? '#9CA3AF' : '#6B7280'};">${stat.label}</span>
+            <span style="font-size: 16px; font-weight: 600; color: ${stat.isMarketCap ? '#ef5350' : (stat.isPurple ? '#8B5CF6' : (theme === 'dark' ? '#FFFFFF' : '#000000'))};">${stat.value}</span>
           </div>
         `;
-        statButton.style.padding = '3px 6px';
-        statButton.style.marginLeft = '6px';
-        statButton.style.borderRadius = '4px';
+        statButton.style.padding = '6px 12px';
+        statButton.style.marginLeft = '8px';
+        statButton.style.borderRadius = '6px';
         statButton.style.cursor = 'default';
         return { button: statButton, label: stat.label };
       });
@@ -198,18 +198,18 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
     const stats = [
       { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}`, isMarketCap: true },
-      { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}` },
-      { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}` },
-      { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0) }
+      { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}`, isPurple: true },
+      { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}`, isPurple: true },
+      { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0), isPurple: true }
     ];
 
     statsButtons.forEach(({ button, label }) => {
       const stat = stats.find(s => s.label === label);
       if (stat) {
         button.innerHTML = `
-          <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
-            <span style="font-size: 10px; color: ${theme === 'dark' ? '#9CA3AF' : '#6B7280'};">${stat.label}</span>
-            <span style="font-size: 11px; font-weight: 500; color: ${stat.isMarketCap ? '#ef5350' : (theme === 'dark' ? '#FFFFFF' : '#000000')};">${stat.value}</span>
+          <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2;">
+            <span style="font-size: 12px; color: ${theme === 'dark' ? '#9CA3AF' : '#6B7280'};">${stat.label}</span>
+            <span style="font-size: 16px; font-weight: 600; color: ${stat.isMarketCap ? '#ef5350' : (stat.isPurple ? '#8B5CF6' : (theme === 'dark' ? '#FFFFFF' : '#000000'))};">${stat.value}</span>
           </div>
         `;
       }
