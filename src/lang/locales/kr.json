@@ -424,7 +424,8 @@
       "invalidPrivateKeyLength": "잘못된 개인 키 길이입니다",
       "addressCopied": "지갑 주소가 클립보드에 복사되었습니다",
       "passwordRequired": "비밀번호를 입력해 주세요",
-      "invalidPassword": "잘못된 비밀번호입니다. 다시 시도해 주세요."
+      "invalidPassword": "잘못된 비밀번호입니다. 다시 시도해 주세요.",
+      "disconnectPhantom": "Phantom 연결 해제"
     },
     "searchPlaceholder": "토큰 이름/주소",
     "languages": {
@@ -715,7 +716,8 @@
         "connect": "연결",
         "welcome": "우리 플랫폼에 오신 것을 환영합니다",
         "connect_with_us": "다양한 로그인 방법으로 연결하세요",
-        "security": "보안"
+        "security": "보안",
+        "disconnectPhantom": "Phantom 연결 해제"
       },
       "notifications": {
         "switchWalletSuccess": "지갑 전환이 성공했습니다!",

@@ -668,7 +668,8 @@
       "connect": "Connect",
       "welcome": "Welcome to our platform",
       "connect_with_us": "Connect with us through multiple flexible login methods",
-      "security": "Security"
+      "security": "Security",
+      "disconnectPhantom": "Disconnect Phantom"
     },
     "notifications": {
       "switchWalletSuccess": "Wallet switched successfully!",

@@ -730,7 +730,8 @@
       "connect": "Kết nối",
       "welcome": "Chào mừng đến với nền tảng của chúng tôi",
       "connect_with_us": "Kết nối với chúng tôi thông qua nhiều phương thức đăng nhập linh hoạt",
-      "security": "Bảo mật"
+      "security": "Bảo mật",
+      "disconnectPhantom": "Ngắt kết nối Phantom"
     },
     "notifications": {
       "switchWalletSuccess": "Chuyển đổi ví thành công!",

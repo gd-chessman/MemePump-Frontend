@@ -692,7 +692,8 @@
       "tos": "利用規約",
       "privacypolicy": "プライバシーポリシー",
       "ref": "紹介",
-      "security": "セキュリティ"
+      "security": "セキュリティ",
+      "disconnectPhantom": "Phantomの切断"
     },
     "notifications": {
       "switchWalletSuccess": "ウォレットの切り替えに成功しました！",

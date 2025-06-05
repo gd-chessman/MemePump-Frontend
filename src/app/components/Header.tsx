@@ -426,7 +426,7 @@ const Header = () => {
                                         <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800">
                                             <DropdownMenuItem className="dropdown-item cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={handlePhantomDisconnect}>
                                                 <LogOut className="mr-2 h-4 w-4" />
-                                                <span>Ngắt kết nối Phantom</span>
+                                                <span>{t('header.wallet.disconnectPhantom')}</span>
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
