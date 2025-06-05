@@ -1,14 +1,24 @@
 "use client"
 
 import { useLang } from "@/lang/useLang";
+import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator } from "@/services/api/TelegramWalletService";
+import { useQuery } from "@tanstack/react-query";
 import type React from "react"
 
 import { useState } from "react"
 
 export default function GoogleAuthenticatorBind() {
+const { data: walletInfor, refetch } = useQuery({
+    queryKey: ["wallet-infor"],
+    queryFn: getInforWallet,
+});
   const { t } = useLang();
-  const [verificationCode, setVerificationCode] = useState(["1", "9", "", "", "", ""])
+  const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""])
   const [showStep2, setShowStep2] = useState(false)
+  const [qrCodeUrl, setQrCodeUrl] = useState("")
+  const [secretKey, setSecretKey] = useState("")
+  const [copiedKey, setCopiedKey] = useState(false)
+  const [copiedUser, setCopiedUser] = useState(false)
 
   const handleCodeChange = (index: number, value: string) => {
     if (value.length <= 1 && /^\d*$/.test(value)) {
@@ -31,9 +41,45 @@ export default function GoogleAuthenticatorBind() {
     }
   }
 
-  const handleNextStep = () => {
-    setShowStep2(true)
+  const handleNextStep = async () => {
+    try {
+      const response = await addGoogleAuthenticator("");
+      setQrCodeUrl(response.qr_code_url);
+      setSecretKey(response.secret_key);
+      setShowStep2(true);
+    } catch (error) {
+      console.error("Error adding Google Authenticator:", error);
+    }
   }
+
+  const handleSubmit = async () => {
+    try {
+      const code = verificationCode.join('');
+      const response = await verifyGoogleAuthenticator(code);
+      if (response.status === 200) {
+        // Handle successful verification
+        console.log("Verification successful");
+        // You might want to redirect or show a success message here
+      }
+    } catch (error) {
+      console.error("Error verifying code:", error);
+    }
+  }
+
+  const handleCopy = async (text: string, type: 'key' | 'user') => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (type === 'key') {
+        setCopiedKey(true);
+        setTimeout(() => setCopiedKey(false), 2000);
+      } else {
+        setCopiedUser(true);
+        setTimeout(() => setCopiedUser(false), 2000);
+      }
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
 
   return (
     <div className="min-h-screen text-gray-900 dark:text-white p-4 transition-colors duration-300">
@@ -111,55 +157,32 @@ export default function GoogleAuthenticatorBind() {
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg p-6 mb-6 shadow-sm dark:shadow-none transition-colors duration-300">
               <div className="flex items-start gap-4">
                 <div className="bg-white p-2 rounded border">
-                  <svg className="w-20 h-20" viewBox="0 0 100 100">
-                    <rect width="100" height="100" fill="black" />
-                    <path
-                      d="M0,0V40H40V0ZM30,30H10V10H30Z M50,0V10H60V0Z M70,0V10H80V20H70V30H80V40H60V30H50V40H40V50H50V70H40V80H50V90H40V100H60V90H70V100H90V90H100V70H90V60H100V40H90V50H80V40H90V30H100V0ZM90,10H80V20H90Z M0,50V90H40V50ZM30,80H10V60H30Z M50,50V60H60V50Z M80,50V60H90V50Z M60,60V70H70V60Z M80,60V70H90V80H70V90H60V80H50V90H60V100H50V90H40V100H30V90H20V100H10V90H0V100H20V90H30V80H40V70H50V60Z"
-                      fill="white"
-                    />
-                  </svg>
+                  <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrCodeUrl)}`} alt="QR Code" className="w-20 h-20" />
                 </div>
                 <div className="flex-1">
                   <div className="mb-2">
                     <span className="text-gray-500 dark:text-gray-400 text-sm">{t('security.step2.user')}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-gray-900 dark:text-white">Quy</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 text-gray-400 hover:text-gray-600 dark:hover:text-white cursor-pointer transition-colors duration-300"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                        />
-                      </svg>
-                    </div>
                   </div>
                   <div>
                     <span className="text-gray-500 dark:text-gray-400 text-sm">{t('security.step2.key')}</span>
                     <div className="flex items-center gap-2">
                       <span className="text-gray-900 dark:text-white text-xs font-mono break-all">
-                        FsXqRL3DchD8XBrBb8ksECqUpY9psVansCmCCPAeLuW4
+                        {secretKey}
                       </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 text-gray-400 hover:text-gray-600 dark:hover:text-white cursor-pointer flex-shrink-0 transition-colors duration-300"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                      <button 
+                        onClick={() => handleCopy(secretKey, 'key')}
+                        className="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors duration-300 flex-shrink-0"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                        />
-                      </svg>
+                        {copiedKey ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -187,7 +210,10 @@ export default function GoogleAuthenticatorBind() {
             </div>
 
             {/* Submit Button */}
-            <button className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl">
+            <button 
+              onClick={handleSubmit}
+              className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
               {t('security.step2.submit')}
             </button>
           </div>

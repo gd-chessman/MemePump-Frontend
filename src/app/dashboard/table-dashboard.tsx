@@ -11,11 +11,12 @@ import notify from "@/app/components/notify";
 import { useAuth } from "@/hooks/useAuth";
 import { TableTokenList } from "@/app/components/trading/TableTokenList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
-import { getMyWishlist } from "@/services/api/SolonaTokenService";
+import { getMyWishlist, getTokenByCategory } from "@/services/api/SolonaTokenService";
 import { useQuery } from "@tanstack/react-query";
 import { getNewCoins, getTopCoins } from "@/services/api/OnChainService";
 import { formatNumberWithSuffix3 } from "@/utils/format";
 import TokenList from "@/app/components/dashboard/TokenListCard";
+import { getTokenCategorys } from "@/services/api/TelegramWalletService";
 
 interface Token {
   id: number;
@@ -68,6 +69,16 @@ export default function Trading() {
     queryFn: getMyWishlist,
     refetchOnMount: true,
   });
+  // const { data: categories = [] } = useQuery({
+  //   queryKey: ["token-categories"],
+  //   queryFn: getTokenCategorys,
+  // });
+
+  // const { data: tokenByCategory = [] } = useQuery({
+  //   queryKey: ["token-by-category"],
+  //   queryFn: () => getTokenByCategory(categories[0].slug),
+  //   enabled: !!categories.length,
+  // });
   const [searchResults, setSearchResults] = useState<Token[]>([]);
 
   const [expandedRows, setExpandedRows] = useState<{ [key: string]: boolean }>({});
