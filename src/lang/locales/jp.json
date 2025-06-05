@@ -927,7 +927,14 @@
     "submit": "送信"
   },
   "security": {
+    "enter_password": "パスワードを入力してください",
+    "password_placeholder": "パスワードを入力してください",
+    "gg_auth_linked": "Google Authenticator 連携",
+    "gg_auth_linked_desc": "Google Authenticator がアカウントに連携されました",
+    "remove_gg_auth": "Google Authenticator を削除",
     "bind_google_authenticator": "Google認証システムを連携",
+    "remove_gg_auth_title": "Google認証システムの連携解除",
+    "token_placeholder": "Google認証システムの認証コードを入力",
     "step1": {
       "title": "ステップ1: Google認証システムをインストール",
       "description": "iOSユーザーはApp Storeにログインして「Authenticator」を検索してダウンロードしてください。Androidユーザーはアプリストアにログインするか、モバイルブラウザで「Google Authenticator」を検索してダウンロードしてください",

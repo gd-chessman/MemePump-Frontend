@@ -197,9 +197,9 @@ export const verifyGoogleAuthenticator = async (token: string)=>{
     }
 }
 
-export const removeGoogleAuthenticator = async (password: string)=>{
+export const removeGoogleAuthenticator = async (token: string, password: string)=>{
     try {
-        const temp = await axiosClient.post("/telegram-wallets/remove-gg-auth", {password})
+        const temp = await axiosClient.post("/telegram-wallets/remove-gg-auth", {token, password})
         return temp.data;
     } catch (error) {
         console.log(error)

@@ -958,7 +958,14 @@
         "submit": "제출"
     },
     "security": {
+      "enter_password": "비밀번호를 입력하세요",
+      "password_placeholder": "비밀번호를 입력하세요",
+      "gg_auth_linked": "Google 인증기 연동",
+      "gg_auth_linked_desc": "Google 인증기가 계정에 연동되었습니다",
+      "remove_gg_auth": "Google 인증기 제거",
       "bind_google_authenticator": "Google 인증기 연동",
+      "remove_gg_auth_title": "Google 인증기 연동 해제",
+      "token_placeholder": "Google 인증기 인증 코드 입력",
       "step1": {
         "title": "1단계: Google 인증기 설치",
         "description": "iOS 사용자는 App Store에 로그인하여 'Authenticator'를 검색하여 다운로드하세요. Android 사용자는 앱 스토어에 로그인하거나 모바일 브라우저에서 'Google Authenticator'를 검색하여 다운로드하세요",

@@ -971,7 +971,14 @@
     "submit": "Gửi"
   },
   "security": {
+    "enter_password": "Nhập mật khẩu của bạn",
+    "password_placeholder": "Nhập mật khẩu của bạn",
+    "gg_auth_linked": "Google Authenticator đã liên kết",
+    "gg_auth_linked_desc": "Google Authenticator đã được liên kết với tài khoản của bạn",
+    "remove_gg_auth": "Xóa Google Authenticator",
     "bind_google_authenticator": "Liên kết Google Authenticator",
+    "remove_gg_auth_title": "Gỡ liên kết Google Authenticator",
+    "token_placeholder": "Nhập mã xác thực Google Authenticator",
     "step1": {
       "title": "Bước 1: Cài đặt Google Authenticator",
       "description": "Người dùng iOS đăng nhập vào App Store và tìm kiếm 'Authenticator' để tải xuống. Người dùng Android đăng nhập vào cửa hàng ứng dụng hoặc sử dụng trình duyệt di động để tìm kiếm 'Google Authenticator' để tải xuống",
