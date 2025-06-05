@@ -183,13 +183,15 @@ const { data: walletInfor, refetch } = useQuery({
               placeholder={t('security.token_placeholder') || 'Google Authenticator Token'}
               maxLength={6}
             />
-            <input
-              type="password"
-              value={removePassword}
-              onChange={e => setRemovePassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4"
-              placeholder={t('security.password_placeholder')}
-            />
+            {walletInfor?.password && (
+              <input
+                type="password"
+                value={removePassword}
+                onChange={e => setRemovePassword(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4"
+                placeholder={t('security.password_placeholder')}
+              />
+            )}
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => setShowRemoveModal(false)}
@@ -201,7 +203,7 @@ const { data: walletInfor, refetch } = useQuery({
               <button
                 onClick={handleRemoveConfirm}
                 className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-md disabled:opacity-60"
-                disabled={removing || !removeToken || !removePassword}
+                disabled={removing || !removeToken || (walletInfor?.password && !removePassword)}
               >
                 {removing ? t('security.removing') : t('security.remove_gg_auth')}
               </button>
