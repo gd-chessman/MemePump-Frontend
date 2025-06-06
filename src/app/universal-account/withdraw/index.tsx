@@ -5,10 +5,20 @@ import { Check, Copy } from "lucide-react"
 import { toast } from 'react-hot-toast';
 import React from "react";
 import { truncateString } from "@/utils/format";
-import { createTransaction } from "@/services/api/HistoryTransactionWallet";
+import { createTransaction, getTransactionHistory } from "@/services/api/HistoryTransactionWallet";
 import { useLang } from "@/lang/useLang";
+import { useQuery } from "@tanstack/react-query";
+import { getInforWallet } from "@/services/api/TelegramWalletService";
 
 export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
+  const { data: walletInforAccount, refetch: refetchWalletInforAccount } = useQuery({
+    queryKey: ["wallet-infor"],
+    queryFn: getInforWallet,
+});
+  const { data: transactions , refetch: refetchTransactions} = useQuery({
+    queryKey: ["transactions"],
+    queryFn: () => getTransactionHistory(),
+});
   const { t } = useLang();
   const [amount, setAmount] = useState<string>("0")
   const [recipientWallet, setRecipientWallet] = useState<string>("")
@@ -16,6 +26,8 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
   const [error, setError] = useState<string>("")
   const [recipientError, setRecipientError] = useState<string>("")
   const [copied, setCopied] = useState(false);
+  const [googleAuthCode, setGoogleAuthCode] = useState<string[]>(["", "", "", "", "", ""]);
+  const [googleAuthError, setGoogleAuthError] = useState<string>("");
 
   // Kiểm tra điều kiện disable
   const isDisabled = React.useMemo(() => {
@@ -97,26 +109,73 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Function to handle Google Auth code input
+  const handleGoogleAuthChange = (index: number, value: string) => {
+    if (value.length > 1) return; // Only allow single digit
+    if (!/^\d*$/.test(value)) return; // Only allow numbers
+
+    const newCode = [...googleAuthCode];
+    newCode[index] = value;
+    setGoogleAuthCode(newCode);
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`google-auth-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  // Function to handle Google Auth paste
+  const handleGoogleAuthPaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').slice(0, 6);
+    if (!/^\d+$/.test(pastedData)) return;
+
+    const newCode = pastedData.split('').concat(Array(6 - pastedData.length).fill(''));
+    setGoogleAuthCode(newCode);
+  };
+
+  // Function to handle Google Auth keydown
+  const handleGoogleAuthKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !googleAuthCode[index] && index > 0) {
+      const prevInput = document.getElementById(`google-auth-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
   const handleSend = async () => {
-    if (isDisabled.send) return; // Không cho phép gửi khi đang disable
+    if (isDisabled.send) return;
 
     // Validate recipient wallet
     if (!recipientWallet.trim()) {
       setRecipientError(t('universal_account.recipient_address_required'));
       return;
     }
-    setRecipientError("");
 
+    // Validate Google Auth if required
+    if (walletInforAccount?.isGGAuth) {
+      const code = googleAuthCode.join('');
+      if (code.length !== 6) {
+        setGoogleAuthError(t('universal_account.google_auth_required'));
+        return;
+      }
+      setGoogleAuthError("");
+    }
+
+    setRecipientError("");
     setIsSending(true);
     try {
       const response = await createTransaction({ 
         type: "withdraw", 
         amount: Number(amount), 
-        wallet_address_to: recipientWallet 
+        wallet_address_to: recipientWallet,
+        google_auth_token: walletInforAccount?.isGGAuth ? googleAuthCode.join('') : undefined
       });
       console.log("response", response)
       setAmount("0");
       setRecipientWallet("");
+      setGoogleAuthCode(["", "", "", "", "", ""]);
+      refetchTransactions();
       toast.success(t('universal_account.errors.transaction_success'));
     } catch (error: any) {
       // Handle different types of errors
@@ -125,10 +184,11 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
       } else if (error.response?.status === 401) {
         toast.error(t('universal_account.errors.unauthorized'));
       } else if (error.response?.data?.message === "User wallet not found") {
-        // Show specific error message from API
         toast.error(t('universal_account.errors.user_wallet_not_found'));
+      } else if (error.response?.data?.message?.includes("Google Authenticator")) {
+        toast.error(t('universal_account.errors.invalid_google_auth'));
+        setGoogleAuthError(t('universal_account.errors.invalid_google_auth'));
       } else {
-        // Generic error message
         toast.error(t('universal_account.errors.transaction_failed'));
       }
       console.error('Transaction error:', error);
@@ -201,6 +261,39 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
         </div>
       </div>
 
+      {/* Google Authenticator Input */}
+      {walletInforAccount?.isGGAuth && (
+        <div className="w-full max-w-[600px]">
+          <label className="block md:text-sm lg:text-base font-normal dark:text-neutral-100 text-black mb-1 text-xs">
+            {t('universal_account.google_auth_code')} <span className="text-theme-red-200">*</span>
+          </label>
+          <div className="p-[1px] rounded-xl bg-gradient-to-t from-theme-purple-100 to-theme-gradient-linear-end w-full group hover:from-theme-purple-200 hover:to-theme-gradient-linear-end transition-all duration-300">
+            <div className="bg-white dark:bg-theme-black-200 border border-theme-gradient-linear-start rounded-xl group-hover:border-theme-purple-200 transition-all duration-300 p-4">
+              <div className="flex justify-center gap-2">
+                {googleAuthCode.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`google-auth-${index}`}
+                    type="text"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleGoogleAuthChange(index, e.target.value)}
+                    onPaste={handleGoogleAuthPaste}
+                    onKeyDown={(e) => handleGoogleAuthKeyDown(index, e)}
+                    className="w-10 h-10 text-center text-lg font-bold border border-theme-blue-100 rounded-lg focus:outline-none focus:border-theme-blue-200"
+                    disabled={isSending}
+                  />
+                ))}
+              </div>
+              {googleAuthError && (
+                <div className="text-xs text-red-500 mt-2 text-center">
+                  {googleAuthError}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Send Button */}
       <button

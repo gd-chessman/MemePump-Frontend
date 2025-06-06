@@ -1338,6 +1338,12 @@ export default function WalletPage() {
                                     <div className={modalHelperTextStyles}>
                                         {t('wallet.enterPasswordToView')}
                                     </div>
+                                    <button 
+                                            onClick={handleForgotPassword}
+                                            className="text-xs text-theme-primary-500 hover:text-theme-primary-400 text-left mt-1"
+                                        >
+                                            {t('wallet.forgotPassword')}
+                                    </button>
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-5">

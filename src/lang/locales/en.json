@@ -759,6 +759,7 @@
     "close": "Close"
   },
   "universal_account": {
+    "google_auth_code": "Google Authenticator Code",
     "deposit": "Deposit",
     "withdraw": "Withdraw",
     "history": "HISTORY",

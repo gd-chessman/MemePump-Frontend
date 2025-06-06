@@ -835,6 +835,7 @@
       "redirecting": "리다이렉팅 중..."
     },
     "universal_account": {
+      "google_auth_code": "Google 인증 코드",
       "deposit": "입금",
       "withdraw": "출금",
       "history": "거래내역",

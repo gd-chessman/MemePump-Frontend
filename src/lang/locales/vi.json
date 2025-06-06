@@ -848,6 +848,7 @@
     "close": "Đóng"
   },
   "universal_account": {
+    "google_auth_code": "Mã xác minh Google Authenticator",
     "deposit": "Nạp tiền",
     "withdraw": "Rút tiền",
     "history": "LỊCH SỬ",

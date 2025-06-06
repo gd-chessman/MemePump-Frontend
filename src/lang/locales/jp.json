@@ -804,6 +804,7 @@
     "close": "閉じる"
   },
   "universal_account": {
+    "google_auth_code": "Google Authenticator コード",
     "deposit": "入金",
     "withdraw": "出金",
     "history": "履歴",
