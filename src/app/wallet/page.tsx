@@ -1452,7 +1452,8 @@ export default function WalletPage() {
                                                         value={verificationCode[index] || ''}
                                                         onChange={(e) => {
                                                             const value = e.target.value;
-                                                            if (/^\d*$/.test(value)) {
+                                                            // Allow both letters and numbers
+                                                            if (/^[a-zA-Z0-9]*$/.test(value)) {
                                                                 const newCode = verificationCode.split('');
                                                                 newCode[index] = value;
                                                                 setVerificationCode(newCode.join(''));
@@ -1471,7 +1472,7 @@ export default function WalletPage() {
                                                             }
                                                         }}
                                                         data-index={index}
-                                                        className={`${modalInputStyles} text-center text-lg font-semibold`}
+                                                        className={`${modalInputStyles} text-center text-lg font-semibold uppercase`}
                                                         placeholder="-"
                                                     />
                                                 </div>

@@ -554,11 +554,11 @@ export default function CreateCoinForm() {
                           <SelectValue placeholder={t('createCoin.form.categories.placeholder')}>
                             {formData.category_list.length > 0 && (
                               <div className="flex flex-wrap gap-1">
-                                {formData.category_list.map((categoryId) => {
+                                {formData.category_list.map((categoryId, index) => {
                                   const category = categories.find((c: any) => c.id === categoryId);
                                   return category ? (
                                     <span key={categoryId} className="text-sm">
-                                      {formData.category_list.indexOf(categoryId) !== formData.category_list.length - 1 ? ", " : ""}
+                                      {index > 0 && ", "}
                                       <TranslatedCategory name={category.name} />
                                     </span>
                                   ) : null;
