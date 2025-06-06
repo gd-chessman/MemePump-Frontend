@@ -995,6 +995,7 @@
       "key": "Khóa",
       "enter_code": "2. Vui lòng nhập mã xác minh",
       "submit": "GỬI"
-    }
+    },
+    "removing": "Đang xóa..."
   }
 }

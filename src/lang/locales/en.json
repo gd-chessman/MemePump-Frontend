@@ -917,6 +917,7 @@
       "key": "Key",
       "enter_code": "2. Please enter verification code",
       "submit": "SUBMIT"
-    }
+    },
+    "removing": "Removing..."
   }
 }

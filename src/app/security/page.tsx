@@ -118,6 +118,7 @@ const { data: walletInfor, refetch } = useQuery({
     try {
       await removeGoogleAuthenticator(removeToken, removePassword);
       setShowRemoveModal(false);
+      setShowStep2(false);
       refetch();
     } catch (error) {
       console.error("Error removing Google Authenticator:", error);
