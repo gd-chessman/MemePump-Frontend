@@ -1015,6 +1015,20 @@
     "new_password": "Mật khẩu mới",
     "new_password_placeholder": "Nhập mật khẩu mới",
     "confirm_password": "Xác nhận mật khẩu",
-    "confirm_password_placeholder": "Nhập lại mật khẩu mới"
+    "confirm_password_placeholder": "Nhập lại mật khẩu mới",
+    "sending": "Đang gửi...",
+    "code_sent_success": "Mã xác minh đã được gửi thành công",
+    "code_sent_failed": "Gửi mã xác minh thất bại",
+    "code_sent_error": "Lỗi khi gửi mã xác minh",
+    "code_sent_expired": "Mã xác minh đã hết hạn",
+    "code_sent_used": "Mã xác minh đã được sử dụng",
+    "code_sent_invalid": "Mã xác minh không hợp lệ",
+    "enter_verification_code": "Vui lòng nhập mã xác minh",
+    "enter_new_password": "Vui lòng nhập mật khẩu mới",
+    "passwords_not_match": "Mật khẩu không khớp",
+    "password_min_length": "Mật khẩu phải có ít nhất 8 ký tự",
+    "changing_password": "Đang đổi mật khẩu...",
+    "password_changed_success": "Mật khẩu đã được đổi thành công",
+    "change_password_error": "Lỗi khi đổi mật khẩu"
   }
 }

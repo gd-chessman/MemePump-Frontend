@@ -1002,6 +1002,20 @@
       "new_password": "새 비밀번호",
       "new_password_placeholder": "새 비밀번호 입력",
       "confirm_password": "비밀번호 확인",
-      "confirm_password_placeholder": "새 비밀번호 확인"
+      "confirm_password_placeholder": "새 비밀번호 확인",
+      "sending": "전송 중...",
+      "code_sent_success": "인증 코드가 성공적으로 전송되었습니다",
+      "code_sent_failed": "인증 코드 전송에 실패했습니다",
+      "code_sent_error": "인증 코드 전송 중 오류가 발생했습니다",
+      "code_sent_expired": "인증 코드가 만료되었습니다",
+      "code_sent_used": "인증 코드가 사용되었습니다",
+      "code_sent_invalid": "인증 코드가 유효하지 않습니다",
+      "enter_verification_code": "인증 코드를 입력하세요",
+      "enter_new_password": "새 비밀번호를 입력하세요",
+      "passwords_not_match": "비밀번호가 일치하지 않습니다",
+      "password_min_length": "비밀번호는 8자 이상이어야 합니다",
+      "changing_password": "비밀번호 변경 중...",
+      "password_changed_success": "비밀번호가 성공적으로 변경되었습니다",
+      "change_password_error": "비밀번호 변경 중 오류가 발생했습니다"
     }
   }

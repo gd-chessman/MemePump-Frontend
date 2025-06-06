@@ -938,6 +938,20 @@
     "new_password": "New Password",
     "new_password_placeholder": "Enter new password",
     "confirm_password": "Confirm Password",
-    "confirm_password_placeholder": "Confirm new password"
+    "confirm_password_placeholder": "Confirm new password",
+    "sending": "Sending...",
+    "code_sent_success": "Verification code sent successfully",
+    "code_sent_failed": "Failed to send verification code",
+    "code_sent_error": "Error sending verification code",
+    "code_sent_expired": "Verification code expired",
+    "code_sent_used": "Verification code used",
+    "code_sent_invalid": "Invalid verification code",
+    "enter_verification_code": "Please enter verification code",
+    "enter_new_password": "Please enter new password",
+    "passwords_not_match": "Passwords do not match",
+    "password_min_length": "Password must be at least 8 characters",
+    "changing_password": "Changing password...",
+    "password_changed_success": "Password changed successfully",
+    "change_password_error": "Error changing password"
   }
 }

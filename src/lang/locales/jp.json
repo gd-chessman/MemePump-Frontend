@@ -971,6 +971,20 @@
     "new_password": "新しいパスワード",
     "new_password_placeholder": "新しいパスワードを入力",
     "confirm_password": "パスワードを確認",
-    "confirm_password_placeholder": "新しいパスワードを確認"
+    "confirm_password_placeholder": "新しいパスワードを確認",
+    "sending": "送信中...",
+    "code_sent_success": "認証コードを送信しました",
+    "code_sent_failed": "認証コードの送信に失敗しました",
+    "code_sent_error": "認証コードの送信中にエラーが発生しました",
+    "code_sent_expired": "認証コードが期限切れです",
+    "code_sent_used": "認証コードが使用されました",
+    "code_sent_invalid": "認証コードが無効です",
+    "enter_verification_code": "認証コードを入力してください",
+    "enter_new_password": "新しいパスワードを入力してください",
+    "passwords_not_match": "パスワードが一致しません",
+    "password_min_length": "パスワードは8文字以上で入力してください",
+    "changing_password": "パスワードを変更しています...",
+    "password_changed_success": "パスワードを変更しました",
+    "change_password_error": "パスワードの変更に失敗しました"
   }
 }

@@ -141,7 +141,7 @@ function ChangePasswordTab() {
       notify({ message: t('security.password_changed_success'), type: 'success' });
     } catch (error: any) {
       console.error("Error changing password:", error);
-      if (error.response?.data?.message === "Invalid verification code") {
+      if (error.response?.data?.message === "Invalid or expired reset code") {
         setPasswordError(t('security.invalid_code'));
         notify({ message: t('security.invalid_code'), type: 'error' });
       } else {
