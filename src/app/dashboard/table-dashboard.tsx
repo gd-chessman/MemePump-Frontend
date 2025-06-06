@@ -6,7 +6,7 @@ import { Search, Loader2, Copy, Star, BarChart4, ChevronDown, ChevronUp } from "
 import { useState, useEffect } from "react";
 import { SolonaTokenService } from "@/services/api";
 import { useDebounce } from "@/hooks/useDebounce";
-import { truncateString } from "@/utils/format";
+import { formatNumberWithSuffix, truncateString } from "@/utils/format";
 import notify from "@/app/components/notify";
 import { useAuth } from "@/hooks/useAuth";
 import { TableTokenList } from "@/app/components/trading/TableTokenList";
@@ -14,7 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
 import { getMyWishlist, getTokenByCategory } from "@/services/api/SolonaTokenService";
 import { useQuery } from "@tanstack/react-query";
 import { getNewCoins, getTopCoins } from "@/services/api/OnChainService";
-import { formatNumberWithSuffix3 } from "@/utils/format";
 import TokenList from "@/app/components/dashboard/TokenListCard";
 import { getTokenCategorys } from "@/services/api/TelegramWalletService";
 
@@ -30,12 +29,14 @@ interface Token {
   tradingviewSymbol: string | null;
   isVerified: boolean;
   marketCap: number;
+  market_cap?: number;
   isFavorite?: boolean;
   liquidity: any;
   holder: number;
   price?: number;
   priceChange24h?: number;
   volume24h?: number;
+  volume_24h_change_percent?: number;
 }
 
 export default function Trading() {
@@ -301,12 +302,12 @@ export default function Trading() {
                       <div className="grid grid-cols-2 gap-2">
                         <div className="flex gap-2 items-center">
                           <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.price')}</div>
-                          <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
+                          <div className="font-medium text-sm">${formatNumberWithSuffix(token.price || 0)}</div>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.24hChange')}</div>
-                          <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                            {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
+                          <div className={`font-medium text-sm ${(token.volume_24h_change_percent ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                            {(token.volume_24h_change_percent ?? 0) >= 0 ? '+' : ''}{formatNumberWithSuffix(token.volume_24h_change_percent ?? 0)}%
                           </div>
                         </div>
                       </div>
@@ -316,11 +317,11 @@ export default function Trading() {
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.marketCap')}</div>
-                              <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
+                              <div className="font-medium text-sm">${formatNumberWithSuffix(token.market_cap || 0)}</div>
                             </div>
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.holders')}</div>
-                              <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
+                              <div className="font-medium text-sm">{formatNumberWithSuffix(token.holder || 0)}</div>
                             </div>
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.address')}</div>
@@ -421,12 +422,12 @@ export default function Trading() {
                       <div className="grid grid-cols-2 gap-2">
                         <div className="flex gap-2 items-center">
                           <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.price')}</div>
-                          <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
+                          <div className="font-medium text-sm">${formatNumberWithSuffix(token.price || 0)}</div>
                         </div>
-                        <div className="flex gap-2 items-center">
+                        <div className="flex items-center gap-2">
                           <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.24hChange')}</div>
-                          <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                            {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
+                          <div className={`font-medium text-sm ${(token.volume_24h_change_percent ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                            {(token.volume_24h_change_percent ?? 0) >= 0 ? '+' : ''}{formatNumberWithSuffix(token.volume_24h_change_percent ?? 0)}%
                           </div>
                         </div>
                       </div>
@@ -436,11 +437,11 @@ export default function Trading() {
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.marketCap')}</div>
-                              <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
+                              <div className="font-medium text-sm">${formatNumberWithSuffix(token.market_cap || 0)}</div>
                             </div>
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.holders')}</div>
-                              <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
+                              <div className="font-medium text-sm">{formatNumberWithSuffix(token.holder || 0)}</div>
                             </div>
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.address')}</div>
@@ -533,12 +534,12 @@ export default function Trading() {
                       <div className="grid grid-cols-2 gap-2">
                         <div className="flex gap-2 items-center">
                           <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.price')}</div>
-                          <div className="font-medium text-sm">${formatNumberWithSuffix3(token.price || 0)}</div>
+                          <div className="font-medium text-sm">${formatNumberWithSuffix(token.price || 0)}</div>
                         </div>
                         <div className="flex gap-2 items-center">
                           <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.24hChange')}</div>
-                          <div className={`font-medium text-sm ${(token.priceChange24h ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                            {(token.priceChange24h ?? 0) >= 0 ? '+' : ''}{token.priceChange24h ?? 0}%
+                          <div className={`font-medium text-sm ${(token.volume_24h_change_percent ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                            {(token.volume_24h_change_percent ?? 0) >= 0 ? '+' : ''}{formatNumberWithSuffix(token.volume_24h_change_percent ?? 0)}%
                           </div>
                         </div>
                       </div>
@@ -548,11 +549,11 @@ export default function Trading() {
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.marketCap')}</div>
-                              <div className="font-medium text-sm">${formatNumberWithSuffix3(token.marketCap || 0)}</div>
+                              <div className="font-medium text-sm">${formatNumberWithSuffix(token.market_cap || 0)}</div>
                             </div>
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.holders')}</div>
-                              <div className="font-medium text-sm">{formatNumberWithSuffix3(token.holder || 0)}</div>
+                              <div className="font-medium text-sm">{formatNumberWithSuffix(token.holder || 0)}</div>
                             </div>
                             <div className="flex gap-2 items-center">
                               <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.address')}</div>
