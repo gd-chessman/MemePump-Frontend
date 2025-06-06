@@ -887,7 +887,7 @@ function LinkAccountTab() {
                 <button
                   onClick={handleSendCode}
                   disabled={isSendingCode}
-                  className="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[90px] h-10"
+                  className="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[100px] h-10 whitespace-nowrap"
                 >
                   {isSendingCode ? (
                     <div className="flex items-center justify-center">
@@ -906,7 +906,7 @@ function LinkAccountTab() {
 
             {/* Verification Code Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm text-center font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('security.verification_code')}
               </label>
               <div className="flex gap-2 justify-center">

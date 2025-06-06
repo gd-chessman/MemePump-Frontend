@@ -1029,6 +1029,11 @@
     "password_min_length": "Mật khẩu phải có ít nhất 8 ký tự",
     "changing_password": "Đang đổi mật khẩu...",
     "password_changed_success": "Mật khẩu đã được đổi thành công",
-    "change_password_error": "Lỗi khi đổi mật khẩu"
+    "change_password_error": "Lỗi khi đổi mật khẩu",
+    "link_account": "Liên kết tài khoản",
+    "link_telegram_google": "Liên kết tài khoản Telegram và Google",
+    "link_account_description": "Liên kết tài khoản Telegram và Google để bảo mật tài khoản của bạn",
+    "telegram_code": "Mã Telegram",
+    "link_now": "Liên kết ngay"
   }
 }
