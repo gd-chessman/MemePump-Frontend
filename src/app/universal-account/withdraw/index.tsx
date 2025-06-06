@@ -124,9 +124,9 @@ export default function WithdrawWallet({ walletInfor }: { walletInfor: any }) {
         toast.error(t('universal_account.errors.network_error'));
       } else if (error.response?.status === 401) {
         toast.error(t('universal_account.errors.unauthorized'));
-      } else if (error.response?.data?.message) {
+      } else if (error.response?.data?.message === "User wallet not found") {
         // Show specific error message from API
-        toast.error(error.response.data.message);
+        toast.error(t('universal_account.errors.user_wallet_not_found'));
       } else {
         // Generic error message
         toast.error(t('universal_account.errors.transaction_failed'));

@@ -886,7 +886,8 @@
       "transaction_success": "Gửi giao dịch thành công!",
       "network_error": "Lỗi kết nối. Vui lòng kiểm tra kết nối của bạn.",
       "unauthorized": "Không được phép. Vui lòng đăng nhập lại.",
-      "recipient_required": "Vui lòng nhập địa chỉ người nhận"
+      "recipient_required": "Vui lòng nhập địa chỉ người nhận",
+      "user_wallet_not_found": "Ví không tồn tại"
     },
     "minimum_withdrawal_amount": "Số tiền rút tối thiểu là {amount} SOL",
     "maximum_withdrawal_amount": "Số tiền rút tối đa là {amount} SOL",

@@ -877,7 +877,8 @@
         "network_error": "네트워크 오류. 연결을 확인해 주세요.",
         "unauthorized": "인증되지 않음. 다시 로그인해 주세요.",
         "recipient_required": "수신자 주소가 필요합니다",
-        "invalid_recipient": "유효하지 않은 수신자 주소입니다"
+        "invalid_recipient": "유효하지 않은 수신자 주소입니다",
+        "user_wallet_not_found": "지갑이 존재하지 않습니다"
       }
     },
     "searchModal": {

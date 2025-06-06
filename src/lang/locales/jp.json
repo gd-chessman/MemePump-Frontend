@@ -842,7 +842,8 @@
       "transaction_success": "取引が正常に送信されました！",
       "network_error": "ネットワークエラー。接続を確認してください。",
       "unauthorized": "認証されていません。再度ログインしてください。",
-      "recipient_required": "受取人アドレスが必要です"
+      "recipient_required": "受取人アドレスが必要です",
+      "user_wallet_not_found": "ウォレットが存在しません"
     },
     "minimum_withdrawal_amount": "最小出金額は{amount} SOLです",
     "maximum_withdrawal_amount": "最大出金額は{amount} SOLです",

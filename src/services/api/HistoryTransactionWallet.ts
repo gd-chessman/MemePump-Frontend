@@ -16,6 +16,6 @@ export const createTransaction = async ({type, amount, wallet_address_to}: {type
         return response.data;
     } catch (error) {
         console.error("Error creating transaction:", error);
-        return [];
+        throw error;
     }
 }

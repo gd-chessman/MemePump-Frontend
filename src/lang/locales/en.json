@@ -797,7 +797,8 @@
       "transaction_success": "Transaction sent successfully!",
       "network_error": "Network error. Please check your connection.",
       "unauthorized": "Unauthorized. Please login again.",
-      "recipient_required": "Recipient address is required"
+      "recipient_required": "Recipient address is required",
+      "user_wallet_not_found": "Wallet not found"
     },
     "minimum_withdrawal_amount": "Minimum withdrawal amount is {amount} SOL",
     "maximum_withdrawal_amount": "Maximum withdrawal amount is {amount} SOL",
