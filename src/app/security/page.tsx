@@ -1,9 +1,10 @@
 "use client"
 
 import { useLang } from "@/lang/useLang";
-import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator, removeGoogleAuthenticator, sendVerificationCode } from "@/services/api/TelegramWalletService";
+import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator, removeGoogleAuthenticator, sendVerificationCode, changePassword } from "@/services/api/TelegramWalletService";
 import { useQuery } from "@tanstack/react-query";
 import type React from "react"
+import notify from "@/app/components/notify";
 
 import { useState } from "react"
 
@@ -58,9 +59,11 @@ function ChangePasswordTab() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSendingCode, setIsSendingCode] = useState(false);
   const [sendCodeError, setSendCodeError] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const handleCodeChange = (index: number, value: string) => {
-    if (value.length <= 1 && /^\d*$/.test(value)) {
+    if (value.length <= 1) {
       const newCode = [...verificationCode];
       newCode[index] = value;
       setVerificationCode(newCode);
@@ -82,7 +85,7 @@ function ChangePasswordTab() {
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const paste = e.clipboardData.getData('text');
-    if (/^\d{4}$/.test(paste)) {
+    if (paste.length === 4) {
       setVerificationCode(paste.split(''));
       e.preventDefault();
     }
@@ -98,6 +101,46 @@ function ChangePasswordTab() {
       setSendCodeError(t('security.send_code_error'));
     } finally {
       setIsSendingCode(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    // Validate inputs
+    if (verificationCode.some(code => !code)) {
+      setPasswordError(t('security.enter_verification_code'));
+      return;
+    }
+    if (!newPassword) {
+      setPasswordError(t('security.enter_new_password'));
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordError(t('security.password_min_length'));
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError(t('security.passwords_not_match'));
+      return;
+    }
+
+    try {
+      setIsChangingPassword(true);
+      setPasswordError("");
+      const code = verificationCode.join('');
+      await changePassword(code, newPassword);
+      // Reset form after successful change
+      setVerificationCode(["", "", "", ""]);
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error: any) {
+      console.error("Error changing password:", error);
+      if (error.response?.data?.message === "Invalid verification code") {
+        setPasswordError(t('security.invalid_code'));
+      } else {
+        setPasswordError(t('security.change_password_error'));
+      }
+    } finally {
+      setIsChangingPassword(false);
     }
   };
 
@@ -129,7 +172,7 @@ function ChangePasswordTab() {
           <button
             onClick={handleSendCode}
             disabled={isSendingCode}
-            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[100px]"
+            className="px-4 py-2 bg-gradient-to-r ml-auto from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[100px]"
           >
             {isSendingCode ? (
               <div className="flex items-center justify-center">
@@ -157,7 +200,10 @@ function ChangePasswordTab() {
         <input
           type="password"
           value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          onChange={(e) => {
+            setNewPassword(e.target.value);
+            setPasswordError("");
+          }}
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
           placeholder={t('security.new_password_placeholder')}
         />
@@ -171,17 +217,36 @@ function ChangePasswordTab() {
         <input
           type="password"
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            setPasswordError("");
+          }}
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
           placeholder={t('security.confirm_password_placeholder')}
         />
       </div>
 
+      {passwordError && (
+        <p className="mb-4 text-sm text-red-500">{passwordError}</p>
+      )}
+
       {/* Submit Button */}
       <button
-        className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+        onClick={handleChangePassword}
+        disabled={isChangingPassword}
+        className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        {t('security.change_password')}
+        {isChangingPassword ? (
+          <div className="flex items-center justify-center">
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            {t('security.changing_password')}
+          </div>
+        ) : (
+          t('security.change_password')
+        )}
       </button>
     </div>
   );
@@ -212,25 +277,25 @@ function GoogleAuthenticatorBind() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCodeChange = (index: number, value: string) => {
-    if (value.length <= 1 && /^\d*$/.test(value)) {
-      const newCode = [...verificationCode]
-      newCode[index] = value
-      setVerificationCode(newCode)
+    if (value.length <= 1) {
+      const newCode = [...verificationCode];
+      newCode[index] = value;
+      setVerificationCode(newCode);
 
       // Auto-focus next input
-      if (value && index < 5) {
-        const nextInput = document.getElementById(`code-${index + 1}`)
-        nextInput?.focus()
+      if (value && index < 3) {
+        const nextInput = document.getElementById(`code-${index + 1}`);
+        nextInput?.focus();
       }
     }
-  }
+  };
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === "Backspace" && !verificationCode[index] && index > 0) {
-      const prevInput = document.getElementById(`code-${index - 1}`)
-      prevInput?.focus()
+      const prevInput = document.getElementById(`code-${index - 1}`);
+      prevInput?.focus();
     }
-  }
+  };
 
   const handleNextStep = async () => {
     if (walletInfor?.password) {
@@ -354,7 +419,7 @@ function GoogleAuthenticatorBind() {
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const paste = e.clipboardData.getData('text');
-    if (/^\d{6}$/.test(paste)) {
+    if (paste.length === 4) {
       setVerificationCode(paste.split(''));
       e.preventDefault();
     }
