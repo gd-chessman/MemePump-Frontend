@@ -1327,15 +1327,6 @@ export default function WalletPage() {
                                     <div className={modalHelperTextStyles}>
                                         {t('wallet.passwordRequirements')}
                                     </div>
-                                    <div className="flex justify-between items-center">
-                                        <button 
-                                            onClick={handleResendCode}
-                                            disabled={isSendingCode}
-                                            className="text-xs text-theme-primary-400 hover:text-theme-primary-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            {isSendingCode ? t('wallet.sending') : t('wallet.resendCode')}
-                                        </button>
-                                    </div>
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-5">
