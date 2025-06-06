@@ -1571,7 +1571,12 @@ export default function WalletPage() {
                                     </button>
                                     <button
                                         onClick={handleChangePassword}
-                                        disabled={isVerifyingCode || verificationCode.length !== 4}
+                                        disabled={isVerifyingCode || 
+                                            verificationCode.length !== 4 || 
+                                            !newPassword || 
+                                            !confirmPassword || 
+                                            !!passwordError || 
+                                            !!confirmPasswordError}
                                         className={modalButtonStyles}
                                     >
                                         <div className={modalButtonTextStyles}>

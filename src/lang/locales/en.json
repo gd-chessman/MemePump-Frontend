@@ -393,7 +393,8 @@
     "verificationCode": "Verification code",
     "resendCode": "Resend code",
     "verify": "Verify",
-    "invalidCode": "Invalid code"
+    "invalidCode": "Invalid code",
+    "passwordsDoNotMatch": "Passwords do not match"
   },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {
