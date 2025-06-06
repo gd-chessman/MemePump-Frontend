@@ -228,9 +228,19 @@ export const sendMailCode = async ()=>{
     }
 }
 
-export const addGmail = async (telegram_code: string, code: string)=>{
+export const addGmail = async (code: string)=>{
     try {
-        const temp = await axiosClient.post("/telegram-wallets/add-gmail", {telegram_code, code})
+        const temp = await axiosClient.post("/telegram-wallets/add-gmail", { code })
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export const verifyGmail = async (telegram_code: string)=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/verify-gmail", { telegram_code })
         return temp.data;
     } catch (error) {
         console.log(error)
