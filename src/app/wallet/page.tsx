@@ -496,11 +496,19 @@ export default function WalletPage() {
     };
 
     const handleForgotPassword = async () => {
-        setShowForgotPassword(true)
-        handleVerifyCode()
+        // Close other modals
+        setShowPasswordInput(false);
+        setShowCreatePassword(false);
+        setShowPrivateKeys(false);
+        setShowAddWallet(false);
+        setShowImportWallet(false);
+        
+        // Show verification code modal
+        setShowForgotPassword(true);
+        handleSendVerificationCode();
     };
 
-    const handleVerifyCode = async () => {
+    const handleSendVerificationCode = async () => {
         try {
             const res = await TelegramWalletService.sendVerificationCode()
             console.log(res)
@@ -527,6 +535,58 @@ export default function WalletPage() {
         setShowVerifyCode(false);
         setVerificationCode("");
         setCodeError("");
+    };
+
+    const handleChangePassword = async () => {
+        try {
+            setIsLoading(true);
+            const res = await TelegramWalletService.changePassword(verificationCode, newPassword);
+            console.log(res);
+            
+            // Close modal and reset states
+            setShowForgotPassword(false);
+            setVerificationCode("");
+            setNewPassword("");
+            setConfirmPassword("");
+            setShowNewPassword(false);
+            setShowConfirmPassword(false);
+            setPasswordError("");
+            setConfirmPasswordError("");
+            setCodeError("");
+
+            // Show success message
+            toast({
+                title: t('wallet.success'),
+                description: t('wallet.passwordChangedSuccessfully'),
+                duration: 2000,
+            });
+        } catch (error) {
+            console.error("Error changing password:", error);
+            setCodeError(t("wallet.invalidCode"));
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const handleResendCode = async () => {
+        try {
+            setIsSendingCode(true);
+            const res = await TelegramWalletService.sendVerificationCode();
+            toast({
+                title: t('wallet.success'),
+                description: t('wallet.codeResentSuccessfully'),
+                duration: 2000,
+            });
+        } catch (error) {
+            console.error("Error resending code:", error);
+            toast({
+                title: t('wallet.error'),
+                description: t('wallet.failedToResendCode'),
+                duration: 2000,
+            });
+        } finally {
+            setIsSendingCode(false);
+        }
     };
 
     return (
@@ -1338,6 +1398,12 @@ export default function WalletPage() {
                                     <div className={modalHelperTextStyles}>
                                         {t('wallet.enterPasswordToView')}
                                     </div>
+                                    <button 
+                                            onClick={handleForgotPassword}
+                                            className="text-xs text-theme-primary-400 hover:text-theme-primary-400 text-left mt-1"
+                                        >
+                                            {t('wallet.forgotPassword')}
+                                    </button>
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-5">
@@ -1374,28 +1440,120 @@ export default function WalletPage() {
                                         </button>
                                     </div>
 
-                                    {/* Email Input */}
+                                    {/* Verification Code Inputs */}
                                     <div className="flex flex-col gap-1">
-                                        <div className={modalLabelStyles}>{t('wallet.email')}</div>
-                                        <div className={wrapGradientStyle}>
-                                            <input
-                                                type="email"
-                                                value={email}
-                                                onChange={(e) => {
-                                                    setEmail(e.target.value);
-                                                    setEmailError("");
-                                                }}
-                                                placeholder={t("wallet.enterEmail")}
-                                                className={`${modalInputStyles} ${emailError ? 'border-red-500' : ''}`}
-                                            />
+                                        <div className={modalLabelStyles}>{t('wallet.verificationCode')}</div>
+                                        <div className="flex justify-between gap-2">
+                                            {[0, 1, 2, 3].map((index) => (
+                                                <div key={index} className={wrapGradientStyle}>
+                                                    <input
+                                                        type="text"
+                                                        maxLength={1}
+                                                        value={verificationCode[index] || ''}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            // Allow both letters and numbers
+                                                            if (/^[a-zA-Z0-9]*$/.test(value)) {
+                                                                const newCode = verificationCode.split('');
+                                                                newCode[index] = value;
+                                                                setVerificationCode(newCode.join(''));
+                                                                
+                                                                // Auto focus next input
+                                                                if (value && index < 3) {
+                                                                    const nextInput = document.querySelector(`input[data-index="${index + 1}"]`) as HTMLInputElement;
+                                                                    if (nextInput) nextInput.focus();
+                                                                }
+                                                            }
+                                                        }}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Backspace' && !verificationCode[index] && index > 0) {
+                                                                const prevInput = document.querySelector(`input[data-index="${index - 1}"]`) as HTMLInputElement;
+                                                                if (prevInput) prevInput.focus();
+                                                            }
+                                                        }}
+                                                        data-index={index}
+                                                        className={`${modalInputStyles} text-center text-lg font-semibold uppercase`}
+                                                        placeholder="-"
+                                                    />
+                                                </div>
+                                            ))}
                                         </div>
-                                        {emailError && (
-                                            <div className={modalErrorStyles}>{emailError}</div>
+                                        {codeError && (
+                                            <div className={modalErrorStyles}>{codeError}</div>
+                                        )}
+                                    </div>
+
+                                    {/* New Password */}
+                                    <div className="flex flex-col gap-1">
+                                        <div className={modalLabelStyles}>{t('wallet.newPassword')}</div>
+                                        <div className={wrapGradientStyle}>
+                                            <div className="relative w-full">
+                                                <input
+                                                    type={showNewPassword ? "text" : "password"}
+                                                    value={newPassword}
+                                                    onChange={handlePasswordChange}
+                                                    placeholder={t('wallet.enterNewPassword')}
+                                                    className={`${modalInputStyles} pr-10 ${passwordError ? 'border-red-500' : ''}`}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                                                >
+                                                    {showNewPassword ? (
+                                                        <EyeOff className="w-4 h-4" />
+                                                    ) : (
+                                                        <Eye className="w-4 h-4" />
+                                                    )}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {passwordError && (
+                                            <div className={modalErrorStyles}>{passwordError}</div>
+                                        )}
+                                    </div>
+
+                                    {/* Confirm Password */}
+                                    <div className="flex flex-col gap-1">
+                                        <div className={modalLabelStyles}>{t('wallet.confirmPassword')}</div>
+                                        <div className={wrapGradientStyle}>
+                                            <div className="relative w-full">
+                                                <input
+                                                    type={showConfirmPassword ? "text" : "password"}
+                                                    value={confirmPassword}
+                                                    onChange={handleConfirmPasswordChange}
+                                                    placeholder={t('wallet.enterConfirmPassword')}
+                                                    className={`${modalInputStyles} pr-10 ${confirmPasswordError ? 'border-red-500' : ''}`}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                                                >
+                                                    {showConfirmPassword ? (
+                                                        <EyeOff className="w-4 h-4" />
+                                                    ) : (
+                                                        <Eye className="w-4 h-4" />
+                                                    )}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {confirmPasswordError && (
+                                            <div className={modalErrorStyles}>{confirmPasswordError}</div>
                                         )}
                                     </div>
 
                                     <div className={modalHelperTextStyles}>
-                                        {t('wallet.enterEmailForVerification')}
+                                        {t('wallet.passwordRequirements')}
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <button 
+                                            onClick={handleResendCode}
+                                            disabled={isSendingCode}
+                                            className="text-xs text-theme-primary-400 hover:text-theme-primary-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {isSendingCode ? t('wallet.sending') : t('wallet.resendCode')}
+                                        </button>
                                     </div>
                                 </div>
 
@@ -1404,12 +1562,17 @@ export default function WalletPage() {
                                         <div className={modalButtonTextStyles}>{t('common.cancel')}</div>
                                     </button>
                                     <button
-                                        onClick={handleForgotPassword}
-                                        disabled={isSendingCode || !email}
+                                        onClick={handleChangePassword}
+                                        disabled={isVerifyingCode || 
+                                            verificationCode.length !== 4 || 
+                                            !newPassword || 
+                                            !confirmPassword || 
+                                            !!passwordError || 
+                                            !!confirmPasswordError}
                                         className={modalButtonStyles}
                                     >
                                         <div className={modalButtonTextStyles}>
-                                            {isSendingCode ? t('wallet.sending') : t('wallet.sendCode')}
+                                            {isVerifyingCode ? t('wallet.verifying') : t('wallet.verify')}
                                         </div>
                                     </button>
                                 </div>

@@ -434,7 +434,12 @@
     "invalidPassword": "Mật khẩu không hợp lệ. Vui lòng thử lại.",
     "enterNewPassword": "Nhập mật khẩu mới",
     "enterConfirmPassword": "Nhập xác nhận mật khẩu",
-    "noTokens": "Không tìm thấy token nào"
+    "noTokens": "Không tìm thấy token nào",
+    "forgotPassword": "Quên mật khẩu?",
+    "verificationCode": "Mã xác minh",
+    "resendCode": "Gửi lại mã",
+    "verify": "Xác minh",
+    "invalidCode": "Mã xác minh không hợp lệ"
   },
   "searchPlaceholder": "Tên Token/ Địa chỉ",
   "languages": {
@@ -848,6 +853,7 @@
     "close": "Đóng"
   },
   "universal_account": {
+    "google_auth_code": "Mã xác minh Google Authenticator",
     "deposit": "Nạp tiền",
     "withdraw": "Rút tiền",
     "history": "LỊCH SỬ",
@@ -885,8 +891,9 @@
       "transaction_failed": "Giao dịch thất bại. Vui lòng thử lại.",
       "transaction_success": "Gửi giao dịch thành công!",
       "network_error": "Lỗi kết nối. Vui lòng kiểm tra kết nối của bạn.",
-      "unauthorized": "Không được phép. Vui lòng đăng nhập lại.",
-      "recipient_required": "Vui lòng nhập địa chỉ người nhận"
+      "unauthorized": "Xác thực không hợp lệ",
+      "recipient_required": "Vui lòng nhập địa chỉ người nhận",
+      "user_wallet_not_found": "Ví không tồn tại"
     },
     "minimum_withdrawal_amount": "Số tiền rút tối thiểu là {amount} SOL",
     "maximum_withdrawal_amount": "Số tiền rút tối đa là {amount} SOL",
@@ -995,6 +1002,46 @@
       "key": "Khóa",
       "enter_code": "2. Vui lòng nhập mã xác minh",
       "submit": "GỬI"
-    }
+    },
+    "removing": "Đang xóa...",
+    "invalid_password": "Mật khẩu không hợp lệ",
+    "processing": "Đang xử lý...",
+    "enter_code": "Nhập mã xác minh",
+    "invalid_code": "Mã xác minh không hợp lệ",
+    "change_password": "Đổi mật khẩu",
+    "install_google_auth": "Google Authenticator",
+    "verification_code": "Mã xác thực",
+    "send_code": "Gửi mã",
+    "new_password": "Mật khẩu mới",
+    "new_password_placeholder": "Nhập mật khẩu mới",
+    "confirm_password": "Xác nhận mật khẩu",
+    "confirm_password_placeholder": "Nhập lại mật khẩu mới",
+    "sending": "Đang gửi...",
+    "code_sent_success": "Mã xác minh đã được gửi thành công",
+    "code_sent_failed": "Gửi mã xác minh thất bại",
+    "code_sent_error": "Lỗi khi gửi mã xác minh",
+    "code_sent_expired": "Mã xác minh đã hết hạn",
+    "code_sent_used": "Mã xác minh đã được sử dụng",
+    "code_sent_invalid": "Mã xác minh không hợp lệ",
+    "enter_verification_code": "Vui lòng nhập mã xác minh",
+    "enter_new_password": "Vui lòng nhập mật khẩu mới",
+    "passwords_not_match": "Mật khẩu không khớp",
+    "password_min_length": "Mật khẩu phải có ít nhất 8 ký tự",
+    "changing_password": "Đang đổi mật khẩu...",
+    "password_changed_success": "Mật khẩu đã được đổi thành công",
+    "change_password_error": "Lỗi khi đổi mật khẩu",
+    "link_account": "Liên kết tài khoản",
+    "link_telegram_google": "Liên kết tài khoản Telegram và Google",
+    "link_account_description": "Liên kết tài khoản Telegram và Google để bảo mật tài khoản của bạn",
+    "telegram_code": "Mã Telegram",
+    "link_now": "Liên kết ngay",
+    "enter_telegram_code": "Vui lòng nhập mã Telegram",
+    "verification_code_google": "Mã xác minh Google",
+    "sign_in_with_google": "Đăng nhập với Google",
+    "account_linking_error": "Lỗi khi liên kết tài khoản",
+    "linking": "Đang liên kết...",
+    "account_linked_success": "Tài khoản đã được liên kết thành công",
+    "account_linked": "Tài khoản đã liên kết",
+    "account_linked_description": "Tài khoản đã được liên kết thành công!"
   }
 }

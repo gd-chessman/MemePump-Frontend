@@ -1,17 +1,292 @@
 "use client"
 
 import { useLang } from "@/lang/useLang";
-import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator, removeGoogleAuthenticator } from "@/services/api/TelegramWalletService";
+import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator, removeGoogleAuthenticator, sendVerificationCode, changePassword, sendMailCode, addGmail, verifyGmail } from "@/services/api/TelegramWalletService";
 import { useQuery } from "@tanstack/react-query";
 import type React from "react"
+import notify from "@/app/components/notify";
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation";
 
-export default function GoogleAuthenticatorBind() {
-const { data: walletInfor, refetch } = useQuery({
+export default function SecurityPage() {
+  const { data: walletInfor, refetch } = useQuery({
     queryKey: ["wallet-infor"],
     queryFn: getInforWallet,
-});
+  });
+  const { t } = useLang();
+  const [activeTab, setActiveTab] = useState<'password' | 'google-auth' | 'link'>('link');
+
+  if (!walletInfor) return null;
+
+  return (
+    <div className="min-h-screen text-gray-900 dark:text-white p-4 transition-colors duration-300">
+      {/* Tab Navigation */}
+      <div className="max-w-lg mx-auto mb-8">
+        <div className="flex border-b border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => setActiveTab('link')}
+            className={`flex-1 whitespace-nowrap py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
+              activeTab === 'link'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            {t('security.link_account')}
+          </button>
+          {walletInfor?.password && (
+            <button
+              onClick={() => setActiveTab('password')}
+              className={`flex-1 whitespace-nowrap py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
+                activeTab === 'password'
+                  ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              {t('security.change_password')}
+            </button>
+          )}
+          <button
+            onClick={() => setActiveTab('google-auth')}
+            className={`${walletInfor?.password ? 'flex-1' : 'flex-1'} whitespace-nowrap py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
+              activeTab === 'google-auth'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            {t('security.install_google_auth')}
+          </button>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div className="max-w-md mx-auto">
+        {activeTab === 'password' ? (
+          <ChangePasswordTab />
+        ) : activeTab === 'google-auth' ? (
+          <GoogleAuthenticatorBind />
+        ) : (
+          <LinkAccountTab />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ChangePasswordTab() {
+  const { t } = useLang();
+  const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [sendCodeError, setSendCodeError] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+
+  const handleCodeChange = (index: number, value: string) => {
+    if (value.length <= 1) {
+      const newCode = [...verificationCode];
+      newCode[index] = value;
+      setVerificationCode(newCode);
+
+      // Auto-focus next input
+      if (value && index < 3) {
+        const nextInput = document.getElementById(`code-${index + 1}`);
+        nextInput?.focus();
+      }
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !verificationCode[index] && index > 0) {
+      const prevInput = document.getElementById(`code-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    if (paste.length === 4) {
+      setVerificationCode(paste.split(''));
+      e.preventDefault();
+    }
+  };
+
+  const handleSendCode = async () => {
+    try {
+      setIsSendingCode(true);
+      setSendCodeError("");
+      await sendVerificationCode();
+      notify({ message: t('security.code_sent_success'), type: 'success' });
+    } catch (error: any) {
+      console.error("Error sending verification code:", error);
+      setSendCodeError(t('security.send_code_error'));
+      notify({ message: t('security.send_code_error'), type: 'error' });
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    // Validate inputs
+    if (verificationCode.some(code => !code)) {
+      setPasswordError(t('security.enter_verification_code'));
+      notify({ message: t('security.enter_verification_code'), type: 'error' });
+      return;
+    }
+    if (!newPassword) {
+      setPasswordError(t('security.enter_new_password'));
+      notify({ message: t('security.enter_new_password'), type: 'error' });
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordError(t('security.password_min_length'));
+      notify({ message: t('security.password_min_length'), type: 'error' });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError(t('security.passwords_not_match'));
+      notify({ message: t('security.passwords_not_match'), type: 'error' });
+      return;
+    }
+
+    try {
+      setIsChangingPassword(true);
+      setPasswordError("");
+      const code = verificationCode.join('');
+      await changePassword(code, newPassword);
+      // Reset form after successful change
+      setVerificationCode(["", "", "", ""]);
+      setNewPassword("");
+      setConfirmPassword("");
+      notify({ message: t('security.password_changed_success'), type: 'success' });
+    } catch (error: any) {
+      console.error("Error changing password:", error);
+      if (error.response?.data?.message === "Invalid or expired reset code") {
+        setPasswordError(t('security.invalid_code'));
+        notify({ message: t('security.invalid_code'), type: 'error' });
+      } else {
+        setPasswordError(t('security.change_password_error'));
+        notify({ message: t('security.change_password_error'), type: 'error' });
+      }
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  return (
+    <div className="animate-fadeIn">
+      <h2 className="text-xl font-medium mb-6">{t('security.change_password')}</h2>
+
+      {/* Verification Code Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {t('security.verification_code')}
+        </label>
+        <div className="flex items-center gap-4">
+          <div className="flex gap-2">
+            {verificationCode.map((digit, index) => (
+              <input
+                key={index}
+                id={`code-${index}`}
+                type="text"
+                value={digit}
+                onChange={(e) => handleCodeChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={handlePaste}
+                className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                maxLength={1}
+              />
+            ))}
+          </div>
+          <button
+            onClick={handleSendCode}
+            disabled={isSendingCode}
+            className="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[90px] h-10"
+          >
+            {isSendingCode ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {t('security.sending')}
+              </div>
+            ) : (
+              t('security.send_code')
+            )}
+          </button>
+        </div>
+        {sendCodeError && (
+          <p className="mt-2 text-sm text-red-500">{sendCodeError}</p>
+        )}
+      </div>
+
+      {/* New Password Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {t('security.new_password')}
+        </label>
+        <input
+          type="password"
+          value={newPassword}
+          onChange={(e) => {
+            setNewPassword(e.target.value);
+            setPasswordError("");
+          }}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
+          placeholder={t('security.new_password_placeholder')}
+        />
+      </div>
+
+      {/* Confirm Password Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {t('security.confirm_password')}
+        </label>
+        <input
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            setPasswordError("");
+          }}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
+          placeholder={t('security.confirm_password_placeholder')}
+        />
+      </div>
+
+      {passwordError && (
+        <p className="mb-4 text-sm text-red-500">{passwordError}</p>
+      )}
+
+      {/* Submit Button */}
+      <button
+        onClick={handleChangePassword}
+        disabled={isChangingPassword}
+        className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {isChangingPassword ? (
+          <div className="flex items-center justify-center">
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            {t('security.changing_password')}
+          </div>
+        ) : (
+          t('security.change_password')
+        )}
+      </button>
+    </div>
+  );
+}
+
+function GoogleAuthenticatorBind() {
+  const { data: walletInfor, refetch } = useQuery({
+    queryKey: ["wallet-infor"],
+    queryFn: getInforWallet,
+  });
 
   const { t } = useLang();
   const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""])
@@ -22,32 +297,35 @@ const { data: walletInfor, refetch } = useQuery({
   const [copiedUser, setCopiedUser] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [password, setPassword] = useState("")
+  const [passwordError, setPasswordError] = useState("")
   const [removing, setRemoving] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [removeToken, setRemoveToken] = useState("");
   const [removePassword, setRemovePassword] = useState("");
+  const [removeTokenError, setRemoveTokenError] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCodeChange = (index: number, value: string) => {
-    if (value.length <= 1 && /^\d*$/.test(value)) {
-      const newCode = [...verificationCode]
-      newCode[index] = value
-      setVerificationCode(newCode)
+    if (value.length <= 1) {
+      const newCode = [...verificationCode];
+      newCode[index] = value;
+      setVerificationCode(newCode);
 
       // Auto-focus next input
-      if (value && index < 5) {
-        const nextInput = document.getElementById(`code-${index + 1}`)
-        nextInput?.focus()
+      if (value && index < 3) {
+        const nextInput = document.getElementById(`code-${index + 1}`);
+        nextInput?.focus();
       }
     }
-  }
+  };
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === "Backspace" && !verificationCode[index] && index > 0) {
-      const prevInput = document.getElementById(`code-${index - 1}`)
-      prevInput?.focus()
+      const prevInput = document.getElementById(`code-${index - 1}`);
+      prevInput?.focus();
     }
-  }
+  };
 
   const handleNextStep = async () => {
     if (walletInfor?.password) {
@@ -64,19 +342,23 @@ const { data: walletInfor, refetch } = useQuery({
       setSecretKey(response.secret_key);
       setShowStep2(true);
       setShowPasswordModal(false);
-    } catch (error) {
+      setPasswordError("");
+    } catch (error: any) {
       console.error("Error adding Google Authenticator:", error);
+      setPasswordError(t('security.invalid_password'));
     }
   }
 
   const handlePasswordSubmit = async () => {
     if (password) {
       await proceedWithGoogleAuth(password);
+      setPassword("");
     }
   }
 
   const handleSubmit = async () => {
     try {
+      setIsSubmitting(true);
       const code = verificationCode.join('');
       const response = await verifyGoogleAuthenticator(code);
       if (response.status === 200) {
@@ -89,6 +371,8 @@ const { data: walletInfor, refetch } = useQuery({
     } catch (error: any) {
       console.error("Error verifying code:", error);
       setErrorMsg(t('security.invalid_code'));
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -115,14 +399,51 @@ const { data: walletInfor, refetch } = useQuery({
 
   const handleRemoveConfirm = async () => {
     setRemoving(true);
+    setRemoveTokenError("");
     try {
       await removeGoogleAuthenticator(removeToken, removePassword);
       setShowRemoveModal(false);
+      setShowStep2(false);
       refetch();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error removing Google Authenticator:", error);
+      if(error.response.data.message === "Invalid password") {
+        setRemoveTokenError(t('security.invalid_password'));
+      } 
+      if (error.response.data.message === "Invalid verification code") {
+        setRemoveTokenError(t('security.invalid_code'));
+      }
     } finally {
       setRemoving(false);
+    }
+  };
+
+  const handleRemoveTokenChange = (index: number, value: string) => {
+    if (value.length <= 1 && /^\d*$/.test(value)) {
+      const newToken = removeToken.split('');
+      newToken[index] = value;
+      setRemoveToken(newToken.join(''));
+
+      // Auto-focus next input
+      if (value && index < 5) {
+        const nextInput = document.getElementById(`remove-token-${index + 1}`);
+        nextInput?.focus();
+      }
+    }
+  };
+
+  const handleRemoveTokenKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !removeToken[index] && index > 0) {
+      const prevInput = document.getElementById(`remove-token-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const handleRemoveTokenPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    if (/^\d{6}$/.test(paste)) {
+      setRemoveToken(paste);
+      e.preventDefault();
     }
   };
 
@@ -133,6 +454,8 @@ const { data: walletInfor, refetch } = useQuery({
       e.preventDefault();
     }
   };
+
+  if(!walletInfor) return null;
 
   return (
     <div className="min-h-screen text-gray-900 dark:text-white p-4 transition-colors duration-300">
@@ -146,10 +469,21 @@ const { data: walletInfor, refetch } = useQuery({
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordError("");
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && password) {
+                  handlePasswordSubmit();
+                }
+              }}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-2"
               placeholder={t('security.password_placeholder')}
             />
+            {passwordError && (
+              <p className="text-red-500 text-sm mb-4">{passwordError}</p>
+            )}
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => setShowPasswordModal(false)}
@@ -175,14 +509,29 @@ const { data: walletInfor, refetch } = useQuery({
             <h3 className="text-lg font-medium mb-4 text-gray-900 dark:text-white">
               {t('security.remove_gg_auth_title')}
             </h3>
-            <input
-              type="text"
-              value={removeToken}
-              onChange={e => setRemoveToken(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-3"
-              placeholder={t('security.token_placeholder') || 'Google Authenticator Token'}
-              maxLength={6}
-            />
+            <div className="mb-4">
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 text-center">
+                {t('security.enter_code')}
+              </p>
+              <div className="flex gap-2 mb-2 justify-center">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <input
+                    key={index}
+                    id={`remove-token-${index}`}
+                    type="text"
+                    value={removeToken[index] || ''}
+                    onChange={(e) => handleRemoveTokenChange(index, e.target.value)}
+                    onKeyDown={(e) => handleRemoveTokenKeyDown(index, e)}
+                    onPaste={handleRemoveTokenPaste}
+                    className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                    maxLength={1}
+                  />
+                ))}
+              </div>
+              {removeTokenError && (
+                <div className="text-red-500 text-sm mb-4 text-center">{removeTokenError}</div>
+              )}
+            </div>
             {walletInfor?.password && (
               <input
                 type="password"
@@ -205,7 +554,17 @@ const { data: walletInfor, refetch } = useQuery({
                 className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-md disabled:opacity-60"
                 disabled={removing || !removeToken || (walletInfor?.password && !removePassword)}
               >
-                {removing ? t('security.removing') : t('security.remove_gg_auth')}
+                {removing ? (
+                  <div className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {t('security.processing')}
+                  </div>
+                ) : (
+                  t('security.remove_gg_auth')
+                )}
               </button>
             </div>
           </div>
@@ -233,15 +592,6 @@ const { data: walletInfor, refetch } = useQuery({
           <>
             {/* Header */}
             <div className="flex items-center mb-8">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 mr-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
               <h1 className="text-xl font-medium">{t('security.bind_google_authenticator')}</h1>
             </div>
 
@@ -351,7 +701,7 @@ const { data: walletInfor, refetch } = useQuery({
                       onChange={(e) => handleCodeChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
                       onPaste={handlePaste}
-                      className="w-12 h-12 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-lg font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                      className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
                       maxLength={1}
                     />
                   ))}
@@ -363,9 +713,20 @@ const { data: walletInfor, refetch } = useQuery({
                 {/* Submit Button */}
                 <button 
                   onClick={handleSubmit}
-                  className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+                  disabled={isSubmitting}
+                  className="mt-4 w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {t('security.step2.submit')}
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {t('security.processing')}
+                    </div>
+                  ) : (
+                    t('security.step2.submit')
+                  )}
                 </button>
               </div>
             )}
@@ -374,4 +735,294 @@ const { data: walletInfor, refetch } = useQuery({
       </div>
     </div>
   )
+}
+
+function LinkAccountTab() {
+  const { data: walletInfor, refetch } = useQuery({
+    queryKey: ["wallet-infor"],
+    queryFn: getInforWallet,
+  });
+  const searchParams = useSearchParams()
+  const code = searchParams.get('code')
+  const { t } = useLang();
+  const [isLinking, setIsLinking] = useState(false);
+  const [isLinked, setIsLinked] = useState(false);
+  const [telegramCode, setTelegramCode] = useState(["", "", "", "", "", "", "", ""]);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isSendingCode, setIsSendingCode] = useState(false);
+
+  useEffect(() => {
+    const autoLink = async () => {
+      if (code) {
+        try {
+          setIsLinking(true);
+          setErrorMsg("");
+          await addGmail(code);
+          setIsLinked(true);
+          notify({ message: t('security.account_linked_success'), type: 'success' });
+          refetch();
+        } catch (error: any) {
+          console.error("Error linking account:", error);
+          if (error.response?.data?.message === "Invalid telegram code") {
+            setErrorMsg(t('security.invalid_telegram_code'));
+            notify({ message: t('security.invalid_telegram_code'), type: 'error' });
+          } else if (error.response?.data?.message === "Invalid verification code") {
+            setErrorMsg(t('security.invalid_verification_code'));
+            notify({ message: t('security.invalid_verification_code'), type: 'error' });
+          } else {
+            setErrorMsg(t('security.account_linking_error'));
+            notify({ message: t('security.account_linking_error'), type: 'error' });
+          }
+        } finally {
+          setIsLinking(false);
+        }
+      }
+    };
+
+    autoLink();
+  }, [code, refetch]);
+
+  const handleTelegramCodeChange = (index: number, value: string) => {
+    if (value.length <= 1) {
+      const newCode = [...telegramCode];
+      newCode[index] = value;
+      setTelegramCode(newCode);
+
+      // Auto-focus next input
+      if (value && index < 7) {
+        const nextInput = document.getElementById(`telegram-code-${index + 1}`);
+        nextInput?.focus();
+      }
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !telegramCode[index] && index > 0) {
+      const prevInput = document.getElementById(`telegram-code-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    if (paste.length === 8) {
+      setTelegramCode(paste.split(''));
+      e.preventDefault();
+    }
+  };
+
+  const handleLinkAccount = async () => {
+    // Validate inputs
+    if (telegramCode.some(code => !code)) {
+      setErrorMsg(t('security.enter_telegram_code'));
+      notify({ message: t('security.enter_telegram_code'), type: 'error' });
+      return;
+    }
+
+    try {
+      setIsLinking(true);
+      setErrorMsg("");
+      
+      if (walletInfor?.email && !walletInfor?.isActiveMail) {
+        // Nếu đã có email nhưng chưa active thì gọi verifyGmail
+        await verifyGmail(telegramCode.join(''));
+      } else {
+        // Nếu chưa có email thì gọi addGmail
+        await addGmail(code || "");
+      }
+      
+      setIsLinked(true);
+      notify({ message: t('security.account_linked_success'), type: 'success' });
+      refetch();
+    } catch (error: any) {
+      console.error("Error linking account:", error);
+      if (error.response?.data?.message === "Invalid telegram code") {
+        setErrorMsg(t('security.invalid_telegram_code'));
+        notify({ message: t('security.invalid_telegram_code'), type: 'error' });
+      } else if (error.response?.data?.message === "Invalid verification code") {
+        setErrorMsg(t('security.invalid_verification_code'));
+        notify({ message: t('security.invalid_verification_code'), type: 'error' });
+      } else {
+        setErrorMsg(t('security.account_linking_error'));
+        notify({ message: t('security.account_linking_error'), type: 'error' });
+      }
+    } finally {
+      setIsLinking(false);
+    }
+  };
+
+  const handleSendCode = async () => {
+    try {
+      setIsSendingCode(true);
+      await sendMailCode();
+      notify({ message: t('security.code_sent_success'), type: 'success' });
+    } catch (error) {
+      console.error("Error sending code:", error);
+      notify({ message: t('security.send_code_error'), type: 'error' });
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+  const handleGoogleSignIn = async () => {
+    window.open(`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_ADD_EMAIL}&response_type=code&scope=email%20profile&access_type=offline`)
+    console.log("handleGoogleSignIn")
+  }
+
+  return (
+    <div className="animate-fadeIn">
+      <div className="flex flex-col items-center justify-center py-8">
+        {!walletInfor?.email ? (
+          <>
+            <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+            </div>
+            
+            <h2 className="text-xl font-semibold mb-2 text-center">
+              {isLinked ? t('security.account_linked') : t('security.link_telegram_google')}
+            </h2>
+            
+            <p className="text-gray-600 dark:text-gray-300 text-sm mb-6 text-center max-w-sm">
+              {isLinked 
+                ? t('security.account_linked_description')
+                : t('security.link_account_description')}
+            </p>
+
+            {code ? (
+              // Show Telegram Code input when code is present
+              <div className="flex flex-col items-center justify-center py-8">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('security.telegram_code')}
+                </label>
+                <div className="flex items-center gap-4">
+                  <div className="flex gap-2">
+                    {telegramCode.map((digit, index) => (
+                      <input
+                        key={index}
+                        id={`telegram-code-${index}`}
+                        type="text"
+                        value={digit}
+                        onChange={(e) => handleTelegramCodeChange(index, e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(index, e)}
+                        onPaste={(e) => handlePaste(e)}
+                        className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                        maxLength={1}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    onClick={handleSendCode}
+                    disabled={isSendingCode}
+                    className="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[100px] h-10 whitespace-nowrap"
+                  >
+                    {isSendingCode ? (
+                      <div className="flex items-center justify-center">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        {t('security.sending')}
+                      </div>
+                    ) : (
+                      t('security.send_code')
+                    )}
+                  </button>
+                </div>
+                {errorMsg && (
+                  <div className="text-red-500 text-sm text-center mt-4">{errorMsg}</div>
+                )}
+                <button
+                  onClick={handleLinkAccount}
+                  disabled={isLinking}
+                  className="mt-4 w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {isLinking ? (
+                    <div className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {t('security.linking')}
+                    </div>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+                      </svg>
+                      {t('security.link_now')}
+                    </>
+                  )}
+                </button>
+              </div>
+            ) : (
+              // Show Google Sign In button when no code is present
+              <div>
+                <label className="block text-sm text-center font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('security.verification_code_google')}
+                </label>
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleGoogleSignIn}
+                    className="w-64 h-10 bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300 flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path
+                        fill="currentColor"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                      />
+                      <path
+                        fill="currentColor"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                      />
+                      <path
+                        fill="currentColor"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                      />
+                      <path
+                        fill="currentColor"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                      />
+                    </svg>
+                    {t('security.sign_in_with_google')}
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="w-full max-w-xs">
+            <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-4">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-green-700 dark:text-green-400 text-sm">
+                    {walletInfor?.email}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-purple-700 dark:text-purple-400 text-sm">
+                    {walletInfor?.password ? '✓' : '✗'}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-orange-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-orange-700 dark:text-orange-400 text-sm">
+                    {walletInfor?.isGGAuth ? '✓' : '✗'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

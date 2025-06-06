@@ -176,8 +176,8 @@ function SingleTokenCard({ token }: any) {
 
         {/* Right side - Content section */}
         <div className="ml-auto flex-1 flex flex-col justify-between">
-          <div className="flex items-start justify-between flex-wrap ">
-            <div className="flex-1">
+          <div className="flex items-start justify-between flex-wrap gap-2 ">
+            <div className="flex-1 min-w-56">
               <div className="flex items-center gap-1">
                 <span className="font-semibold text-lg text-zinc-900 dark:text-white whitespace-nowrap max-w-[8rem] truncate">{token.name}</span>
                 <span className="text-zinc-600 dark:text-zinc-400 text-sm truncate max-w-[8rem] whitespace-nowrap">{token.fullName}</span>
@@ -212,7 +212,7 @@ function SingleTokenCard({ token }: any) {
              
             </div>
           </div>
-          <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-2">
+          <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-3">
                 <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{t("trading.marketCap")}</span>
                 <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap * 100))}</span>
               </div>

@@ -105,7 +105,8 @@ export default function CreateCoinForm() {
   // const { translate } = useTranslate();
   const router = useRouter();
   const { t, tArray } = useLang();
-  const [formData, setFormData] = useState<CoinFormData>({
+
+  const initialFormState: CoinFormData = {
     name: "",
     symbol: "",
     amount: "0",
@@ -121,8 +122,9 @@ export default function CreateCoinForm() {
     showName: false,
     totalSupply: "",
     allowMinting: false,
-  });
+  };
 
+  const [formData, setFormData] = useState<CoinFormData>(initialFormState);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
@@ -290,6 +292,13 @@ export default function CreateCoinForm() {
     }
   };
 
+  const handleUndo = () => {
+    setFormData(initialFormState);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -375,24 +384,7 @@ export default function CreateCoinForm() {
         });
         refetchMemeCoins();
         // Reset form
-        setFormData({
-          name: "",
-          symbol: "",
-          amount: "",
-          category: "",
-          description: "",
-          telegram: "",
-          website: "",
-          twitter: "",
-          logo: null,
-          logoPreview: null,
-          category_list: [],
-          image: null,
-          showName: false,
-          totalSupply: "",
-          allowMinting: false,
-        });
-
+        setFormData(initialFormState);
       }
     } catch (error: any) {
       console.error("Error creating coin:", error);
@@ -753,6 +745,7 @@ export default function CreateCoinForm() {
                       </div>
                       <button
                         type="button"
+                        onClick={handleUndo}
                         className="absolute top-2 right-2 dark:text-theme-neutral-100 text-theme-neutral-900 hover:text-theme-primary-300 flex items-center gap-2"
                       >
                         <Undo2 className="h-4 w-4" /> {t('createCoin.form.preview.undo')}

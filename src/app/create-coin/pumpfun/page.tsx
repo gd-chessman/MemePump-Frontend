@@ -103,7 +103,7 @@ export default function CreateCoinForm() {
   // const { translate } = useTranslate();
   const router = useRouter();
   const { t, tArray } = useLang();
-  const [formData, setFormData] = useState<CoinFormData>({
+  const initialFormState: CoinFormData = {
     name: "",
     symbol: "",
     amount: "0",
@@ -117,8 +117,9 @@ export default function CreateCoinForm() {
     category_list: [],
     image: null,
     showName: false,
-  });
+  };
 
+  const [formData, setFormData] = useState<CoinFormData>(initialFormState);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
@@ -272,6 +273,13 @@ export default function CreateCoinForm() {
     }
   };
 
+  const handleUndo = () => {
+    setFormData(initialFormState);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -351,21 +359,7 @@ export default function CreateCoinForm() {
         });
         refetchMemeCoins();
         // Reset form
-        setFormData({
-          name: "",
-          symbol: "",
-          amount: "",
-          category: "",
-          description: "",
-          telegram: "",
-          website: "",
-          twitter: "",
-          logo: null,
-          logoPreview: null,
-          category_list: [],
-          image: null,
-          showName: false,
-        });
+        setFormData(initialFormState);
 
       }
     } catch (error: any) {
@@ -560,11 +554,11 @@ export default function CreateCoinForm() {
                           <SelectValue placeholder={t('createCoin.form.categories.placeholder')}>
                             {formData.category_list.length > 0 && (
                               <div className="flex flex-wrap gap-1">
-                                {formData.category_list.map((categoryId) => {
+                                {formData.category_list.map((categoryId, index) => {
                                   const category = categories.find((c: any) => c.id === categoryId);
                                   return category ? (
                                     <span key={categoryId} className="text-sm">
-                                      {formData.category_list.indexOf(categoryId) !== formData.category_list.length - 1 ? ", " : ""}
+                                      {index > 0 && ", "}
                                       <TranslatedCategory name={category.name} />
                                     </span>
                                   ) : null;
@@ -726,6 +720,7 @@ export default function CreateCoinForm() {
                       </div>
                       <button
                         type="button"
+                        onClick={handleUndo}
                         className="absolute top-2 right-2 dark:text-theme-neutral-100 text-theme-neutral-900 hover:text-theme-primary-300 flex items-center gap-2"
                       >
                         <Undo2 className="h-4 w-4" /> {t('createCoin.form.preview.undo')}

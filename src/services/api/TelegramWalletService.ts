@@ -13,6 +13,12 @@ export const login = async (item: any) => {
 export const getInforWallet = async ()=>{
     try {
         const temp = await axiosClient.get("/telegram-wallets/info")
+        // const data = temp.data.data;
+        // if (data) {
+        //     data.email = '';
+        //     data.isActiveMail = false;
+        // }
+        // return data;
         return temp.data.data;
     } catch (error: any) {
         console.log(error)
@@ -176,6 +182,16 @@ export const sendVerificationCode = async ()=>{
     }
 }
 
+export const changePassword = async (code: string, password: string)=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/change-password", {code, password})
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
 export const addGoogleAuthenticator = async (password: string)=>{
     try {
         const body = password ? { password } : {};
@@ -201,6 +217,36 @@ export const removeGoogleAuthenticator = async (token: string, password?: string
     try {
         const body = password ? { token, password } : { token };
         const temp = await axiosClient.post("/telegram-wallets/remove-gg-auth", body)
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export const sendMailCode = async ()=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/set-mail-code")
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export const addGmail = async (code: string)=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/add-gmail", { code })
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export const verifyGmail = async (telegram_code: string)=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/verify-gmail", { telegram_code })
         return temp.data;
     } catch (error) {
         console.log(error)

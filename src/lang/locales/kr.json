@@ -425,7 +425,11 @@
       "addressCopied": "지갑 주소가 클립보드에 복사되었습니다",
       "passwordRequired": "비밀번호를 입력해 주세요",
       "invalidPassword": "잘못된 비밀번호입니다. 다시 시도해 주세요.",
-      "disconnectPhantom": "Phantom 연결 해제"
+      "disconnectPhantom": "Phantom 연결 해제",
+      "verificationCode": "인증 코드",
+      "resendCode": "인증 코드 재전송",
+      "verify": "인증",
+      "invalidCode": "인증 코드가 일치하지 않습니다"
     },
     "searchPlaceholder": "토큰 이름/주소",
     "languages": {
@@ -835,6 +839,7 @@
       "redirecting": "리다이렉팅 중..."
     },
     "universal_account": {
+      "google_auth_code": "Google 인증 코드",
       "deposit": "입금",
       "withdraw": "출금",
       "history": "거래내역",
@@ -875,9 +880,10 @@
         "transaction_failed": "거래 실패. 다시 시도해 주세요.",
         "transaction_success": "거래가 성공적으로 전송되었습니다!",
         "network_error": "네트워크 오류. 연결을 확인해 주세요.",
-        "unauthorized": "인증되지 않음. 다시 로그인해 주세요.",
+        "unauthorized": "인증되지 않음",
         "recipient_required": "수신자 주소가 필요합니다",
-        "invalid_recipient": "유효하지 않은 수신자 주소입니다"
+        "invalid_recipient": "유효하지 않은 수신자 주소입니다",
+        "user_wallet_not_found": "지갑이 존재하지 않습니다"
       }
     },
     "searchModal": {
@@ -983,6 +989,46 @@
         "key": "키",
         "enter_code": "2. 인증 코드를 입력하세요",
         "submit": "제출"
-      }
+      },
+      "removing": "제거 중...",
+      "invalid_password": "비밀번호가 일치하지 않습니다",
+      "processing": "처리 중...",
+      "enter_code": "인증 코드 입력",
+      "invalid_code": "인증 코드가 일치하지 않습니다",
+      "change_password": "비밀번호 변경",
+      "install_google_auth": "Google Authenticator",
+      "verification_code": "인증 코드",
+      "send_code": "코드 전송",
+      "new_password": "새 비밀번호",
+      "new_password_placeholder": "새 비밀번호 입력",
+      "confirm_password": "비밀번호 확인",
+      "confirm_password_placeholder": "새 비밀번호 확인",
+      "sending": "전송 중...",
+      "code_sent_success": "인증 코드가 성공적으로 전송되었습니다",
+      "code_sent_failed": "인증 코드 전송에 실패했습니다",
+      "code_sent_error": "인증 코드 전송 중 오류가 발생했습니다",
+      "code_sent_expired": "인증 코드가 만료되었습니다",
+      "code_sent_used": "인증 코드가 사용되었습니다",
+      "code_sent_invalid": "인증 코드가 유효하지 않습니다",
+      "enter_verification_code": "인증 코드를 입력하세요",
+      "enter_new_password": "새 비밀번호를 입력하세요",
+      "passwords_not_match": "비밀번호가 일치하지 않습니다",
+      "password_min_length": "비밀번호는 8자 이상이어야 합니다",
+      "changing_password": "비밀번호 변경 중...",
+      "password_changed_success": "비밀번호가 성공적으로 변경되었습니다",
+      "change_password_error": "비밀번호 변경 중 오류가 발생했습니다",
+      "link_account": "계정 연결",
+      "link_telegram_google": "Telegram 및 Google 계정 연결",
+      "link_account_description": "Telegram 및 Google 계정을 연결하여 계정 보안을 강화하세요",
+      "telegram_code": "Telegram 코드",
+      "link_now": "지금 연결",
+      "enter_telegram_code": "Telegram 코드를 입력하세요",
+      "verification_code_google": "Google 인증 코드",
+      "sign_in_with_google": "Google로 로그인",
+      "account_linking_error": "계정 연결 중 오류가 발생했습니다",
+      "linking": "계정 연결 중...",
+      "account_linked_success": "계정이 성공적으로 연결되었습니다",
+      "account_linked": "계정 연결",
+      "account_linked_description": "계정이 성공적으로 연결되었습니다!"
     }
   }

@@ -388,7 +388,13 @@
     "invalidPassword": "Invalid password. Please try again.",
     "enterNewPassword": "Enter new password",
     "enterConfirmPassword": "Enter confirm password",
-    "noTokens": "No tokens found"
+    "noTokens": "No tokens found",
+    "forgotPassword": "Forgot password?",
+    "verificationCode": "Verification code",
+    "resendCode": "Resend code",
+    "verify": "Verify",
+    "invalidCode": "Invalid code",
+    "passwordsDoNotMatch": "Passwords do not match"
   },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {
@@ -759,6 +765,7 @@
     "close": "Close"
   },
   "universal_account": {
+    "google_auth_code": "Google Authenticator Code",
     "deposit": "Deposit",
     "withdraw": "Withdraw",
     "history": "HISTORY",
@@ -797,7 +804,8 @@
       "transaction_success": "Transaction sent successfully!",
       "network_error": "Network error. Please check your connection.",
       "unauthorized": "Unauthorized. Please login again.",
-      "recipient_required": "Recipient address is required"
+      "recipient_required": "Recipient address is required",
+      "user_wallet_not_found": "Wallet not found"
     },
     "minimum_withdrawal_amount": "Minimum withdrawal amount is {amount} SOL",
     "maximum_withdrawal_amount": "Maximum withdrawal amount is {amount} SOL",
@@ -917,6 +925,46 @@
       "key": "Key",
       "enter_code": "2. Please enter verification code",
       "submit": "SUBMIT"
-    }
+    },
+    "removing": "Removing...",
+    "invalid_password": "Invalid password",
+    "processing": "Processing...",
+    "enter_code": "Enter verification code",
+    "invalid_code": "Invalid verification code",
+    "change_password": "Change Password",
+    "install_google_auth": "Google Authenticator",
+    "verification_code": "Verification Code",
+    "send_code": "Send Code",
+    "new_password": "New Password",
+    "new_password_placeholder": "Enter new password",
+    "confirm_password": "Confirm Password",
+    "confirm_password_placeholder": "Confirm new password",
+    "sending": "Sending...",
+    "code_sent_success": "Verification code sent successfully",
+    "code_sent_failed": "Failed to send verification code",
+    "code_sent_error": "Error sending verification code",
+    "code_sent_expired": "Verification code expired",
+    "code_sent_used": "Verification code used",
+    "code_sent_invalid": "Invalid verification code",
+    "enter_verification_code": "Please enter verification code",
+    "enter_new_password": "Please enter new password",
+    "passwords_not_match": "Passwords do not match",
+    "password_min_length": "Password must be at least 8 characters",
+    "changing_password": "Changing password...",
+    "password_changed_success": "Password changed successfully",
+    "change_password_error": "Error changing password",
+    "link_account": "Link Account",
+    "link_telegram_google": "Link Telegram and Google Account",
+    "link_account_description": "Link Telegram and Google Account to enhance account security",
+    "telegram_code": "Telegram Code",
+    "link_now": "Link Now",
+    "enter_telegram_code": "Please enter Telegram code",
+    "verification_code_google": "Google Verification Code",
+    "sign_in_with_google": "Sign in with Google",
+    "account_linking_error": "Error linking account",
+    "linking": "Linking...",
+    "account_linked_success": "Account linked successfully",
+    "account_linked": "Account linked",
+    "account_linked_description": "Account linked successfully!"
   }
 }

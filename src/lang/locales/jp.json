@@ -396,7 +396,12 @@
     "adding": "追加中...",
     "enterNewPassword": "新しいパスワードを入力",
     "enterConfirmPassword": "確認用パスワードを入力",
-    "noTokens": "トークンが見つかりません"
+    "noTokens": "トークンが見つかりません",
+    "forgotPassword": "パスワードを忘れた",
+    "verificationCode": "認証コード",
+    "resendCode": "認証コードを再送信",
+    "verify": "認証",
+    "invalidCode": "認証コードが一致しません"
   },
   "searchPlaceholder": "トークン名/アドレス",
   "languages": {
@@ -804,6 +809,7 @@
     "close": "閉じる"
   },
   "universal_account": {
+    "google_auth_code": "Google Authenticator コード",
     "deposit": "入金",
     "withdraw": "出金",
     "history": "履歴",
@@ -841,8 +847,9 @@
       "transaction_failed": "取引に失敗しました。もう一度お試しください。",
       "transaction_success": "取引が正常に送信されました！",
       "network_error": "ネットワークエラー。接続を確認してください。",
-      "unauthorized": "認証されていません。再度ログインしてください。",
-      "recipient_required": "受取人アドレスが必要です"
+      "unauthorized": "認証されていません",
+      "recipient_required": "受取人アドレスが必要です",
+      "user_wallet_not_found": "ウォレットが存在しません"
     },
     "minimum_withdrawal_amount": "最小出金額は{amount} SOLです",
     "maximum_withdrawal_amount": "最大出金額は{amount} SOLです",
@@ -951,6 +958,47 @@
       "key": "キー",
       "enter_code": "2. 認証コードを入力してください",
       "submit": "送信"
-    }
+    },
+    "removing": "削除中...",
+    "invalid_password": "パスワードが一致しません",
+    "processing": "処理中...",
+    "enter_code": "認証コードを入力",
+    "invalid_code": "認証コードが一致しません",
+    "change_password": "パスワードを変更",
+    "install_google_auth": "Google Authenticator",
+    "verification_code": "認証コード",
+    "send_code": "コードを送信",
+    "new_password": "新しいパスワード",
+    "new_password_placeholder": "新しいパスワードを入力",
+    "confirm_password": "パスワードを確認",
+    "confirm_password_placeholder": "新しいパスワードを確認",
+    "sending": "送信中...",
+    "code_sent_success": "認証コードを送信しました",
+    "code_sent_failed": "認証コードの送信に失敗しました",
+    "code_sent_error": "認証コードの送信中にエラーが発生しました",
+    "code_sent_expired": "認証コードが期限切れです",
+    "code_sent_used": "認証コードが使用されました",
+    "code_sent_invalid": "認証コードが無効です",
+    "enter_verification_code": "認証コードを入力してください",
+    "enter_new_password": "新しいパスワードを入力してください",
+    "passwords_not_match": "パスワードが一致しません",
+    "password_min_length": "パスワードは8文字以上で入力してください",
+    "changing_password": "パスワードを変更しています...",
+    "password_changed_success": "パスワードを変更しました",
+    "change_password_error": "パスワードの変更に失敗しました",
+    "link_account": "アカウントをリンク",
+    "link_telegram_google": "Telegram と Google アカウントをリンク",
+    "link_account_description": "Telegram と Google アカウントをリンクしてアカウントのセキュリティを強化してください",
+    "telegram_code": "Telegram コード",
+    "link_now": "今すぐリンク",
+    "enter_telegram_code": "Telegram コードを入力してください",
+    "verification_code_google": "Google 認証コード",
+    "sign_in_with_google": "Googleでログイン",
+    "account_linking_error": "アカウントのリンク中にエラーが発生しました",
+    "linking": "アカウントのリンク中...",
+    "account_linked_success": "アカウントが正常にリンクされました",
+    "account_linked": "アカウントリンク",
+    "account_linked_description": "アカウントが正常にリンクされました！"
+    
   }
 }
