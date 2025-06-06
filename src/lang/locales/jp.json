@@ -842,7 +842,7 @@
       "transaction_failed": "取引に失敗しました。もう一度お試しください。",
       "transaction_success": "取引が正常に送信されました！",
       "network_error": "ネットワークエラー。接続を確認してください。",
-      "unauthorized": "認証されていません。再度ログインしてください。",
+      "unauthorized": "認証されていません",
       "recipient_required": "受取人アドレスが必要です",
       "user_wallet_not_found": "ウォレットが存在しません"
     },
