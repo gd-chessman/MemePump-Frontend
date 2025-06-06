@@ -388,7 +388,12 @@
     "invalidPassword": "Invalid password. Please try again.",
     "enterNewPassword": "Enter new password",
     "enterConfirmPassword": "Enter confirm password",
-    "noTokens": "No tokens found"
+    "noTokens": "No tokens found",
+    "forgotPassword": "Forgot password?",
+    "verificationCode": "Verification code",
+    "resendCode": "Resend code",
+    "verify": "Verify",
+    "invalidCode": "Invalid code"
   },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {

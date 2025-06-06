@@ -176,6 +176,16 @@ export const sendVerificationCode = async ()=>{
     }
 }
 
+export const changePassword = async (code: string, password: string)=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/change-password", {code, password})
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
 export const addGoogleAuthenticator = async (password: string)=>{
     try {
         const body = password ? { password } : {};

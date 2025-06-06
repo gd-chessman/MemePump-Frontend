@@ -396,7 +396,12 @@
     "adding": "追加中...",
     "enterNewPassword": "新しいパスワードを入力",
     "enterConfirmPassword": "確認用パスワードを入力",
-    "noTokens": "トークンが見つかりません"
+    "noTokens": "トークンが見つかりません",
+    "forgotPassword": "パスワードを忘れた",
+    "verificationCode": "認証コード",
+    "resendCode": "認証コードを再送信",
+    "verify": "認証",
+    "invalidCode": "認証コードが一致しません"
   },
   "searchPlaceholder": "トークン名/アドレス",
   "languages": {

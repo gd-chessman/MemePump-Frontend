@@ -434,7 +434,12 @@
     "invalidPassword": "Mật khẩu không hợp lệ. Vui lòng thử lại.",
     "enterNewPassword": "Nhập mật khẩu mới",
     "enterConfirmPassword": "Nhập xác nhận mật khẩu",
-    "noTokens": "Không tìm thấy token nào"
+    "noTokens": "Không tìm thấy token nào",
+    "forgotPassword": "Quên mật khẩu?",
+    "verificationCode": "Mã xác minh",
+    "resendCode": "Gửi lại mã",
+    "verify": "Xác minh",
+    "invalidCode": "Mã xác minh không hợp lệ"
   },
   "searchPlaceholder": "Tên Token/ Địa chỉ",
   "languages": {

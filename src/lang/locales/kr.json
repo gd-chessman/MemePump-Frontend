@@ -425,7 +425,11 @@
       "addressCopied": "지갑 주소가 클립보드에 복사되었습니다",
       "passwordRequired": "비밀번호를 입력해 주세요",
       "invalidPassword": "잘못된 비밀번호입니다. 다시 시도해 주세요.",
-      "disconnectPhantom": "Phantom 연결 해제"
+      "disconnectPhantom": "Phantom 연결 해제",
+      "verificationCode": "인증 코드",
+      "resendCode": "인증 코드 재전송",
+      "verify": "인증",
+      "invalidCode": "인증 코드가 일치하지 않습니다"
     },
     "searchPlaceholder": "토큰 이름/주소",
     "languages": {
