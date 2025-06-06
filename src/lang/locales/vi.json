@@ -1034,6 +1034,7 @@
     "link_telegram_google": "Liên kết tài khoản Telegram và Google",
     "link_account_description": "Liên kết tài khoản Telegram và Google để bảo mật tài khoản của bạn",
     "telegram_code": "Mã Telegram",
-    "link_now": "Liên kết ngay"
+    "link_now": "Liên kết ngay",
+    "enter_telegram_code": "Vui lòng nhập mã Telegram"
   }
 }

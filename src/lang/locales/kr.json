@@ -1016,6 +1016,12 @@
       "password_min_length": "비밀번호는 8자 이상이어야 합니다",
       "changing_password": "비밀번호 변경 중...",
       "password_changed_success": "비밀번호가 성공적으로 변경되었습니다",
-      "change_password_error": "비밀번호 변경 중 오류가 발생했습니다"
+      "change_password_error": "비밀번호 변경 중 오류가 발생했습니다",
+      "link_account": "계정 연결",
+      "link_telegram_google": "Telegram 및 Google 계정 연결",
+      "link_account_description": "Telegram 및 Google 계정을 연결하여 계정 보안을 강화하세요",
+      "telegram_code": "Telegram 코드",
+      "link_now": "지금 연결",
+      "enter_telegram_code": "Telegram 코드를 입력하세요"
     }
   }

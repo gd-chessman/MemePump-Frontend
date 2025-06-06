@@ -985,6 +985,12 @@
     "password_min_length": "パスワードは8文字以上で入力してください",
     "changing_password": "パスワードを変更しています...",
     "password_changed_success": "パスワードを変更しました",
-    "change_password_error": "パスワードの変更に失敗しました"
+    "change_password_error": "パスワードの変更に失敗しました",
+    "link_account": "アカウントをリンク",
+    "link_telegram_google": "Telegram と Google アカウントをリンク",
+    "link_account_description": "Telegram と Google アカウントをリンクしてアカウントのセキュリティを強化してください",
+    "telegram_code": "Telegram コード",
+    "link_now": "今すぐリンク",
+    "enter_telegram_code": "Telegram コードを入力してください"
   }
 }

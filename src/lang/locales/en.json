@@ -952,6 +952,12 @@
     "password_min_length": "Password must be at least 8 characters",
     "changing_password": "Changing password...",
     "password_changed_success": "Password changed successfully",
-    "change_password_error": "Error changing password"
+    "change_password_error": "Error changing password",
+    "link_account": "Link Account",
+    "link_telegram_google": "Link Telegram and Google Account",
+    "link_account_description": "Link Telegram and Google Account to enhance account security",
+    "telegram_code": "Telegram Code",
+    "link_now": "Link Now",
+    "enter_telegram_code": "Please enter Telegram code"
   }
 }
