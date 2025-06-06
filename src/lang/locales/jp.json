@@ -991,6 +991,7 @@
     "link_account_description": "Telegram と Google アカウントをリンクしてアカウントのセキュリティを強化してください",
     "telegram_code": "Telegram コード",
     "link_now": "今すぐリンク",
-    "enter_telegram_code": "Telegram コードを入力してください"
+    "enter_telegram_code": "Telegram コードを入力してください",
+    "verification_code_google": "Google 認証コード"
   }
 }

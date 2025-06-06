@@ -741,7 +741,7 @@ function LinkAccountTab() {
   const [isLinking, setIsLinking] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
   const [telegramCode, setTelegramCode] = useState(["", "", "", "", "", "", "", ""]);
-  const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
+  const [verificationCode, setVerificationCode] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [isSendingCode, setIsSendingCode] = useState(false);
 
@@ -759,34 +759,17 @@ function LinkAccountTab() {
     }
   };
 
-  const handleVerificationCodeChange = (index: number, value: string) => {
-    if (value.length <= 1) {
-      const newCode = [...verificationCode];
-      newCode[index] = value;
-      setVerificationCode(newCode);
-
-      // Auto-focus next input
-      if (value && index < 5) {
-        const nextInput = document.getElementById(`verification-code-${index + 1}`);
-        nextInput?.focus();
-      }
-    }
-  };
-
-  const handleKeyDown = (index: number, e: React.KeyboardEvent, type: 'telegram' | 'verification') => {
-    if (e.key === "Backspace" && !(type === 'telegram' ? telegramCode[index] : verificationCode[index]) && index > 0) {
-      const prevInput = document.getElementById(`${type}-code-${index - 1}`);
+  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !telegramCode[index] && index > 0) {
+      const prevInput = document.getElementById(`telegram-code-${index - 1}`);
       prevInput?.focus();
     }
   };
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>, type: 'telegram' | 'verification') => {
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const paste = e.clipboardData.getData('text');
-    if (type === 'telegram' && paste.length === 8) {
+    if (paste.length === 8) {
       setTelegramCode(paste.split(''));
-      e.preventDefault();
-    } else if (type === 'verification' && paste.length === 6) {
-      setVerificationCode(paste.split(''));
       e.preventDefault();
     }
   };
@@ -798,7 +781,7 @@ function LinkAccountTab() {
       notify({ message: t('security.enter_telegram_code'), type: 'error' });
       return;
     }
-    if (verificationCode.some(code => !code)) {
+    if (!verificationCode) {
       setErrorMsg(t('security.enter_verification_code'));
       notify({ message: t('security.enter_verification_code'), type: 'error' });
       return;
@@ -808,8 +791,7 @@ function LinkAccountTab() {
       setIsLinking(true);
       setErrorMsg("");
       const telegramCodeStr = telegramCode.join('');
-      const verificationCodeStr = verificationCode.join('');
-      await addGmail(telegramCodeStr, verificationCodeStr);
+      await addGmail(telegramCodeStr, verificationCode);
       setIsLinked(true);
       notify({ message: t('security.account_linked_success'), type: 'success' });
     } catch (error: any) {
@@ -877,8 +859,8 @@ function LinkAccountTab() {
                       type="text"
                       value={digit}
                       onChange={(e) => handleTelegramCodeChange(index, e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(index, e, 'telegram')}
-                      onPaste={(e) => handlePaste(e, 'telegram')}
+                      onKeyDown={(e) => handleKeyDown(index, e)}
+                      onPaste={(e) => handlePaste(e)}
                       className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
                       maxLength={1}
                     />
@@ -907,22 +889,20 @@ function LinkAccountTab() {
             {/* Verification Code Input */}
             <div>
               <label className="block text-sm text-center font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t('security.verification_code')}
+                {t('security.verification_code_google')}
               </label>
-              <div className="flex gap-2 justify-center">
-                {verificationCode.map((digit, index) => (
-                  <input
-                    key={index}
-                    id={`verification-code-${index}`}
-                    type="text"
-                    value={digit}
-                    onChange={(e) => handleVerificationCodeChange(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e, 'verification')}
-                    onPaste={(e) => handlePaste(e, 'verification')}
-                    className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
-                    maxLength={1}
-                  />
-                ))}
+              <div className="flex justify-center">
+                <input
+                  type="text"
+                  value={verificationCode}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+                    setVerificationCode(value);
+                  }}
+                  className="w-48 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                  maxLength={6}
+                  placeholder="000000"
+                />
               </div>
             </div>
 

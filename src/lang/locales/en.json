@@ -958,6 +958,7 @@
     "link_account_description": "Link Telegram and Google Account to enhance account security",
     "telegram_code": "Telegram Code",
     "link_now": "Link Now",
-    "enter_telegram_code": "Please enter Telegram code"
+    "enter_telegram_code": "Please enter Telegram code",
+    "verification_code_google": "Google Verification Code"
   }
 }
