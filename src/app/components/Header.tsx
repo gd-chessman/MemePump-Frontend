@@ -565,8 +565,7 @@ const Header = () => {
                                         </div>
                                     )}
 
-                                    <div className="flex items-center justify-between">
-                                        <Display />
+                                    <div className="flex items-center justify-end">
                                         {mounted && (
                                             <>
                                                 {!isAuthenticated && !phantomConnected ? (
