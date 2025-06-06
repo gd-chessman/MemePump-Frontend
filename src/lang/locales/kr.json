@@ -1026,6 +1026,9 @@
       "verification_code_google": "Google 인증 코드",
       "sign_in_with_google": "Google로 로그인",
       "account_linking_error": "계정 연결 중 오류가 발생했습니다",
-      "linking": "계정 연결 중..."
+      "linking": "계정 연결 중...",
+      "account_linked_success": "계정이 성공적으로 연결되었습니다",
+      "account_linked": "계정 연결",
+      "account_linked_description": "계정이 성공적으로 연결되었습니다!"
     }
   }

@@ -962,6 +962,9 @@
     "verification_code_google": "Google Verification Code",
     "sign_in_with_google": "Sign in with Google",
     "account_linking_error": "Error linking account",
-    "linking": "Linking..."
+    "linking": "Linking...",
+    "account_linked_success": "Account linked successfully",
+    "account_linked": "Account linked",
+    "account_linked_description": "Account linked successfully!"
   }
 }

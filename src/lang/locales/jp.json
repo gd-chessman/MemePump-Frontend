@@ -995,6 +995,10 @@
     "verification_code_google": "Google 認証コード",
     "sign_in_with_google": "Googleでログイン",
     "account_linking_error": "アカウントのリンク中にエラーが発生しました",
-    "linking": "アカウントのリンク中..."
+    "linking": "アカウントのリンク中...",
+    "account_linked_success": "アカウントが正常にリンクされました",
+    "account_linked": "アカウントリンク",
+    "account_linked_description": "アカウントが正常にリンクされました！"
+    
   }
 }
