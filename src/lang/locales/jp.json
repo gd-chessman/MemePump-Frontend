@@ -963,6 +963,14 @@
     "invalid_password": "パスワードが一致しません",
     "processing": "処理中...",
     "enter_code": "認証コードを入力",
-    "invalid_code": "認証コードが一致しません"
+    "invalid_code": "認証コードが一致しません",
+    "change_password": "パスワードを変更",
+    "install_google_auth": "Google Authenticator",
+    "verification_code": "認証コード",
+    "send_code": "コードを送信",
+    "new_password": "新しいパスワード",
+    "new_password_placeholder": "新しいパスワードを入力",
+    "confirm_password": "パスワードを確認",
+    "confirm_password_placeholder": "新しいパスワードを確認"
   }
 }

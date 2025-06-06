@@ -930,6 +930,14 @@
     "invalid_password": "Invalid password",
     "processing": "Processing...",
     "enter_code": "Enter verification code",
-    "invalid_code": "Invalid verification code"
+    "invalid_code": "Invalid verification code",
+    "change_password": "Change Password",
+    "install_google_auth": "Google Authenticator",
+    "verification_code": "Verification Code",
+    "send_code": "Send Code",
+    "new_password": "New Password",
+    "new_password_placeholder": "Enter new password",
+    "confirm_password": "Confirm Password",
+    "confirm_password_placeholder": "Confirm new password"
   }
 }

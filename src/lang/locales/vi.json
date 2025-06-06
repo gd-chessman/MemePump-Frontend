@@ -1007,6 +1007,14 @@
     "invalid_password": "Mật khẩu không hợp lệ",
     "processing": "Đang xử lý...",
     "enter_code": "Nhập mã xác minh",
-    "invalid_code": "Mã xác minh không hợp lệ"
+    "invalid_code": "Mã xác minh không hợp lệ",
+    "change_password": "Đổi mật khẩu",
+    "install_google_auth": "Google Authenticator",
+    "verification_code": "Mã xác thực",
+    "send_code": "Gửi mã",
+    "new_password": "Mật khẩu mới",
+    "new_password_placeholder": "Nhập mật khẩu mới",
+    "confirm_password": "Xác nhận mật khẩu",
+    "confirm_password_placeholder": "Nhập lại mật khẩu mới"
   }
 }

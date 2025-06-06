@@ -994,6 +994,14 @@
       "invalid_password": "비밀번호가 일치하지 않습니다",
       "processing": "처리 중...",
       "enter_code": "인증 코드 입력",
-      "invalid_code": "인증 코드가 일치하지 않습니다"
+      "invalid_code": "인증 코드가 일치하지 않습니다",
+      "change_password": "비밀번호 변경",
+      "install_google_auth": "Google Authenticator",
+      "verification_code": "인증 코드",
+      "send_code": "코드 전송",
+      "new_password": "새 비밀번호",
+      "new_password_placeholder": "새 비밀번호 입력",
+      "confirm_password": "비밀번호 확인",
+      "confirm_password_placeholder": "새 비밀번호 확인"
     }
   }
