@@ -220,7 +220,7 @@ export const removeGoogleAuthenticator = async (token: string, password?: string
 
 export const sendMailCode = async ()=>{
     try {
-        const temp = await axiosClient.get("/telegram-wallets/set-mail-code")
+        const temp = await axiosClient.post("/telegram-wallets/set-mail-code")
         return temp.data;
     } catch (error) {
         console.log(error)

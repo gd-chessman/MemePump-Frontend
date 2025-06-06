@@ -1,7 +1,7 @@
 "use client"
 
 import { useLang } from "@/lang/useLang";
-import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator, removeGoogleAuthenticator, sendVerificationCode, changePassword } from "@/services/api/TelegramWalletService";
+import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator, removeGoogleAuthenticator, sendVerificationCode, changePassword, sendMailCode, addGmail } from "@/services/api/TelegramWalletService";
 import { useQuery } from "@tanstack/react-query";
 import type React from "react"
 import notify from "@/app/components/notify";
@@ -115,7 +115,7 @@ function ChangePasswordTab() {
     try {
       setIsSendingCode(true);
       setSendCodeError("");
-      await sendVerificationCode();
+      await sendMailCode();
       notify({ message: t('security.code_sent_success'), type: 'success' });
     } catch (error: any) {
       console.error("Error sending verification code:", error);
@@ -807,15 +807,23 @@ function LinkAccountTab() {
     try {
       setIsLinking(true);
       setErrorMsg("");
-      // TODO: Implement the actual linking logic here
-      // This is where you would call your API to link the accounts
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      const telegramCodeStr = telegramCode.join('');
+      const verificationCodeStr = verificationCode.join('');
+      await addGmail(telegramCodeStr, verificationCodeStr);
       setIsLinked(true);
       notify({ message: t('security.account_linked_success'), type: 'success' });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error linking account:", error);
-      setErrorMsg(t('security.account_linking_error'));
-      notify({ message: t('security.account_linking_error'), type: 'error' });
+      if (error.response?.data?.message === "Invalid telegram code") {
+        setErrorMsg(t('security.invalid_telegram_code'));
+        notify({ message: t('security.invalid_telegram_code'), type: 'error' });
+      } else if (error.response?.data?.message === "Invalid verification code") {
+        setErrorMsg(t('security.invalid_verification_code'));
+        notify({ message: t('security.invalid_verification_code'), type: 'error' });
+      } else {
+        setErrorMsg(t('security.account_linking_error'));
+        notify({ message: t('security.account_linking_error'), type: 'error' });
+      }
     } finally {
       setIsLinking(false);
     }
@@ -824,8 +832,7 @@ function LinkAccountTab() {
   const handleSendCode = async () => {
     try {
       setIsSendingCode(true);
-      // TODO: Implement the actual send code logic here
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      await sendMailCode();
       notify({ message: t('security.code_sent_success'), type: 'success' });
     } catch (error) {
       console.error("Error sending code:", error);
