@@ -436,7 +436,7 @@ function GoogleAuthenticatorBind() {
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const paste = e.clipboardData.getData('text');
-    if (paste.length === 4) {
+    if (/^\d{6}$/.test(paste)) {
       setVerificationCode(paste.split(''));
       e.preventDefault();
     }
