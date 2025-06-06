@@ -22,11 +22,14 @@ const { data: walletInfor, refetch } = useQuery({
   const [copiedUser, setCopiedUser] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [password, setPassword] = useState("")
+  const [passwordError, setPasswordError] = useState("")
   const [removing, setRemoving] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [removeToken, setRemoveToken] = useState("");
   const [removePassword, setRemovePassword] = useState("");
+  const [removeTokenError, setRemoveTokenError] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCodeChange = (index: number, value: string) => {
     if (value.length <= 1 && /^\d*$/.test(value)) {
@@ -64,19 +67,23 @@ const { data: walletInfor, refetch } = useQuery({
       setSecretKey(response.secret_key);
       setShowStep2(true);
       setShowPasswordModal(false);
-    } catch (error) {
+      setPasswordError("");
+    } catch (error: any) {
       console.error("Error adding Google Authenticator:", error);
+      setPasswordError(t('security.invalid_password'));
     }
   }
 
   const handlePasswordSubmit = async () => {
     if (password) {
       await proceedWithGoogleAuth(password);
+      setPassword("");
     }
   }
 
   const handleSubmit = async () => {
     try {
+      setIsSubmitting(true);
       const code = verificationCode.join('');
       const response = await verifyGoogleAuthenticator(code);
       if (response.status === 200) {
@@ -89,6 +96,8 @@ const { data: walletInfor, refetch } = useQuery({
     } catch (error: any) {
       console.error("Error verifying code:", error);
       setErrorMsg(t('security.invalid_code'));
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -115,15 +124,51 @@ const { data: walletInfor, refetch } = useQuery({
 
   const handleRemoveConfirm = async () => {
     setRemoving(true);
+    setRemoveTokenError("");
     try {
       await removeGoogleAuthenticator(removeToken, removePassword);
       setShowRemoveModal(false);
       setShowStep2(false);
       refetch();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error removing Google Authenticator:", error);
+      if(error.response.data.message === "Invalid password") {
+        setRemoveTokenError(t('security.invalid_password'));
+      } 
+      if (error.response.data.message === "Invalid verification code") {
+        setRemoveTokenError(t('security.invalid_code'));
+      }
     } finally {
       setRemoving(false);
+    }
+  };
+
+  const handleRemoveTokenChange = (index: number, value: string) => {
+    if (value.length <= 1 && /^\d*$/.test(value)) {
+      const newToken = removeToken.split('');
+      newToken[index] = value;
+      setRemoveToken(newToken.join(''));
+
+      // Auto-focus next input
+      if (value && index < 5) {
+        const nextInput = document.getElementById(`remove-token-${index + 1}`);
+        nextInput?.focus();
+      }
+    }
+  };
+
+  const handleRemoveTokenKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !removeToken[index] && index > 0) {
+      const prevInput = document.getElementById(`remove-token-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const handleRemoveTokenPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    if (/^\d{6}$/.test(paste)) {
+      setRemoveToken(paste);
+      e.preventDefault();
     }
   };
 
@@ -147,10 +192,21 @@ const { data: walletInfor, refetch } = useQuery({
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordError("");
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && password) {
+                  handlePasswordSubmit();
+                }
+              }}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-2"
               placeholder={t('security.password_placeholder')}
             />
+            {passwordError && (
+              <p className="text-red-500 text-sm mb-4">{passwordError}</p>
+            )}
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => setShowPasswordModal(false)}
@@ -176,14 +232,29 @@ const { data: walletInfor, refetch } = useQuery({
             <h3 className="text-lg font-medium mb-4 text-gray-900 dark:text-white">
               {t('security.remove_gg_auth_title')}
             </h3>
-            <input
-              type="text"
-              value={removeToken}
-              onChange={e => setRemoveToken(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-3"
-              placeholder={t('security.token_placeholder') || 'Google Authenticator Token'}
-              maxLength={6}
-            />
+            <div className="mb-4">
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 text-center">
+                {t('security.enter_code')}
+              </p>
+              <div className="flex gap-2 mb-2 justify-center">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <input
+                    key={index}
+                    id={`remove-token-${index}`}
+                    type="text"
+                    value={removeToken[index] || ''}
+                    onChange={(e) => handleRemoveTokenChange(index, e.target.value)}
+                    onKeyDown={(e) => handleRemoveTokenKeyDown(index, e)}
+                    onPaste={handleRemoveTokenPaste}
+                    className="w-12 h-12 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-lg font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                    maxLength={1}
+                  />
+                ))}
+              </div>
+              {removeTokenError && (
+                <div className="text-red-500 text-sm mb-4 text-center">{removeTokenError}</div>
+              )}
+            </div>
             {walletInfor?.password && (
               <input
                 type="password"
@@ -206,7 +277,17 @@ const { data: walletInfor, refetch } = useQuery({
                 className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-md disabled:opacity-60"
                 disabled={removing || !removeToken || (walletInfor?.password && !removePassword)}
               >
-                {removing ? t('security.removing') : t('security.remove_gg_auth')}
+                {removing ? (
+                  <div className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {t('security.processing')}
+                  </div>
+                ) : (
+                  t('security.remove_gg_auth')
+                )}
               </button>
             </div>
           </div>
@@ -364,9 +445,20 @@ const { data: walletInfor, refetch } = useQuery({
                 {/* Submit Button */}
                 <button 
                   onClick={handleSubmit}
-                  className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+                  disabled={isSubmitting}
+                  className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {t('security.step2.submit')}
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {t('security.processing')}
+                    </div>
+                  ) : (
+                    t('security.step2.submit')
+                  )}
                 </button>
               </div>
             )}

@@ -984,6 +984,10 @@
         "enter_code": "2. 인증 코드를 입력하세요",
         "submit": "제출"
       },
-      "removing": "제거 중..."
+      "removing": "제거 중...",
+      "invalid_password": "비밀번호가 일치하지 않습니다",
+      "processing": "처리 중...",
+      "enter_code": "인증 코드 입력",
+      "invalid_code": "인증 코드가 일치하지 않습니다"
     }
   }

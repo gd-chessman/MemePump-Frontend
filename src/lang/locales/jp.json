@@ -952,6 +952,10 @@
       "enter_code": "2. 認証コードを入力してください",
       "submit": "送信"
     },
-    "removing": "削除中..."
+    "removing": "削除中...",
+    "invalid_password": "パスワードが一致しません",
+    "processing": "処理中...",
+    "enter_code": "認証コードを入力",
+    "invalid_code": "認証コードが一致しません"
   }
 }

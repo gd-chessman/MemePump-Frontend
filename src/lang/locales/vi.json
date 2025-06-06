@@ -996,6 +996,10 @@
       "enter_code": "2. Vui lòng nhập mã xác minh",
       "submit": "GỬI"
     },
-    "removing": "Đang xóa..."
+    "removing": "Đang xóa...",
+    "invalid_password": "Mật khẩu không hợp lệ",
+    "processing": "Đang xử lý...",
+    "enter_code": "Nhập mã xác minh",
+    "invalid_code": "Mã xác minh không hợp lệ"
   }
 }

@@ -918,6 +918,10 @@
       "enter_code": "2. Please enter verification code",
       "submit": "SUBMIT"
     },
-    "removing": "Removing..."
+    "removing": "Removing...",
+    "invalid_password": "Invalid password",
+    "processing": "Processing...",
+    "enter_code": "Enter verification code",
+    "invalid_code": "Invalid verification code"
   }
 }
