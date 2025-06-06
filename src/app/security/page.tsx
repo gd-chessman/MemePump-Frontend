@@ -7,6 +7,7 @@ import type React from "react"
 import notify from "@/app/components/notify";
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation";
 
 export default function SecurityPage() {
   const { data: walletInfor, refetch } = useQuery({
@@ -14,7 +15,7 @@ export default function SecurityPage() {
     queryFn: getInforWallet,
   });
   const { t } = useLang();
-  const [activeTab, setActiveTab] = useState<'password' | 'google-auth' | 'link'>('google-auth');
+  const [activeTab, setActiveTab] = useState<'password' | 'google-auth' | 'link'>('link');
 
   if (!walletInfor) return null;
 
@@ -23,6 +24,16 @@ export default function SecurityPage() {
       {/* Tab Navigation */}
       <div className="max-w-lg mx-auto mb-8">
         <div className="flex border-b border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => setActiveTab('link')}
+            className={`flex-1 whitespace-nowrap py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
+              activeTab === 'link'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            {t('security.link_account')}
+          </button>
           {walletInfor?.password && (
             <button
               onClick={() => setActiveTab('password')}
@@ -44,16 +55,6 @@ export default function SecurityPage() {
             }`}
           >
             {t('security.install_google_auth')}
-          </button>
-          <button
-            onClick={() => setActiveTab('link')}
-            className={`flex-1 whitespace-nowrap py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
-              activeTab === 'link'
-                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-            }`}
-          >
-            {t('security.link_account')}
           </button>
         </div>
       </div>
@@ -737,6 +738,8 @@ function GoogleAuthenticatorBind() {
 }
 
 function LinkAccountTab() {
+  const searchParams = useSearchParams()
+  const code = searchParams.get('code')
   const { t } = useLang();
   const [isLinking, setIsLinking] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
