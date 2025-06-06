@@ -47,11 +47,11 @@ export default function SecurityPage() {
           </button>
           <button
             onClick={() => setActiveTab('link')}
-            className="flex-1 whitespace-nowrap py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
+            className={`flex-1 whitespace-nowrap py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
               activeTab === 'link'
                 ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-            }"
+            }`}
           >
             {t('security.link_account')}
           </button>
