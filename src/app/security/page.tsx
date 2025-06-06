@@ -7,11 +7,57 @@ import type React from "react"
 
 import { useState } from "react"
 
-export default function GoogleAuthenticatorBind() {
-const { data: walletInfor, refetch } = useQuery({
+export default function SecurityPage() {
+  const { t } = useLang();
+  const [activeTab, setActiveTab] = useState<'password' | 'google-auth'>('password');
+
+  return (
+    <div className="min-h-screen text-gray-900 dark:text-white p-4 transition-colors duration-300">
+      {/* Tab Navigation */}
+      <div className="max-w-md mx-auto mb-8">
+        <div className="flex border-b border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => setActiveTab('password')}
+            className={`flex-1 py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
+              activeTab === 'password'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            {t('security.change_password')}
+          </button>
+          <button
+            onClick={() => setActiveTab('google-auth')}
+            className={`flex-1 py-4 px-6 text-center font-medium text-sm transition-colors duration-300 ${
+              activeTab === 'google-auth'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            {t('security.install_google_auth')}
+          </button>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div className="max-w-md mx-auto">
+        {activeTab === 'password' ? (
+          <div>
+            {/* Change Password content will go here */}
+          </div>
+        ) : (
+          <GoogleAuthenticatorBind />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function GoogleAuthenticatorBind() {
+  const { data: walletInfor, refetch } = useQuery({
     queryKey: ["wallet-infor"],
     queryFn: getInforWallet,
-});
+  });
 
   const { t } = useLang();
   const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""])
