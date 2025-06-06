@@ -960,6 +960,8 @@
     "link_now": "Link Now",
     "enter_telegram_code": "Please enter Telegram code",
     "verification_code_google": "Google Verification Code",
-    "sign_in_with_google": "Sign in with Google"
+    "sign_in_with_google": "Sign in with Google",
+    "account_linking_error": "Error linking account",
+    "linking": "Linking..."
   }
 }

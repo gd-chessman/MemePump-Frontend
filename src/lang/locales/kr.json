@@ -1024,6 +1024,8 @@
       "link_now": "지금 연결",
       "enter_telegram_code": "Telegram 코드를 입력하세요",
       "verification_code_google": "Google 인증 코드",
-      "sign_in_with_google": "Google로 로그인"
+      "sign_in_with_google": "Google로 로그인",
+      "account_linking_error": "계정 연결 중 오류가 발생했습니다",
+      "linking": "계정 연결 중..."
     }
   }
