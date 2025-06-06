@@ -96,9 +96,11 @@ function ChangePasswordTab() {
       setIsSendingCode(true);
       setSendCodeError("");
       await sendVerificationCode();
+      notify({ message: t('security.code_sent_success'), type: 'success' });
     } catch (error: any) {
       console.error("Error sending verification code:", error);
       setSendCodeError(t('security.send_code_error'));
+      notify({ message: t('security.send_code_error'), type: 'error' });
     } finally {
       setIsSendingCode(false);
     }
@@ -108,18 +110,22 @@ function ChangePasswordTab() {
     // Validate inputs
     if (verificationCode.some(code => !code)) {
       setPasswordError(t('security.enter_verification_code'));
+      notify({ message: t('security.enter_verification_code'), type: 'error' });
       return;
     }
     if (!newPassword) {
       setPasswordError(t('security.enter_new_password'));
+      notify({ message: t('security.enter_new_password'), type: 'error' });
       return;
     }
     if (newPassword.length < 8) {
       setPasswordError(t('security.password_min_length'));
+      notify({ message: t('security.password_min_length'), type: 'error' });
       return;
     }
     if (newPassword !== confirmPassword) {
       setPasswordError(t('security.passwords_not_match'));
+      notify({ message: t('security.passwords_not_match'), type: 'error' });
       return;
     }
 
@@ -132,12 +138,15 @@ function ChangePasswordTab() {
       setVerificationCode(["", "", "", ""]);
       setNewPassword("");
       setConfirmPassword("");
+      notify({ message: t('security.password_changed_success'), type: 'success' });
     } catch (error: any) {
       console.error("Error changing password:", error);
       if (error.response?.data?.message === "Invalid verification code") {
         setPasswordError(t('security.invalid_code'));
+        notify({ message: t('security.invalid_code'), type: 'error' });
       } else {
         setPasswordError(t('security.change_password_error'));
+        notify({ message: t('security.change_password_error'), type: 'error' });
       }
     } finally {
       setIsChangingPassword(false);
