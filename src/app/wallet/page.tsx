@@ -1331,7 +1331,7 @@ export default function WalletPage() {
                                         <button 
                                             onClick={handleResendCode}
                                             disabled={isSendingCode}
-                                            className="text-xs text-theme-primary-500 hover:text-theme-primary-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="text-xs text-theme-primary-400 hover:text-theme-primary-400 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             {isSendingCode ? t('wallet.sending') : t('wallet.resendCode')}
                                         </button>
@@ -1409,7 +1409,7 @@ export default function WalletPage() {
                                     </div>
                                     <button 
                                             onClick={handleForgotPassword}
-                                            className="text-xs text-theme-primary-500 hover:text-theme-primary-400 text-left mt-1"
+                                            className="text-xs text-theme-primary-400 hover:text-theme-primary-400 text-left mt-1"
                                         >
                                             {t('wallet.forgotPassword')}
                                     </button>
@@ -1558,7 +1558,7 @@ export default function WalletPage() {
                                         <button 
                                             onClick={handleResendCode}
                                             disabled={isSendingCode}
-                                            className="text-xs text-theme-primary-500 hover:text-theme-primary-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="text-xs text-theme-primary-400 hover:text-theme-primary-400 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             {isSendingCode ? t('wallet.sending') : t('wallet.resendCode')}
                                         </button>
