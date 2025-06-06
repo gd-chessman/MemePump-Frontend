@@ -180,6 +180,8 @@ const { data: walletInfor, refetch } = useQuery({
     }
   };
 
+  if(!walletInfor) return null;
+
   return (
     <div className="min-h-screen text-gray-900 dark:text-white p-4 transition-colors duration-300">
       {/* Password Modal */}
