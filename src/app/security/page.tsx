@@ -1,7 +1,7 @@
 "use client"
 
 import { useLang } from "@/lang/useLang";
-import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator, removeGoogleAuthenticator } from "@/services/api/TelegramWalletService";
+import { getInforWallet, addGoogleAuthenticator, verifyGoogleAuthenticator, removeGoogleAuthenticator, sendVerificationCode } from "@/services/api/TelegramWalletService";
 import { useQuery } from "@tanstack/react-query";
 import type React from "react"
 
@@ -42,13 +42,147 @@ export default function SecurityPage() {
       {/* Tab Content */}
       <div className="max-w-md mx-auto">
         {activeTab === 'password' ? (
-          <div>
-            {/* Change Password content will go here */}
-          </div>
+          <ChangePasswordTab />
         ) : (
           <GoogleAuthenticatorBind />
         )}
       </div>
+    </div>
+  );
+}
+
+function ChangePasswordTab() {
+  const { t } = useLang();
+  const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [sendCodeError, setSendCodeError] = useState("");
+
+  const handleCodeChange = (index: number, value: string) => {
+    if (value.length <= 1 && /^\d*$/.test(value)) {
+      const newCode = [...verificationCode];
+      newCode[index] = value;
+      setVerificationCode(newCode);
+
+      // Auto-focus next input
+      if (value && index < 3) {
+        const nextInput = document.getElementById(`code-${index + 1}`);
+        nextInput?.focus();
+      }
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !verificationCode[index] && index > 0) {
+      const prevInput = document.getElementById(`code-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    if (/^\d{4}$/.test(paste)) {
+      setVerificationCode(paste.split(''));
+      e.preventDefault();
+    }
+  };
+
+  const handleSendCode = async () => {
+    try {
+      setIsSendingCode(true);
+      setSendCodeError("");
+      await sendVerificationCode();
+    } catch (error: any) {
+      console.error("Error sending verification code:", error);
+      setSendCodeError(t('security.send_code_error'));
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+
+  return (
+    <div className="animate-fadeIn">
+      <h2 className="text-xl font-medium mb-6">{t('security.change_password')}</h2>
+
+      {/* Verification Code Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {t('security.verification_code')}
+        </label>
+        <div className="flex items-center gap-4">
+          <div className="flex gap-2">
+            {verificationCode.map((digit, index) => (
+              <input
+                key={index}
+                id={`code-${index}`}
+                type="text"
+                value={digit}
+                onChange={(e) => handleCodeChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={handlePaste}
+                className="w-12 h-12 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-lg font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                maxLength={1}
+              />
+            ))}
+          </div>
+          <button
+            onClick={handleSendCode}
+            disabled={isSendingCode}
+            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[100px]"
+          >
+            {isSendingCode ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {t('security.sending')}
+              </div>
+            ) : (
+              t('security.send_code')
+            )}
+          </button>
+        </div>
+        {sendCodeError && (
+          <p className="mt-2 text-sm text-red-500">{sendCodeError}</p>
+        )}
+      </div>
+
+      {/* New Password Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {t('security.new_password')}
+        </label>
+        <input
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
+          placeholder={t('security.new_password_placeholder')}
+        />
+      </div>
+
+      {/* Confirm Password Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {t('security.confirm_password')}
+        </label>
+        <input
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
+          placeholder={t('security.confirm_password_placeholder')}
+        />
+      </div>
+
+      {/* Submit Button */}
+      <button
+        className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+      >
+        {t('security.change_password')}
+      </button>
     </div>
   );
 }
