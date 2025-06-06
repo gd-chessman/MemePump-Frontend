@@ -317,15 +317,6 @@ const { data: walletInfor, refetch } = useQuery({
           <>
             {/* Header */}
             <div className="flex items-center mb-8">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 mr-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
               <h1 className="text-xl font-medium">{t('security.bind_google_authenticator')}</h1>
             </div>
 
