@@ -99,7 +99,7 @@ const styles = {
   groupCard: "dark:bg-black border-create-coin-light dark:bg-opacity-30 bg-white backdrop-blur-sm rounded-xl border border-blue-500/30 p-[15px] md:p-[30px] shadow-lg",
   groupTitle: "text-center text-[14px] md:text-lg font-bold dark:text-theme-neutral-100 text-theme-neutral-1000 mb-4 md:mb-6 flex items-center justify-center gap-2",
   groupInput: "rounded-full border border-theme-primary-300 py-1 px-2 md:px-4 w-full md:w-64 text-[10px] sm:text-xs md:text-sm focus:outline-none bg-gray-100 dark:bg-black text-gray-900 dark:text-neutral-200 focus:ring-1 focus:ring-blue-500 dark:focus:ring-[hsl(var(--ring))] max-h-[25px] md:max-h-[30px] border border-gray-200 dark:border-t-theme-primary-300 dark:border-l-theme-primary-300 dark:border-b-theme-secondary-400 dark:border-r-theme-secondary-400 placeholder:text-gray-500 dark:placeholder:text-neutral-400 placeholder:text-[10px]",
-  groupButton: "lg:max-w-auto group cursor-pointer relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1 px-3 md:px-4 lg:px-6 text-sm rounded-full transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto",
+  groupButton: "whitespace-nowrap lg:max-w-auto group cursor-pointer relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1 px-3 md:px-4 lg:px-6 text-sm rounded-full transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto",
   tabButton: "h-min rounded-sm text-[10px] sm:text-xs md:text-sm font-medium text-neutral-400 px-1 md:px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer",
   actionButton: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-yellow-200 border border-theme-yellow-200 hover:!text-theme-neutral-100 hover:bg-theme-yellow-200",
   actionButtonConnect: "px-2 md:px-3 py-1 rounded-full text-[10px] sm:text-xs text-theme-green-200 hover:!text-theme-neutral-100 border border-theme-green-200  hover:bg-theme-green-200",
@@ -904,7 +904,7 @@ export default function MasterTradeInterface() {
 
       {/* Chat Section */}
       <div className={styles.chatSection}>
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full gap-1">
           <button
             className={styles.groupButton}
             onClick={() => setIsChangeRoleDialogOpen(true)}
