@@ -992,6 +992,7 @@
     "telegram_code": "Telegram コード",
     "link_now": "今すぐリンク",
     "enter_telegram_code": "Telegram コードを入力してください",
-    "verification_code_google": "Google 認証コード"
+    "verification_code_google": "Google 認証コード",
+    "sign_in_with_google": "Googleでログイン"
   }
 }
