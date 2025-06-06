@@ -21,7 +21,7 @@ export default function SecurityPage() {
   return (
     <div className="min-h-screen text-gray-900 dark:text-white p-4 transition-colors duration-300">
       {/* Tab Navigation */}
-      <div className="max-w-md mx-auto mb-8">
+      <div className="max-w-lg mx-auto mb-8">
         <div className="flex border-b border-gray-200 dark:border-gray-700">
           {walletInfor?.password && (
             <button
@@ -193,7 +193,7 @@ function ChangePasswordTab() {
                 onChange={(e) => handleCodeChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={handlePaste}
-                className="w-12 h-12 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-lg font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
                 maxLength={1}
               />
             ))}
@@ -201,7 +201,7 @@ function ChangePasswordTab() {
           <button
             onClick={handleSendCode}
             disabled={isSendingCode}
-            className="px-4 py-2 bg-gradient-to-r ml-auto from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[100px]"
+            className="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[90px] h-10"
           >
             {isSendingCode ? (
               <div className="flex items-center justify-center">
@@ -522,7 +522,7 @@ function GoogleAuthenticatorBind() {
                     onChange={(e) => handleRemoveTokenChange(index, e.target.value)}
                     onKeyDown={(e) => handleRemoveTokenKeyDown(index, e)}
                     onPaste={handleRemoveTokenPaste}
-                    className="w-12 h-12 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-lg font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                    className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
                     maxLength={1}
                   />
                 ))}
@@ -700,7 +700,7 @@ function GoogleAuthenticatorBind() {
                       onChange={(e) => handleCodeChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
                       onPaste={handlePaste}
-                      className="w-12 h-12 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-lg font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                      className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
                       maxLength={1}
                     />
                   ))}
@@ -740,10 +740,73 @@ function LinkAccountTab() {
   const { t } = useLang();
   const [isLinking, setIsLinking] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
+  const [telegramCode, setTelegramCode] = useState(["", "", "", "", "", "", "", ""]);
+  const [verificationCode, setVerificationCode] = useState(["", "", "", "", "", ""]);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isSendingCode, setIsSendingCode] = useState(false);
+
+  const handleTelegramCodeChange = (index: number, value: string) => {
+    if (value.length <= 1) {
+      const newCode = [...telegramCode];
+      newCode[index] = value;
+      setTelegramCode(newCode);
+
+      // Auto-focus next input
+      if (value && index < 7) {
+        const nextInput = document.getElementById(`telegram-code-${index + 1}`);
+        nextInput?.focus();
+      }
+    }
+  };
+
+  const handleVerificationCodeChange = (index: number, value: string) => {
+    if (value.length <= 1) {
+      const newCode = [...verificationCode];
+      newCode[index] = value;
+      setVerificationCode(newCode);
+
+      // Auto-focus next input
+      if (value && index < 5) {
+        const nextInput = document.getElementById(`verification-code-${index + 1}`);
+        nextInput?.focus();
+      }
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent, type: 'telegram' | 'verification') => {
+    if (e.key === "Backspace" && !(type === 'telegram' ? telegramCode[index] : verificationCode[index]) && index > 0) {
+      const prevInput = document.getElementById(`${type}-code-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>, type: 'telegram' | 'verification') => {
+    const paste = e.clipboardData.getData('text');
+    if (type === 'telegram' && paste.length === 8) {
+      setTelegramCode(paste.split(''));
+      e.preventDefault();
+    } else if (type === 'verification' && paste.length === 6) {
+      setVerificationCode(paste.split(''));
+      e.preventDefault();
+    }
+  };
 
   const handleLinkAccount = async () => {
+    // Validate inputs
+    if (telegramCode.some(code => !code)) {
+      setErrorMsg(t('security.enter_telegram_code'));
+      notify({ message: t('security.enter_telegram_code'), type: 'error' });
+      return;
+    }
+    if (verificationCode.some(code => !code)) {
+      setErrorMsg(t('security.enter_verification_code'));
+      notify({ message: t('security.enter_verification_code'), type: 'error' });
+      return;
+    }
+
     try {
       setIsLinking(true);
+      setErrorMsg("");
       // TODO: Implement the actual linking logic here
       // This is where you would call your API to link the accounts
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
@@ -751,9 +814,24 @@ function LinkAccountTab() {
       notify({ message: t('security.account_linked_success'), type: 'success' });
     } catch (error) {
       console.error("Error linking account:", error);
+      setErrorMsg(t('security.account_linking_error'));
       notify({ message: t('security.account_linking_error'), type: 'error' });
     } finally {
       setIsLinking(false);
+    }
+  };
+
+  const handleSendCode = async () => {
+    try {
+      setIsSendingCode(true);
+      // TODO: Implement the actual send code logic here
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      notify({ message: t('security.code_sent_success'), type: 'success' });
+    } catch (error) {
+      console.error("Error sending code:", error);
+      notify({ message: t('security.send_code_error'), type: 'error' });
+    } finally {
+      setIsSendingCode(false);
     }
   };
 
@@ -777,28 +855,97 @@ function LinkAccountTab() {
         </p>
 
         {!isLinked && (
-          <button
-            onClick={handleLinkAccount}
-            disabled={isLinking}
-            className="w-full max-w-xs h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
-          >
-            {isLinking ? (
-              <div className="flex items-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                {t('security.linking')}
+          <div className="w-full max-w-xs space-y-6">
+            {/* Telegram Code Input */}
+            <div className="flex flex-col items-center justify-center py-8">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('security.telegram_code')}
+              </label>
+              <div className="flex items-center gap-4">
+                <div className="flex gap-2">
+                  {telegramCode.map((digit, index) => (
+                    <input
+                      key={index}
+                      id={`telegram-code-${index}`}
+                      type="text"
+                      value={digit}
+                      onChange={(e) => handleTelegramCodeChange(index, e.target.value)}
+                      onKeyDown={(e) => handleKeyDown(index, e, 'telegram')}
+                      onPaste={(e) => handlePaste(e, 'telegram')}
+                      className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                      maxLength={1}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={handleSendCode}
+                  disabled={isSendingCode}
+                  className="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-w-[90px] h-10"
+                >
+                  {isSendingCode ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {t('security.sending')}
+                    </div>
+                  ) : (
+                    t('security.send_code')
+                  )}
+                </button>
               </div>
-            ) : (
-              <>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
-                </svg>
-                {t('security.link_now')}
-              </>
+            </div>
+
+            {/* Verification Code Input */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('security.verification_code')}
+              </label>
+              <div className="flex gap-2 justify-center">
+                {verificationCode.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`verification-code-${index}`}
+                    type="text"
+                    value={digit}
+                    onChange={(e) => handleVerificationCodeChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e, 'verification')}
+                    onPaste={(e) => handlePaste(e, 'verification')}
+                    className="w-8 h-10 text-center bg-white dark:bg-transparent border-2 border-blue-500 text-gray-900 dark:text-white rounded-md text-base font-medium focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 shadow-sm dark:shadow-none transition-colors duration-300"
+                    maxLength={1}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {errorMsg && (
+              <div className="text-red-500 text-sm text-center">{errorMsg}</div>
             )}
-          </button>
+
+            <button
+              onClick={handleLinkAccount}
+              disabled={isLinking}
+              className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium text-lg rounded-full transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {isLinking ? (
+                <div className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  {t('security.linking')}
+                </div>
+              ) : (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+                  </svg>
+                  {t('security.link_now')}
+                </>
+              )}
+            </button>
+          </div>
         )}
 
         {isLinked && (

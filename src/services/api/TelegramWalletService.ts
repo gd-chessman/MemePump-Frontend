@@ -217,3 +217,23 @@ export const removeGoogleAuthenticator = async (token: string, password?: string
         throw error;
     }
 }
+
+export const sendMailCode = async ()=>{
+    try {
+        const temp = await axiosClient.get("/telegram-wallets/set-mail-code")
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export const addGmail = async (telegram_code: string, code: string)=>{
+    try {
+        const temp = await axiosClient.post("/telegram-wallets/add-gmail", {telegram_code, code})
+        return temp.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
