@@ -104,11 +104,11 @@ export default function ConnectToMasterModal({
       <div className="absolute inset-0 bg-black bg-opacity-70" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md mx-4 bg-[#1a1a1a] rounded-xl border-2 border-cyan-500 shadow-lg">
+      <div className="relative w-full max-w-md mx-4 bg-white dark:bg-[#1a1a1a] rounded-xl border-2 border-cyan-500 shadow-lg">
         {/* Header */}
         <div className="flex justify-between items-center py-4 px-6 pb-4">
           <h2 className="text-[18px] font-semibold text-cyan-400 mt-2">{t('connectMasterModal.title')}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-neutral-100 transition-colors">
+          <button onClick={onClose} className="text-gray-400 hover:text-neutral-100 dark:hover:text-neutral-100 transition-colors">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -119,7 +119,7 @@ export default function ConnectToMasterModal({
           <div>
             <div className="flex items-center gap-6">
               <div className="flex items-center space-x-3">
-                <span className="text-neutral-100 font-medium text-sm">{truncateString(inforWallet.solana_address, 12)}</span>
+                <span className="text-black dark:text-neutral-100 font-medium text-sm">{truncateString(inforWallet.solana_address, 12)}</span>
                 <button
                   onClick={handleCopyAddress}
                   className="text-gray-400 hover:text-neutral-100 transition-colors"
@@ -138,13 +138,13 @@ export default function ConnectToMasterModal({
 
           {/* Maximum Copy Amount */}
           <div>
-            <label className="block text-neutral-100 font-normal text-sm mb-3">{t('connectMasterModal.maximumCopyAmount')}</label>
+            <label className="block text-black dark:text-neutral-100 font-normal text-sm mb-3">{t('connectMasterModal.maximumCopyAmount')}</label>
             <div className="relative flex items-center">
               <input
                 type="text"
                 inputMode="decimal"
                 pattern="[0-9]*[.,]?[0-9]*"
-                className="w-full bg-[#111111] border-2 border-theme-primary-300 rounded-lg px-4 py-2 text-neutral-100 text-left focus:outline-none focus:ring-0"
+                className="w-full bg-gray-100 dark:bg-[#111111] border-2 border-theme-primary-300 rounded-lg px-4 py-2 text-black dark:text-neutral-100 text-left focus:outline-none focus:ring-0"
                 value={copyAmount}
                 onChange={(e) => {
                   const value = e.target.value.replace(/[.,]/g, ',');
@@ -198,7 +198,7 @@ export default function ConnectToMasterModal({
               disabled={isLoading}
               className="lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto"
             >
-              <span className="relative z-10">{isLoading ? t('connectMasterModal.buttons.connecting') : t('connectMasterModal.buttons.connect')}</span>
+              <span className="relative z-10 text-white">{isLoading ? t('connectMasterModal.buttons.connecting') : t('connectMasterModal.buttons.connect')}</span>
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
             </button>
           </div>
