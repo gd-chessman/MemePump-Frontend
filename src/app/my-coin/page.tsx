@@ -149,7 +149,7 @@ export default function MyCoinsTable() {
     };
 
     const handleCreateCoin = () => {
-        router.push('/create-coin');
+        router.push('/create-coin//memepump');
     };
 
     return (
@@ -195,7 +195,7 @@ export default function MyCoinsTable() {
                     {/* Desktop button */}
                     <button
                         onClick={handleCreateCoin}
-                        className="hidden md:block linear-gradient-light dark:create-coin-bg hover:linear-200-bg hover-bg-delay text-black dark:text-neutral-100 text-sm font-medium px-6 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="hidden md:block linear-gradient-light dark:create-coin-bg hover-bg-delay text-black dark:text-neutral-100 text-sm font-medium px-6 py-[6px] rounded-full transition-all duration-500 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         {t('createCoin.myCoins.createCoin')}
                     </button>

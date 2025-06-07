@@ -7,6 +7,6 @@ export const login = async (code: string) => {
         return temp.data;
     } catch (e) {
         console.log(e)
-        throw new Error("Error Login")
+        throw e;
     }
 }

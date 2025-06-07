@@ -401,7 +401,11 @@
     "verificationCode": "認証コード",
     "resendCode": "認証コードを再送信",
     "verify": "認証",
-    "invalidCode": "認証コードが一致しません"
+    "invalidCode": "認証コードが一致しません",
+    "confirmDeleteWallet": "このウォレットを削除してもよろしいですか？",
+    "confirmDeleteWalletAction": "ウォレットを削除",
+    "cancel": "キャンセル",
+    "delete": "削除"
   },
   "searchPlaceholder": "トークン名/アドレス",
   "languages": {
@@ -640,7 +644,8 @@
       "trending": "トレンド",
       "new": "新規",
       "pumpfun": "Pumpfun",
-      "memepumpfun": "ミームPumpfun"
+      "memepumpfun": "ミームPumpfun",
+      "noData": "データがありません"
     }
   },
   "auth": {
@@ -967,6 +972,7 @@
     "change_password": "パスワードを変更",
     "install_google_auth": "Google Authenticator",
     "verification_code": "認証コード",
+    "verification_code_telegram": "Telegram 認証コード",
     "send_code": "コードを送信",
     "new_password": "新しいパスワード",
     "new_password_placeholder": "新しいパスワードを入力",
@@ -998,7 +1004,21 @@
     "linking": "アカウントのリンク中...",
     "account_linked_success": "アカウントが正常にリンクされました",
     "account_linked": "アカウントリンク",
-    "account_linked_description": "アカウントが正常にリンクされました！"
-    
+    "account_linked_description": "アカウントが正常にリンクされました！",
+    "password_set": "パスワードが設定されています",
+    "password_not_set": "パスワードが設定されていません",
+    "gg_auth_enabled": "Google Authenticatorが有効です",
+    "gg_auth_disabled": "Google Authenticatorが無効です"
+  },
+  "login": {
+    "error": "エラー",
+    "notActive": "アカウントが有効ではありません",
+    "returnHome": "ホームに戻る"
+  },
+  "time": {
+    "secondsAgo": "{seconds}秒前",
+    "minutesAgo": "{minutes}分前",
+    "hoursAgo": "{hours}時間前",
+    "daysAgo": "{days}日前"
   }
 }

@@ -445,7 +445,7 @@ export default function CreateCoinForm() {
             <h3 className="text-lg font-semibold text-center mb-2 dark:text-theme-neutral-100 text-theme-neutral-900">
               {t('createCoin.confirmation.title')}
             </h3>
-            <span>
+            <span className="text-center">
               {t('createCoin.confirmation.description1')}
 
               <span className="font-bold">
@@ -457,13 +457,13 @@ export default function CreateCoinForm() {
             <div className="flex w-full gap-4 justify-center px-2 mt-4">
               <button
                 onClick={() => setShowConfirmModal(false)}
-                className="px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors dark:text-theme-neutral-100 text-theme-neutral-900"
+                className="min-w-24 px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors dark:text-theme-neutral-100 text-theme-neutral-900"
               >
                 {t('createCoin.confirmation.cancel')}
               </button>
               <button
                 onClick={handleConfirmSubmit}
-                className="px-4 py-2 rounded-full bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 text-theme-neutral-100 hover:from-theme-blue-100 hover:to-theme-blue-200 transition-all duration-500"
+                className="min-w-24 px-4 py-2 rounded-full bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 text-theme-neutral-100 hover:from-theme-blue-100 hover:to-theme-blue-200 transition-all duration-500"
               >
                 {t('createCoin.confirmation.confirm')}
               </button>
@@ -579,11 +579,11 @@ export default function CreateCoinForm() {
                           <SelectValue placeholder={t('createCoin.form.categories.placeholder')}>
                             {formData.category_list.length > 0 && (
                               <div className="flex flex-wrap gap-1">
-                                {formData.category_list.map((categoryId) => {
+                                {formData.category_list.map((categoryId, index) => {
                                   const category = categories.find((c: any) => c.id === categoryId);
                                   return category ? (
                                     <span key={categoryId} className="text-sm">
-                                      {formData.category_list.indexOf(categoryId) !== formData.category_list.length - 1 ? ", " : ""}
+                                      {index > 0 && ", "}
                                       <TranslatedCategory name={category.name} />
                                     </span>
                                   ) : null;

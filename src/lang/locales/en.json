@@ -394,7 +394,11 @@
     "resendCode": "Resend code",
     "verify": "Verify",
     "invalidCode": "Invalid code",
-    "passwordsDoNotMatch": "Passwords do not match"
+    "passwordsDoNotMatch": "Passwords do not match",
+    "confirmDeleteWallet": "Are you sure you want to delete this wallet?",
+    "confirmDeleteWalletAction": "Delete wallet",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {
@@ -587,7 +591,8 @@
       "favorite": "Favorite",
       "category": "Category",
       "trending": "Trending",
-      "new": "New"
+      "new": "New",
+      "noData": "No data"
     },
     "tokenInfo": {
       "marketCap": "Market Cap",
@@ -934,6 +939,7 @@
     "change_password": "Change Password",
     "install_google_auth": "Google Authenticator",
     "verification_code": "Verification Code",
+    "verification_code_telegram": "Telegram Verification Code",
     "send_code": "Send Code",
     "new_password": "New Password",
     "new_password_placeholder": "Enter new password",
@@ -965,6 +971,21 @@
     "linking": "Linking...",
     "account_linked_success": "Account linked successfully",
     "account_linked": "Account linked",
-    "account_linked_description": "Account linked successfully!"
+    "account_linked_description": "Account linked successfully!",
+    "password_set": "Password set",
+    "password_not_set": "Password not set",
+    "gg_auth_enabled": "Google Authenticator enabled",
+    "gg_auth_disabled": "Google Authenticator disabled"
+  },
+  "login": {
+    "error": "Error",
+    "notActive": "Account is not active",
+    "returnHome": "Return to home"
+  },
+  "time": {
+    "secondsAgo": "{seconds}s ago",
+    "minutesAgo": "{minutes}m ago",
+    "hoursAgo": "{hours}h ago",
+    "daysAgo": "{days}d ago"
   }
 }

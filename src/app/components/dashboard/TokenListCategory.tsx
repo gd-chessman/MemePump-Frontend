@@ -8,6 +8,8 @@ import PumpFun from "../pump-fun";
 import { useState } from "react";
 import { useLang } from "@/lang";
 import { useRouter } from "next/navigation";
+import { getListTokenAllCategory, getTokenByCategory } from "@/services/api/SolonaTokenService";
+import { useQuery } from "@tanstack/react-query";
 
 // Skeleton card component for loading state
 function SkeletonCard() {
@@ -37,52 +39,71 @@ function SkeletonCard() {
 }
 
 // Component to render a list of token cards
-export default function TokenList() {
-  const { tokens: wsTokens } = useWsSubscribeTokens({ limit: 36 });
+export default function TokenListCategory({category = ""}: any) {
+    const { t } = useLang()
+    const { data: tokenAllCategory = [] } = useQuery({
+        queryKey: ["token-all-category"],
+        queryFn: () => getListTokenAllCategory(),
+    });
+
+    const { data: tokenByCategory = [] } = useQuery({
+        queryKey: ["token-by-category", category],
+        queryFn: () => getTokenByCategory(category),
+        enabled: Boolean(category),
+    });
   
-  // Show skeleton loading when tokens array is empty or has length less than 1
-  if (!wsTokens || wsTokens.length < 1) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {[...Array(36)].map((_, index) => (
-          <SkeletonCard key={index} />
-        ))}
-      </div>
-    );
-  }
+    // Show skeleton loading when tokens array is empty or has length less than 1
+    if ((!category && (!tokenAllCategory || tokenAllCategory.length < 1)) || 
+        (category && (!tokenByCategory || tokenByCategory.length < 1))) {
+        if (category && (!tokenByCategory || tokenByCategory.length < 1)) {
+            return (
+                <div className="flex flex-col items-center justify-center min-h-[200px]">
+                    <div className="text-base font-semibold text-zinc-600 dark:text-zinc-400">{t("trading.listToken.noData")}</div>
+                    <div className="text-sm text-zinc-500 dark:text-zinc-500 mt-2">{t("trading.listToken.noData")}</div>
+                </div>
+            );
+        }
+        return (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {[...Array(36)].map((_, index) => (
+                    <SkeletonCard key={index} />
+                ))}
+            </div>
+        );
+    }
     
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {wsTokens?.map((token, index) => (
-        <SingleTokenCard 
-          key={index} 
-          token={{
-            id: token.id.toString(),
-            name: token.symbol,
-            ticker: token.symbol,
-            fullName: token.name,
-            logo: token.logoUrl || "/placeholder.png",
-            // time: "Just now",
-            address: token.address,
-            price: token.marketCap,
-            marketCap: token.marketCap,
-            program: token.program,
-            createdAt: token.createdAt,
-            change24h: 0, // This data is not available in wsTokens
-            volume: 0, // This data is not available in wsTokens
-            holders: 0, // This data is not available in wsTokens
-            transactions: { count: 0, volume: 0 }, // This data is not available in wsTokens
-            social: { twitter: false, telegram: false, website: false, tiktok: false }, // This data is not available in wsTokens
-            percentages: {
-              holders: 0, // This data is not available in wsTokens
-              liquidity: parseFloat(token.liquidity) / 1000000, // Convert to millions
-              run: token.isVerified
-            }
-          }} 
-        />
-      ))}
-    </div>
-  )
+    const tokensToDisplay = category ? tokenByCategory : tokenAllCategory;
+    
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {tokensToDisplay?.map((token: any, index: any) => (
+                <SingleTokenCard 
+                    key={index} 
+                    token={{
+                        id: token.id.toString(),
+                        name: token.symbol,
+                        ticker: token.symbol,
+                        fullName: token.name,
+                        logo: token.logoUrl || "/placeholder.png",
+                        address: token.address,
+                        marketCap: token.market_cap,
+                        program: token.program,
+                        createdAt: token.createdAt,
+                        change24h: 0,
+                        volume: 0,
+                        holders: 0,
+                        transactions: { count: 0, volume: 0 },
+                        social: { twitter: false, telegram: false, website: false, tiktok: false },
+                        percentages: {
+                            holders: 0,
+                            liquidity: parseFloat(token.liquidity) / 1000000,
+                            run: token.isVerified
+                        }
+                    }} 
+                />
+            ))}
+        </div>
+    )
 }
 
 
@@ -232,10 +253,10 @@ function SingleTokenCard({ token }: any) {
             </div>
           </div>
           <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-3">
-                <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{getRelativeTime(token.createdAt)}</span>
-                <span className="text-zinc-700">|</span>
+                {/* <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{getRelativeTime(token.createdAt)}</span> */}
+                {/* <span className="text-zinc-700">|</span> */}
                 <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{t("trading.marketCap")}</span>
-                <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap * 100))}</span>
+                <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap))}</span>
               </div>
         </div>
       </div>

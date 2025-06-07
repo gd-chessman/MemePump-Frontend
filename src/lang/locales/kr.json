@@ -636,7 +636,8 @@
         "favorite": "즐겨찾기",
         "trending": "인기",
         "new": "신규",
-        "category": "테마"
+        "category": "테마",
+        "noData": "데이터가 없습니다"
       },
       "tokenInfo": {
         "price": "가격",
@@ -998,6 +999,7 @@
       "change_password": "비밀번호 변경",
       "install_google_auth": "Google Authenticator",
       "verification_code": "인증 코드",
+      "verification_code_telegram": "Telegram 인증 코드",
       "send_code": "코드 전송",
       "new_password": "새 비밀번호",
       "new_password_placeholder": "새 비밀번호 입력",
@@ -1029,6 +1031,21 @@
       "linking": "계정 연결 중...",
       "account_linked_success": "계정이 성공적으로 연결되었습니다",
       "account_linked": "계정 연결",
-      "account_linked_description": "계정이 성공적으로 연결되었습니다!"
+      "account_linked_description": "계정이 성공적으로 연결되었습니다!",
+      "password_set": "비밀번호가 설정되었습니다",
+      "password_not_set": "비밀번호가 설정되지 않았습니다",
+      "gg_auth_enabled": "Google Authenticator가 활성화되었습니다",
+      "gg_auth_disabled": "Google Authenticator가 비활성화되었습니다"
+    },
+    "login": {
+      "error": "오류",
+      "notActive": "계정이 활성화되지 않았습니다",
+      "returnHome": "홈으로 돌아가기"
+    },
+    "time": {
+      "secondsAgo": "{seconds}초 전",
+      "minutesAgo": "{minutes}분 전",
+      "hoursAgo": "{hours}시간 전",
+      "daysAgo": "{days}일 전"
     }
   }

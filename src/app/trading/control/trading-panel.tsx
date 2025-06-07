@@ -16,12 +16,14 @@ import { AmountButtons } from "./components/AmountButtons"
 import { GroupSelect } from "./components/GroupSelect"
 import { getInforWallet } from "@/services/api/TelegramWalletService"
 import { useTradingState } from './hooks/useTradingState'
+import { useConnectListStore } from "@/hooks/useConnectListStore"
 
 export default function TradingPanel({
     defaultMode = "buy",
     currency,
     isConnected,
 }: Omit<TradingPanelProps, 'selectedGroups' | 'setSelectedGroups' | 'selectedConnections' | 'setSelectedConnections'>) {
+    const { getConnectList } = useConnectListStore()
     const { t } = useLang()
     const searchParams = useSearchParams()
     const address = searchParams?.get("address")
@@ -273,7 +275,7 @@ export default function TradingPanel({
                         ? Number(amount) * (tokenAmount?.token_price || 0)
                         : Number(amount) * (solPrice?.priceUSD || 0),
                 order_qlty: Number(amount),
-                member_list: selectedConnections.map(e => Number(e)),
+                member_list: getConnectList().map(id => Number(id))
             })
         }
 

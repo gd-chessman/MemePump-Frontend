@@ -13,10 +13,12 @@ import { useSearchParams } from "next/navigation"
 import { useAuth } from "@/hooks/useAuth"
 import { useLang } from "@/lang"
 import { useTradingState } from './hooks/useTradingState'
+import { useConnectListStore } from "@/hooks/useConnectListStore"
 
 type TabType = "chat" | "trade";
 
 export default function MasterTradeChat() {
+    const { setConnectList } = useConnectListStore()
     const searchParams = useSearchParams();
     const tokenAddress = searchParams?.get("address");
     const { token } = useAuth();
@@ -158,8 +160,14 @@ export default function MasterTradeChat() {
         setTimeout(() => setCopiedAddress(null), 2000)
     }, [])
 
-    const handleSelectItem = useCallback((id: string) => {
+    const handleSelectItem = useCallback((id: string) => {        
         setSelectedConnections(prev => {
+            const newConnections = prev.includes(id)
+                ? prev.filter(item => item !== id)
+                : [...prev, id];
+            
+            // Update connectList with the new value
+            setConnectList(newConnections);
             if (prev.includes(id)) {
                 // If deselecting, also remove associated groups
                 const connection = myConnects?.find((connect: any) => connect.member_id.toString() === id)
@@ -167,11 +175,9 @@ export default function MasterTradeChat() {
                     const groupIds = connection.joined_groups.map((group: any) => group.group_id.toString())
                     setSelectedGroups(prevGroups => prevGroups.filter(groupId => !groupIds.includes(groupId)))
                 }
-                return prev.filter(item => item !== id)
-            } else {
-                // If selecting, add to selected connections
-                return [...prev, id]
             }
+            
+            return newConnections;
         })
     }, [myConnects])
 

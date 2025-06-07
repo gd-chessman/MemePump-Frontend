@@ -48,7 +48,7 @@ interface Trader {
     };
     lastTime?: string;
     type?: string;
-    connection_status?: TradeStatus;
+    connect_status?: TradeStatus;
     info?: any;
 }
 
@@ -182,7 +182,7 @@ export default function MasterTradeTable() {
                     if (!address) return null;
                     try {
                         const data = await getMasterById(address);
-                        const statusConnection = trader.connection_status === "connect" ? data : null;
+                        const statusConnection = trader.connect_status === "connect" ? data : null;
                         return { ...data.historic.summary, address, lastTime: data?.pnl_since, info: statusConnection };
                     } catch (error) {
                         return null;
@@ -224,7 +224,7 @@ export default function MasterTradeTable() {
                     ...trader,
                     ...details,
                     address: trader.address,
-                    connection_status: trader.connection_status
+                    connect_status: trader.connect_status
                 };
             });
 
@@ -233,7 +233,8 @@ export default function MasterTradeTable() {
 
         // Use setTimeout to avoid React state update conflicts
         setTimeout(updateData, 0);
-    }, [masterDetails]);
+    }, [masterDetails, router, combinedMasterData]);
+
 
     // Update tradeData to use combinedMasterData
     const tradeData = useMemo(() => {
@@ -256,7 +257,7 @@ export default function MasterTradeTable() {
                 lastTime: formatLastTime(trader.lastTime),
                 info: trader.info,
                 type: trader.type || "NORMAL" as TradeType,
-                status: (trader.connection_status ?? "Not Connected") as TradeStatus
+                status: (trader.connect_status ?? "Not Connected") as TradeStatus
             };
         });
     }, [combinedMasterData]);
@@ -301,22 +302,6 @@ export default function MasterTradeTable() {
     }
 
     // Xử lý các hành động
-    const handleConnect = (inforWallet?: any) => {
-        if (inforWallet.type === "normal") {
-            setShowConnectModal(inforWallet.address)
-        } else {
-            handleMemberConnect(inforWallet)
-        }
-        // Thực hiện logic kết nối ở đây
-    }
-    const handleMemberConnect = async (inforWallet?: any) => {
-        await MasterTradingService.connectMaster({
-            option_limit: "price",
-            price_limit: "0.01",
-            master_wallet_address: inforWallet.address,
-        });
-        refetchMasterTraders()
-    }
     const handleMemberConnectStatus = async (inforWallet?: any, status?: string) => {
         try {
             await MasterTradingService.memberSetConnect({
@@ -324,14 +309,47 @@ export default function MasterTradeTable() {
                 master_id: inforWallet.id,
                 status: status,
             });
-            // Refetch both queries to ensure UI updates
-            await Promise.all([
-                refetchMasterTraders(),
-                refetchMasterDetails()
-            ]);
+
+            // Update combinedMasterData directly
+            setCombinedMasterData(prevData => 
+                prevData.map(trader => 
+                    trader.address === inforWallet.address 
+                        ? { ...trader, connect_status: status as TradeStatus }
+                        : trader
+                )
+            );
+
+            // Then refetch to ensure data consistency
+            await refetchMasterTraders();
         } catch (error) {
             console.error("Error pausing master:", error);
         }
+    }
+
+    const handleConnect = async (inforWallet?: any) => {
+        if (inforWallet.type !== "vip" && inforWallet.status == null) {
+            setShowConnectModal(inforWallet.address)
+        } else if (inforWallet.status === "pause") {
+            await handleMemberConnectStatus(inforWallet, "connect")
+        } else {
+            await handleMemberConnect(inforWallet)
+            // Update combinedMasterData directly after connect
+            setCombinedMasterData(prevData => 
+                prevData.map(trader => 
+                    trader.address === inforWallet.address 
+                        ? { ...trader, connect_status: "connect" as TradeStatus }
+                        : trader
+                )
+            );
+            await refetchMasterTraders();
+        }
+    }
+    const handleMemberConnect = async (inforWallet?: any) => {
+        await MasterTradingService.connectMaster({
+            option_limit: "price",
+            price_limit: "0.01",
+            master_wallet_address: inforWallet.address,
+        });
     }
 
     // Loading skeleton component

@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
 import { useLang } from "@/lang";
 import { useRouter } from "next/navigation";
-import { Search, Loader2, Copy, Star, BarChart4, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, Loader2, Copy, Star, BarChart4, ChevronDown, ChevronUp, Pill } from "lucide-react";
 import { useState, useEffect } from "react";
 import { SolonaTokenService } from "@/services/api";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -11,11 +11,14 @@ import notify from "@/app/components/notify";
 import { useAuth } from "@/hooks/useAuth";
 import { TableTokenList } from "@/app/components/trading/TableTokenList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
-import { getMyWishlist, getTokenByCategory } from "@/services/api/SolonaTokenService";
+import { getListTokenAllCategory, getMyWishlist, getTokenByCategory } from "@/services/api/SolonaTokenService";
 import { useQuery } from "@tanstack/react-query";
 import { getNewCoins, getTopCoins } from "@/services/api/OnChainService";
 import TokenList from "@/app/components/dashboard/TokenListCard";
 import { getTokenCategorys } from "@/services/api/TelegramWalletService";
+import PumpFun from "../components/pump-fun";
+import TokenListCategory from "@/app/components/dashboard/TokenListCategory";
+import { useTranslate } from "@/hooks/useTranslate";
 
 interface Token {
   id: number;
@@ -39,6 +42,11 @@ interface Token {
   volume_24h_change_percent?: number;
 }
 
+const TranslatedCategory = ({ name }: { name: string }) => {
+  const { translatedText } = useTranslate(name);
+  return <>{translatedText || name}</>;
+};
+
 export default function Trading() {
   const router = useRouter();
   const { t } = useLang();
@@ -48,8 +56,15 @@ export default function Trading() {
   const [isSearching, setIsSearching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [activeTab, setActiveTab] = useState("1");
-  const [sortBy, setSortBy] = useState("volume_24h_usd");
+  const [activeTab, setActiveTab] = useState(() => {
+    // Get active tab from localStorage on initial render
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('activeTabOverview') || '1';
+    }
+    return '1';
+  });
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [sortBy, setSortBy] = useState("volume_24h_change_percent");
   const [sortType, setSortType] = useState("desc");
   
   const { data: topCoins, isLoading: isLoadingTopCoins } = useQuery({
@@ -70,19 +85,22 @@ export default function Trading() {
     queryFn: getMyWishlist,
     refetchOnMount: true,
   });
-  // const { data: categories = [] } = useQuery({
-  //   queryKey: ["token-categories"],
-  //   queryFn: getTokenCategorys,
-  // });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["token-categories"],
+    queryFn: getTokenCategorys,
+  });
 
-  // const { data: tokenByCategory = [] } = useQuery({
-  //   queryKey: ["token-by-category"],
-  //   queryFn: () => getTokenByCategory(categories[0].slug),
-  //   enabled: !!categories.length,
-  // });
+
   const [searchResults, setSearchResults] = useState<Token[]>([]);
 
   const [expandedRows, setExpandedRows] = useState<{ [key: string]: boolean }>({});
+
+  // Update localStorage when activeTab changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('activeTabOverview', activeTab);
+    }
+  }, [activeTab]);
 
   // Update tokens when topCoins or newCoins data changes
   useEffect(() => {
@@ -112,7 +130,6 @@ export default function Trading() {
           // Find complete token data from topCoins or newCoins
           const completeTokenData = topCoins?.find((t: any) => t.address === token.address) || 
                                   newCoins?.find((t: any) => t.address === token.address);
-          console.log("completeTokenData", completeTokenData);
           
           return {
             ...completeTokenData, // Use complete data if available
@@ -125,6 +142,7 @@ export default function Trading() {
       }
     }
   }, [topCoins, newCoins, myWishlist, activeTab]);
+
 
   // Effect to handle search when debounced value changes
   useEffect(() => {
@@ -216,7 +234,7 @@ export default function Trading() {
               className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '2' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
               onClick={() => setActiveTab('2')}
             >
-              <span className={`${activeTab === '2' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.new')} (Pumpfun)</span>
+              <span className={`${activeTab === '2' ? 'dark:gradient-hover flex items-center gap-2' : 'flex items-center gap-2'}`}>{t('tableDashboard.tabs.new')} ( Pumpfun<PumpFun />)</span>
             </button>
             <button
               className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '3' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
@@ -224,12 +242,30 @@ export default function Trading() {
             >
               <span className={`${activeTab === '3' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.favorite')}</span>
             </button>
-            <button
-              className={`rounded-sm  text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '4' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`} 
-              onClick={() => setActiveTab('4')}
-            >
-              <span className={`${activeTab === '4' ? 'dark:gradient-hover' : ''}`}>{t('tableDashboard.tabs.category')}</span>
-            </button>
+            <div className="relative inline-block">
+              <button
+                className={`rounded-sm text-sm font-medium px-2 py-1 border-1 z-10 border-solid border-theme-primary-300 cursor-pointer transition-all ${activeTab === '4' ? 'dark:bg-theme-black-100 bg-theme-blue-100 text-neutral-100' : 'border-transparent hover:dark:bg-theme-black-100/50'}`}
+                onClick={() => setActiveTab('4')}
+              >
+                {activeTab === '4' ? (
+                  <select
+                    className="bg-transparent border-none focus:outline-none cursor-pointer text-neutral-100 dark:gradient-hover"
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <option value="" className="text-neutral-100">{t('tableDashboard.tabs.category')}</option>
+                    {categories.map((category: any) => (
+                      <option key={category.id} value={category.slug} className="text-neutral-100">
+                        <TranslatedCategory name={category.name} />
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span>{t('tableDashboard.tabs.category')}</span>
+                )}
+              </button>
+            </div>
           </div>
 
           <TabsContent value="1">
@@ -466,115 +502,9 @@ export default function Trading() {
             )}  
           </TabsContent>
           <TabsContent value="4">
-            {displayTokens && (
-              <CardContent className="w-full">
-                {/* Desktop Table View */}
-                <div className="hidden md:block">
-                  <TableTokenList
-                    tokens={displayTokens}
-                    onCopyAddress={handleCopyAddress}
-                    onStarClick={handleStarClick}
-                    isFavoritesTab={false}
-                    isLoading={isLoadingNewCoins}
-                    sortBy={sortBy}
-                    sortType={sortType}
-                    onSort={handleSort}
-                    enableSort={!debouncedSearchQuery.trim()}
-                  />
-                </div>
-
-                {/* Mobile Card View */}
-                <div className="md:hidden space-y-4">
-                  {displayTokens.map((token) => (
-                    <div 
-                      key={token.address}
-                      className="bg-white dark:bg-neutral-900 rounded-lg p-4 border border-gray-200 dark:border-neutral-800"
-                    >
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <img 
-                            src={token.logoUrl || token.logo_uri || "/token-placeholder.png"} 
-                            alt={token.symbol} 
-                            className="w-8 h-8 rounded-full"
-                          />
-                          <div className="flex items-center gap-2">
-                            <div className="font-medium text-sm">{token.symbol}</div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 max-w-[10ch] truncate">{token.name}</div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => router.push(`/trading?address=${token.address}`)}
-                            className="linear-gradient-light dark:linear-gradient-connect text-black dark:text-neutral-100 font-medium px-3 py-1 rounded-full text-xs transition-colors whitespace-nowrap"
-                          >
-                            Trade
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCopyAddress(token.address, e);
-                            }}
-                            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
-                          >
-                            <Copy className="h-3 w-3" />
-                          </button>
-                          <button
-                            onClick={() => toggleRow(token.address)}
-                            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
-                          >
-                            {expandedRows[token.address] ? (
-                              <ChevronUp className="h-4 w-4" />
-                            ) : (
-                              <ChevronDown className="h-4 w-4" />
-                            )}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="flex gap-2 items-center">
-                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.price')}</div>
-                          <div className="font-medium text-sm">${formatNumberWithSuffix(token.price || 0)}</div>
-                        </div>
-                        <div className="flex gap-2 items-center">
-                          <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.24hChange')}</div>
-                          <div className={`font-medium text-sm ${(token.volume_24h_change_percent ?? 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                            {(token.volume_24h_change_percent ?? 0) >= 0 ? '+' : ''}{formatNumberWithSuffix(token.volume_24h_change_percent ?? 0)}%
-                          </div>
-                        </div>
-                      </div>
-
-                      {expandedRows[token.address] && (
-                        <div className="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-800">
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.marketCap')}</div>
-                              <div className="font-medium text-sm">${formatNumberWithSuffix(token.market_cap || 0)}</div>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.holders')}</div>
-                              <div className="font-medium text-sm">{formatNumberWithSuffix(token.holder || 0)}</div>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                              <div className="text-xs text-gray-500 dark:text-gray-400">{t('tableDashboard.mobile.address')}</div>
-                              <div className="flex items-center gap-1">
-                                <span className="font-medium text-sm">{truncateString(token.address, 6)}</span>
-                                <button
-                                  onClick={(e) => handleCopyAddress(token.address, e)}
-                                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
-                                >
-                                  <Copy className="h-3 w-3" />
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            )}
+            <CardContent className="w-full p-0">
+              <TokenListCategory category={selectedCategory} />
+            </CardContent>
           </TabsContent>
       
         </Tabs>

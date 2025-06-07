@@ -12,7 +12,7 @@ import { SolonaTokenService } from '@/services/api'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useLang } from '@/lang/useLang'
 import PumpFun from '@/app/components/pump-fun'
-import { getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaTokenService'
+import { getListTokenAllCategory, getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaTokenService'
 import { useWsSubscribeTokens } from "@/hooks/useWsSubscribeTokens";
 import notify from "@/app/components/notify"
 
@@ -22,7 +22,12 @@ const ListToken = () => {
     const queryClient = useQueryClient()
     const [sortBy, setSortBy] = useState("volume_1h_usd");
     const [sortType, setSortType] = useState("desc");
-    const [activeTab, setActiveTab] = useState("trending");
+    const [activeTab, setActiveTab] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('activeTabTrading') || "trending";
+        }
+        return "trending";
+    });
     const [timeFilter, setTimeFilter] = useState("24h");
     const [searchQuery, setSearchQuery] = useState("");
     const [isDragging, setIsDragging] = useState(false);
@@ -40,6 +45,11 @@ const ListToken = () => {
     });
 
     const { tokens: newCoins, isLoading: isLoadingNewCoins } = useWsSubscribeTokens({ limit: 50 });
+
+    const { data: tokenAllCategory = [] } = useQuery({
+        queryKey: ["token-all-category"],
+        queryFn: () => getListTokenAllCategory(),
+    });
 
     const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
         queryKey: ["myWishlist"],
@@ -80,6 +90,7 @@ const ListToken = () => {
             case "new":
                 filteredList = newCoins?.map(token => ({
                     ...token,
+                    market_cap: token.marketCap * 100,
                     volume_24h_usd: token.marketCap * 100,
                     volume_24h_change_percent: 0,
                     volume_1h_change_percent: 0,
@@ -92,9 +103,9 @@ const ListToken = () => {
                 filteredList = myWishlist?.tokens || [];
                 break;
             case "category":
-                filteredList = newCoins?.map(token => ({
+                filteredList = tokenAllCategory?.map((token: any) => ({
                     ...token,
-                    volume_24h_usd: token.marketCap,
+                    volume_24h_usd: token.volume_24h_usd,
                     volume_24h_change_percent: 0,
                     volume_1h_change_percent: 0,
                     volume_4h_change_percent: 0,
@@ -133,6 +144,15 @@ const ListToken = () => {
                     volume_usd: item.volume_24h_usd
                 };
             });
+
+            // Sort by volume_change_percent in descending order
+            if (activeTab === "trending") {
+                filteredList.sort((a, b) => {
+                    const aVolumeChange = a.volume_change_percent || 0;
+                    const bVolumeChange = b.volume_change_percent || 0;
+                    return bVolumeChange - aVolumeChange;
+                });
+            }
         }
 
         setTokenList(filteredList);
@@ -255,6 +275,35 @@ const ListToken = () => {
         setIsDragging(false);
     };
 
+    const getRelativeTime = (date: string) => {
+        const now = new Date();
+        const created = new Date(date);
+        const diffInSeconds = Math.floor((now.getTime() - created.getTime()) / 1000);
+    
+        if (diffInSeconds < 60) {
+          return t("time.secondsAgo", { seconds: diffInSeconds });
+        } else if (diffInSeconds < 3600) {
+          const minutes = Math.floor(diffInSeconds / 60);
+          return t("time.minutesAgo", { minutes });
+        } else if (diffInSeconds < 86400) {
+          const hours = Math.floor(diffInSeconds / 3600);
+          return t("time.hoursAgo", { hours });
+        } else {
+          const days = Math.floor(diffInSeconds / 86400);
+          return t("time.daysAgo", { days });
+        }
+      };
+
+    const handleTabChange = (tab: string) => {
+        setActiveTab(tab);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('activeTabTrading', tab);
+        }
+        if (tab === "favorite" || tab === "category") {
+            refetchMyWishlist();
+        }
+    };
+
     return (
         <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-1 overflow-hidden'>
             {/* <div className="relative mb-3 pr-3 px-3">
@@ -292,31 +341,25 @@ const ListToken = () => {
                     <div className="flex gap-2">
                         <button
                             className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "trending" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
-                            onClick={() => setActiveTab("trending")}
+                            onClick={() => handleTabChange("trending")}
                         >
                             {t('trading.listToken.trending')}
                         </button>
                         <button
-                            className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
-                            onClick={() => setActiveTab("new")}
+                            className={`flex items-center gap-1 text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            onClick={() => handleTabChange("new")}
                         >
-                            {t('trading.listToken.new')}
+                            {t('trading.listToken.new')} <PumpFun />
                         </button>
                         <button
                             className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "favorite" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
-                            onClick={() => {
-                                setActiveTab("favorite")
-                                refetchMyWishlist()
-                            }}
+                            onClick={() => handleTabChange("favorite")}
                         >
                             {t('trading.listToken.favorite')}
                         </button>
                         <button
                             className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "category" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
-                            onClick={() => {
-                                setActiveTab("category")
-                                refetchMyWishlist()
-                            }}
+                            onClick={() => handleTabChange("category")}
                         >
                             {t('trading.listToken.category')}
                         </button>
@@ -424,8 +467,12 @@ const ListToken = () => {
                                 </div>
                                 <div className="text-right pr-3 flex flex-col gap-1 cursor-pointer" onClick={() => handleChangeToken(address)}>
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_usd)}</span>
-                                    {
-                                        activeTab !== "new" && (
+                                    {activeTab === "new" ? (
+                                        <span className="text-xs font-medium dark:text-theme-neutral-100 text-theme-neutral-800">
+                                            {getRelativeTime(item.createdAt)}
+                                        </span>
+                                    ) : (
+                                        item.volume_change_percent !== undefined && (
                                             <span className={`text-xs font-medium ${item.volume_change_percent > 0
                                                 ? 'text-theme-green-200'
                                                 : item.volume_change_percent < 0
@@ -433,8 +480,7 @@ const ListToken = () => {
                                                     : 'dark:text-theme-neutral-100 text-theme-neutral-800'
                                                 }`}>{formatNumberWithSuffix(item.volume_change_percent) ?? 0}%</span>
                                         )
-                                    }
-                                   
+                                    )}
                                 </div>
 
                             </div>
