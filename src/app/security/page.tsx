@@ -313,7 +313,7 @@ function GoogleAuthenticatorBind() {
       setVerificationCode(newCode);
 
       // Auto-focus next input
-      if (value && index < 3) {
+      if (value && index < 5) {
         const nextInput = document.getElementById(`code-${index + 1}`);
         nextInput?.focus();
       }
