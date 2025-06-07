@@ -22,7 +22,12 @@ const ListToken = () => {
     const queryClient = useQueryClient()
     const [sortBy, setSortBy] = useState("volume_1h_usd");
     const [sortType, setSortType] = useState("desc");
-    const [activeTab, setActiveTab] = useState("trending");
+    const [activeTab, setActiveTab] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('activeTabTrading') || "trending";
+        }
+        return "trending";
+    });
     const [timeFilter, setTimeFilter] = useState("24h");
     const [searchQuery, setSearchQuery] = useState("");
     const [isDragging, setIsDragging] = useState(false);
@@ -274,6 +279,16 @@ const ListToken = () => {
         }
       };
 
+    const handleTabChange = (tab: string) => {
+        setActiveTab(tab);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('activeTabTrading', tab);
+        }
+        if (tab === "favorite" || tab === "category") {
+            refetchMyWishlist();
+        }
+    };
+
     return (
         <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-1 overflow-hidden'>
             {/* <div className="relative mb-3 pr-3 px-3">
@@ -311,31 +326,25 @@ const ListToken = () => {
                     <div className="flex gap-2">
                         <button
                             className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "trending" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
-                            onClick={() => setActiveTab("trending")}
+                            onClick={() => handleTabChange("trending")}
                         >
                             {t('trading.listToken.trending')}
                         </button>
                         <button
                             className={`flex items-center gap-1 text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
-                            onClick={() => setActiveTab("new")}
+                            onClick={() => handleTabChange("new")}
                         >
                             {t('trading.listToken.new')} <PumpFun />
                         </button>
                         <button
                             className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "favorite" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
-                            onClick={() => {
-                                setActiveTab("favorite")
-                                refetchMyWishlist()
-                            }}
+                            onClick={() => handleTabChange("favorite")}
                         >
                             {t('trading.listToken.favorite')}
                         </button>
                         <button
                             className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "category" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
-                            onClick={() => {
-                                setActiveTab("category")
-                                refetchMyWishlist()
-                            }}
+                            onClick={() => handleTabChange("category")}
                         >
                             {t('trading.listToken.category')}
                         </button>
