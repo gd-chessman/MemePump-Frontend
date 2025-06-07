@@ -439,7 +439,11 @@
     "verificationCode": "Mã xác minh",
     "resendCode": "Gửi lại mã",
     "verify": "Xác minh",
-    "invalidCode": "Mã xác minh không hợp lệ"
+    "invalidCode": "Mã xác minh không hợp lệ",
+    "confirmDeleteWallet": "Bạn có chắc chắn muốn xóa ví này không?",
+    "confirmDeleteWalletAction": "Xóa ví",
+    "cancel": "Hủy",
+    "delete": "Xóa"
   },
   "searchPlaceholder": "Tên Token/ Địa chỉ",
   "languages": {

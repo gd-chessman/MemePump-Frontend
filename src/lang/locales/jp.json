@@ -401,7 +401,11 @@
     "verificationCode": "認証コード",
     "resendCode": "認証コードを再送信",
     "verify": "認証",
-    "invalidCode": "認証コードが一致しません"
+    "invalidCode": "認証コードが一致しません",
+    "confirmDeleteWallet": "このウォレットを削除してもよろしいですか？",
+    "confirmDeleteWalletAction": "ウォレットを削除",
+    "cancel": "キャンセル",
+    "delete": "削除"
   },
   "searchPlaceholder": "トークン名/アドレス",
   "languages": {

@@ -394,7 +394,11 @@
     "resendCode": "Resend code",
     "verify": "Verify",
     "invalidCode": "Invalid code",
-    "passwordsDoNotMatch": "Passwords do not match"
+    "passwordsDoNotMatch": "Passwords do not match",
+    "confirmDeleteWallet": "Are you sure you want to delete this wallet?",
+    "confirmDeleteWalletAction": "Delete wallet",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "searchPlaceholder": "Token Name/ Address",
   "languages": {
