@@ -156,7 +156,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
       // Create initial stats buttons
       const buttons = [
         { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}`, isMarketCap: true },
-        { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}`, isPurple: true },
+        { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(Math.abs(dataInfo?.volume24h || 0))}`, isPurple: true },
         { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}`, isPurple: true },
         { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0), isPurple: true }
       ].map(stat => {
@@ -198,7 +198,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
     const stats = [
       { label: t('trading.tokenInfo.marketCap'), value: `$${formatNumberWithSuffix(dataInfo?.marketCap || 0)}`, isMarketCap: true },
-      { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(dataInfo?.volume24h || 0)}`, isPurple: true },
+      { label: t('trading.tokenInfo.volume24h'), value: `$${formatNumberWithSuffix(Math.abs(dataInfo?.volume24h || 0))}`, isPurple: true },
       { label: t('trading.tokenInfo.liquidity'), value: `$${formatNumberWithSuffix(dataInfo?.liquidity || 0)}`, isPurple: true },
       { label: t('trading.tokenInfo.holders'), value: formatNumberWithSuffix(dataInfo?.holders || 0), isPurple: true }
     ];
