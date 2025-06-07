@@ -275,7 +275,7 @@ export default function TradingPanel({
                         ? Number(amount) * (tokenAmount?.token_price || 0)
                         : Number(amount) * (solPrice?.priceUSD || 0),
                 order_qlty: Number(amount),
-                member_list: getConnectList()
+                member_list: getConnectList().map(id => Number(id))
             })
         }
 
