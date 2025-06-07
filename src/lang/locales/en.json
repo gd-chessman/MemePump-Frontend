@@ -966,5 +966,10 @@
     "account_linked_success": "Account linked successfully",
     "account_linked": "Account linked",
     "account_linked_description": "Account linked successfully!"
+  },
+  "login": {
+    "error": "Error",
+    "notActive": "Account is not active",
+    "returnHome": "Return to home"
   }
 }

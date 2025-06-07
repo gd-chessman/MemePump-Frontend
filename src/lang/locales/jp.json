@@ -1000,5 +1000,10 @@
     "account_linked": "アカウントリンク",
     "account_linked_description": "アカウントが正常にリンクされました！"
     
+  },
+  "login": {
+    "error": "エラー",
+    "notActive": "アカウントが有効ではありません",
+    "returnHome": "ホームに戻る"
   }
 }

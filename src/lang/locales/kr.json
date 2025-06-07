@@ -1030,5 +1030,10 @@
       "account_linked_success": "계정이 성공적으로 연결되었습니다",
       "account_linked": "계정 연결",
       "account_linked_description": "계정이 성공적으로 연결되었습니다!"
+    },
+    "login": {
+      "error": "오류",
+      "notActive": "계정이 활성화되지 않았습니다",
+      "returnHome": "홈으로 돌아가기"
     }
   }

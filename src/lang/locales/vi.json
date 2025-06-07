@@ -1043,5 +1043,10 @@
     "account_linked_success": "Tài khoản đã được liên kết thành công",
     "account_linked": "Tài khoản đã liên kết",
     "account_linked_description": "Tài khoản đã được liên kết thành công!"
+  },
+  "login": {
+    "error": "Lỗi",
+    "notActive": "Tài khoản chưa được kích hoạt",
+    "returnHome": "Quay về trang chủ"
   }
 }
