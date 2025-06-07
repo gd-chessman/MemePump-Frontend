@@ -64,7 +64,7 @@ export default function Trading() {
     return '1';
   });
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [sortBy, setSortBy] = useState("volume_24h_usd");
+  const [sortBy, setSortBy] = useState("volume_24h_change_percent");
   const [sortType, setSortType] = useState("desc");
   
   const { data: topCoins, isLoading: isLoadingTopCoins } = useQuery({
