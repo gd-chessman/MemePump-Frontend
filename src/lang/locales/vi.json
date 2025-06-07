@@ -670,7 +670,8 @@
       "trending": "Thịnh hành",
       "new": "Mới",
       "pumpfun": "Pumpfun",
-      "memepumpfun": "Meme Pumpfun"
+      "memepumpfun": "Meme Pumpfun",
+      "noData": "Không có dữ liệu"
     }
   },
   "auth": {

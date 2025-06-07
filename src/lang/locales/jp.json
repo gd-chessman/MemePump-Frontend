@@ -640,7 +640,8 @@
       "trending": "トレンド",
       "new": "新規",
       "pumpfun": "Pumpfun",
-      "memepumpfun": "ミームPumpfun"
+      "memepumpfun": "ミームPumpfun",
+      "noData": "データがありません"
     }
   },
   "auth": {

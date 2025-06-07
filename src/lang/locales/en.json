@@ -587,7 +587,8 @@
       "favorite": "Favorite",
       "category": "Category",
       "trending": "Trending",
-      "new": "New"
+      "new": "New",
+      "noData": "No data"
     },
     "tokenInfo": {
       "marketCap": "Market Cap",

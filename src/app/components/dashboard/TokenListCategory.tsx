@@ -40,6 +40,7 @@ function SkeletonCard() {
 
 // Component to render a list of token cards
 export default function TokenListCategory({category = ""}: any) {
+    const { t } = useLang()
     const { data: tokenAllCategory = [] } = useQuery({
         queryKey: ["token-all-category"],
         queryFn: () => getListTokenAllCategory(),
@@ -57,8 +58,8 @@ export default function TokenListCategory({category = ""}: any) {
         if (category && (!tokenByCategory || tokenByCategory.length < 1)) {
             return (
                 <div className="flex flex-col items-center justify-center min-h-[200px]">
-                    <div className="text-base font-semibold text-zinc-600 dark:text-zinc-400">Data not found</div>
-                    <div className="text-sm text-zinc-500 dark:text-zinc-500 mt-2">No tokens found in this category</div>
+                    <div className="text-base font-semibold text-zinc-600 dark:text-zinc-400">{t("trading.listToken.noData")}</div>
+                    <div className="text-sm text-zinc-500 dark:text-zinc-500 mt-2">{t("trading.listToken.noData")}</div>
                 </div>
             );
         }
