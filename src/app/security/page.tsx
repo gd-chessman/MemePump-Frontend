@@ -663,7 +663,7 @@ function GoogleAuthenticatorBind() {
                       <div>
                         <span className="text-gray-500 dark:text-gray-400 text-sm">{t('security.step2.key')}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-900 dark:text-white text-xs font-mono break-all">
+                          <span className="text-gray-900 dark:text-white text-xs font-mono break-all whitespace-nowrap">
                             {secretKey}
                           </span>
                           <button 
