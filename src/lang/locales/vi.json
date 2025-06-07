@@ -1011,6 +1011,7 @@
     "change_password": "Đổi mật khẩu",
     "install_google_auth": "Google Authenticator",
     "verification_code": "Mã xác thực",
+    "verification_code_telegram": "Mã xác thực Telegram",
     "send_code": "Gửi mã",
     "new_password": "Mật khẩu mới",
     "new_password_placeholder": "Nhập mật khẩu mới",

@@ -181,7 +181,7 @@ function ChangePasswordTab() {
       {/* Verification Code Section */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {t('security.verification_code')}
+          {t('security.verification_code_telegram')}
         </label>
         <div className="flex items-center gap-4">
           <div className="flex gap-2">

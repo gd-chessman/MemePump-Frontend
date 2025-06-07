@@ -934,6 +934,7 @@
     "change_password": "Change Password",
     "install_google_auth": "Google Authenticator",
     "verification_code": "Verification Code",
+    "verification_code_telegram": "Telegram Verification Code",
     "send_code": "Send Code",
     "new_password": "New Password",
     "new_password_placeholder": "Enter new password",

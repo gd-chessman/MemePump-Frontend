@@ -967,6 +967,7 @@
     "change_password": "パスワードを変更",
     "install_google_auth": "Google Authenticator",
     "verification_code": "認証コード",
+    "verification_code_telegram": "Telegram 認証コード",
     "send_code": "コードを送信",
     "new_password": "新しいパスワード",
     "new_password_placeholder": "新しいパスワードを入力",
