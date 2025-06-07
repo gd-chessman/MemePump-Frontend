@@ -255,6 +255,25 @@ const ListToken = () => {
         setIsDragging(false);
     };
 
+    const getRelativeTime = (date: string) => {
+        const now = new Date();
+        const created = new Date(date);
+        const diffInSeconds = Math.floor((now.getTime() - created.getTime()) / 1000);
+    
+        if (diffInSeconds < 60) {
+          return t("time.secondsAgo", { seconds: diffInSeconds });
+        } else if (diffInSeconds < 3600) {
+          const minutes = Math.floor(diffInSeconds / 60);
+          return t("time.minutesAgo", { minutes });
+        } else if (diffInSeconds < 86400) {
+          const hours = Math.floor(diffInSeconds / 3600);
+          return t("time.hoursAgo", { hours });
+        } else {
+          const days = Math.floor(diffInSeconds / 86400);
+          return t("time.daysAgo", { days });
+        }
+      };
+
     return (
         <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-1 overflow-hidden'>
             {/* <div className="relative mb-3 pr-3 px-3">
@@ -297,10 +316,10 @@ const ListToken = () => {
                             {t('trading.listToken.trending')}
                         </button>
                         <button
-                            className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
+                            className={`flex items-center gap-1 text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "new" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
                             onClick={() => setActiveTab("new")}
                         >
-                            {t('trading.listToken.new')}
+                            {t('trading.listToken.new')} <PumpFun />
                         </button>
                         <button
                             className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "favorite" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
@@ -424,8 +443,12 @@ const ListToken = () => {
                                 </div>
                                 <div className="text-right pr-3 flex flex-col gap-1 cursor-pointer" onClick={() => handleChangeToken(address)}>
                                     <span className='dark:text-theme-neutral-100 text-theme-neutral-800 text-xs font-medium'>${formatNumberWithSuffix(item.volume_usd)}</span>
-                                    {
-                                        activeTab !== "new" && (
+                                    {activeTab === "new" ? (
+                                        <span className="text-xs font-medium dark:text-theme-neutral-100 text-theme-neutral-800">
+                                            {getRelativeTime(item.createdAt)}
+                                        </span>
+                                    ) : (
+                                        item.volume_change_percent !== undefined && (
                                             <span className={`text-xs font-medium ${item.volume_change_percent > 0
                                                 ? 'text-theme-green-200'
                                                 : item.volume_change_percent < 0
@@ -433,8 +456,7 @@ const ListToken = () => {
                                                     : 'dark:text-theme-neutral-100 text-theme-neutral-800'
                                                 }`}>{formatNumberWithSuffix(item.volume_change_percent) ?? 0}%</span>
                                         )
-                                    }
-                                   
+                                    )}
                                 </div>
 
                             </div>
