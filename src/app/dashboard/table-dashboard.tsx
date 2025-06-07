@@ -11,7 +11,7 @@ import notify from "@/app/components/notify";
 import { useAuth } from "@/hooks/useAuth";
 import { TableTokenList } from "@/app/components/trading/TableTokenList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
-import { getMyWishlist, getTokenByCategory } from "@/services/api/SolonaTokenService";
+import { getListTokenAllCategory, getMyWishlist, getTokenByCategory } from "@/services/api/SolonaTokenService";
 import { useQuery } from "@tanstack/react-query";
 import { getNewCoins, getTopCoins } from "@/services/api/OnChainService";
 import TokenList from "@/app/components/dashboard/TokenListCard";
@@ -77,16 +77,23 @@ export default function Trading() {
     queryFn: getMyWishlist,
     refetchOnMount: true,
   });
-  // const { data: categories = [] } = useQuery({
-  //   queryKey: ["token-categories"],
-  //   queryFn: getTokenCategorys,
-  // });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["token-categories"],
+    queryFn: getTokenCategorys,
+  });
 
-  // const { data: tokenByCategory = [] } = useQuery({
-  //   queryKey: ["token-by-category"],
-  //   queryFn: () => getTokenByCategory(categories[0].slug),
-  //   enabled: !!categories.length,
-  // });
+  const { data: tokenByCategory = [] } = useQuery({
+    queryKey: ["token-by-category"],
+    queryFn: () => getTokenByCategory(categories[0].slug),
+    enabled: !!categories.length,
+  });
+
+  const { data: tokenAllCategory = [] } = useQuery({
+    queryKey: ["token-all-category"],
+    queryFn: () => getListTokenAllCategory(),
+  });
+
+
   const [searchResults, setSearchResults] = useState<Token[]>([]);
 
   const [expandedRows, setExpandedRows] = useState<{ [key: string]: boolean }>({});
@@ -137,8 +144,17 @@ export default function Trading() {
         });
         setTokens(transformedTokens);
       }
+    } else if (activeTab === '4' && tokenAllCategory && tokenAllCategory.length > 0) {
+      const transformedTokens = tokenAllCategory.map((token: any) => ({
+        ...token,
+        logoUrl: token.logoUrl || "/placeholder.png"
+
+      }));
+      setTokens(transformedTokens);
     }
-  }, [topCoins, newCoins, myWishlist, activeTab]);
+  }, [topCoins, newCoins, myWishlist, activeTab, tokenAllCategory]);
+
+  console.log("displayTokens", tokens)
 
   // Effect to handle search when debounced value changes
   useEffect(() => {
