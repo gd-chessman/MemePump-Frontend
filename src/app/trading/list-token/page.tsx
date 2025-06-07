@@ -90,6 +90,7 @@ const ListToken = () => {
             case "new":
                 filteredList = newCoins?.map(token => ({
                     ...token,
+                    market_cap: token.marketCap * 100,
                     volume_24h_usd: token.marketCap * 100,
                     volume_24h_change_percent: 0,
                     volume_1h_change_percent: 0,
@@ -104,7 +105,7 @@ const ListToken = () => {
             case "category":
                 filteredList = tokenAllCategory?.map((token: any) => ({
                     ...token,
-                    volume_24h_usd: token.marketCap,
+                    volume_24h_usd: token.volume_24h_usd,
                     volume_24h_change_percent: 0,
                     volume_1h_change_percent: 0,
                     volume_4h_change_percent: 0,
