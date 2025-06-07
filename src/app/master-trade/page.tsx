@@ -310,6 +310,7 @@ export default function MasterTradeTable() {
         } else {
             handleMemberConnect(inforWallet)
         }
+        refetchMasterTraders()
     }
     const handleMemberConnect = async (inforWallet?: any) => {
         await MasterTradingService.connectMaster({
@@ -317,7 +318,6 @@ export default function MasterTradeTable() {
             price_limit: "0.01",
             master_wallet_address: inforWallet.address,
         });
-        refetchMasterTraders()
     }
     const handleMemberConnectStatus = async (inforWallet?: any, status?: string) => {
         try {
