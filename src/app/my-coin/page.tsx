@@ -149,7 +149,7 @@ export default function MyCoinsTable() {
     };
 
     const handleCreateCoin = () => {
-        router.push('/create-coin');
+        router.push('/create-coin//memepump');
     };
 
     return (
