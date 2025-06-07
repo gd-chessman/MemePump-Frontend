@@ -41,6 +41,10 @@ export default function ConnectToMasterModal({
   // Handle connect
   const handleConnect = async () => {
     try {
+      const value = parseFloat(copyAmount.replace(',', '.'));
+      if (value < 0.01) {
+        return;
+      }
       setIsLoading(true)
       const data = {
         master_wallet_address: masterAddress,
@@ -61,14 +65,14 @@ export default function ConnectToMasterModal({
 
   const handleIncrement = () => {
     const currentValue = parseFloat(copyAmount.replace(',', '.'));
-    const newValue = (currentValue + 0.1).toFixed(1).replace('.', ',');
+    const newValue = (currentValue + 0.01).toFixed(2).replace('.', ',');
     setCopyAmount(newValue);
   };
 
   const handleDecrement = () => {
     const currentValue = parseFloat(copyAmount.replace(',', '.'));
-    if (currentValue > 0.1) {
-      const newValue = (currentValue - 0.1).toFixed(1).replace('.', ',');
+    if (currentValue > 0.01) {
+      const newValue = (currentValue - 0.01).toFixed(2).replace('.', ',');
       setCopyAmount(newValue);
     }
   };
@@ -149,12 +153,7 @@ export default function ConnectToMasterModal({
                 onChange={(e) => {
                   const value = e.target.value.replace(/[.,]/g, ',');
                   if (value === '' || /^[0-9]*[,]?[0-9]*$/.test(value)) {
-                    const numValue = parseFloat(value.replace(',', '.'));
-                    if (value === '' || numValue >= 0.1) {
-                      setCopyAmount(value);
-                    } else {
-                      setCopyAmount('0,01');
-                    }
+                    setCopyAmount(value);
                   }
                 }}
                 onKeyDown={(e) => {
@@ -176,7 +175,7 @@ export default function ConnectToMasterModal({
                   onClick={handleDecrement}
                   className="text-cyan-400 hover:text-cyan-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   type="button"
-                  disabled={parseFloat(copyAmount.replace(',', '.')) <= 0.1}
+                  disabled={parseFloat(copyAmount.replace(',', '.')) <= 0.01}
                 >
                   <ChevronDown className="h-4 w-4" />
                 </button>
@@ -195,8 +194,8 @@ export default function ConnectToMasterModal({
             </button>
             <button
               onClick={handleConnect}
-              disabled={isLoading}
-              className="lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto"
+              disabled={isLoading || copyAmount == "" || parseFloat(copyAmount.replace(',', '.')) < 0.01}
+              className="lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="relative z-10 text-white">{isLoading ? t('connectMasterModal.buttons.connecting') : t('connectMasterModal.buttons.connect')}</span>
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-theme-primary-300 to-theme-secondary-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
