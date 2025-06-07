@@ -51,8 +51,8 @@ const { t } = useLang();
       className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
       onClick={handleOverlayClick}
     >
-      <div className="p-5 bg-white dark:bg-stone-950 rounded-lg shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] dark:shadow-[0px_0px_4px_0px_rgba(0,0,0,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
-        <div className="w-96 inline-flex flex-col justify-start items-center gap-4">
+      <div className="p-5 bg-white mx-2 dark:bg-stone-950 rounded-lg shadow-[0px_0px_4px_0px_rgba(232,232,232,0.50)] dark:shadow-[0px_0px_4px_0px_rgba(0,0,0,0.50)] outline outline-1 outline-offset-[-1px] outline-indigo-500 backdrop-blur-[5px] inline-flex justify-start items-end gap-1">
+        <div className="w-full max-w-96 md:w-96 inline-flex flex-col justify-start items-center gap-4">
           <div className="self-stretch inline-flex justify-between items-center">
             <div className="justify-start text-indigo-500 dark:text-indigo-400 text-lg font-semibold uppercase leading-relaxed">
               {t('header.wallet.connect')}
@@ -66,7 +66,7 @@ const { t } = useLang();
               {t('header.wallet.connect_with_us')}
             </div>
           </div>
-          <div className="inline-flex justify-start items-center gap-20">
+          <div className="inline-flex justify-start items-center gap-4 md:gap-20">
             <div
               data-property-1="Frame 427320434"
               className="w-12 inline-flex flex-col justify-start items-center gap-1"
