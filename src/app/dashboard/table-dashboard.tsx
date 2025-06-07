@@ -18,6 +18,7 @@ import TokenList from "@/app/components/dashboard/TokenListCard";
 import { getTokenCategorys } from "@/services/api/TelegramWalletService";
 import PumpFun from "../components/pump-fun";
 import TokenListCategory from "@/app/components/dashboard/TokenListCategory";
+import { useTranslate } from "@/hooks/useTranslate";
 
 interface Token {
   id: number;
@@ -40,6 +41,11 @@ interface Token {
   volume24h?: number;
   volume_24h_change_percent?: number;
 }
+
+const TranslatedCategory = ({ name }: { name: string }) => {
+  const { translatedText } = useTranslate(name);
+  return <>{translatedText || name}</>;
+};
 
 export default function Trading() {
   const router = useRouter();
@@ -251,7 +257,7 @@ export default function Trading() {
                     <option value="" className="text-neutral-100">{t('tableDashboard.tabs.category')}</option>
                     {categories.map((category: any) => (
                       <option key={category.id} value={category.slug} className="text-neutral-100">
-                        {category.name}
+                        <TranslatedCategory name={category.name} />
                       </option>
                     ))}
                   </select>
