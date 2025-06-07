@@ -1053,5 +1053,11 @@
     "error": "Lỗi",
     "notActive": "Tài khoản chưa được kích hoạt",
     "returnHome": "Quay về trang chủ"
+  },
+  "time": {
+    "secondsAgo": "{seconds}s trước",
+    "minutesAgo": "{minutes}m trước",
+    "hoursAgo": "{hours}h trước",
+    "daysAgo": "{days}d trước"
   }
 }

@@ -50,7 +50,7 @@ export default function TokenList() {
       </div>
     );
   }
-  
+    
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {wsTokens?.map((token, index) => (
@@ -67,6 +67,7 @@ export default function TokenList() {
             price: token.marketCap,
             marketCap: token.marketCap,
             program: token.program,
+            createdAt: token.createdAt,
             change24h: 0, // This data is not available in wsTokens
             volume: 0, // This data is not available in wsTokens
             holders: 0, // This data is not available in wsTokens
@@ -129,6 +130,25 @@ function SingleTokenCard({ token }: any) {
   const [imageError, setImageError] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const getRelativeTime = (date: string) => {
+    const now = new Date();
+    const created = new Date(date);
+    const diffInSeconds = Math.floor((now.getTime() - created.getTime()) / 1000);
+
+    if (diffInSeconds < 60) {
+      return t("time.secondsAgo", { seconds: diffInSeconds });
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return t("time.minutesAgo", { minutes });
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return t("time.hoursAgo", { hours });
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return t("time.daysAgo", { days });
+    }
+  };
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(token.address);
@@ -183,7 +203,7 @@ function SingleTokenCard({ token }: any) {
                 <span className="text-zinc-600 dark:text-zinc-400 text-sm truncate max-w-[8rem] whitespace-nowrap">{token.fullName}</span>
               </div>
               <div className="flex items-center text-xs text-zinc-500 dark:text-zinc-400 gap-1.5 mt-0.5">
-                <span>{token.time}</span>
+                <span>{getRelativeTime(token.createdAt)}</span>
                 <span className="text-zinc-700">|</span>
                 <span className="text-xs">{truncateString(token.address, 12)}</span>
                 {copied ? (
@@ -213,6 +233,8 @@ function SingleTokenCard({ token }: any) {
             </div>
           </div>
           <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-3">
+                <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{getRelativeTime(token.createdAt)}</span>
+                <span className="text-zinc-700">|</span>
                 <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{t("trading.marketCap")}</span>
                 <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap * 100))}</span>
               </div>

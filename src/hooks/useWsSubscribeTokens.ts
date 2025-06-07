@@ -16,6 +16,7 @@ interface Token {
   marketCap: number;
   liquidity: any;
   program: string;
+  createdAt: string;
 }
 
 interface SubscribeParams {
@@ -96,6 +97,7 @@ export function useWsSubscribeTokens(params?: SubscribeParams) {
       isVerified: token.slt_is_verified || token.isVerified,
       marketCap: token.slt_market_cap || token.marketCap,
       program: token.slt_program || token.slt_program,
+      createdAt: token.slt_created_at || token.createdAt,
     };
   };
 

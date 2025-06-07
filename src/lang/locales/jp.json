@@ -1009,5 +1009,11 @@
     "error": "エラー",
     "notActive": "アカウントが有効ではありません",
     "returnHome": "ホームに戻る"
+  },
+  "time": {
+    "secondsAgo": "{seconds}秒前",
+    "minutesAgo": "{minutes}分前",
+    "hoursAgo": "{hours}時間前",
+    "daysAgo": "{days}日前"
   }
 }

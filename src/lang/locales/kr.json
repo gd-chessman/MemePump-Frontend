@@ -1040,5 +1040,11 @@
       "error": "오류",
       "notActive": "계정이 활성화되지 않았습니다",
       "returnHome": "홈으로 돌아가기"
+    },
+    "time": {
+      "secondsAgo": "{seconds}초 전",
+      "minutesAgo": "{minutes}분 전",
+      "hoursAgo": "{hours}시간 전",
+      "daysAgo": "{days}일 전"
     }
   }

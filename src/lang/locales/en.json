@@ -976,5 +976,11 @@
     "error": "Error",
     "notActive": "Account is not active",
     "returnHome": "Return to home"
+  },
+  "time": {
+    "secondsAgo": "{seconds}s ago",
+    "minutesAgo": "{minutes}m ago",
+    "hoursAgo": "{hours}h ago",
+    "daysAgo": "{days}d ago"
   }
 }
