@@ -629,7 +629,7 @@ export default function WalletPage() {
                         </div>
 
                         {/* ETH Wallet Card */}
-                        <div className={`${walletCardStyles} dark:bg-gradient-blue-transparent border-theme-primary-100 bg-white z-10`}>
+                        <div className={`${walletCardStyles} dark:bg-gradient-blue-transparent !border-theme-primary-100 bg-white z-10`}>
                             <div className="inline-flex justify-start items-center gap-2 w-full">
                                 <div className="w-8 h-8 bg-theme-primary-500 rounded-full flex justify-center items-center relative overflow-hidden flex-shrink-0">
                                     <img src="/ethereum.png" alt="Ethereum" className="w-6 h-6 object-cover" />
