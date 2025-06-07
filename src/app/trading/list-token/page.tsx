@@ -12,7 +12,7 @@ import { SolonaTokenService } from '@/services/api'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useLang } from '@/lang/useLang'
 import PumpFun from '@/app/components/pump-fun'
-import { getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaTokenService'
+import { getListTokenAllCategory, getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaTokenService'
 import { useWsSubscribeTokens } from "@/hooks/useWsSubscribeTokens";
 import notify from "@/app/components/notify"
 
@@ -45,6 +45,11 @@ const ListToken = () => {
     });
 
     const { tokens: newCoins, isLoading: isLoadingNewCoins } = useWsSubscribeTokens({ limit: 50 });
+
+    const { data: tokenAllCategory = [] } = useQuery({
+        queryKey: ["token-all-category"],
+        queryFn: () => getListTokenAllCategory(),
+    });
 
     const { data: myWishlist, refetch: refetchMyWishlist } = useQuery({
         queryKey: ["myWishlist"],
@@ -97,7 +102,7 @@ const ListToken = () => {
                 filteredList = myWishlist?.tokens || [];
                 break;
             case "category":
-                filteredList = newCoins?.map(token => ({
+                filteredList = tokenAllCategory?.map((token: any) => ({
                     ...token,
                     volume_24h_usd: token.marketCap,
                     volume_24h_change_percent: 0,
