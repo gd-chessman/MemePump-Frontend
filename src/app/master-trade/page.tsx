@@ -302,13 +302,13 @@ export default function MasterTradeTable() {
     }
 
     // Xử lý các hành động
-    const handleConnect = (inforWallet?: any) => {
+    const handleConnect = async (inforWallet?: any) => {
         if (inforWallet.type !== "vip" && inforWallet.status == null) {
             setShowConnectModal(inforWallet.address)
         } else if (inforWallet.status === "pause") {
-            handleMemberConnectStatus(inforWallet, "connect")
+            await handleMemberConnectStatus(inforWallet, "connect")
         } else {
-            handleMemberConnect(inforWallet)
+            await handleMemberConnect(inforWallet)
         }
         refetchMasterTraders()
     }
