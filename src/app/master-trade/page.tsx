@@ -233,7 +233,8 @@ export default function MasterTradeTable() {
 
         // Use setTimeout to avoid React state update conflicts
         setTimeout(updateData, 0);
-    }, [masterDetails]);
+    }, [masterDetails, router, combinedMasterData]);
+
 
     // Update tradeData to use combinedMasterData
     const tradeData = useMemo(() => {
