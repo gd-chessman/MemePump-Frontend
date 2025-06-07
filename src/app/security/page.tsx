@@ -17,7 +17,7 @@ export default function SecurityPage() {
   const { t } = useLang();
   const [activeTab, setActiveTab] = useState<'password' | 'google-auth' | 'link'>('link');
 
-  if (!walletInfor) return null;
+  if (!walletInfor?.wallet_id) return null;
 
   return (
     <div className="min-h-screen text-gray-900 dark:text-white p-4 transition-colors duration-300">
@@ -958,9 +958,6 @@ function LinkAccountTab() {
             ) : (
               // Show Google Sign In button when no code is present
               <div>
-                <label className="block text-sm text-center font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t('security.verification_code_google')}
-                </label>
                 <div className="flex justify-center">
                   <button
                     onClick={handleGoogleSignIn}
