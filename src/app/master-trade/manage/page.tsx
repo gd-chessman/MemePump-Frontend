@@ -514,7 +514,7 @@ export default function MasterTradeInterface() {
     <div className={styles.container}>
       {/* Group Management Section */}
       <div className={styles.groupSection}>
-        <div className={styles.groupCard}>
+        <div className={`${styles.groupCard} mt-[3.375rem]`}>
           <h2 className={styles.groupTitle}>
             {ethereumIcon(14, 14)}
             {t('masterTrade.manage.groupManagement.createGroup')}
