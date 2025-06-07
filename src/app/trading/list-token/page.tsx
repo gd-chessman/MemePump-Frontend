@@ -143,6 +143,15 @@ const ListToken = () => {
                     volume_usd: item.volume_24h_usd
                 };
             });
+
+            // Sort by volume_change_percent in descending order
+            if (activeTab === "trending") {
+                filteredList.sort((a, b) => {
+                    const aVolumeChange = a.volume_change_percent || 0;
+                    const bVolumeChange = b.volume_change_percent || 0;
+                    return bVolumeChange - aVolumeChange;
+                });
+            }
         }
 
         setTokenList(filteredList);
