@@ -203,7 +203,6 @@ function SingleTokenCard({ token }: any) {
                 <span className="text-zinc-600 dark:text-zinc-400 text-sm truncate max-w-[8rem] whitespace-nowrap">{token.fullName}</span>
               </div>
               <div className="flex items-center text-xs text-zinc-500 dark:text-zinc-400 gap-1.5 mt-0.5">
-                <span>{getRelativeTime(token.createdAt)}</span>
                 <span className="text-zinc-700">|</span>
                 <span className="text-xs">{truncateString(token.address, 12)}</span>
                 {copied ? (
