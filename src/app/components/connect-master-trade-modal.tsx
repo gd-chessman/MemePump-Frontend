@@ -24,7 +24,7 @@ export default function ConnectToMasterModal({
   refetchMasterTraders,
 }: ConnectToMasterModalProps) {
   const { t } = useLang()
-  const [copyAmount, setCopyAmount] = useState("0")
+  const [copyAmount, setCopyAmount] = useState("0,01")
   const [showDropdown, setShowDropdown] = useState(false)
   const [copiedAddress, setCopiedAddress] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
