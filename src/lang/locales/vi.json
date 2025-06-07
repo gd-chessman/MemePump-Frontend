@@ -1043,7 +1043,11 @@
     "linking": "Đang liên kết...",
     "account_linked_success": "Tài khoản đã được liên kết thành công",
     "account_linked": "Tài khoản đã liên kết",
-    "account_linked_description": "Tài khoản đã được liên kết thành công!"
+    "account_linked_description": "Tài khoản đã được liên kết thành công!",
+    "password_set": "Mật khẩu đã được đặt",
+    "password_not_set": "Mật khẩu chưa được đặt",
+    "gg_auth_enabled": "Google Authenticator đã được kích hoạt",
+    "gg_auth_disabled": "Google Authenticator chưa được kích hoạt"
   },
   "login": {
     "error": "Lỗi",

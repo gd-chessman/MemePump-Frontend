@@ -999,8 +999,11 @@
     "linking": "アカウントのリンク中...",
     "account_linked_success": "アカウントが正常にリンクされました",
     "account_linked": "アカウントリンク",
-    "account_linked_description": "アカウントが正常にリンクされました！"
-    
+    "account_linked_description": "アカウントが正常にリンクされました！",
+    "password_set": "パスワードが設定されています",
+    "password_not_set": "パスワードが設定されていません",
+    "gg_auth_enabled": "Google Authenticatorが有効です",
+    "gg_auth_disabled": "Google Authenticatorが無効です"
   },
   "login": {
     "error": "エラー",

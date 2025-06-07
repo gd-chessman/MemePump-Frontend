@@ -966,7 +966,11 @@
     "linking": "Linking...",
     "account_linked_success": "Account linked successfully",
     "account_linked": "Account linked",
-    "account_linked_description": "Account linked successfully!"
+    "account_linked_description": "Account linked successfully!",
+    "password_set": "Password set",
+    "password_not_set": "Password not set",
+    "gg_auth_enabled": "Google Authenticator enabled",
+    "gg_auth_disabled": "Google Authenticator disabled"
   },
   "login": {
     "error": "Error",

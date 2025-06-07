@@ -1030,7 +1030,11 @@
       "linking": "계정 연결 중...",
       "account_linked_success": "계정이 성공적으로 연결되었습니다",
       "account_linked": "계정 연결",
-      "account_linked_description": "계정이 성공적으로 연결되었습니다!"
+      "account_linked_description": "계정이 성공적으로 연결되었습니다!",
+      "password_set": "비밀번호가 설정되었습니다",
+      "password_not_set": "비밀번호가 설정되지 않았습니다",
+      "gg_auth_enabled": "Google Authenticator가 활성화되었습니다",
+      "gg_auth_disabled": "Google Authenticator가 비활성화되었습니다"
     },
     "login": {
       "error": "오류",
