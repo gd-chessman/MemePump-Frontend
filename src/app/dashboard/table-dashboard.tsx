@@ -49,7 +49,13 @@ export default function Trading() {
   const [isSearching, setIsSearching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState(() => {
+    // Get active tab from localStorage on initial render
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('activeTabOverview') || '1';
+    }
+    return '1';
+  });
   const [sortBy, setSortBy] = useState("volume_24h_usd");
   const [sortType, setSortType] = useState("desc");
   
@@ -84,6 +90,13 @@ export default function Trading() {
   const [searchResults, setSearchResults] = useState<Token[]>([]);
 
   const [expandedRows, setExpandedRows] = useState<{ [key: string]: boolean }>({});
+
+  // Update localStorage when activeTab changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('activeTabOverview', activeTab);
+    }
+  }, [activeTab]);
 
   // Update tokens when topCoins or newCoins data changes
   useEffect(() => {
