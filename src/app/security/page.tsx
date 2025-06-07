@@ -989,15 +989,15 @@ function LinkAccountTab() {
           </>
         ) : (
           <div className="w-full max-w-md">
-            <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-4">
+            <div className="bg-green-50 dark:bg-green-900/30 border border-blue-200 dark:border-green-800 rounded-lg p-4 mb-4">
               <div className="flex flex-col gap-3">
                 <div className="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${walletInfor?.isActiveMail ? 'text-green-500' : 'text-yellow-500'} mr-2`} viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${walletInfor?.isActiveMail ? 'text-blue-500' : 'text-blue-500'} mr-2`} viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
-                  <span className={`text-sm ${walletInfor?.isActiveMail ? 'text-green-700 dark:text-green-400' : 'text-yellow-700 dark:text-yellow-400'}`}>
-                    {walletInfor?.email} {!walletInfor?.isActiveMail && '(✗)'}
+                  <span className={`text-sm ${walletInfor?.isActiveMail ? 'text-blue-700 dark:text-blue-400' : 'text-blue -700 dark:text-blue-400'}`}>
+                    {walletInfor?.email} {!walletInfor?.isActiveMail ? '(✗)' : '(✓)'}
                   </span>
                 </div>
                 <div className="flex items-center">
