@@ -48,7 +48,7 @@ interface Trader {
     };
     lastTime?: string;
     type?: string;
-    connection_status?: TradeStatus;
+    connect_status?: TradeStatus;
     info?: any;
 }
 
@@ -182,7 +182,7 @@ export default function MasterTradeTable() {
                     if (!address) return null;
                     try {
                         const data = await getMasterById(address);
-                        const statusConnection = trader.connection_status === "connect" ? data : null;
+                        const statusConnection = trader.connect_status === "connect" ? data : null;
                         return { ...data.historic.summary, address, lastTime: data?.pnl_since, info: statusConnection };
                     } catch (error) {
                         return null;
@@ -224,7 +224,7 @@ export default function MasterTradeTable() {
                     ...trader,
                     ...details,
                     address: trader.address,
-                    connection_status: trader.connection_status
+                    connect_status: trader.connect_status
                 };
             });
 
@@ -256,7 +256,7 @@ export default function MasterTradeTable() {
                 lastTime: formatLastTime(trader.lastTime),
                 info: trader.info,
                 type: trader.type || "NORMAL" as TradeType,
-                status: (trader.connection_status ?? "Not Connected") as TradeStatus
+                status: (trader.connect_status ?? "Not Connected") as TradeStatus
             };
         });
     }, [combinedMasterData]);
