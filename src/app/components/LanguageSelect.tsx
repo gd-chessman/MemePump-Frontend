@@ -18,7 +18,7 @@ export function LangToggle({ className, showArrow = false }: { className?: strin
           {showArrow && <ChevronDown className="h-6 w-6 ml-auto" />}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className={`${showArrow ? '!bg-transparent border-t border-neutral-200 dark:border-neutral-700 rounded-xl box-shadow-none rounded-t-none' : ''}`}>
+      <DropdownMenuContent align="end" className={`${showArrow ? 'bg-[#e0fcff] dark:!bg-[#2b1858] border-t border-neutral-200 dark:border-neutral-700 rounded-xl box-shadow-none rounded-t-none' : ''}`}>
         <div className="flex flex-col pr-2 gap-1 overflow-x-hidden">
           {langConfig.listLangs.map((language) => (
             <DropdownMenuItem key={language.id} onClick={() => setLang(language.code)} className="flex dark:text-theme-neutral-100 text-theme-neutral-800 items-center gap-2 lg:ml-0 ml-5 cursor-pointer hover:bg-theme-neutral-100 dark:hover:bg-theme-neutral-900" style={{ width: showArrow ? '100vw' : '180px', marginRight: '-10px' }}>
