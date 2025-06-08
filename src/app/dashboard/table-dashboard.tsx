@@ -249,14 +249,14 @@ export default function Trading() {
               >
                 {activeTab === '4' ? (
                   <select
-                    className="bg-transparent border-none focus:outline-none cursor-pointer text-neutral-100 dark:gradient-hover"
+                    className="bg-transparent border-none focus:outline-none cursor-pointer flex flex-col text-neutral-100 dark:gradient-hover"
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <option value="" className="text-neutral-100">{t('tableDashboard.tabs.category')}</option>
+                    <option value="" className="dark:!text-theme-neutral-100 !text-theme-neutral-1000 dark:!bg-theme-neutral-1000 flex-1">{t('tableDashboard.tabs.category')}</option>
                     {categories.map((category: any) => (
-                      <option key={category.id} value={category.slug} className="text-neutral-100">
+                      <option key={category.id} value={category.slug} className="dark:!text-theme-neutral-100 !text-theme-neutral-1000 dark:!bg-theme-neutral-1000 flex-1">
                         <TranslatedCategory name={category.name} />
                       </option>
                     ))}

@@ -147,7 +147,7 @@
     },
     "confirmation": {
       "title": "確認",
-      "description": "このトークンを作成するには<span class=\"font-bold\">0.0025 SOL</span>が必要です",
+      "description": "このトークンを作成するには<span class=\"font-bold\">0.025 SOL</span>が必要です",
       "cancel": "キャンセル",
       "confirm": "確認",
       "description1": "このトークンを作成するには",

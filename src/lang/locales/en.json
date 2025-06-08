@@ -144,7 +144,7 @@
     },
     "confirmation": {
       "title": "Confirmation",
-      "description": "You need to spend <span class=\"font-bold\">0.0025 SOL</span> to create this token",
+      "description": "You need to spend <span class=\"font-bold\">0.025 SOL</span> to create this token",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "description1": "To create this token, you need to spend",

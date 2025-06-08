@@ -108,7 +108,7 @@ const styles = {
   selectTrigger: "w-[150px] md:w-[200px] pl-3 md:pl-4 h-[25px] md:h-[30px] dark:bg-black/60 bg-gray-100 border-theme-primary-300/30 hover:border-theme-primary-300/50 dark:text-theme-neutral-100 text-[10px] sm:text-xs md:text-sm rounded-full",
   selectContent: "dark:bg-black/90 bg-white border-theme-primary-300/30 text-[10px] sm:text-xs md:text-sm",
   selectItem: "dark:text-theme-neutral-100 text-theme-neutral-1000 hover:bg-theme-primary-300/20 focus:bg-theme-primary-300/10 cursor-pointer text-[10px] sm:text-xs md:text-sm",
-  dialogContent: "dark:bg-black border border-blue-500/30 w-[90vw] md:w-[400px] max-w-[400px]",
+  dialogContent: "dark:bg-black bg-white border border-blue-500/30 w-[90vw] md:w-[400px] max-w-[400px]",
   dialogTitle: "dark:text-theme-neutral-100 text-theme-neutral-1000 text-center text-[10px] sm:text-xs md:text-sm",
   dialogButton: "px-2 md:px-3 py-1 dark:text-theme-neutral-100 text-theme-neutral-1000 border border-blue-500/30 hover:bg-blue-500/10 h-[25px] md:h-[30px] text-[10px] sm:text-xs"
 };
@@ -1064,7 +1064,7 @@ export default function MasterTradeInterface() {
                     setRoleChangePassword(e.target.value);
                     setRoleChangeError("");
                   }}
-                  className={`${styles.input} w-full ${roleChangeError ? 'border-red-500' : ''}`}
+                  className={`${styles.input} w-full border border-theme-primary-100 dark:border-theme-neutral-1000 ${roleChangeError ? 'border-red-500' : ''}`}
                   placeholder={t('masterTrade.manage.connectionManagement.passwordPlaceholder')}
                 />
                 {roleChangeError && (
