@@ -443,7 +443,7 @@ const ListToken = () => {
                 )}
 
                 <div className="flex-grow h-[calc(100%-20px)] custom-scroll overflow-y-scroll mt-2">
-                    {Array.isArray(tokenList) && tokenList?.filter(e => categoryOption?.length > 0 ? e.category.name === categoryOption : true)?.map((item: any, i: number) => {
+                    {Array.isArray(tokenList) && tokenList?.filter(e => categoryOption?.length > 0 ? e?.category?.name === categoryOption : true)?.map((item: any, i: number) => {
                         const address = searchQuery.length > 0 ? item.poolAddress : item.address;
                         return (
                             <div
