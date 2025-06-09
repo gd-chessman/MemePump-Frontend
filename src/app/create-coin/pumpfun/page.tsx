@@ -404,7 +404,7 @@ export default function CreateCoinForm() {
               {t('createCoin.confirmation.description1')}
 
               <span className="font-bold">
-                &nbsp;{Number(formData.amount) + 0.0025} SOL
+                &nbsp;{Number(formData.amount) + 0.025} SOL
               </span>
               {t('createCoin.confirmation.description3')}
             </span>

@@ -39,7 +39,7 @@ function SkeletonCard() {
 // Component to render a list of token cards
 export default function TokenList() {
   const { tokens: wsTokens } = useWsSubscribeTokens({ limit: 36 });
-  
+
   // Show skeleton loading when tokens array is empty or has length less than 1
   if (!wsTokens || wsTokens.length < 1) {
     return (
@@ -50,12 +50,12 @@ export default function TokenList() {
       </div>
     );
   }
-    
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {wsTokens?.map((token, index) => (
-        <SingleTokenCard 
-          key={index} 
+        <SingleTokenCard
+          key={index}
           token={{
             id: token.id.toString(),
             name: token.symbol,
@@ -78,7 +78,7 @@ export default function TokenList() {
               liquidity: parseFloat(token.liquidity) / 1000000, // Convert to millions
               run: token.isVerified
             }
-          }} 
+          }}
         />
       ))}
     </div>
@@ -124,7 +124,7 @@ function TikTok(props: React.SVGProps<SVGSVGElement>) {
 
 // Component to render a single token card (internal to this file)
 function SingleTokenCard({ token }: any) {
-  const { t } = useLang() 
+  const { t } = useLang()
   const router = useRouter();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -198,9 +198,9 @@ function SingleTokenCard({ token }: any) {
         <div className="ml-auto flex-1 flex flex-col justify-between">
           <div className="flex items-start justify-between flex-wrap gap-2 ">
             <div className="flex-1 min-w-56">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 <span className="font-semibold text-lg text-zinc-900 dark:text-white whitespace-nowrap max-w-[8rem] truncate">{token.name}</span>
-                <span className="text-zinc-600 dark:text-zinc-400 text-sm truncate max-w-[8rem] whitespace-nowrap">{token.fullName}</span>
+                <span className="text-zinc-600 dark:text-zinc-400 text-xs truncate max-w-[10rem] whitespace-nowrap">{token.fullName}</span>
               </div>
               <div className="flex items-center text-xs text-zinc-500 dark:text-zinc-400 gap-1.5 mt-0.5">
                 <span className="text-zinc-700">|</span>
@@ -220,23 +220,20 @@ function SingleTokenCard({ token }: any) {
                 {token.social?.tiktok && <TikTok className="h-3.5 w-3.5 text-zinc-400 cursor-pointer hover:text-white" />}
               </div>
             </div>
-            <div className="flex flex-col items-end">
-              <button 
+            <div className="flex justify-between items-center w-full flex-row-reverse px-2">
+              <button
                 onClick={handleTrade}
                 className="text-white lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto flex items-center justify-center"
               >
                 <Zap className="h-4 w-4 mr-1.5 text-green-400" />
                 {t("trading.trade")}
               </button>
-             
+              <div className="flex flex-col items-end">
+                <span className="text-zinc-800 dark:text-zinc-300 text-sm">{t("trading.marketCap")}: {formatNumber(Number(token.marketCap * 100))}</span>
+                <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{getRelativeTime(token.createdAt)}</span>
+              </div>
             </div>
           </div>
-          <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-3">
-                <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{getRelativeTime(token.createdAt)}</span>
-                <span className="text-zinc-700">|</span>
-                <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{t("trading.marketCap")}</span>
-                <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap * 100))}</span>
-              </div>
         </div>
       </div>
     </div>

@@ -147,7 +147,7 @@
     },
     "confirmation": {
       "title": "Xác nhận",
-      "description": "Bạn cần bỏ ra <span class=\"font-bold\">0.0025 SOL</span> để tạo đồng token này",
+      "description": "Bạn cần bỏ ra <span class=\"font-bold\">0.025 SOL</span> để tạo đồng token này",
       "cancel": "Hủy",
       "confirm": "Xác nhận",
       "description1": "Để tạo đồng token này, bạn cần bỏ ra",

@@ -282,17 +282,17 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
       />
 
       {/* Modal */}
-      <div className="fixed top-[64px] right-0 w-1/2 h-[calc(100vh-64px)] bg-[#111111] border-l border-blue-500/30 shadow-lg flex flex-col p-6">
+      <div className="fixed top-[64px] right-0 w-1/2 h-[calc(100vh-64px)] dark:bg-[#111111] bg-white border-l border-blue-500/30 shadow-lg flex flex-col p-6">
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-neutral-100 flex items-center">
+          <h2 className="text-2xl font-bold dark:text-neutral-100 text-theme-neutral-1000 flex items-center">
             <span className="text-cyan-400 mr-2">✦</span>
             {t("masterTrade.page.manageMaster")}
             <span className="text-cyan-400 ml-2">✦</span>
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-neutral-100 transition-colors"
+            className="dark:text-theme-neutral-100 text-theme-neutral-1000 hover:text-neutral-100 transition-colors"
           >
             <X className="h-6 w-6" />
           </button>
@@ -302,10 +302,10 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
         <div className="flex gap-4 flex-col flex-1 overflow-y-auto mt-4">
           {/* Address */}
           <div className="flex items-center gap-2">
-            <span className="text-neutral-100">{truncateString(info?.address || "", 12)}</span>
+            <span className="dark:text-neutral-100 text-theme-neutral-1000">{truncateString(info?.address || "", 12)}</span>
             <button
               onClick={handleCopyAddress}
-              className="text-gray-400 hover:text-neutral-100 transition-colors"
+              className="dark:text-theme-neutral-100 text-theme-neutral-1000 hover:text-neutral-100 transition-colors"
               title={copiedAddress ? t("common.copy.copied") : t("common.copy.copyAddress")}
             >
               <Copy className={`h-4 w-4 ${copiedAddress ? "text-green-500" : ""}`} />
@@ -317,11 +317,11 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <span className="text-gray-400 mr-2">{t("trading.panel.balance")}</span>
-                  <div className="bg-gray-800 rounded-full px-2 py-0.5 text-xs text-gray-400 flex items-center">USD</div>
+                  <span className="dark:text-neutral-100 text-theme-neutral-1000 mr-2">{t("trading.panel.balance")}</span>
+                  <div className="bg-gray-300 dark:bg-theme-neutral-1000 rounded-full px-2 py-0.5 text-xs dark:text-theme-neutral-100 text-theme-neutral-1000 flex items-center">USD</div>
                 </div>
                 <div className="text-right">
-                  <span className="text-gray-400">{t("masterTrade.page.table.winRate7d")}</span>
+                  <span className="dark:text-theme-neutral-100 text-theme-neutral-1000">{t("masterTrade.page.table.winRate7d")}</span>
                 </div>
               </div>
 
@@ -342,7 +342,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">{t("masterTrade.page.table.pnl7d")}</span>
+                <span className="dark:text-theme-neutral-100 text-theme-neutral-1000">{t("masterTrade.page.table.pnl7d")}</span>
                 <div className="flex items-center">
                   <span className={`text-lg font-bold ${stats.totalPnL.isPositive ? "text-green-500" : "text-red-500"}`}>
                     {stats.totalPnL.isPositive ? "+" : "-"}${stats.totalPnL.value}M
@@ -353,7 +353,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                 </div>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">{t("trading.panel.balance")}</span>
+                <span className="dark:text-theme-neutral-100 text-theme-neutral-1000">{t("trading.panel.balance")}</span>
                 <span className={`${stats.unrealizedProfits.isPositive ? "text-green-500" : "text-red-500"}`}>
                   {stats.unrealizedProfits.isPositive ? "+" : "-"}${stats.unrealizedProfits.value}k
                 </span>
@@ -362,28 +362,28 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
 
             <div className="flex flex-col">
               <div className="flex justify-end mb-2">
-                <div className="flex bg-gray-800 rounded-lg overflow-hidden">
+                <div className="flex bg-gray-300 dark:bg-theme-neutral-1000 rounded-lg overflow-hidden">
                   <button
                     onClick={() => setTimeFilter("1d")}
-                    className={`px-2 py-1 text-xs ${timeFilter === "1d" ? "bg-gray-700 text-neutral-100" : "text-gray-400"}`}
+                    className={`px-2 py-1 text-xs ${timeFilter === "1d" ? "bg-gray-700 text-neutral-100" : "dark:text-theme-neutral-100 text-theme-neutral-1000"}`}
                   >
                     {t("masterTrade.page.filters.1d")}
                   </button>
                   <button
                     onClick={() => setTimeFilter("7d")}
-                    className={`px-2 py-1 text-xs ${timeFilter === "7d" ? "bg-gray-700 text-neutral-100" : "text-gray-400"}`}
+                    className={`px-2 py-1 text-xs ${timeFilter === "7d" ? "bg-gray-700 text-neutral-100" : "dark:text-theme-neutral-100 text-theme-neutral-1000"}`}
                   >
                     {t("masterTrade.page.filters.7d")}
                   </button>
                   <button
                     onClick={() => setTimeFilter("30d")}
-                    className={`px-2 py-1 text-xs ${timeFilter === "30d" ? "bg-gray-700 text-neutral-100" : "text-gray-400"}`}
+                    className={`px-2 py-1 text-xs ${timeFilter === "30d" ? "bg-gray-700 text-neutral-100" : "dark:text-theme-neutral-100 text-theme-neutral-1000"}`}
                   >
                     {t("masterTrade.page.filters.30d")}
                   </button>
                   <button
                     onClick={() => setTimeFilter("All")}
-                    className={`px-2 py-1 text-xs ${timeFilter === "All" ? "bg-gray-700 text-neutral-100" : "text-gray-400"}`}
+                    className={`px-2 py-1 text-xs ${timeFilter === "All" ? "bg-gray-700 text-neutral-100" : "dark:text-theme-neutral-100 text-theme-neutral-1000"}`}
                   >
                     {t("masterTrade.page.filters.all")}
                   </button>
@@ -421,7 +421,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
           {/* Tab Content */}
           {activeTab === "DETAILS" && (
             <>
-              <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 bg-theme-black-1/2 bg-opacity-30 backdrop-blur-sm relative">
+              <div className="overflow-x-auto rounded-xl border-1 z-10 border-solid border-y-theme-primary-100 border-x-theme-purple-200 dark:bg-theme-black-1/2 bg-theme-neutral-800 bg-opacity-30 backdrop-blur-sm relative">
                 {isLoading ? (
                   <div className="flex items-center justify-center h-32">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -431,13 +431,13 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                     {t("common.error")}
                   </div>
                 ) : !ordersMyWallet?.data?.trades?.length ? (
-                  <div className="flex items-center justify-center h-32 text-gray-400">
+                  <div className="flex items-center justify-center h-32 dark:text-theme-neutral-100 text-theme-neutral-1000">
                     {t("transactionHistory.noTransactions")}
                   </div>
                 ) : (
                   <table className="w-full text-neutral-100">
                     <thead>
-                      <tr className="border-b border-blue-500/30 text-gray-400 text-sm">
+                      <tr className="border-b border-blue-500/30 dark:text-theme-neutral-100 text-theme-neutral-1000 text-sm">
                         <th className="px-4 py-3 text-left">{t("trading.token")}</th>
                         <th className="px-4 py-3 text-left">{t("transactionHistory.type")}</th>
                         <th className="px-4 py-3 text-left">{t("transactionHistory.total")}</th>
@@ -450,7 +450,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                       {ordersMyWallet.data.trades.map((trade: any) => {
                         const transaction = formatTransaction(trade)
                         return (
-                          <tr key={transaction.tx} className="border-b border-gray-200">
+                          <tr key={transaction.tx} className="border-b border-gray-200 dark:text-theme-neutral-100 text-theme-neutral-1000">
                             <td className="py-2 px-4">
                               <div className="flex flex-col gap-1">
                                 <div className="flex items-center gap-2">
@@ -462,14 +462,14 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                                   <span>{transaction.type === "buy" ? transaction.to.token.symbol : transaction.from.token.symbol}</span>
                                 </div>
                                 <div className="text-xs text-gray-500 flex items-center gap-1">
-                                  <span className="truncate max-w-[150px]">
+                                  <span className="truncate max-w-[150px] dark:text-theme-neutral-100 text-theme-neutral-1000">
                                     {truncateString(transaction.type === "buy" ? transaction.to.address : transaction.from.address, 12)}
                                   </span>
                                   <button 
                                     onClick={() => {
                                       navigator.clipboard.writeText(transaction.type === "buy" ? transaction.to.address : transaction.from.address)
                                     }}
-                                    className="text-gray-400 hover:text-gray-600"
+                                    className="dark:text-theme-neutral-100 text-theme-neutral-1000 hover:text-gray-600"
                                     title={t("common.copy.copyAddress")}
                                   >
                                     <Copy className="h-3 w-3" />
@@ -570,7 +570,7 @@ export default function DetailMasterModal({ isOpen, onClose, info }: DetailMaste
                   </div>
                 </>
               ) : (
-                <div className="flex-1 flex items-center justify-center text-neutral-400">
+                <div className="flex-1 flex items-center justify-center dark:text-neutral-400 text-theme-neutral-1000 dark:bg-transparent bg-theme-neutral-300">
                   {!checkMasterData?.groupConnect ? (
                     <p>{t("masterTrade.manage.chat.noMessages")}</p>
                   ) : !checkMasterData?.isConnect ? (

@@ -2,7 +2,6 @@ import React from 'react'
 import { Copy, Check } from 'lucide-react'
 import { formatNumberWithSuffix3, truncateString } from '@/utils/format'
 import { useLang } from '@/lang/useLang'
-import { useTradingState } from '../hooks/useTradingState'
 
 export interface ConnectionListProps {
     connections: any[]
@@ -11,6 +10,8 @@ export interface ConnectionListProps {
     copiedAddress: string | null
     onCopyAddress: (address: string) => void
     isLoading?: boolean
+    balances?: Record<string, any>
+    onRefreshBalance?: (memberId: string, address: string) => Promise<void>
 }
 
 export const ConnectionList: React.FC<ConnectionListProps> = ({
@@ -19,14 +20,14 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
     onSelectConnection,
     copiedAddress,
     onCopyAddress,
-    isLoading: externalLoading = false
+    isLoading: externalLoading = false,
+    balances,
+    onRefreshBalance
 }) => {
     const { t } = useLang()
-    const { balances, isLoadingBalances, refreshBalance, setSelectedConnections } = useTradingState(connections)
-    const isLoading = externalLoading || isLoadingBalances
+    const isLoading = externalLoading
 
     const handleSelectConnection = (id: string) => {
-        setSelectedConnections(id)
         onSelectConnection(id)
     }
 
@@ -37,7 +38,6 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
             </div>
         )
     }
-
     if (!connections || connections.length === 0) {
         return (
             <div className="flex items-center justify-center h-full text-neutral-400">
@@ -48,9 +48,11 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
 
     const handleRefreshBalance = async (memberId: string, address: string, e: React.MouseEvent) => {
         e.stopPropagation()
-        await refreshBalance(memberId, address)
+        if (onRefreshBalance) {
+            await onRefreshBalance(memberId, address)
+        }
     }
-
+    console.log("connections", connections)
     return (
         <div className="h-full overflow-y-auto bg-gray-300/50 dark:bg-transparent rounded-xl">
             <div className="">
@@ -87,8 +89,8 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-1">
-                                    <span>{formatNumberWithSuffix3(balances[item.member_id]?.sol_balance || 0)} SOL</span>
-                                    <span>${formatNumberWithSuffix3(balances[item.member_id]?.sol_balance_usd || 0)}</span>
+                                    <span>{formatNumberWithSuffix3(balances?.[item.member_id]?.sol_balance || 0)} SOL</span>
+                                    <span>${formatNumberWithSuffix3(balances?.[item.member_id]?.sol_balance_usd || 0)}</span>
                                     <button
                                         onClick={(e) => handleRefreshBalance(item.member_id, item.member_address, e)}
                                         className="ml-1 text-gray-400 hover:text-gray-300"
