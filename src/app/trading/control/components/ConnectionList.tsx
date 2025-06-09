@@ -38,7 +38,6 @@ export const ConnectionList: React.FC<ConnectionListProps> = ({
             </div>
         )
     }
-    console.log("selectedConnections", selectedConnections)
     if (!connections || connections.length === 0) {
         return (
             <div className="flex items-center justify-center h-full text-neutral-400">

@@ -12,9 +12,16 @@ import { SolonaTokenService } from '@/services/api'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useLang } from '@/lang/useLang'
 import PumpFun from '@/app/components/pump-fun'
-import { getListTokenAllCategory, getMyWishlist, getTokenInforByAddress } from '@/services/api/SolonaTokenService'
+import { getListTokenAllCategory, getMyWishlist, getTokenInforByAddress, getTokenByCategory } from '@/services/api/SolonaTokenService'
 import { useWsSubscribeTokens } from "@/hooks/useWsSubscribeTokens";
 import notify from "@/app/components/notify"
+import { getTokenCategorys } from '@/services/api/TelegramWalletService'
+import { useTranslate } from "@/hooks/useTranslate";
+
+const TranslatedCategory = ({ name }: { name: string }) => {
+    const { translatedText } = useTranslate(name);
+    return <>{translatedText || name}</>;
+};
 
 const ListToken = () => {
     const { t } = useLang()
@@ -30,6 +37,7 @@ const ListToken = () => {
     });
     const [timeFilter, setTimeFilter] = useState("24h");
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
@@ -72,6 +80,17 @@ const ListToken = () => {
         queryKey: ["token-infor", selectedTokenAddress],
         queryFn: () => selectedTokenAddress ? getTokenInforByAddress(selectedTokenAddress) : null,
         enabled: !!selectedTokenAddress,
+    });
+
+    const { data: categories = [] } = useQuery({
+        queryKey: ["token-categories"],
+        queryFn: getTokenCategorys,
+    });
+
+    const { data: categoryTokens, isLoading: isLoadingCategoryTokens } = useQuery({
+        queryKey: ["category-tokens", selectedCategory],
+        queryFn: () => selectedCategory ? getTokenByCategory(selectedCategory) : null,
+        enabled: !!selectedCategory && activeTab === "category",
     });
 
     useEffect(() => {
@@ -191,7 +210,7 @@ const ListToken = () => {
             if (isAdding) {
                 // Find token info from current tokenList
                 const tokenInfo = tokenList.find((token: any) => token.address === token_address);
-                const newTokens = tokenInfo 
+                const newTokens = tokenInfo
                     ? [tokenInfo, ...myWishlist.tokens]
                     : [{ address: token_address }, ...myWishlist.tokens];
 
@@ -211,23 +230,23 @@ const ListToken = () => {
         try {
             // Call API
             await SolonaTokenService.toggleWishlist(data);
-            
+
             // Show success notification
-            notify({ 
-                message: isAdding 
-                    ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}` 
-                    : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}`, 
-                type: 'success' 
+            notify({
+                message: isAdding
+                    ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}`
+                    : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.success")}`,
+                type: 'success'
             });
         } catch (error) {
             // Show error notification
-            notify({ 
-                message: isAdding 
-                    ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}` 
-                    : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}`, 
-                type: 'error' 
+            notify({
+                message: isAdding
+                    ? `${t("tableDashboard.toast.add")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}`
+                    : `${t("tableDashboard.toast.remove")} ${t("tableDashboard.toast.wishlist")} ${t("tableDashboard.toast.failed")}`,
+                type: 'error'
             });
-            
+
             // Revert optimistic update
             if (myWishlist) {
                 queryClient.setQueryData(["myWishlist"], myWishlist);
@@ -279,20 +298,20 @@ const ListToken = () => {
         const now = new Date();
         const created = new Date(date);
         const diffInSeconds = Math.floor((now.getTime() - created.getTime()) / 1000);
-    
+
         if (diffInSeconds < 60) {
-          return t("time.secondsAgo", { seconds: diffInSeconds });
+            return t("time.secondsAgo", { seconds: diffInSeconds });
         } else if (diffInSeconds < 3600) {
-          const minutes = Math.floor(diffInSeconds / 60);
-          return t("time.minutesAgo", { minutes });
+            const minutes = Math.floor(diffInSeconds / 60);
+            return t("time.minutesAgo", { minutes });
         } else if (diffInSeconds < 86400) {
-          const hours = Math.floor(diffInSeconds / 3600);
-          return t("time.hoursAgo", { hours });
+            const hours = Math.floor(diffInSeconds / 3600);
+            return t("time.hoursAgo", { hours });
         } else {
-          const days = Math.floor(diffInSeconds / 86400);
-          return t("time.daysAgo", { days });
+            const days = Math.floor(diffInSeconds / 86400);
+            return t("time.daysAgo", { days });
         }
-      };
+    };
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -302,8 +321,17 @@ const ListToken = () => {
         if (tab === "favorite" || tab === "category") {
             refetchMyWishlist();
         }
+        // Reset selectedCategory when switching away from category tab
+        if (tab !== "category") {
+            setSelectedCategory("");
+        }
     };
 
+    const [categoryOption, setCategoryOption] = useState<string>("");
+    const handleCategoryChange = (categorySlug: string) => {
+        setCategoryOption(categorySlug)
+        setSelectedCategory(categorySlug);
+    };
     return (
         <div className='dark:bg-theme-neutral-1000 bg-white shadow-inset rounded-xl pr-0 pb-0 flex-1 pt-1 overflow-hidden'>
             {/* <div className="relative mb-3 pr-3 px-3">
@@ -361,7 +389,23 @@ const ListToken = () => {
                             className={`text-xs cursor-pointer p-1 px-3 rounded-xl font-normal shrink-0 ${activeTab === "category" ? "text-theme-neutral-100 dark:linear-gradient-connect bg-linear-200" : "dark:text-theme-neutral-100"}`}
                             onClick={() => handleTabChange("category")}
                         >
-                            {t('trading.listToken.category')}
+                            {activeTab === 'category' ? (
+                                <select
+                                    className="bg-transparent border-none focus:outline-none cursor-pointer flex flex-col text-neutral-100 dark:gradient-hover"
+                                    value={selectedCategory}
+                                    onChange={(e) => handleCategoryChange(e.target.value)}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <option value="" className="dark:!text-theme-neutral-100 p-1 !text-theme-neutral-1000 dark:!bg-theme-neutral-1000 flex-1">{t('tableDashboard.tabs.category')}</option>
+                                    {categories.map((category: any) => (
+                                        <option key={category.id} value={category.slug} className="dark:!text-theme-neutral-100 p-1 !text-theme-neutral-1000 dark:!bg-theme-neutral-1000 flex-1">
+                                            <TranslatedCategory name={category.name} />
+                                        </option>
+                                    ))}
+                                </select>
+                            ) : (
+                                <span>{t('tableDashboard.tabs.category')}</span>
+                            )}
                         </button>
                     </div>
 
@@ -393,12 +437,13 @@ const ListToken = () => {
                             >
                                 {t('tokenInfo.timeFrames.24h')}
                             </button>
+
                         </div>
                     </div>
                 )}
 
                 <div className="flex-grow h-[calc(100%-20px)] custom-scroll overflow-y-scroll mt-2">
-                    {Array.isArray(tokenList) && tokenList?.map((item: any, i: number) => {
+                    {Array.isArray(tokenList) && tokenList?.filter(e => categoryOption?.length > 0 ? e.category.name === categoryOption : true)?.map((item: any, i: number) => {
                         const address = searchQuery.length > 0 ? item.poolAddress : item.address;
                         return (
                             <div
@@ -417,11 +462,11 @@ const ListToken = () => {
                                         <Star className={`w-4 h-4 ${isTokenInWishlist(item.address) ? "text-yellow-500 fill-yellow-500" : "text-neutral-500 hover:text-yellow-400"}`} />
                                     </button>
                                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleChangeToken(address)}>
-                                        <img 
-                                            src={item?.logo_uri || item?.logoUrl || "/logo.png"} 
-                                            alt="" 
-                                            width={24} 
-                                            height={24} 
+                                        <img
+                                            src={item?.logo_uri || item?.logoUrl || "/logo.png"}
+                                            alt=""
+                                            width={24}
+                                            height={24}
                                             className='w-[24px] h-[24px] rounded-full object-cover'
                                             onError={(e) => {
                                                 const target = e.target as HTMLImageElement;
@@ -459,7 +504,7 @@ const ListToken = () => {
                                             />
                                         )}
                                         <div className='flex gap-1 items-center'>
-                                            
+
                                             <span className='text-xs font-light dark:text-neutral-300 text-neutral-800'>{item.symbol}</span>
                                         </div>
                                     </div>
