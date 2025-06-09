@@ -23,18 +23,20 @@ export default function TradingPanel({
     currency,
     isConnected,
 }: Omit<TradingPanelProps, 'selectedGroups' | 'setSelectedGroups' | 'selectedConnections' | 'setSelectedConnections'>) {
-    const { getConnectList } = useConnectListStore()
+    const { getConnectList, selectedConnections, setSelectedConnections, selectedGroups, setSelectedGroups } = useConnectListStore()
     const { t } = useLang()
     const searchParams = useSearchParams()
     const address = searchParams?.get("address")
-    const queryClient = useQueryClient()
+
+    const { data: myConnects = [], isLoading: isLoadingConnects } = useQuery({
+        queryKey: ["myConnects"],
+        queryFn: () => getMyConnects(),
+        refetchOnWindowFocus: false
+    })
+
     const {
-        selectedGroups,
-        setSelectedGroups,
-        selectedConnections,
-        setSelectedConnections,
         handleTradeSubmit
-    } = useTradingState()
+    } = useTradingState(myConnects || [])
 
     const { data: groups } = useQuery({
         queryKey: ["groups"],
@@ -242,7 +244,6 @@ export default function TradingPanel({
             setIsLoading(false)
         }, 2000)
     }, [])
-
     // Cleanup timeout when component unmounts
     useEffect(() => {
         return () => {
@@ -275,7 +276,7 @@ export default function TradingPanel({
                         ? Number(amount) * (tokenAmount?.token_price || 0)
                         : Number(amount) * (solPrice?.priceUSD || 0),
                 order_qlty: Number(amount),
-                member_list: getConnectList().map(id => Number(id))
+                member_list: selectedConnections.map(id => Number(id))
             })
         }
 
@@ -318,6 +319,13 @@ export default function TradingPanel({
         }
     }, [tradeAmount, mode, percentage, isDirectAmountInput])
 
+    const handleSelectConnection = useCallback((groups: string[]) => {
+        setSelectedGroups(groups)
+        const connectionsFilter = myConnects.filter((connect: any) => groups.some((group: any) => connect.joined_groups.some((joinedGroup: any) => joinedGroup.group_id.toString() === group))).map((connect: any) => connect.member_id.toString())
+        setSelectedConnections(connectionsFilter)
+    }, [setSelectedGroups, setSelectedConnections, myConnects, selectedConnections])
+   
+   
     return (
         <div className="h-full flex flex-col">
             {/* Mode Tabs */}
@@ -424,7 +432,7 @@ export default function TradingPanel({
                 {walletInfor?.role == "master" && <GroupSelect
                     groups={groups || []}
                     selectedGroups={selectedGroups}
-                    setSelectedGroups={setSelectedGroups}
+                    setSelectedGroups={handleSelectConnection}
                 />}
 
 

@@ -18,7 +18,7 @@ import { useConnectListStore } from "@/hooks/useConnectListStore"
 type TabType = "chat" | "trade";
 
 export default function MasterTradeChat() {
-    const { setConnectList } = useConnectListStore()
+    const { setConnectList, selectedConnections, setSelectedConnections } = useConnectListStore()
     const searchParams = useSearchParams();
     const tokenAddress = searchParams?.get("address");
     const { token } = useAuth();
@@ -33,13 +33,17 @@ export default function MasterTradeChat() {
         disconnectWebSocket
     } = useTradingChatStore();
 
+    const { data: myConnects = [], isLoading: isLoadingConnects } = useQuery({
+        queryKey: ["myConnects"],
+        queryFn: () => getMyConnects(),
+        refetchOnWindowFocus: false
+    })
+
     const {
         selectedGroups,
         setSelectedGroups,
-        selectedConnections,
-        setSelectedConnections,
         refreshTradingData
-    } = useTradingState()
+    } = useTradingState(myConnects || [])
 
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
     const [searchQuery, setSearchQuery] = useState("")
@@ -68,12 +72,7 @@ export default function MasterTradeChat() {
         };
     }, [tokenAddress, token, lang, setTokenAddress, initializeWebSocket, disconnectWebSocket, mounted]);
 
-    const { data: myConnects = [], isLoading: isLoadingConnects, refetch: refetchMyConnects } = useQuery({
-        queryKey: ["myConnects"],
-        queryFn: getMyConnects,
-        refetchOnWindowFocus: false
-    })
-    console.log("myConnects", myConnects)
+
     const { data: walletInfor, isLoading: isLoadingWallet } = useQuery({
         queryKey: ["wallet-infor"],
         queryFn: getInforWallet,
@@ -105,46 +104,24 @@ export default function MasterTradeChat() {
         return filtered
     }, [myConnects, selectedGroups, searchQuery])
 
-    // Update selected connections when groups change
-    useEffect(() => {
-        if (!mounted || !initialized || !myConnects) return
-
-        // If no groups are selected, keep current selections
-        if (selectedGroups.length === 0) return
-
-        // Get all connections that belong to selected groups
-        const newSelectedConnections = myConnects
-            .filter((connect: any) =>
-                connect.joined_groups.some((group: any) =>
-                    selectedGroups.includes(group.group_id.toString())
-                )
-            )
-            .map((connect: any) => connect.member_id.toString())
-
-        // Update selected connections if there are changes
-        if (JSON.stringify(newSelectedConnections) !== JSON.stringify(selectedConnections)) {
-            setSelectedConnections(newSelectedConnections)
-        }
-    }, [selectedGroups, myConnects, mounted, initialized])
-
     // Initialize connections after mount
-    useEffect(() => {
-        if (!mounted || initialized || !myConnects) return
+    // useEffect(() => {
+    //     if (!mounted || initialized || !myConnects) return
 
-        // If there are selected groups, initialize with their connections
-        if (selectedGroups.length > 0) {
-            const initialConnections = myConnects
-                .filter((connect: any) =>
-                    connect.joined_groups.some((group: any) =>
-                        selectedGroups.includes(group.group_id.toString())
-                    )
-                )
-                .map((connect: any) => connect.member_id.toString())
+    //     // If there are selected groups, initialize with their connections
+    //     if (selectedGroups.length > 0) {
+    //         const initialConnections = myConnects
+    //             .filter((connect: any) =>
+    //                 connect.joined_groups.some((group: any) =>
+    //                     selectedGroups.includes(group.group_id.toString())
+    //                 )
+    //             )
+    //             .map((connect: any) => connect.member_id.toString())
 
-            setSelectedConnections(initialConnections)
-        }
-        setInitialized(true)
-    }, [mounted, myConnects, selectedGroups, initialized])
+    //         setSelectedConnections(initialConnections)
+    //     }
+    //     setInitialized(true)
+    // }, [mounted, myConnects, selectedGroups, initialized])
 
     useEffect(() => {
         if (walletInfor?.role === "master") {
@@ -161,29 +138,29 @@ export default function MasterTradeChat() {
     }, [])
 
     const handleSelectItem = useCallback((id: string) => {        
-        setSelectedConnections(prev => {
-            const newConnections = prev.includes(id)
-                ? prev.filter(item => item !== id)
-                : [...prev, id];
-            
-            // Update connectList with the new value
-            setConnectList(newConnections);
-            if (prev.includes(id)) {
-                // If deselecting, also remove associated groups
-                const connection = myConnects?.find((connect: any) => connect.member_id.toString() === id)
-                if (connection) {
-                    const groupIds = connection.joined_groups.map((group: any) => group.group_id.toString())
-                    setSelectedGroups(prevGroups => prevGroups.filter(groupId => !groupIds.includes(groupId)))
-                }
-            }
-            
-            return newConnections;
-        })
-    }, [myConnects])
+        console.log("handleSelectItem called with id:", id)
+        console.log("Current selectedConnections:", selectedConnections)
+        
+        // Toggle selection logic
+        const newConnections = selectedConnections.includes(id)
+            ? selectedConnections.filter(item => item !== id)
+            : [...selectedConnections, id];
+        
+        console.log("New connections will be:", newConnections)
+        setSelectedConnections(newConnections)
+        setConnectList(newConnections)
+    }, [selectedConnections, setSelectedConnections, setConnectList])
 
     const handleTabChange = (tab: TabType) => {
         setActiveTab(tab);
     };
+    console.log("selectedConnections", selectedConnections)
+    
+    // Debug: Track selectedConnections changes
+    useEffect(() => {
+        console.log("selectedConnections changed:", selectedConnections)
+    }, [selectedConnections])
+    
     return (
         <div className="h-full flex flex-col relative">
             {/* {isLoading && (

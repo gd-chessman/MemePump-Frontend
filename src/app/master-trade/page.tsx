@@ -632,7 +632,7 @@ export default function MasterTradeTable() {
                                                             handleConnect(item)
                                                             setInforWallet(getTraderDetails(item.address))
                                                         }}
-                                                        className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
+                                                        className={`px-3 py-1 text-theme-green-200 border hover:text-theme-neutral-100 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
                                                     >
                                                         {t('masterTrade.page.actions.connect')}
                                                     </button>
@@ -651,7 +651,7 @@ export default function MasterTradeTable() {
                                                         {item.status === "connect" ? (
                                                             <button
                                                                 onClick={() => handleMemberConnectStatus(item, "pause")}
-                                                                className="flex-1 px-3 py-1.5 text-theme-yellow-200 border border-theme-yellow-200 hover:dark:text-theme-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs text-center"
+                                                                className="flex-1 px-3 py-1.5 text-theme-yellow-200 border border-theme-yellow-200 hover:text-theme-neutral-100 hover:dark:text-theme-neutral-100 hover:bg-theme-yellow-200 rounded-full transition-colors text-xs text-center"
                                                             >
                                                                 {t('masterTrade.page.actions.pause')}
                                                             </button>
@@ -661,7 +661,7 @@ export default function MasterTradeTable() {
                                                                     handleConnect(item)
                                                                     setInforWallet(getTraderDetails(item.address))
                                                                 }}
-                                                                className="flex-1 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
+                                                                className="flex-1 px-3 py-1.5 text-theme-green-200 border border-theme-green-200 hover:text-theme-neutral-100 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs text-center"
                                                             >
                                                                 {t('masterTrade.page.actions.connect')}
                                                             </button>
@@ -670,7 +670,7 @@ export default function MasterTradeTable() {
                                                             onClick={() => {
                                                                 handleMemberConnectStatus(item, "disconnect")
                                                             }}
-                                                            className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:dark:text-theme-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
+                                                            className={`px-3 py-1 text-theme-red-200 border border-theme-red-200 hover:text-theme-neutral-100 hover:dark:text-theme-neutral-100 hover:bg-theme-red-200 rounded-full transition-colors text-xs`}
                                                         >
                                                             {t('masterTrade.page.actions.disconnect')}
                                                         </button>
@@ -681,7 +681,7 @@ export default function MasterTradeTable() {
                                                         onClick={() => {
                                                             handleMemberConnectStatus(item, "connect")
                                                         }}
-                                                        className={`px-3 py-1 text-theme-green-200 border border-theme-green-200 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
+                                                        className={`px-3 py-1 text-theme-green-200 border hover:text-theme-neutral-100 hover:dark:text-theme-neutral-100 hover:bg-theme-green-200 rounded-full transition-colors text-xs`}
                                                     >
                                                         {t('masterTrade.page.actions.reconnect')}
                                                     </button>

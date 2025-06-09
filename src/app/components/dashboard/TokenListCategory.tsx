@@ -39,71 +39,71 @@ function SkeletonCard() {
 }
 
 // Component to render a list of token cards
-export default function TokenListCategory({category = ""}: any) {
-    const { t } = useLang()
-    const { data: tokenAllCategory = [] } = useQuery({
-        queryKey: ["token-all-category"],
-        queryFn: () => getListTokenAllCategory(),
-    });
+export default function TokenListCategory({ category = "" }: any) {
+  const { t } = useLang()
+  const { data: tokenAllCategory = [] } = useQuery({
+    queryKey: ["token-all-category"],
+    queryFn: () => getListTokenAllCategory(),
+  });
 
-    const { data: tokenByCategory = [] } = useQuery({
-        queryKey: ["token-by-category", category],
-        queryFn: () => getTokenByCategory(category),
-        enabled: Boolean(category),
-    });
-  
-    // Show skeleton loading when tokens array is empty or has length less than 1
-    if ((!category && (!tokenAllCategory || tokenAllCategory.length < 1)) || 
-        (category && (!tokenByCategory || tokenByCategory.length < 1))) {
-        if (category && (!tokenByCategory || tokenByCategory.length < 1)) {
-            return (
-                <div className="flex flex-col items-center justify-center min-h-[200px]">
-                    <div className="text-base font-semibold text-zinc-600 dark:text-zinc-400">{t("trading.listToken.noData")}</div>
-                    <div className="text-sm text-zinc-500 dark:text-zinc-500 mt-2">{t("trading.listToken.noData")}</div>
-                </div>
-            );
-        }
-        return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {[...Array(36)].map((_, index) => (
-                    <SkeletonCard key={index} />
-                ))}
-            </div>
-        );
-    }
-    
-    const tokensToDisplay = category ? tokenByCategory : tokenAllCategory;
-    
-    return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {tokensToDisplay?.map((token: any, index: any) => (
-                <SingleTokenCard 
-                    key={index} 
-                    token={{
-                        id: token.id.toString(),
-                        name: token.symbol,
-                        ticker: token.symbol,
-                        fullName: token.name,
-                        logo: token.logoUrl || "/placeholder.png",
-                        address: token.address,
-                        marketCap: token.market_cap,
-                        program: token.program,
-                        createdAt: token.createdAt,
-                        change24h: 0,
-                        volume: 0,
-                        holders: 0,
-                        transactions: { count: 0, volume: 0 },
-                        social: { twitter: false, telegram: false, website: false, tiktok: false },
-                        percentages: {
-                            holders: 0,
-                            liquidity: parseFloat(token.liquidity) / 1000000,
-                            run: token.isVerified
-                        }
-                    }} 
-                />
-            ))}
+  const { data: tokenByCategory = [] } = useQuery({
+    queryKey: ["token-by-category", category],
+    queryFn: () => getTokenByCategory(category),
+    enabled: Boolean(category),
+  });
+
+  // Show skeleton loading when tokens array is empty or has length less than 1
+  if ((!category && (!tokenAllCategory || tokenAllCategory.length < 1)) ||
+    (category && (!tokenByCategory || tokenByCategory.length < 1))) {
+    if (category && (!tokenByCategory || tokenByCategory.length < 1)) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-[200px]">
+          <div className="text-base font-semibold text-zinc-600 dark:text-zinc-400">{t("trading.listToken.noData")}</div>
+          <div className="text-sm text-zinc-500 dark:text-zinc-500 mt-2">{t("trading.listToken.noData")}</div>
         </div>
-    )
+      );
+    }
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {[...Array(36)].map((_, index) => (
+          <SkeletonCard key={index} />
+        ))}
+      </div>
+    );
+  }
+
+  const tokensToDisplay = category ? tokenByCategory : tokenAllCategory;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {tokensToDisplay?.map((token: any, index: any) => (
+        <SingleTokenCard
+          key={index}
+          token={{
+            id: token.id.toString(),
+            name: token.symbol,
+            ticker: token.symbol,
+            fullName: token.name,
+            logo: token.logoUrl || "/placeholder.png",
+            address: token.address,
+            marketCap: token.market_cap,
+            program: token.program,
+            createdAt: token.createdAt,
+            change24h: 0,
+            volume: 0,
+            holders: 0,
+            transactions: { count: 0, volume: 0 },
+            social: { twitter: false, telegram: false, website: false, tiktok: false },
+            percentages: {
+              holders: 0,
+              liquidity: parseFloat(token.liquidity) / 1000000,
+              run: token.isVerified
+            }
+          }}
+        />
+      ))}
+    </div>
+  )
 }
 
 
@@ -145,7 +145,7 @@ function TikTok(props: React.SVGProps<SVGSVGElement>) {
 
 // Component to render a single token card (internal to this file)
 function SingleTokenCard({ token }: any) {
-  const { t } = useLang() 
+  const { t } = useLang()
   const router = useRouter();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -241,24 +241,27 @@ function SingleTokenCard({ token }: any) {
                 {token.social?.tiktok && <TikTok className="h-3.5 w-3.5 text-zinc-400 cursor-pointer hover:text-white" />}
               </div>
             </div>
-            <div className="flex flex-col items-end">
-              <button 
-                onClick={handleTrade}
-                className="text-white lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto flex items-center justify-center"
-              >
-                <Zap className="h-4 w-4 mr-1.5 text-green-400" />
-                {t("trading.trade")}
-              </button>
-             
-            </div>
-          </div>
-          <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-3">
+            <div className="flex justify-between items-center w-full flex-row-reverse px-2">
+              <div className="flex flex-col items-end">
+                <button
+                  onClick={handleTrade}
+                  className="text-white lg:max-w-auto max-w-[120px] group relative bg-gradient-to-t from-theme-primary-500 to-theme-secondary-400 py-1.5 md:py-2 px-3 md:px-4 lg:px-5 rounded-full text-[11px] md:text-xs transition-all duration-500 hover:from-theme-blue-100 hover:to-theme-blue-200 hover:scale-105 hover:shadow-lg hover:shadow-theme-primary-500/30 active:scale-95 w-full md:w-auto flex items-center justify-center"
+                >
+                  <Zap className="h-4 w-4 mr-1.5 text-green-400" />
+                  {t("trading.trade")}
+                </button>
+
+              </div>
+              <div className="flex justify-end items-center gap-2 text-xs mt-2 mr-3">
                 {/* <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{getRelativeTime(token.createdAt)}</span> */}
                 {/* <span className="text-zinc-700">|</span> */}
                 <span className="text-zinc-600 dark:text-neutral-400 text-sm whitespace-nowrap">{t("trading.marketCap")}</span>
                 <span className="text-zinc-800 dark:text-zinc-300 text-sm">{formatNumber(Number(token.marketCap))}</span>
               </div>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   )
