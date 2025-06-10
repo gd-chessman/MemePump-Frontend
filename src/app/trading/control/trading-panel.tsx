@@ -23,15 +23,19 @@ export default function TradingPanel({
     currency,
     isConnected,
 }: Omit<TradingPanelProps, 'selectedGroups' | 'setSelectedGroups' | 'selectedConnections' | 'setSelectedConnections'>) {
-    const { getConnectList, selectedConnections, setSelectedConnections, selectedGroups, setSelectedGroups } = useConnectListStore()
+    const { getConnectList, selectedConnections, setSelectedConnections, selectedGroups, setSelectedGroups, refetchConnections } = useConnectListStore()
     const { t } = useLang()
     const searchParams = useSearchParams()
     const address = searchParams?.get("address")
+    const queryClient = useQueryClient()
 
-    const { data: myConnects = [], isLoading: isLoadingConnects } = useQuery({
+    const { data: myConnects = [], isLoading: isLoadingConnects, refetch: refetchMyConnects } = useQuery({
         queryKey: ["myConnects"],
         queryFn: () => getMyConnects(),
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
+        staleTime: 0,
+        refetchInterval: 30000,
+        refetchOnMount: true,
     })
 
     const {
@@ -65,12 +69,6 @@ export default function TradingPanel({
     const { data: tokenAmount, refetch: refetchTokenAmount } = useQuery({
         queryKey: ["tokenAmount", address],
         queryFn: () => getTokenAmount(address),
-    })
-
-    const {refetch: refetchMyConnects } = useQuery({
-        queryKey: ["myConnects"],
-        queryFn: getMyConnects,
-        refetchOnWindowFocus: false
     })
 
     const [mode, setMode] = useState<TradingMode>(defaultMode)
@@ -291,6 +289,9 @@ export default function TradingPanel({
                 message: t('trading.panel.success'),
                 type: 'success'
             })
+            // Invalidate all queries with "myConnects" key to refresh data in all components
+          
+          
         } else {
             setAmount("0.00")
             setPercentage(0)
@@ -301,7 +302,8 @@ export default function TradingPanel({
                 type: 'error'
             })
         }
-    }, [mode, amount, tokenAmount, solPrice, selectedConnections, handleTradeSubmit, t, validateAmount, amountError, tokenInfor])
+        await queryClient.invalidateQueries({ queryKey: ["myConnects"] })
+    }, [mode, amount, tokenAmount, solPrice, selectedConnections, handleTradeSubmit, t, validateAmount, amountError, tokenInfor, queryClient, refetchConnections])
 
     // Reset amount and percentage when mode changes
     useEffect(() => {

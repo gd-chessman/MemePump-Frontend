@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useCallback, useMemo } from "react"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getMyConnects } from "@/services/api/MasterTradingService"
 import ChatTrading from "./chat"
 import { MasterTradeChatProps } from "./types"
@@ -23,6 +23,7 @@ export default function MasterTradeChat() {
     const tokenAddress = searchParams?.get("address");
     const { token } = useAuth();
     const { lang } = useLang();
+    const queryClient = useQueryClient();
     const { 
         activeTab, 
         setActiveTab, 
@@ -30,13 +31,15 @@ export default function MasterTradeChat() {
         messages,
         setTokenAddress,
         initializeWebSocket,
-        disconnectWebSocket
+        disconnectWebSocket,
     } = useTradingChatStore();
 
-    const { data: myConnects = [], isLoading: isLoadingConnects } = useQuery({
+    const { data: myConnects = [], isLoading: isLoadingConnects, refetch: refetchMyConnects } = useQuery({
         queryKey: ["myConnects"],
         queryFn: () => getMyConnects(),
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
+        staleTime: 0, // Always consider data stale to allow refetching
+        refetchOnMount: true,
     })
 
     const {
@@ -81,7 +84,7 @@ export default function MasterTradeChat() {
     // Filter connections based on search query and selected groups
     const filteredConnections = useMemo(() => {
         let filtered = myConnects || []
-
+        console.log("filteredConnections render - myConnects:", myConnects?.length, "filtered:", filtered.length)
         // First filter by selected groups if any groups are selected
         if (selectedGroups.length > 0) {
             filtered = filtered.filter((connect: any) =>
@@ -104,25 +107,6 @@ export default function MasterTradeChat() {
         return filtered
     }, [myConnects, selectedGroups, searchQuery])
 
-    // Initialize connections after mount
-    // useEffect(() => {
-    //     if (!mounted || initialized || !myConnects) return
-
-    //     // If there are selected groups, initialize with their connections
-    //     if (selectedGroups.length > 0) {
-    //         const initialConnections = myConnects
-    //             .filter((connect: any) =>
-    //                 connect.joined_groups.some((group: any) =>
-    //                     selectedGroups.includes(group.group_id.toString())
-    //                 )
-    //             )
-    //             .map((connect: any) => connect.member_id.toString())
-
-    //         setSelectedConnections(initialConnections)
-    //     }
-    //     setInitialized(true)
-    // }, [mounted, myConnects, selectedGroups, initialized])
-
     useEffect(() => {
         if (walletInfor?.role === "master") {
             setActiveTab("trade")
@@ -138,8 +122,6 @@ export default function MasterTradeChat() {
     }, [])
 
     const handleSelectItem = useCallback((id: string) => {        
-        console.log("handleSelectItem called with id:", id)
-        console.log("Current selectedConnections:", selectedConnections)
         
         // Toggle selection logic
         const newConnections = selectedConnections.includes(id)
@@ -160,6 +142,45 @@ export default function MasterTradeChat() {
     useEffect(() => {
         console.log("selectedConnections changed:", selectedConnections)
     }, [selectedConnections])
+
+    // Refetch myConnects when component mounts or when there are cache invalidations
+    useEffect(() => {
+        if (mounted) {
+            console.log("Refetching myConnects on mount")
+            refetchMyConnects()
+        }
+    }, [mounted, refetchMyConnects])
+
+    // Listen for query cache changes and refetch when myConnects is invalidated
+    useEffect(() => {
+        if (!mounted) return;
+
+        const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
+            if (event.type === 'updated' && event.query.queryKey[0] === 'myConnects') {
+                console.log("Query cache updated for myConnects, refetching")
+                refetchMyConnects()
+            }
+        })
+
+        return () => {
+            unsubscribe()
+        }
+    }, [mounted, queryClient, refetchMyConnects])
+
+    // Refetch data when window gains focus
+    useEffect(() => {
+        if (!mounted) return;
+
+        const handleFocus = () => {
+            console.log("Window focused, refetching myConnects")
+            refetchMyConnects()
+        }
+
+        window.addEventListener('focus', handleFocus)
+        return () => {
+            window.removeEventListener('focus', handleFocus)
+        }
+    }, [mounted, refetchMyConnects])
     
     return (
         <div className="h-full flex flex-col relative">
